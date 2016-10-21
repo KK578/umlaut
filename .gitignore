@@ -1,0 +1,49 @@
+###############
+### Project ###
+.env
+.cache/
+tmp/
+
+## Dependencies
+node_modules/
+bower[-_]components/
+
+
+
+#######################
+### Editor Specific ###
+## Visual Studio
+*.suo
+*.sln
+.vs/
+[Oo]bj/
+typings/
+
+## NodeJS Tools for Visual Studio
+*.njsproj
+
+## Vim
+# Swap Files
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+
+
+
+#################
+## OS Specific ##
+## Windows
+Thumbs.db
+ehthumbs.db
+
+## OSX
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+
+
+#############
+### Misc. ###
+.[tT][mM][pP]
