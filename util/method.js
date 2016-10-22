@@ -1,50 +1,3 @@
-const test = {
-	name: 'Add',
-	arguments: [
-		{
-			name: "a",
-			type: "Int"
-		},
-		{
-			name: "b",
-			type: "Int"
-		}
-	],
-	return: { type: "Int" },
-	preconditions: [
-		{
-			type: ">=",
-			left: "a",
-			right: "0"
-		},
-		{
-			type: ">=",
-			left: "b",
-			right: "0"
-		}
-	],
-	postconditions: [
-		{
-			type: ">=",
-			left: "result",
-			right: "a"
-		}
-	]
-};
-
-/* 1) Declare arguments
- * 2) Declare function
- * 3) Push to stack
- * 4) Declare all pre and post conditions
- * 5) Get values
- * 6) Pop stack
- * 7) For each precondition
- *    a) Invert
- *    b) Declare condition
- *    c) Get values
- * 8)
-*/
-
 const smtStringsSource = require('./smt-strings.js');
 const smtStrings = new smtStringsSource();
 
@@ -78,6 +31,7 @@ class SmtMethod {
 		const args = method.arguments.map((a) => {
 			return a.type;
 		});
+
 		const type = typeof method.return === 'string' ? method.return : method.return.type;
 		const command = smtStrings.declareFunction(method.name, args, type);
 
@@ -141,7 +95,4 @@ class SmtMethod {
 	}
 }
 
-module.exports = {
-	class: SmtMethod,
-	test
-}
+module.exports = SmtMethod;
