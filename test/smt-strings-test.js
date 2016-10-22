@@ -18,21 +18,21 @@ describe('smt-strings', () => {
 
 	describe('declareFunction', () => {
 		it('should declare a function', () => {
-			const actual = testee.declareFunction('Foo', 'a', 'Int');
+			const actual = testee.declareFunction('Foo', 'Int', 'Int');
 
-			expect(actual).to.equal('(declare-fun Foo (a) Int)');
+			expect(actual).to.equal('(declare-fun Foo (Int) Int)');
 		});
 
 		it('should declare a function from multiple arguments in string', () => {
-			const actual = testee.declareFunction('Foo', 'a b c', 'Int');
+			const actual = testee.declareFunction('Foo', 'Int Bool', 'Int');
 
-			expect(actual).to.equal('(declare-fun Foo (a b c) Int)');
+			expect(actual).to.equal('(declare-fun Foo (Int Bool) Int)');
 		});
 
 		it('should declare a function from argument array', () => {
-			const actual = testee.declareFunction('Foo', ['a', 'b', 'c'], 'Int');
+			const actual = testee.declareFunction('Foo', ['Int', 'Bool'], 'Int');
 
-			expect(actual).to.equal('(declare-fun Foo (a b c) Int)');
+			expect(actual).to.equal('(declare-fun Foo (Int Bool) Int)');
 		});
 	});
 
@@ -68,6 +68,18 @@ describe('smt-strings', () => {
 			const actual = testee.makeFunctionCall('Foo', ['a', 'b', 'c']);
 
 			expect(actual).to.equal('(Foo a b c)');
+		});
+
+		it('should make a function call from argument array of ints', () => {
+			const actual = testee.makeFunctionCall('Foo', [1, 2, 3]);
+
+			expect(actual).to.equal('(Foo 1 2 3)');
+		});
+
+		it('should make a function call from argument array of floats', () => {
+			const actual = testee.makeFunctionCall('Foo', [1.4, 2.3, 3.6]);
+
+			expect(actual).to.equal('(Foo 1.4 2.3 3.6)');
 		});
 	});
 
