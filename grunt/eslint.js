@@ -8,7 +8,8 @@ module.exports = {
 				expand: true,
 				src: [
 					'gruntfile.js',
-					'grunt/*.js'
+					'grunt/*.js',
+					'util/**/*.js'
 				]
 			}
 		]
