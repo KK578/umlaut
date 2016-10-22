@@ -4,7 +4,7 @@ class SmtStrings {
 	}
 
 	declareFunction(name, args, type) {
-		if (args instanceof Array) {
+		if (Array.isArray(args)) {
 			return this.declareFunction(name, args.join(' '), type);
 		}
 
@@ -20,7 +20,7 @@ class SmtStrings {
 	}
 
 	makeFunctionCall(name, args) {
-		if (args instanceof Array) {
+		if (Array.isArray(args)) {
 			return this.makeFunctionCall(name, args.join(' '));
 		}
 
@@ -44,7 +44,7 @@ class SmtStrings {
 	}
 
 	getValues(args) {
-		if (args instanceof Array) {
+		if (Array.isArray(args)) {
 			return this.getValues(args.join(' '));
 		}
 
