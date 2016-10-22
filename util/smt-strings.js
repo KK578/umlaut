@@ -20,7 +20,7 @@ class SmtStrings {
 			return this.makeFunctionCall(name, args.join(' '));
 		}
 
-		return `(${name} ${args})`
+		return `(${name} ${args})`;
 	}
 
 	stackPush() {
