@@ -1,5 +1,5 @@
-const smtStringsSource = require('./smt-strings.js');
-const smtStrings = new smtStringsSource();
+const SmtStringsSource = require('./smt-strings.js');
+const smtStrings = new SmtStringsSource();
 
 class SmtMethod {
 	constructor(method) {
@@ -57,8 +57,8 @@ class SmtMethod {
 
 			// HACK: Currently just replace 'result' with the function call.
 			const functionCall = smtStrings.makeFunctionCall(method.name, args);
-			let left = c.left === 'result' ? functionCall : c.left;
-			let right = c.right === 'result' ? functionCall : c.right;
+			const left = c.left === 'result' ? functionCall : c.left;
+			const right = c.right === 'result' ? functionCall : c.right;
 
 			const command = smtStrings.makeAssertion(c.type, left, right);
 
