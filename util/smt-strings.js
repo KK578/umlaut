@@ -15,6 +15,10 @@ class SmtStrings {
 		return `(assert (${assertionType} ${left} ${right}))`;
 	}
 
+	makeInvertedAssertion(assertionType, left, right) {
+		return `(assert (not (${assertionType} ${left} ${right})))`;
+	}
+
 	makeFunctionCall(name, args) {
 		if (args instanceof Array) {
 			return this.makeFunctionCall(name, args.join(' '));
@@ -37,6 +41,14 @@ class SmtStrings {
 
 	getModel() {
 		return '(get-model)';
+	}
+
+	getValues(args) {
+		if (args instanceof Array) {
+			return this.getValues(args.join(' '));
+		}
+
+		return `(get-value (${args}))`;
 	}
 }
 

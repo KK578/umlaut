@@ -51,6 +51,21 @@ describe('smt-strings', () => {
 		});
 	});
 
+	describe('makeInvertedAssertion', () => {
+		it('should make an inverted assertion', () => {
+			const actual = testee.makeInvertedAssertion('>=', 'a', 'b');
+
+			expect(actual).to.equal('(assert (not (>= a b)))');
+		});
+
+		it('should make an inverted assertion with a function call', () => {
+			const functionCall = testee.makeFunctionCall('Foo', 'a');
+			const actual = testee.makeInvertedAssertion('>=', functionCall, 'b');
+
+			expect(actual).to.equal('(assert (not (>= (Foo a) b)))');
+		});
+	});
+
 	describe('makeFunctionCall', () => {
 		it('should make a function call', () => {
 			const actual = testee.makeFunctionCall('Foo', 'a');
