@@ -1,0 +1,76 @@
+{
+	"name": "SimpleMath",
+	"methods": [
+		{
+			"name": "Add",
+			"arguments": [
+				{
+					"name": "a",
+					"type": "Int"
+				},
+				{
+					"name": "b",
+					"type": "Int"
+				}
+			],
+			"return": { "type": "Int" },
+			"preconditions": [
+				{
+					"type": ">=",
+					"left": "a",
+					"right": "0"
+				},
+				{
+					"type": ">=",
+					"left": "b",
+					"right": "0"
+				}
+			],
+			"postconditions": [
+				{
+					"type": ">=",
+					"left": "result",
+					"right": "a"
+				}
+			]
+		},
+		{
+			"name": "Subtract",
+			"arguments": [
+				{
+					"name": "a",
+					"type": "Int"
+				},
+				{
+					"name": "b",
+					"type": "Int"
+				}
+			],
+			"return": { "type": "Int" },
+			"preconditions": [
+				{
+					"type": ">=",
+					"left": "a",
+					"right": "0"
+				},
+				{
+					"type": ">=",
+					"left": "b",
+					"right": "0"
+				},
+				{
+					"type": ">=",
+					"left": "a",
+					"right": "b"
+				}
+			],
+			"postconditions": [
+				{
+					"type": "<=",
+					"left": "result",
+					"right": "a"
+				}
+			]
+		}
+	]
+}

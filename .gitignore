@@ -3,6 +3,7 @@
 .env
 .cache/
 tmp/
+build/
 
 ## Dependencies
 node_modules/
