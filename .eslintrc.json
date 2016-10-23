@@ -47,7 +47,7 @@
     "max-statements": [ "warn", { "max": 15 }],
     "new-cap": [ "error", { "capIsNewExceptions": ["Router", "Polymer"] }],
     "new-parens": "error",
-    "newline-after-var": "error",
+    "newline-after-var": [ "warn", "always" ],
     "newline-before-return": "error",
     "no-bitwise": "error",
     "no-lonely-if": "error",

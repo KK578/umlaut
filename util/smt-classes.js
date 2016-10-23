@@ -8,14 +8,14 @@ const SmtClasses = {
 	StackModifier: require('../classes/StackModifier.js')
 };
 
-function DeclareConst(argumentObj) {
+function declareConst(argumentObj) {
 	const n = argumentObj.name;
 	const t = argumentObj.type;
 
 	return new SmtClasses.DeclareConst(n, t);
 }
 
-function DeclareFunction(methodObj) {
+function declareFunction(methodObj) {
 	const name = methodObj.name;
 	const returnType = methodObj.return.type;
 	const args = methodObj.arguments.map((a) => {
@@ -25,14 +25,14 @@ function DeclareFunction(methodObj) {
 	return new SmtClasses.DeclareFunction(name, returnType, args);
 }
 
-function BooleanExpression(conditionObj) {
+function booleanExpression(conditionObj) {
 	const comparison = conditionObj.comparison;
 	const args = conditionObj.arguments.map((a) => {
 		if ((typeof a) === 'string' || a instanceof SmtClasses.FunctionCall) {
 			return a;
 		}
 		else {
-			return BooleanExpression(a);
+			return booleanExpression(a);
 		}
 	});
 
@@ -42,7 +42,7 @@ function BooleanExpression(conditionObj) {
 	return expression;
 }
 
-function FunctionCall(methodObj) {
+function functionCall(methodObj) {
 	const name = methodObj.name;
 	const args = methodObj.arguments.map((a) => {
 		return a.name;
@@ -51,34 +51,34 @@ function FunctionCall(methodObj) {
 	return new SmtClasses.FunctionCall(name, args);
 }
 
-function Assertion(condition) {
+function assertion(condition) {
 	if (condition instanceof SmtClasses.BooleanExpression) {
 		return new SmtClasses.Assertion(condition);
 	}
 	else {
-		return new SmtClasses.Assertion(BooleanExpression(condition));
+		return new SmtClasses.Assertion(booleanExpression(condition));
 	}
 }
 
-function GetValues(values) {
+function getValues(values) {
 	return new SmtClasses.Model(values);
 }
 
-function StackPop() {
+function stackPop() {
 	return new SmtClasses.StackModifier('pop');
 }
 
-function StackPush() {
+function stackPush() {
 	return new SmtClasses.StackModifier('push');
 }
 
 module.exports = {
-	Assertion,
-	BooleanExpression,
-	DeclareConst,
-	DeclareFunction,
-	FunctionCall,
-	GetValues,
-	StackPop,
-	StackPush
+	assertion,
+	booleanExpression,
+	declareConst,
+	declareFunction,
+	functionCall,
+	getValues,
+	stackPop,
+	stackPush
 };
