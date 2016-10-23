@@ -1,9 +1,7 @@
-const util = require('../util/smt-util.js');
-
 module.exports = class SmtDeclareConst {
 	constructor(name, type) {
-		this.name = util.validateName(name);
-		this.type = util.validateType(type);
+		this.name = name;
+		this.type = type;
 	}
 
 	toString() {

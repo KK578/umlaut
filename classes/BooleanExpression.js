@@ -1,13 +1,7 @@
-const util = require('../util/smt-util.js');
-
 module.exports = class SmtBooleanExpression {
 	constructor(comparison, args) {
-		this.comparison = util.validateComparison(comparison);
-		this.isInverted = /!/.test(comparison);
-
-		this.args = args.map((a) => {
-			return util.validateType(a);
-		});
+		this.comparison = comparison;
+		this.args = args;
 	}
 
 	setInverted(value) {
@@ -18,7 +12,7 @@ module.exports = class SmtBooleanExpression {
 		const args = this.args.map((a) => {
 			return a.toString();
 		}).join(' ');
-		const command = `(${comparison} ${args})`;
+		const command = `(${this.comparison} ${args})`;
 
 		return this.isInverted ? `(not ${command})` : command;
 	}
