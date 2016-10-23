@@ -16,21 +16,27 @@
 			"return": { "type": "Int" },
 			"preconditions": [
 				{
-					"type": ">=",
-					"left": "a",
-					"right": "0"
+					"comparison": ">=",
+					"arguments": [
+            "a",
+            "0"
+          ]
 				},
 				{
-					"type": ">=",
-					"left": "b",
-					"right": "0"
+					"comparison": ">=",
+					"arguments": [
+            "b",
+            "0"
+          ]
 				}
 			],
 			"postconditions": [
 				{
-					"type": ">=",
-					"left": "result",
-					"right": "a"
+					"comparison": ">=",
+					"arguments": [
+            "result",
+            "a"
+          ]
 				}
 			]
 		},
@@ -49,27 +55,67 @@
 			"return": { "type": "Int" },
 			"preconditions": [
 				{
-					"type": ">=",
-					"left": "a",
-					"right": "0"
+					"comparison": ">=",
+					"arguments": [
+            "a",
+            "0"
+          ]
 				},
 				{
-					"type": ">=",
-					"left": "b",
-					"right": "0"
+					"comparison": ">=",
+					"arguments": [
+            "b",
+            "0"
+          ]
 				},
 				{
-					"type": ">=",
-					"left": "a",
-					"right": "b"
+					"comparison": ">=",
+					"arguments": [
+            "a",
+            "b"
+          ]
 				}
 			],
 			"postconditions": [
 				{
-					"type": "<=",
-					"left": "result",
-					"right": "a"
+					"comparison": "<=",
+					"arguments": [
+            "result",
+            "a"
+          ]
 				}
+			]
+		},
+    {
+			"name": "Divide",
+			"arguments": [
+				{
+					"name": "a",
+					"type": "Int"
+				},
+				{
+					"name": "b",
+					"type": "Int"
+				}
+			],
+			"return": { "type": "Int" },
+			"preconditions": [
+				{
+					"comparison": ">=",
+					"arguments": [
+            "a",
+            "0"
+          ]
+				},
+				{
+					"comparison": ">",
+					"arguments": [
+            "b",
+            "0"
+          ]
+				}
+			],
+			"postconditions": [
 			]
 		}
 	]

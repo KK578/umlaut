@@ -1,9 +1,8 @@
-const SmtStringsSource = require('./smt-strings.js');
-const smtStrings = new SmtStringsSource();
+const SMT = new require('./smt-classes.js');
 
 class SmtMethod {
 	constructor(method) {
-		this.smtCommands = [];
+		this.commands = [];
 		this.constants = [];
 
 		this.declareArguments(method.arguments);
@@ -15,74 +14,76 @@ class SmtMethod {
 	declareArguments(args) {
 		// For every argument to the function, add a declaration to SMT.
 		args.map((a) => {
-			const command = smtStrings.declareConst(a.name, a.type);
+			const command = SMT.DeclareConst(a);
 
 			// Note the existence of the argument to the class for get-value calls later.
 			if (!this.constants[a.name]) {
 				this.constants[a.name] = true;
 			}
 
-			this.smtCommands.push(command);
+			this.commands.push(command);
 		});
 	}
 
 	declareFunction(method) {
 		// Declare the function to SMT.
-		const args = method.arguments.map((a) => {
-			return a.type;
-		});
+		const command = SMT.DeclareFunction(method);
 
-		const type = typeof method.return === 'string' ? method.return : method.return.type;
-		const command = smtStrings.declareFunction(method.name, args, type);
-
-		this.smtCommands.push(command);
+		this.commands.push(command);
 	}
 
 	allValidConditions(method) {
 		// Add a layer to the stack so we can pop later and keep the declarations.
-		this.smtCommands.push(smtStrings.stackPush());
+		this.commands.push(SMT.StackPush());
 
 		// For each precondition, add it to the stack.
 		method.preconditions.map((c) => {
-			const command = smtStrings.makeAssertion(c.type, c.left, c.right);
+			const command = SMT.Assertion(c);
 
-			this.smtCommands.push(command);
+			this.commands.push(command);
 		});
+
+		// Declare a variable for the result
+		if (method.return.type !== 'void') {
+			const resultDeclare = SMT.DeclareConst({ name: 'result', type: method.return.type });
+			const functionCall = SMT.FunctionCall(method);
+			const resultAssert = SMT.Assertion({
+				comparison: '=',
+				arguments: [
+					'result',
+					functionCall
+				]
+			});
+
+			this.commands.push(resultDeclare);
+			this.commands.push(resultAssert);
+		}
 
 		// Add postconditions so that the inputs may be more interesting.
 		method.postconditions.map((c) => {
-			const args = method.arguments.map((a) => {
-				return a.name;
-			});
+			const command = SMT.Assertion(c);
 
-			// HACK: Currently just replace 'result' with the function call.
-			const functionCall = smtStrings.makeFunctionCall(method.name, args);
-			const left = c.left === 'result' ? functionCall : c.left;
-			const right = c.right === 'result' ? functionCall : c.right;
-
-			const command = smtStrings.makeAssertion(c.type, left, right);
-
-			this.smtCommands.push(command);
+			this.commands.push(command);
 		});
 
 		// Check satisfiability and get values of arguments.
-		this.smtCommands.push(smtStrings.checkSat());
-		this.smtCommands.push(smtStrings.getValues(this.getConstants()));
-		this.smtCommands.push(smtStrings.stackPop());
+		this.commands.push(SMT.GetValues(this.getConstants()));
+		this.commands.push(SMT.StackPop());
 	}
 
 	singularInvalidConditions(method) {
 		// For each precondition, invert the result and get the values to use as inputs.
 		method.preconditions.map((c) => {
-			this.smtCommands.push(smtStrings.stackPush());
+			this.commands.push(SMT.StackPush());
 
-			const command = smtStrings.makeInvertedAssertion(c.type, c.left, c.right);
+			const expression = SMT.BooleanExpression(c);
+			expression.setInverted(!expression.isInverted);
 
-			this.smtCommands.push(command);
+			const command = SMT.Assertion(expression);
+			this.commands.push(command);
 
-			this.smtCommands.push(smtStrings.checkSat());
-			this.smtCommands.push(smtStrings.getValues(this.getConstants()));
-			this.smtCommands.push(smtStrings.stackPop());
+			this.commands.push(SMT.GetValues(this.getConstants()));
+			this.commands.push(SMT.StackPop());
 		});
 	}
 
@@ -91,7 +92,7 @@ class SmtMethod {
 	}
 
 	getCommands() {
-		return this.smtCommands;
+		return this.commands;
 	}
 }
 
