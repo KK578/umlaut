@@ -2,6 +2,7 @@ module.exports = class SmtBooleanExpression {
 	constructor(comparison, args) {
 		this.comparison = comparison;
 		this.args = args;
+		this.isInverted = false;
 	}
 
 	setInverted(value) {
