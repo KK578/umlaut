@@ -3,6 +3,7 @@ const SmtClasses = {
 	BooleanExpression: require('../classes/BooleanExpression.js'),
 	DeclareConst: require('../classes/DeclareConst.js'),
 	DeclareFunction: require('../classes/DeclareFunction.js'),
+	Echo: require('../classes/Echo.js'),
 	FunctionCall: require('../classes/FunctionCall.js'),
 	Model: require('../classes/Model.js'),
 	StackModifier: require('../classes/StackModifier.js')
@@ -51,6 +52,10 @@ function functionCall(methodObj) {
 	return new SmtClasses.FunctionCall(name, args);
 }
 
+function echo(output) {
+	return new SmtClasses.Echo(output);
+}
+
 function assertion(condition) {
 	if (condition instanceof SmtClasses.BooleanExpression) {
 		return new SmtClasses.Assertion(condition);
@@ -77,6 +82,7 @@ module.exports = {
 	booleanExpression,
 	declareConst,
 	declareFunction,
+	echo,
 	functionCall,
 	getValues,
 	stackPop,
