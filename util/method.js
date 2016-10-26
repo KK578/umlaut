@@ -34,6 +34,7 @@ class SmtMethod {
 
 	allValidConditions(method) {
 		// Add a layer to the stack so we can pop later and keep the declarations.
+		this.commands.push(smt.echo("-----Valid"));
 		this.commands.push(smt.stackPush());
 
 		// For each precondition, add it to the stack.
@@ -74,10 +75,11 @@ class SmtMethod {
 	singularInvalidConditions(method) {
 		// For each precondition, invert the result and get the values to use as inputs.
 		method.preconditions.map((c) => {
-			this.commands.push(smt.stackPush());
-
 			const expression = smt.booleanExpression(c);
 			expression.setInverted(!expression.isInverted);
+
+			this.commands.push(smt.echo(`-----Invalid (${expression.toString()})`));
+			this.commands.push(smt.stackPush());
 
 			const command = smt.assertion(expression);
 			this.commands.push(command);
