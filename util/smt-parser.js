@@ -30,7 +30,7 @@ function parseValues(text) {
 		return { [name]: value };
 	};
 
-	for (var i = 0; i < text.length; i++) {
+	for (let i = 0; i < text.length; i++) {
 		if (text[i] === '(') {
 			i++;
 			const oppositeParen = findClosingParen(text, i);
@@ -45,13 +45,13 @@ function parseValues(text) {
 }
 
 function parseCondition(text) {
-	var split = text.split('\n');
-	var condition = split[0];
-	var arguments = {};
+	const split = text.split('\n');
+	const condition = split[0];
+	let arguments = {};
 
 	if (split[1] === 'sat') {
-		var values = split.slice(2).join('');
-		var arguments = parseValues(values);
+		const values = split.slice(2).join('');
+		arguments = parseValues(values);
 	}
 
 	return {
