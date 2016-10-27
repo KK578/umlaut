@@ -44,6 +44,22 @@ function parseValues(text) {
 	return Object.assign.apply(null, values);
 }
 
+function parseCondition(text) {
+	var split = text.split('\n');
+	var condition = split[0];
+	var arguments = {};
+
+	if (split[1] === 'sat') {
+		var values = split.slice(2).join('');
+		var arguments = parseValues(values);
+	}
+
+	return {
+		condition,
+		arguments
+	}
+}
+
 module.exports = {
-	parseValues
+	parseCondition
 }
