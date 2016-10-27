@@ -47,19 +47,29 @@ function parseValues(text) {
 function parseCondition(text) {
 	const split = text.split('\n');
 	const condition = split[0];
-	let arguments = {};
+	let args = {};
 
 	if (split[1] === 'sat') {
 		const values = split.slice(2).join('');
-		arguments = parseValues(values);
+		args = parseValues(values);
 	}
 
 	return {
 		condition,
-		arguments
+		args
 	}
 }
 
+function parseZ3(text) {
+	let split = text.split('-----');
+	// Ignore first as it will be empty.
+	split = split.slice(1);
+
+	const results = split.map(parseCondition);
+
+	return results;
+}
+
 module.exports = {
-	parseCondition
+	parseZ3
 }
