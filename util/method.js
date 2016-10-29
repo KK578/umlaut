@@ -73,16 +73,24 @@ class SmtMethod {
 	}
 
 	singularInvalidConditions(method) {
-		// For each precondition, invert the result and get the values to use as inputs.
-		method.preconditions.map((c) => {
-			const expression = smt.booleanExpression(c);
-			expression.setInverted(!expression.isInverted);
-
-			this.commands.push(smt.echo(`-----Invalid (${expression.toString()})`));
+		method.preconditions.map((a, i) => {
+			// For each precondition, add it to the stack.
+			const inverted = smt.booleanExpression(a);
+			this.commands.push(smt.echo(`-----Invalid ${inverted.toString()}`));
 			this.commands.push(smt.stackPush());
 
-			const command = smt.assertion(expression);
-			this.commands.push(command);
+			method.preconditions.map((c, j) => {
+				const expression = smt.booleanExpression(c);
+
+				// If it is the one that we are testing,
+				//  invert the result and get the values to use as inputs.
+				if (i === j) {
+					expression.setInverted(!expression.isInverted);
+				}
+
+				const command = smt.assertion(expression);
+				this.commands.push(command);
+			});
 
 			this.commands.push(smt.getValues(this.getConstants()));
 			this.commands.push(smt.stackPop());
