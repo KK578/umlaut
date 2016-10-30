@@ -9,8 +9,18 @@ module.exports = {
 				src: [
 					'gruntfile.js',
 					'grunt/*.js',
-					'classes/**/*.js',
-					'util/**/*.js'
+					'scripts/*.js'
+				]
+			}
+		]
+	},
+	'smt-generator': {
+		files: [
+			{
+				expand: true,
+				src: [
+					'smt-generator/**/*.js',
+					'!smt-generator/node_modules/**/*.js'
 				]
 			}
 		]
