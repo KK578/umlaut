@@ -53,6 +53,9 @@ function parseCondition(text) {
 		const values = split.slice(2).join('');
 		args = parseValues(values);
 	}
+	else {
+		args = 'Unsatisfiable';
+	}
 
 	return {
 		condition,
