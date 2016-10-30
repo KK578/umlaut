@@ -1,4 +1,4 @@
 module.exports = {
 	options: { reporter: 'spec' },
-	all: { src: 'test/*-test.js' }
+	'smt-generator': { src: 'smt-generator/test/*-test.js' }
 };
