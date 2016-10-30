@@ -45,7 +45,8 @@ function solve() {
 				result[methodName] = parser.parseZ3(solved);
 
 				if (--count === 0) {
-					console.log(result);
+					const output = JSON.stringify(result, null, 2);
+					fs.writeFile(`${dir}/solved.json`, output, 'utf-8');
 				}
 			});
 		});
