@@ -28,7 +28,7 @@ function solveSmt(filename, callback) {
 	});
 
 	z3.on('close', () => {
-		callback(`${filename}/${output}`);
+		callback(`${output}`);
 	});
 }
 
@@ -37,12 +37,12 @@ function solve() {
 
 	readFiles(dir, (smtFiles) => {
 		let count = smtFiles.length;
-		const result = [];
+		const result = {};
 
 		smtFiles.map((smtFile) => {
 			solveSmt(`${dir}/${smtFile}`, (solved) => {
-				console.log(solved);
-				result[smtFile] = parser.parseZ3(solved);
+				const methodName = smtFile.substring(0, smtFile.length - 5);
+				result[methodName] = parser.parseZ3(solved);
 
 				if (--count === 0) {
 					console.log(result);
