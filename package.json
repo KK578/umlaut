@@ -6,7 +6,9 @@
     "email": "KevinKwan@googlemail.com"
   },
   "license": "BSD-3-Clause",
-  "dependencies": {},
+  "dependencies": {
+    "glob": "^7.1.1"
+  },
   "devDependencies": {
     "chai": "^3.5.0",
     "eslint-formatter-pretty": "^0.2.2",
