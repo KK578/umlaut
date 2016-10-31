@@ -101,7 +101,7 @@ const generator = generators.Base.extend({
 	},
 
 	writing() {
-		this.template('test-class.cs', 'SimpleMath.cs', { method: methods[0] });
+		this.template('test-class.cs', 'SimpleMath.cs', { methods: methods });
 	}
 });
 

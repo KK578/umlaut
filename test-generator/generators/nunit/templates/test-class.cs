@@ -14,12 +14,16 @@ namespace AutomatedTestSuite
             testee = new SimpleMath();
         }
 
-		<% for (var i = 0; i < method.tests.length; i++) { %>
+		<% for (var i = 0; i < methods.length; i++) { %>
+		<% for (var j = 0; j < methods[i].tests.length; j++) { %>
+		<% if (methods[i].tests[j]) { %>
 		[TestMethod]
-		public void <%= method.tests[i].name %>()
+		public void <%= methods[i].tests[j].name %>()
 		{
-			testee.<%= method.name %>(<%= method.tests[i].argumentString %>);
+			testee.<%= methods[i].name %>(<%= methods[i].tests[j].argumentString %>);
 		}
+		<% } %>
+		<% } %>
 		<% } %>
 	}
 }
