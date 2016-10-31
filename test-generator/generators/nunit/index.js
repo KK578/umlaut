@@ -6,16 +6,45 @@ let uml;
 let smt;
 let methods = [];
 
-function generateTestMethodName(condition) {
+function generateTestMethodName(methodName, condition) {
 	const clean = condition.replace(/[<>=() \t]/g, '');
 
-	return `test_${clean}`;
+	return `test_${methodName}_${clean}`;
+}
+
+function getValue(arg, value) {
+	let v = value;
+
+	switch (arg.type) {
+		case 'Int':
+		case 'int':
+			if (v[0] === '(') {
+				v = v.slice(1, v.length - 1);
+				v = v.replace(' ', '');
+			}
+
+			v = parseInt(v);
+			break;
+
+		default:
+			break;
+	}
+
+	return v;
 }
 
 function generateArgumentString(methodArgs, testArgs) {
 	const keys = Object.keys(testArgs);
 	const values = keys.map((key) => {
-		return testArgs[key];
+		let value = testArgs[key];
+
+		for (let i = 0; i < keys.length; i++) {
+			if (methodArgs[i].name === key) {
+				value = getValue(methodArgs[i], testArgs[key]);
+			}
+		}
+
+		return value;
 	});
 
 	return values.join(', ');
@@ -50,7 +79,7 @@ const generator = generators.Base.extend({
 				}
 
 				const test = {
-					name: generateTestMethodName(t.condition),
+					name: generateTestMethodName(m.name, t.condition),
 					args: t.args,
 					argumentString: generateArgumentString(m.arguments, t.args)
 				};
@@ -68,11 +97,11 @@ const generator = generators.Base.extend({
 			return method;
 		});
 
-		console.log(JSON.stringify(methods, null, 2));
+		// console.log(JSON.stringify(methods, null, 2));
 	},
 
 	writing() {
-		this.template('test-class.cs', 'Add.cs', { method: methods[0] });
+		this.template('test-class.cs', 'SimpleMath.cs', { method: methods[0] });
 	}
 });
 
