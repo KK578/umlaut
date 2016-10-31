@@ -18,7 +18,7 @@ namespace AutomatedTestSuite
 		[TestMethod]
 		public void <%= method.tests[i].name %>()
 		{
-			testee.<%= method.name %>(<%= method[i].argumentString %>);
+			testee.<%= method.name %>(<%= method.tests[i].argumentString %>);
 		}
 		<% } %>
 	}

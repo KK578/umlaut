@@ -6,6 +6,21 @@ let uml;
 let smt;
 let methods = [];
 
+function generateTestMethodName(condition) {
+	const clean = condition.replace(/[<>=() \t]/g, '');
+
+	return `test_${clean}`;
+}
+
+function generateArgumentString(methodArgs, testArgs) {
+	const keys = Object.keys(testArgs);
+	const values = keys.map((key) => {
+		return testArgs[key];
+	});
+
+	return values.join(', ');
+}
+
 const generator = generators.Base.extend({
 	constructor: function () {
 		generators.Base.apply(this, arguments);
@@ -29,17 +44,35 @@ const generator = generators.Base.extend({
 
 	configuring() {
 		methods = uml.methods.map((m) => {
+			const tests = smt[m.name].map((t) => {
+				if (t.args === 'Unsatisfiable') {
+					return null;
+				}
+
+				const test = {
+					name: generateTestMethodName(t.condition),
+					args: t.args,
+					argumentString: generateArgumentString(m.arguments, t.args)
+				};
+
+				return test;
+			});
+
 			const method = {
 				name: m.name,
 				arguments: m.arguments,
 				return: m.return,
-				tests: smt[m.name]
+				tests: tests
 			};
 
 			return method;
 		});
 
 		console.log(JSON.stringify(methods, null, 2));
+	},
+
+	writing() {
+		this.template('test-class.cs', 'Add.cs', { method: methods[0] });
 	}
 });
 
