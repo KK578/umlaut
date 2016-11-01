@@ -5,7 +5,8 @@ const spawn = require('child_process').spawnSync;
 
 // get library path
 const projects = [
-	'smt-generator'
+	'smt-generator',
+	'test-generator'
 ];
 
 projects.map((project) => {
