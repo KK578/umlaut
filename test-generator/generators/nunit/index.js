@@ -4,7 +4,7 @@ const path = require('path');
 
 let uml;
 let smt;
-let methods = [];
+const classes = [];
 
 function generateTestMethodName(methodName, condition) {
 	const clean = condition.replace(/[<>=() \t]/g, '');
@@ -50,6 +50,40 @@ function generateArgumentString(methodArgs, testArgs) {
 	return values.join(', ');
 }
 
+function readClass(uml) {
+	const umlClass = {};
+
+	umlClass.name = uml.name;
+	umlClass.methods = uml.methods.map((m) => {
+		const tests = smt[m.name].map((t) => {
+			if (t.args === 'Unsatisfiable') {
+				return null;
+			}
+
+			const test = {
+				name: generateTestMethodName(m.name, t.condition),
+				args: t.args,
+				argumentString: generateArgumentString(m.arguments, t.args)
+			};
+
+			return test;
+		});
+
+		const method = {
+			name: m.name,
+			arguments: m.arguments,
+			return: m.return,
+			tests: tests
+		};
+
+		return method;
+	});
+
+	// console.log(JSON.stringify(umlClass, null, 2));
+
+	return umlClass;
+}
+
 const generator = generators.Base.extend({
 	constructor: function () {
 		generators.Base.apply(this, arguments);
@@ -66,42 +100,19 @@ const generator = generators.Base.extend({
 		});
 	},
 
-	initializing(done) {
+	initializing() {
 		uml = require(path.resolve(process.cwd(), this.umlFile));
 		smt = require(path.resolve(process.cwd(), this.smtFile));
 	},
 
 	configuring() {
-		methods = uml.methods.map((m) => {
-			const tests = smt[m.name].map((t) => {
-				if (t.args === 'Unsatisfiable') {
-					return null;
-				}
-
-				const test = {
-					name: generateTestMethodName(m.name, t.condition),
-					args: t.args,
-					argumentString: generateArgumentString(m.arguments, t.args)
-				};
-
-				return test;
-			});
-
-			const method = {
-				name: m.name,
-				arguments: m.arguments,
-				return: m.return,
-				tests: tests
-			};
-
-			return method;
-		});
-
-		// console.log(JSON.stringify(methods, null, 2));
+		classes[0] = readClass(uml);
 	},
 
 	writing() {
-		this.template('test-class.cs', 'SimpleMath.cs', { methods: methods });
+		classes.map((c) => {
+			this.template('test-class.cs', `${c.name}.cs`, { classObject: c });
+		});
 	}
 });
 
