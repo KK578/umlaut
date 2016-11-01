@@ -13,17 +13,16 @@ namespace AutomatedTestSuite
         {
             testee = new <%= classObject.name %>();
         }
-
-		<% for (var i = 0; i < classObject.methods.length; i++) { %>
-		<% for (var j = 0; j < classObject.methods[i].tests.length; j++) { %>
-		<% if (classObject.methods[i].tests[j]) { %>
+		<% for (var i = 0; i < classObject.methods.length; i++) { _%>
+		<%_ for (var j = 0; j < classObject.methods[i].tests.length; j++) { _%>
+		<%_ if (classObject.methods[i].tests[j]) { %>
 		[TestMethod]
 		public void <%= classObject.methods[i].tests[j].name %>()
 		{
 			testee.<%= classObject.methods[i].name %>(<%= classObject.methods[i].tests[j].argumentString %>);
 		}
-		<% } %>
-		<% } %>
-		<% } %>
+		<%_ } _%>
+		<%_ } _%>
+		<%_ } -%>
 	}
 }
