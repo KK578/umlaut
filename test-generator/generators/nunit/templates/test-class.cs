@@ -8,21 +8,21 @@ namespace AutomatedTestSuite
 	{
 		<%= classObject.name %> testee;
 
-        [TestInitialize]
-        public void Initialize()
-        {
-            testee = new <%= classObject.name %>();
-        }
-		<% for (var i = 0; i < classObject.methods.length; i++) { _%>
-		<%_ for (var j = 0; j < classObject.methods[i].tests.length; j++) { _%>
-		<%_ if (classObject.methods[i].tests[j]) { %>
-		[TestMethod]
-		public void <%= classObject.methods[i].tests[j].name %>()
+		[TestInitialize]
+		public void Initialize()
 		{
-			testee.<%= classObject.methods[i].name %>(<%= classObject.methods[i].tests[j].argumentString %>);
+			testee = new <%= classObject.name %>();
 		}
-		<%_ } _%>
-		<%_ } _%>
-		<%_ } -%>
+		<%_ classObject.methods.map((method) => { _%>
+		<%_		method.tests.map((test) => { _%>
+		<%_			if (test) { %>
+		[TestMethod]
+		public void <%= test.name %>()
+		{
+			testee.<%= method.name %>(<%= test.argumentString %>);
+		}
+		<%_			} _%>
+		<%_ 	}) _%>
+		<%_ }) _%>
 	}
 }

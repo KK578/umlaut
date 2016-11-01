@@ -111,7 +111,7 @@ const generator = generators.Base.extend({
 
 	writing() {
 		classes.map((c) => {
-			this.template('test-class.cs', `${c.name}.cs`, { classObject: c });
+			this.template('test-class.cs', `build/${c.name}.cs`, { classObject: c });
 		});
 	}
 });
