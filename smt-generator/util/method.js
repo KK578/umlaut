@@ -77,7 +77,7 @@ class SmtMethod {
 			// For each precondition, add it to the stack.
 			const inverted = smt.booleanExpression(a);
 
-			this.commands.push(smt.echo(`-----Invalid ${inverted.toString()}`));
+			this.commands.push(smt.echo(`-----Complement ${inverted.toString()}`));
 			this.commands.push(smt.stackPush());
 
 			method.preconditions.map((c, j) => {
