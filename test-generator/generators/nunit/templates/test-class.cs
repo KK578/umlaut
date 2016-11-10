@@ -19,6 +19,10 @@ namespace AutomatedTestSuite
 		[TestMethod]
 		public void <%= test.name %>()
 		{
+			<%_ test.args.map((arg) => { _%>
+			<%= arg.type %> <%= arg.name %> = <%= arg.value %>;
+			<%_ }) _%>
+
 			testee.<%= method.name %>(<%= test.argumentString %>);
 		}
 		<%_			} _%>
