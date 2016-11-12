@@ -116,51 +116,7 @@
 				}
 			],
 			"postconditions": [
-				{
-					"comparison": "ite",
-					"arguments": [
-            {
-              "comparison": ">=",
-              "arguments": [
-                "a",
-                "b"
-              ]
-            },
-            {
-              "comparison": "ite",
-              "arguments": [
-                {
-                  "comparison": ">",
-                  "arguments": [
-                    "a",
-                    "b"
-                  ]
-                },
-                {
-                  "comparison": ">",
-                  "arguments": [
-                    "result",
-                    "a"
-                  ]
-                },
-                {
-                  "comparison": "=",
-                  "arguments": [
-                    "result",
-                    "1"
-                  ]
-                }
-              ]
-            },
-            {
-              "comparison": "<",
-              "arguments": [
-                "result",
-                "a"
-              ]
-            }
-          ]
-				}
+
 			]
 		}
 	]

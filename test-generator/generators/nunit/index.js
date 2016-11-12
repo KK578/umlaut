@@ -98,6 +98,7 @@ function readClass(uml) {
 			name: m.name,
 			arguments: m.arguments,
 			return: m.return,
+			postconditions: m.postconditions,
 			tests: tests
 		};
 

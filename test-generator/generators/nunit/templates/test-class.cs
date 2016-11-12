@@ -23,7 +23,11 @@ namespace AutomatedTestSuite
 			<%= arg.type %> <%= arg.name %> = <%= arg.value %>;
 			<%_ }) _%>
 
-			testee.<%= method.name %>(<%= test.argumentString %>);
+			<%= method.return.type %> result = testee.<%= method.name %>(<%= test.argumentString %>);
+
+			<%_ method.postconditions.map((condition) => { _%>
+			Assert.isTrue(<%= condition.arguments[0] %> <%- condition.comparison %> <%= condition.arguments[1] %>);
+			<%_ }) _%>
 		}
 		<%_			} _%>
 		<%_ 	}) _%>
