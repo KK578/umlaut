@@ -6,10 +6,69 @@ let uml;
 let smt;
 const classes = [];
 
-function generateTestMethodName(methodName, condition) {
-	const clean = condition.replace(/[<>=() \t]/g, '');
+function comparatorString(comparator) {
+	let value = '';
 
-	return `test_${methodName}_${clean}`;
+	switch (comparator) {
+		case '=':
+			value = 'Equal';
+			break;
+
+		case '<':
+			value = 'LessThan';
+			break;
+
+		case '<=':
+			value = 'LessThanOrEqual';
+			break;
+
+		case '>':
+			value = 'GreaterThan';
+			break;
+
+		case '>=':
+			value = 'GreaterThanOrEqual';
+			break;
+
+		case '&':
+			value = 'And';
+			break;
+
+		case '|':
+			value = 'Or';
+			break;
+
+		default:
+			break;
+	}
+
+	return value;
+}
+
+function generateTestMethodName(method, test) {
+	let condition;
+	let id = '';
+	let clean;
+
+	if (test.condition === 'Valid') {
+		clean = 'Valid';
+	}
+	else {
+		id = test.condition.split(' ')[1];
+
+		for (let i = 0; i < method.preconditions.length; i++) {
+			const c = method.preconditions[i];
+
+			if (c.id === id) {
+				condition = c;
+				break;
+			}
+		}
+
+		clean = `Not${comparatorString(condition.comparison)}_${condition.arguments.join('_')}`;
+	}
+
+	return `test_${method.name}_${clean}`;
 }
 
 function getValue(arg, value) {
@@ -86,7 +145,7 @@ function readClass(uml) {
 			}
 
 			const test = {
-				name: generateTestMethodName(m.name, t.condition),
+				name: generateTestMethodName(m, t),
 				args: generateArguments(m.arguments, t.args),
 				argumentString: generateArgumentString(m.arguments)
 			};
