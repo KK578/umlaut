@@ -4,7 +4,7 @@ module.exports = class SmtEcho {
 	}
 
 	toString() {
-		var output = this.output.replace(/"/g, '""');
+		const output = this.output.replace(/"/g, '""');
 
 		return `(echo "${output}")`;
 	}

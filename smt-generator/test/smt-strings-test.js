@@ -1,11 +1,11 @@
 const expect = require('chai').expect;
-const smtStrings = require('../util/smt-strings.js');
+const SmtStrings = require('../util/smt-strings.js');
 
 let testee;
 
 describe('smt-strings', () => {
 	before(() => {
-		testee = new smtStrings();
+		testee = new SmtStrings();
 	});
 
 	describe('declareConst', () => {
