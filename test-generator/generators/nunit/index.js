@@ -33,21 +33,46 @@ function getValue(arg, value) {
 	return v;
 }
 
-function generateArgumentString(methodArgs, testArgs) {
+function getLanguageType(type) {
+	// TODO: Expand this to a config file lookup
+	switch (type) {
+		case 'Int':
+		case 'int':
+			return 'int';
+
+		default:
+			console.log(`Undefined type "${type}"`);
+			return type;
+	}
+}
+
+function generateArguments(methodArgs, testArgs) {
 	const keys = Object.keys(testArgs);
 	const values = keys.map((key) => {
 		let value = testArgs[key];
 
 		for (let i = 0; i < keys.length; i++) {
 			if (methodArgs[i].name === key) {
-				value = getValue(methodArgs[i], testArgs[key]);
+				value = {
+					name: key,
+					type: getLanguageType(methodArgs[i].type),
+					value: getValue(methodArgs[i], testArgs[key])
+				};
 			}
 		}
 
 		return value;
 	});
 
-	return values.join(', ');
+	return values;
+}
+
+function generateArgumentString(methodArgs) {
+	const names = methodArgs.map((arg) => {
+		return arg.name;
+	});
+
+	return names.join(', ');
 }
 
 function readClass(uml) {
@@ -62,8 +87,8 @@ function readClass(uml) {
 
 			const test = {
 				name: generateTestMethodName(m.name, t.condition),
-				args: t.args,
-				argumentString: generateArgumentString(m.arguments, t.args)
+				args: generateArguments(m.arguments, t.args),
+				argumentString: generateArgumentString(m.arguments)
 			};
 
 			return test;
@@ -73,6 +98,7 @@ function readClass(uml) {
 			name: m.name,
 			arguments: m.arguments,
 			return: m.return,
+			postconditions: m.postconditions,
 			tests: tests
 		};
 
