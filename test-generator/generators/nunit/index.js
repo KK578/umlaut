@@ -47,7 +47,6 @@ function comparatorString(comparator) {
 
 function generateTestMethodName(method, testId) {
 	let condition;
-	let id = '';
 	let clean;
 
 	if (testId === 'Valid') {
@@ -99,6 +98,7 @@ function getLanguageType(type) {
 
 		default:
 			console.log(`Undefined type "${type}"`);
+
 			return type;
 	}
 }
@@ -157,7 +157,7 @@ function readClass(uml) {
 				testId = t.condition.split(' ')[1];
 				// This will mean exception is either defined to the corresponding
 				//  precondition's exception, or it will be undefined.'
-			 	exception = preconditions[testId].exception;
+				exception = preconditions[testId].exception;
 			}
 			else {
 				// Else the condition is probably 'Valid'.
