@@ -24,5 +24,16 @@ module.exports = {
 				]
 			}
 		]
+	},
+	'test-generator': {
+		files: [
+			{
+				expand: true,
+				src: [
+					'test-generator/**/*.js',
+					'!test-generator/node_modules/**/*.js'
+				]
+			}
+		]
 	}
 };
