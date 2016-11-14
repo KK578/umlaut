@@ -21,7 +21,10 @@
           "arguments": [
             "a",
             "0"
-          ]
+          ],
+          "exception": {
+            "type": "NegativeNumberException"
+          }
         },
         {
           "id": "000002",
@@ -29,7 +32,10 @@
           "arguments": [
             "b",
             "0"
-          ]
+          ],
+          "exception": {
+            "type": "NegativeNumberException"
+          }
         }
       ],
       "postconditions": [
@@ -39,7 +45,10 @@
           "arguments": [
             "result",
             "a"
-          ]
+          ],
+          "exception": {
+            "type": "NegativeNumberException"
+          }
         }
       ]
     },

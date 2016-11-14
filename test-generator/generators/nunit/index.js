@@ -45,21 +45,19 @@ function comparatorString(comparator) {
 	return value;
 }
 
-function generateTestMethodName(method, test) {
+function generateTestMethodName(method, testId) {
 	let condition;
 	let id = '';
 	let clean;
 
-	if (test.condition === 'Valid') {
+	if (testId === 'Valid') {
 		clean = 'Valid';
 	}
 	else {
-		id = test.condition.split(' ')[1];
-
 		for (let i = 0; i < method.preconditions.length; i++) {
 			const c = method.preconditions[i];
 
-			if (c.id === id) {
+			if (c.id === testId) {
 				condition = c;
 				break;
 			}
@@ -139,24 +137,51 @@ function readClass(uml) {
 
 	umlClass.name = uml.name;
 	umlClass.methods = uml.methods.map((m) => {
+		const preconditions = {};
+		m.preconditions.map((c) => {
+			preconditions[c.id] = c;
+		});
+
 		const tests = smt[m.name].map((t) => {
 			if (t.args === 'Unsatisfiable') {
 				return null;
 			}
 
+			// TODO: Organise this better.
+			// Redundant search through preconditions occurs in generateTestMethodName.
+			// Could pass value directly via preconditions object.
+			let testId;
+			let exception = undefined;
+
+			if (t.condition.indexOf(' ') >= 0) {
+				testId = t.condition.split(' ')[1];
+				// This will mean exception is either defined to the corresponding
+				//  precondition's exception, or it will be undefined.'
+			 	exception = preconditions[testId].exception;
+			}
+			else {
+				// Else the condition is probably 'Valid'.
+				testId = t.condition;
+			}
+
 			const test = {
-				name: generateTestMethodName(m, t),
+				name: generateTestMethodName(m, testId),
 				args: generateArguments(m.arguments, t.args),
-				argumentString: generateArgumentString(m.arguments)
+				argumentString: generateArgumentString(m.arguments),
+				exception: exception
 			};
 
 			return test;
 		});
 
+		const r = m.return;
+		r.type = getLanguageType(r.type);
+
 		const method = {
 			name: m.name,
 			arguments: m.arguments,
-			return: m.return,
+			return: r,
+			preconditions: preconditions,
 			postconditions: m.postconditions,
 			tests: tests
 		};
@@ -164,7 +189,7 @@ function readClass(uml) {
 		return method;
 	});
 
-	// console.log(JSON.stringify(umlClass, null, 2));
+	console.log(JSON.stringify(umlClass, null, 2));
 
 	return umlClass;
 }
