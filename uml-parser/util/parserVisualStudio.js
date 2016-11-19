@@ -1,13 +1,17 @@
 function parseVariables(umlClass) {
 	const variables = {};
 
-	umlClass.ownedAttributesInternal.map((variable) => {
-		const property = variable.property;
+	umlClass.ownedAttributesInternal[0].property.map((variable) => {
+		const property = variable;
 		const v = {
-			id: property.Id,
-			name: property.name,
+			id: property.$.Id,
+			name: property.$.name,
 		};
+
+		variables[v.name] = v;
 	});
+
+	return variables;
 }
 
 function parseMethods(umlClass) {
@@ -63,6 +67,23 @@ function parseMethods(umlClass) {
 		return args;
 	}
 
+	function getConditions(conditions) {
+		const c = {};
+
+		if (conditions) {
+			const constraint = conditions[0].constraint[0];
+			const rawString = constraint.specification[0].literalString[0].$.value;
+
+			c.id = constraint.$.Id;
+			// TODO: Add a character to split off of while using Visual Studio's inbuilt
+			//  property conditions.
+			// TODO: Parse condition string into object splitting into comparison and arguments.
+			c.string = rawString;
+		}
+
+		return c;
+	}
+
 	umlClass.ownedOperationsInternal[0].operation.map((method) => {
 		const operation = method;
 		const v = {
@@ -72,10 +93,10 @@ function parseMethods(umlClass) {
 
 		v.returnType = getReturnType(operation.ownedParameters);
 		v.arguments = getArguments(operation.ownedParameters);
-		// TODO: Correct this
-		v.preconditions = operation.preconditionsInternal;
-		v.postconditions = operation.postconditionsInternal;
+		v.preconditions = getConditions(operation.preconditionsInternal);
+		v.postconditions = getConditions(operation.postconditionsInternal);
 
+		// TODO: Keep as hashmap of method name?
 		methods[v.name] = v;
 	});
 
@@ -92,6 +113,8 @@ function parseClass(umlClass) {
 	c.methods = parseMethods(umlClass);
 
 	console.log(JSON.stringify(c, null, 2));
+
+	return c;
 }
 
 function parse(uml) {
