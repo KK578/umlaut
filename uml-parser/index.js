@@ -19,6 +19,7 @@ const parser = require('./util/parser.js');
 				throw err;
 			}
 
+			// TODO: Write data to file.
 			parser.parse(uml);
 		});
 	});

@@ -148,13 +148,13 @@ function parseClass(umlClass) {
 	c.variables = parseVariables(umlClass);
 	c.methods = parseMethods(umlClass);
 
-	console.log(JSON.stringify(c, null, 2));
-
 	return c;
 }
 
 function parse(uml) {
 	// Enter root item.
+	const classes = {};
+
 	uml = uml.modelStoreModel;
 
 	uml.packagedElements.map((element) => {
@@ -162,10 +162,16 @@ function parse(uml) {
 		// Iterate through all and for objects representing classes, parse them.
 		element.packageHasNamedElement.map((namedElement) => {
 			if (namedElement.class) {
-				parseClass(namedElement.class[0]);
+				const c = parseClass(namedElement.class[0]);
+
+				classes[c.name] = c;
 			}
 		});
 	});
+
+	console.log(JSON.stringify(classes, null, 2));
+
+	return classes;
 }
 
 module.exports = parse;
