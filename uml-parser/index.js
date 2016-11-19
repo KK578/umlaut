@@ -13,6 +13,7 @@ const parser = require('./util/parser.js');
 			throw err;
 		}
 
+		// TODO: Enable parsing other structure types.
 		xmlParser.parseString(data, (err, uml) => {
 			if (err) {
 				throw err;
