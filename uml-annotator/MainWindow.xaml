@@ -5,8 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UmlAnnotator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+        Title="UML Annotator" Height="350" Width="525" MinWidth="320" MinHeight="180">
+	<Grid>
+		<Button x:Name="buttonLoad" Content="Load" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="40"/>
+		<Button x:Name="buttonSave" Content="Save" HorizontalAlignment="Left" Margin="55,10,0,0" VerticalAlignment="Top" Width="40"/>
+		<ComboBox x:Name="comboBox" Margin="100,10,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Stretch"/>
+
+	</Grid>
 </Window>
