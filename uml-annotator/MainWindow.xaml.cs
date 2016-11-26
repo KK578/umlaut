@@ -99,18 +99,12 @@ namespace UmlAnnotator
 			XmlNode node = classes[selectedClass];
 			XmlNodeList nodeChildren = node.ChildNodes;
 
-			for (int i = 0; i < nodeChildren.Count; i++)
-			{
-				XmlNode child = nodeChildren[i];
-
+			foreach (XmlNode child in nodeChildren) {
 				if (child.Name == "ownedOperationsInternal")
 				{
 					XmlNodeList methodList = child.ChildNodes;
 
-					for (int j = 0; j < methodList.Count; j++)
-					{
-						XmlNode method = methodList[j];
-
+					foreach (XmlNode method in methodList) {
 						Console.WriteLine(method.Attributes.GetNamedItem("name").Value);
 					}
 				}
@@ -134,10 +128,7 @@ namespace UmlAnnotator
 			{
 				XmlNodeList children = umlClass.ChildNodes;
 
-				for (int i = 0; i < children.Count; i++)
-				{
-					XmlNode child = children[i];
-
+				foreach (XmlNode child in children) {
 					if (child.Name == "ownedOperationsInternal")
 					{
 						ParseMethods(child.ChildNodes);
