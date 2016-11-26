@@ -124,39 +124,26 @@ namespace UmlAnnotator
 
 					if (child.Name == "ownedOperationsInternal")
 					{
-						ParseMethods(child.ChildNodes);
+						methods = ParseChildNodes(child.ChildNodes);
 					}
 					else if (child.Name == "ownedAttributesInternal")
 					{
-						ParseVariables(child.ChildNodes);
+						variables = ParseChildNodes(child.ChildNodes);
 					}
 				}
 			}
 
-			private void ParseMethods(XmlNodeList methods)
+			private Dictionary<string, XmlNode> ParseChildNodes(XmlNodeList list)
 			{
-				this.methods = new Dictionary<string, XmlNode>();
+				Dictionary<string, XmlNode> dictionary = new Dictionary<string, XmlNode>();
 
-				for (int i = 0; i < methods.Count; i++)
+				foreach (XmlNode item in list)
 				{
-					XmlNode method = methods[i];
-					string methodName = method.Attributes.GetNamedItem("name").Value;
-
-					this.methods.Add(methodName, method);
+					string name = item.Attributes.GetNamedItem("name").Value;
+					dictionary.Add(name, item);
 				}
-			}
 
-			private void ParseVariables(XmlNodeList variables)
-			{
-				this.variables = new Dictionary<string, XmlNode>();
-
-				for (int i = 0; i < variables.Count; i++)
-				{
-					XmlNode variable = variables[i];
-					string variableName = variable.Attributes.GetNamedItem("name").Value;
-
-					this.variables.Add(variableName, variable);
-				}
+				return dictionary;
 			}
 		}
 	}
