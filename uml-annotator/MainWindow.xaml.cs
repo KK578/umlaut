@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
+
+using Microsoft.Win32;
 
 namespace UmlAnnotator
 {
@@ -20,9 +23,31 @@ namespace UmlAnnotator
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		XmlDocument umlFile;
+
 		public MainWindow()
 		{
 			InitializeComponent();
+
+			umlFile = new XmlDocument();
+		}
+
+		private void buttonLoad_Click(object sender, RoutedEventArgs e)
+		{
+			OpenFileDialog dialog = new OpenFileDialog();
+
+			if (dialog.ShowDialog() == true)
+			{
+				try
+				{
+					umlFile.Load(dialog.FileName);
+				}
+				catch
+				{
+					MessageBox.Show("Invalid XML File.");
+					return;
+				}
+			}
 		}
 	}
 }
