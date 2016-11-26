@@ -104,7 +104,7 @@ namespace UmlAnnotator
 		private class UmlClassNode
 		{
 			XmlNode umlClass;
-			Dictionary<string, XmlNode> methods;
+			Dictionary<string, UmlMethodNode> methods;
 			Dictionary<string, XmlNode> variables;
 
 			public UmlClassNode(XmlNode umlClass)
@@ -137,12 +137,12 @@ namespace UmlAnnotator
 
 			private void ParseMethods(XmlNodeList methods)
 			{
-				this.methods = new Dictionary<string, XmlNode>();
+				this.methods = new Dictionary<string, UmlMethodNode>();
 
-				for (int i = 0; i < methods.Count; i++)
+				foreach (XmlNode node in methods)
 				{
-					XmlNode method = methods[i];
-					string methodName = method.Attributes.GetNamedItem("name").Value;
+					UmlMethodNode method = new UmlMethodNode(node);
+					string methodName = method.Name;
 
 					this.methods.Add(methodName, method);
 				}
@@ -152,11 +152,9 @@ namespace UmlAnnotator
 			{
 				this.variables = new Dictionary<string, XmlNode>();
 
-				for (int i = 0; i < variables.Count; i++)
+				foreach (XmlNode variable in variables)
 				{
-					XmlNode variable = variables[i];
 					string variableName = variable.Attributes.GetNamedItem("name").Value;
-
 					this.variables.Add(variableName, variable);
 				}
 			}
@@ -168,10 +166,27 @@ namespace UmlAnnotator
 					Console.WriteLine("Variable: " + a.Key);
 				}
 
-				foreach (KeyValuePair<string, XmlNode> a in methods)
+				foreach (KeyValuePair<string, UmlMethodNode> a in methods)
 				{
 					Console.WriteLine("Method: " + a.Key);
 				}
+			}
+		}
+
+		private class UmlMethodNode
+		{
+			private string name;
+			public string Name
+			{
+				get { return name; }
+			}
+
+			private XmlNode node;
+
+			public UmlMethodNode(XmlNode node)
+			{
+				this.node = node;
+				this.name = node.Attributes.GetNamedItem("name").Value;
 			}
 		}
 	}
