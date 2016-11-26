@@ -182,11 +182,70 @@ namespace UmlAnnotator
 			}
 
 			private XmlNode node;
+			private XmlNode preconditionNode;
+			private XmlNode postconditionNode;
 
 			public UmlMethodNode(XmlNode node)
 			{
 				this.node = node;
 				this.name = node.Attributes.GetNamedItem("name").Value;
+
+				ParseMethod();
+			}
+
+			private void ParseMethod()
+			{
+				XmlNodeList children = node.ChildNodes;
+
+				foreach (XmlNode child in children)
+				{
+					if (child.Name == "ownedParameters")
+					{
+						ParseArguments(child.ChildNodes);
+					}
+					else if (child.Name == "preconditionsInternal")
+					{
+						XmlNode constraintNode = child.FirstChild;
+						foreach (XmlNode node in constraintNode.ChildNodes)
+						{
+							if (node.Name == "specification")
+							{
+								preconditionNode = node.FirstChild;
+								break;
+							}
+						}
+					}
+					else if (child.Name == "postconditionsInternal")
+					{
+						XmlNode constraintNode = child.FirstChild;
+						foreach (XmlNode node in constraintNode.ChildNodes)
+						{
+							if (node.Name == "specification")
+							{
+								postconditionNode = node.FirstChild;
+								break;
+							}
+						}
+					}
+				}
+			}
+
+			private void ParseArguments(XmlNodeList arguments)
+			{
+				foreach (XmlNode child in arguments)
+				{
+					XmlNode argument = child.ChildNodes[0];
+					string direction = argument.Attributes.GetNamedItem("direction").Value;
+
+					if (direction == "In")
+					{
+						Console.WriteLine(argument.Attributes.GetNamedItem("name").Value);
+					}
+					else if (direction == "Return")
+					{
+
+					}
+				}
 			}
 		}
 	}
