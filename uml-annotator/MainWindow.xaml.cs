@@ -24,12 +24,34 @@ namespace UmlAnnotator
 	public partial class MainWindow : Window
 	{
 		XmlDocument umlFile;
+		Dictionary<string, XmlNode> classes;
 
 		public MainWindow()
 		{
 			InitializeComponent();
 
 			umlFile = new XmlDocument();
+		}
+
+		private void UmlFindClasses()
+		{
+			classes = new Dictionary<string, XmlNode>();
+
+			if (umlFile.HasChildNodes)
+			{
+				XmlNodeList list = umlFile.GetElementsByTagName("class");
+
+				for (int i = 0; i < list.Count; i++)
+				{
+					// Store related node based on class name.
+					XmlNode node = list[i];
+					string name = node.Attributes.GetNamedItem("name").InnerText;
+
+					classes.Add(name, node);
+				}
+			}
+
+			comboBox.ItemsSource = classes.Keys;
 		}
 
 		private void buttonLoad_Click(object sender, RoutedEventArgs e)
@@ -47,6 +69,9 @@ namespace UmlAnnotator
 					MessageBox.Show("Invalid XML File.");
 					return;
 				}
+
+				// TODO: Make it observer based?
+				UmlFindClasses();
 			}
 		}
 	}
