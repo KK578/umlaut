@@ -45,7 +45,7 @@ namespace UmlAnnotator
 				{
 					// Store related node based on class name.
 					XmlNode node = list[i];
-					string name = node.Attributes.GetNamedItem("name").InnerText;
+					string name = node.Attributes.GetNamedItem("name").Value;
 
 					classes.Add(name, node);
 				}
@@ -72,6 +72,30 @@ namespace UmlAnnotator
 
 				// TODO: Make it observer based?
 				UmlFindClasses();
+			}
+		}
+
+		private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			string selectedClass = comboBox.SelectedValue.ToString();
+			XmlNode node = classes[selectedClass];
+			XmlNodeList nodeChildren = node.ChildNodes;
+
+			for (int i = 0; i < nodeChildren.Count; i++)
+			{
+				XmlNode child = nodeChildren[i];
+
+				if (child.Name == "ownedOperationsInternal")
+				{
+					XmlNodeList methodList = child.ChildNodes;
+
+					for (int j = 0; j < methodList.Count; j++)
+					{
+						XmlNode method = methodList[j];
+
+						Console.WriteLine(method.Attributes.GetNamedItem("name").Value);
+					}
+				}
 			}
 		}
 	}
