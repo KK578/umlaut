@@ -98,5 +98,38 @@ namespace UmlAnnotator
 				}
 			}
 		}
+
+		private class UmlClassNode
+		{
+			XmlNode umlClass;
+			XmlNodeList methods;
+			XmlNodeList variables;
+
+			public UmlClassNode(XmlNode umlClass)
+			{
+				this.umlClass = umlClass;
+
+				ParseClass();
+			}
+
+			private void ParseClass()
+			{
+				XmlNodeList children = umlClass.ChildNodes;
+
+				for (int i = 0; i < children.Count; i++)
+				{
+					XmlNode child = children[i];
+
+					if (child.Name == "ownedOperationsInternal")
+					{
+						methods = child.ChildNodes;
+					}
+					else if (child.Name == "ownedAttributesInternal")
+					{
+						variables = child.ChildNodes;
+					}
+				}
+			}
+		}
 	}
 }
