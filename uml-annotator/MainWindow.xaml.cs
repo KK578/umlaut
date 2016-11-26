@@ -48,6 +48,8 @@ namespace UmlAnnotator
 					string name = node.Attributes.GetNamedItem("name").Value;
 
 					classes.Add(name, node);
+
+					UmlClassNode thing = new UmlClassNode(node);
 				}
 			}
 
@@ -102,8 +104,8 @@ namespace UmlAnnotator
 		private class UmlClassNode
 		{
 			XmlNode umlClass;
-			XmlNodeList methods;
-			XmlNodeList variables;
+			Dictionary<string, XmlNode> methods;
+			Dictionary<string, XmlNode> variables;
 
 			public UmlClassNode(XmlNode umlClass)
 			{
@@ -122,12 +124,38 @@ namespace UmlAnnotator
 
 					if (child.Name == "ownedOperationsInternal")
 					{
-						methods = child.ChildNodes;
+						ParseMethods(child.ChildNodes);
 					}
 					else if (child.Name == "ownedAttributesInternal")
 					{
-						variables = child.ChildNodes;
+						ParseVariables(child.ChildNodes);
 					}
+				}
+			}
+
+			private void ParseMethods(XmlNodeList methods)
+			{
+				this.methods = new Dictionary<string, XmlNode>();
+
+				for (int i = 0; i < methods.Count; i++)
+				{
+					XmlNode method = methods[i];
+					string methodName = method.Attributes.GetNamedItem("name").Value;
+
+					this.methods.Add(methodName, method);
+				}
+			}
+
+			private void ParseVariables(XmlNodeList variables)
+			{
+				this.variables = new Dictionary<string, XmlNode>();
+
+				for (int i = 0; i < variables.Count; i++)
+				{
+					XmlNode variable = variables[i];
+					string variableName = variable.Attributes.GetNamedItem("name").Value;
+
+					this.variables.Add(variableName, variable);
 				}
 			}
 		}
