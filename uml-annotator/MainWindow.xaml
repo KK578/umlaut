@@ -13,6 +13,9 @@
 		<ComboBox x:Name="comboBoxMethod" Margin="70,70,10,0" VerticalAlignment="Top" SelectionChanged="comboBoxMethod_SelectionChanged"/>
 		<Label x:Name="label" Content="Class:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="60"/>
 		<Label x:Name="label_Copy" Content="Method:" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="60"/>
+		<RadioButton x:Name="radioButtonPreconditions" Content="Preconditions" HorizontalAlignment="Left" Margin="10,101,0,0" VerticalAlignment="Top" GroupName="conditionType" Checked="radioButtonPreconditions_Checked"/>
+		<RadioButton x:Name="radioButtonPostconditions" Content="Postconditions" HorizontalAlignment="Left" Margin="10,122,0,0" VerticalAlignment="Top" GroupName="conditionType" Checked="radioButtonPostconditions_Checked"/>
+		<ListBox x:Name="listBoxConditions" Margin="10,143,357,10" Padding="0" Width="150" HorizontalAlignment="Left"/>
 
 	</Grid>
 </Window>

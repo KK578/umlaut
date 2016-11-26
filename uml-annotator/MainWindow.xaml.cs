@@ -26,6 +26,8 @@ namespace UmlAnnotator
 		XmlDocument umlFile;
 		Dictionary<string, UmlClassNode> classes;
 
+		UmlMethodNode selectedMethod;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -105,7 +107,21 @@ namespace UmlAnnotator
 			string selectedMethod = comboBoxMethod.SelectedValue.ToString();
 			UmlClassNode classNode = classes[selectedClass];
 			UmlMethodNode methodNode = classNode.Methods[selectedMethod];
+
+			this.selectedMethod = methodNode;
 		}
+
+		private void radioButtonPreconditions_Checked(object sender, RoutedEventArgs e)
+		{
+			this.listBoxConditions.ItemsSource = this.selectedMethod.Preconditions;
+		}
+
+		private void radioButtonPostconditions_Checked(object sender, RoutedEventArgs e)
+		{
+			this.listBoxConditions.ItemsSource = this.selectedMethod.Postconditions;
+		}
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////
 
 		private class UmlClassNode
 		{
@@ -195,6 +211,10 @@ namespace UmlAnnotator
 				get { return name; }
 			}
 
+			// Even hackier than before.
+			public List<OclCondition> Preconditions;
+			public List<OclCondition> Postconditions;
+
 			private XmlNode node;
 			private XmlNode preconditionNode;
 			private XmlNode postconditionNode;
@@ -207,6 +227,10 @@ namespace UmlAnnotator
 				this.name = node.Attributes.GetNamedItem("name").Value;
 
 				ParseMethod();
+
+				Preconditions = new List<OclCondition>();
+				Preconditions.Add(new OclCondition());
+				Postconditions = new List<OclCondition>();
 			}
 
 			private void ParseMethod()
@@ -300,6 +324,25 @@ namespace UmlAnnotator
 						returnNode = argument;
 					}
 				}
+			}
+		}
+
+		private class OclCondition
+		{
+			private string comparator;
+			private List<string> arguments;
+
+			public OclCondition()
+			{
+				comparator = ">";
+				arguments = new List<string>();
+				arguments.Add("a");
+				arguments.Add("b");
+			}
+
+			public override string ToString()
+			{
+				return String.Format("({0} {1})", comparator, String.Join(" ", arguments));
 			}
 		}
 	}
