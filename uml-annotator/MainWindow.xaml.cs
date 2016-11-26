@@ -99,6 +99,14 @@ namespace UmlAnnotator
 			comboBoxMethod.ItemsSource = node.Methods.Keys;
 		}
 
+		private void comboBoxMethod_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			string selectedClass = comboBoxClass.SelectedValue.ToString();
+			string selectedMethod = comboBoxMethod.SelectedValue.ToString();
+			UmlClassNode classNode = classes[selectedClass];
+			UmlMethodNode methodNode = classNode.Methods[selectedMethod];
+		}
+
 		private class UmlClassNode
 		{
 			XmlNode umlClass;
@@ -237,22 +245,38 @@ namespace UmlAnnotator
 					}
 				}
 
+				XmlDocument doc = node.OwnerDocument;
+
 				// Create nodes in place if they don't already exist.
 				if (preconditionNode == null)
 				{
-					XmlDocument doc = node.OwnerDocument;
 					preconditionNode = doc.CreateNode("element", "preconditionsInternal", doc.NamespaceURI);
 
+					PopulateConstraintNode(preconditionNode);
 					node.AppendChild(preconditionNode);
 				}
 
 				if (postconditionNode == null)
 				{
-					XmlDocument doc = node.OwnerDocument;
 					postconditionNode = doc.CreateNode("element", "postconditionsInternal", doc.NamespaceURI);
 
-					node.AppendChild(preconditionNode);
+					PopulateConstraintNode(postconditionNode);
+					node.AppendChild(postconditionNode);
 				}
+			}
+
+			private void PopulateConstraintNode(XmlNode node)
+			{
+				XmlDocument doc = node.OwnerDocument;
+				XmlNode constraintNode = doc.CreateNode("element", "constraint", doc.NamespaceURI);
+				XmlNode specificationNode = doc.CreateNode("element", "specification", doc.NamespaceURI);
+				XmlNode literalStringNode = doc.CreateNode("element", "literalString", doc.NamespaceURI);
+				XmlNode valueNode = doc.CreateNode("attribute", "value", doc.NamespaceURI);
+				valueNode.InnerText = "";
+				literalStringNode.Attributes.SetNamedItem(valueNode);
+				specificationNode.AppendChild(literalStringNode);
+				constraintNode.AppendChild(specificationNode);
+				node.AppendChild(constraintNode);
 			}
 
 			private void ParseArguments(XmlNodeList arguments)

@@ -10,7 +10,7 @@
 		<Button x:Name="buttonLoad" Content="Load" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="40" Click="buttonLoad_Click"/>
 		<Button x:Name="buttonSave" Content="Save" HorizontalAlignment="Left" Margin="55,10,0,0" VerticalAlignment="Top" Width="40" Click="buttonSave_Click"/>
 		<ComboBox x:Name="comboBoxClass" Margin="70,40,10,0" VerticalAlignment="Top" SelectionChanged="comboBoxClass_SelectionChanged"/>
-		<ComboBox x:Name="comboBoxMethod" Margin="70,70,10,0" VerticalAlignment="Top"/>
+		<ComboBox x:Name="comboBoxMethod" Margin="70,70,10,0" VerticalAlignment="Top" SelectionChanged="comboBoxMethod_SelectionChanged"/>
 		<Label x:Name="label" Content="Class:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="60"/>
 		<Label x:Name="label_Copy" Content="Method:" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="60"/>
 
