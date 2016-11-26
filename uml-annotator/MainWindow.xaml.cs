@@ -250,7 +250,7 @@ namespace UmlAnnotator
 				// Create nodes in place if they don't already exist.
 				if (preconditionNode == null)
 				{
-					preconditionNode = doc.CreateNode("element", "preconditionsInternal", doc.NamespaceURI);
+					preconditionNode = doc.CreateElement("preconditionsInternal");
 
 					PopulateConstraintNode(preconditionNode);
 					node.AppendChild(preconditionNode);
@@ -258,7 +258,7 @@ namespace UmlAnnotator
 
 				if (postconditionNode == null)
 				{
-					postconditionNode = doc.CreateNode("element", "postconditionsInternal", doc.NamespaceURI);
+					postconditionNode = doc.CreateElement("postconditionsInternal");
 
 					PopulateConstraintNode(postconditionNode);
 					node.AppendChild(postconditionNode);
@@ -268,10 +268,10 @@ namespace UmlAnnotator
 			private void PopulateConstraintNode(XmlNode node)
 			{
 				XmlDocument doc = node.OwnerDocument;
-				XmlNode constraintNode = doc.CreateNode("element", "constraint", doc.NamespaceURI);
-				XmlNode specificationNode = doc.CreateNode("element", "specification", doc.NamespaceURI);
-				XmlNode literalStringNode = doc.CreateNode("element", "literalString", doc.NamespaceURI);
-				XmlNode valueNode = doc.CreateNode("attribute", "value", doc.NamespaceURI);
+				XmlNode constraintNode = doc.CreateElement("constraint");
+				XmlNode specificationNode = doc.CreateElement("specification");
+				XmlNode literalStringNode = doc.CreateElement("literalString");
+				XmlNode valueNode = doc.CreateAttribute("value");
 				valueNode.InnerText = "";
 				literalStringNode.Attributes.SetNamedItem(valueNode);
 				specificationNode.AppendChild(literalStringNode);
