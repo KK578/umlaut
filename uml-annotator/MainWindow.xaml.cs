@@ -24,7 +24,7 @@ namespace UmlAnnotator
 	public partial class MainWindow : Window
 	{
 		XmlDocument umlFile;
-		Dictionary<string, XmlNode> classes;
+		Dictionary<string, UmlClassNode> classes;
 
 		public MainWindow()
 		{
@@ -35,7 +35,7 @@ namespace UmlAnnotator
 
 		private void UmlFindClasses()
 		{
-			classes = new Dictionary<string, XmlNode>();
+			classes = new Dictionary<string, UmlClassNode>();
 
 			if (umlFile.HasChildNodes)
 			{
@@ -47,13 +47,11 @@ namespace UmlAnnotator
 					XmlNode node = list[i];
 					string name = node.Attributes.GetNamedItem("name").Value;
 
-					classes.Add(name, node);
-
-					UmlClassNode thing = new UmlClassNode(node);
+					classes.Add(name, new UmlClassNode(node));
 				}
 			}
 
-			comboBox.ItemsSource = classes.Keys;
+			comboBoxClass.ItemsSource = classes.Keys;
 		}
 
 		private void buttonLoad_Click(object sender, RoutedEventArgs e)
@@ -93,29 +91,30 @@ namespace UmlAnnotator
 			}
 		}
 
-		private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void comboBoxClass_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			string selectedClass = comboBox.SelectedValue.ToString();
-			XmlNode node = classes[selectedClass];
-			XmlNodeList nodeChildren = node.ChildNodes;
+			string selectedClass = comboBoxClass.SelectedValue.ToString();
+			UmlClassNode node = classes[selectedClass];
 
-			foreach (XmlNode child in nodeChildren) {
-				if (child.Name == "ownedOperationsInternal")
-				{
-					XmlNodeList methodList = child.ChildNodes;
-
-					foreach (XmlNode method in methodList) {
-						Console.WriteLine(method.Attributes.GetNamedItem("name").Value);
-					}
-				}
-			}
+			comboBoxMethod.ItemsSource = node.Methods.Keys;
 		}
 
 		private class UmlClassNode
 		{
 			XmlNode umlClass;
-			Dictionary<string, UmlMethodNode> methods;
-			Dictionary<string, XmlNode> variables;
+			private Dictionary<string, UmlMethodNode> methods;
+			private Dictionary<string, XmlNode> variables;
+
+			// TODO: Hacky exposing dictionary directly.
+			// Should only allow access to Keys or the Values.
+			public Dictionary<string, UmlMethodNode> Methods
+			{
+				get { return methods; }
+			}
+			public Dictionary<string, XmlNode> Variables
+			{
+				get { return variables; }
+			}
 
 			public UmlClassNode(XmlNode umlClass)
 			{
