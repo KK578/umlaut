@@ -131,6 +131,8 @@ namespace UmlAnnotator
 						variables = ParseChildNodes(child.ChildNodes);
 					}
 				}
+
+				PrintDebug();
 			}
 
 			private Dictionary<string, XmlNode> ParseChildNodes(XmlNodeList list)
@@ -144,6 +146,19 @@ namespace UmlAnnotator
 				}
 
 				return dictionary;
+			}
+
+			private void PrintDebug()
+			{
+				foreach (KeyValuePair<string, XmlNode> a in variables)
+				{
+					Console.WriteLine("Variable: " + a.Key);
+				}
+
+				foreach (KeyValuePair<string, XmlNode> a in methods)
+				{
+					Console.WriteLine("Method: " + a.Key);
+				}
 			}
 		}
 	}
