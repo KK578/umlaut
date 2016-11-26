@@ -226,7 +226,7 @@ namespace UmlAnnotator
 						{
 							if (node.Name == "specification")
 							{
-								preconditionNode = node.FirstChild;
+								preconditionNode = node.FirstChild.Attributes.GetNamedItem("value");
 								break;
 							}
 						}
@@ -238,7 +238,7 @@ namespace UmlAnnotator
 						{
 							if (node.Name == "specification")
 							{
-								postconditionNode = node.FirstChild;
+								postconditionNode = node.FirstChild.Attributes.GetNamedItem("value");
 								break;
 							}
 						}
@@ -251,21 +251,21 @@ namespace UmlAnnotator
 				if (preconditionNode == null)
 				{
 					preconditionNode = doc.CreateElement("preconditionsInternal");
-
-					PopulateConstraintNode(preconditionNode);
 					node.AppendChild(preconditionNode);
+
+					preconditionNode = PopulateConstraintNode(preconditionNode);
 				}
 
 				if (postconditionNode == null)
 				{
 					postconditionNode = doc.CreateElement("postconditionsInternal");
-
-					PopulateConstraintNode(postconditionNode);
 					node.AppendChild(postconditionNode);
+
+					postconditionNode = PopulateConstraintNode(postconditionNode);
 				}
 			}
 
-			private void PopulateConstraintNode(XmlNode node)
+			private XmlNode PopulateConstraintNode(XmlNode node)
 			{
 				XmlDocument doc = node.OwnerDocument;
 				XmlNode constraintNode = doc.CreateElement("constraint");
@@ -277,6 +277,8 @@ namespace UmlAnnotator
 				specificationNode.AppendChild(literalStringNode);
 				constraintNode.AppendChild(specificationNode);
 				node.AppendChild(constraintNode);
+
+				return valueNode;
 			}
 
 			private void ParseArguments(XmlNodeList arguments)
