@@ -184,6 +184,8 @@ namespace UmlAnnotator
 			private XmlNode node;
 			private XmlNode preconditionNode;
 			private XmlNode postconditionNode;
+			private Dictionary<string, XmlNode> argumentNodes;
+			private XmlNode returnNode;
 
 			public UmlMethodNode(XmlNode node)
 			{
@@ -228,10 +230,29 @@ namespace UmlAnnotator
 						}
 					}
 				}
+
+				// Create nodes in place if they don't already exist.
+				if (preconditionNode == null)
+				{
+					XmlDocument doc = node.OwnerDocument;
+					preconditionNode = doc.CreateNode("element", "preconditionsInternal", doc.NamespaceURI);
+
+					node.AppendChild(preconditionNode);
+				}
+
+				if (postconditionNode == null)
+				{
+					XmlDocument doc = node.OwnerDocument;
+					postconditionNode = doc.CreateNode("element", "postconditionsInternal", doc.NamespaceURI);
+
+					node.AppendChild(preconditionNode);
+				}
 			}
 
 			private void ParseArguments(XmlNodeList arguments)
 			{
+				argumentNodes = new Dictionary<string, XmlNode>();
+
 				foreach (XmlNode child in arguments)
 				{
 					XmlNode argument = child.ChildNodes[0];
@@ -239,11 +260,12 @@ namespace UmlAnnotator
 
 					if (direction == "In")
 					{
-						Console.WriteLine(argument.Attributes.GetNamedItem("name").Value);
+						string name = argument.Attributes.GetNamedItem("name").Value;
+						argumentNodes.Add(name, argument);
 					}
 					else if (direction == "Return")
 					{
-
+						returnNode = argument;
 					}
 				}
 			}
