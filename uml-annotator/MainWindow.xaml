@@ -8,7 +8,7 @@
         Title="UML Annotator" Height="350" Width="525" MinWidth="320" MinHeight="180">
 	<Grid>
 		<Button x:Name="buttonLoad" Content="Load" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="40" Click="buttonLoad_Click"/>
-		<Button x:Name="buttonSave" Content="Save" HorizontalAlignment="Left" Margin="55,10,0,0" VerticalAlignment="Top" Width="40"/>
+		<Button x:Name="buttonSave" Content="Save" HorizontalAlignment="Left" Margin="55,10,0,0" VerticalAlignment="Top" Width="40" Click="buttonSave_Click"/>
 		<ComboBox x:Name="comboBox" Margin="100,10,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" SelectionChanged="comboBox_SelectionChanged"/>
 
 	</Grid>

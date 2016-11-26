@@ -77,6 +77,22 @@ namespace UmlAnnotator
 			}
 		}
 
+		private void buttonSave_Click(object sender, RoutedEventArgs e)
+		{
+			SaveFileDialog dialog = new SaveFileDialog();
+
+			if (dialog.ShowDialog() == true)
+			{
+				XmlWriterSettings settings = new XmlWriterSettings();
+				settings.Indent = true;
+
+				using (XmlWriter writer = XmlWriter.Create(dialog.FileName, settings))
+				{
+					umlFile.WriteTo(writer);
+				}
+			}
+		}
+
 		private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			string selectedClass = comboBox.SelectedValue.ToString();
