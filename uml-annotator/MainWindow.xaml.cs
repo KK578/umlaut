@@ -146,18 +146,35 @@ namespace UmlAnnotator
 		private void listBoxConditions_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			selectedCondition = listBoxConditions.SelectedItem as OclCondition;
+
+			if (!String.IsNullOrWhiteSpace(selectedCondition.Comparator))
+			{
+				comboBoxComparator.SelectedItem = selectedCondition.Comparator;
+			}
+			else
+			{
+				comboBoxComparator.SelectedIndex = -1;
+			}
+
+			textBoxArguments.Text = selectedCondition.GetArgumentsString();
 		}
 
 		private void comboBoxComparator_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			selectedCondition.Comparator = comboBoxComparator.SelectedItem.ToString();
-			listBoxConditions.Items.Refresh();
+			if (comboBoxComparator.SelectedItem != null)
+			{
+				selectedCondition.Comparator = comboBoxComparator.SelectedItem.ToString();
+				listBoxConditions.Items.Refresh();
+			}
 		}
 
 		private void textBoxArguments_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			selectedCondition.SetArguments(textBoxArguments.Text);
-			listBoxConditions.Items.Refresh();
+			if (!String.IsNullOrWhiteSpace(textBoxArguments.Text))
+			{
+				selectedCondition.SetArguments(textBoxArguments.Text);
+				listBoxConditions.Items.Refresh();
+			}
 		}
 	}
 }

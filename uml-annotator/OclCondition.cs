@@ -22,6 +22,11 @@ namespace UmlAnnotator
 			arguments = new List<string>(Regex.Split(argument, "\r?\n"));
 		}
 
+		public string GetArgumentsString()
+		{
+			return String.Join("\r\n", arguments);
+		}
+
 		public override string ToString()
 		{
 			return String.Format("({0} {1})", Comparator, String.Join(" ", arguments));
