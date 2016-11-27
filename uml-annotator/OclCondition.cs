@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace UmlAnnotator
@@ -18,7 +19,7 @@ namespace UmlAnnotator
 
 		public void SetArguments(string argument)
 		{
-			arguments = new List<string>(argument.Split('\n'));
+			arguments = new List<string>(Regex.Split(argument, "\r?\n"));
 		}
 
 		public override string ToString()
