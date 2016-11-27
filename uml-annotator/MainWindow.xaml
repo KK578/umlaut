@@ -16,6 +16,11 @@
 		<RadioButton x:Name="radioButtonPreconditions" Content="Preconditions" HorizontalAlignment="Left" Margin="10,101,0,0" VerticalAlignment="Top" GroupName="conditionType" Checked="radioButtonPreconditions_Checked"/>
 		<RadioButton x:Name="radioButtonPostconditions" Content="Postconditions" HorizontalAlignment="Left" Margin="10,122,0,0" VerticalAlignment="Top" GroupName="conditionType" Checked="radioButtonPostconditions_Checked"/>
 		<ListBox x:Name="listBoxConditions" Margin="10,143,357,10" Padding="0" Width="150" HorizontalAlignment="Left"/>
+		<Label x:Name="label1" Content="Comparator:" HorizontalAlignment="Left" Margin="165,99,0,0" VerticalAlignment="Top"/>
+		<ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="246,101,0,0" VerticalAlignment="Top" Width="261"/>
+		<Label x:Name="label2" Content="Arguments:" HorizontalAlignment="Left" Margin="165,130,0,0" VerticalAlignment="Top"/>
+		<TextBox x:Name="textBox" HorizontalAlignment="Left" Height="177" Margin="246,132,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="261" AcceptsReturn="True"/>
+		<Button x:Name="button" Content="+" HorizontalAlignment="Left" Margin="140,115,0,0" VerticalAlignment="Top" Width="20" RenderTransformOrigin="1,0.609" Click="button_Click"/>
 
 	</Grid>
 </Window>

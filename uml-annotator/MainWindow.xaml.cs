@@ -120,5 +120,19 @@ namespace UmlAnnotator
 		{
 			this.listBoxConditions.ItemsSource = this.selectedMethod.Postconditions;
 		}
+
+		private void button_Click(object sender, RoutedEventArgs e)
+		{
+			if (radioButtonPreconditions.IsChecked == true)
+			{
+				selectedMethod.AddCondition("pre");
+			}
+			else
+			{
+				selectedMethod.AddCondition("post");
+			}
+
+			listBoxConditions.Items.Refresh();
+		}
 	}
 }

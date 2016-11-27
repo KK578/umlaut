@@ -33,7 +33,6 @@ namespace UmlAnnotator
 			ParseMethod();
 
 			Preconditions = new List<OclCondition>();
-			Preconditions.Add(new OclCondition());
 			Postconditions = new List<OclCondition>();
 		}
 
@@ -127,6 +126,20 @@ namespace UmlAnnotator
 				{
 					returnNode = argument;
 				}
+			}
+		}
+
+		public void AddCondition(string type)
+		{
+			switch (type)
+			{
+				case "pre":
+					Preconditions.Add(new OclCondition());
+					break;
+
+				case "post":
+					Postconditions.Add(new OclCondition());
+					break;
 			}
 		}
 	}
