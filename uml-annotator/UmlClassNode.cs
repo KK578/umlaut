@@ -74,6 +74,14 @@ namespace UmlAnnotator
 			}
 		}
 
+		public void UpdateNodes()
+		{
+			foreach (UmlMethodNode node in methods.Values)
+			{
+				node.UpdateNodes();
+			}
+		}
+
 		private void PrintDebug()
 		{
 			foreach (KeyValuePair<string, XmlNode> a in variables)

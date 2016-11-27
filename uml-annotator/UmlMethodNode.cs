@@ -142,5 +142,11 @@ namespace UmlAnnotator
 					break;
 			}
 		}
+
+		public void UpdateNodes()
+		{
+			preconditionNode.InnerText = String.Join(" ", Preconditions);
+			postconditionNode.InnerText = String.Join(" ", Postconditions);
+		}
 	}
 }

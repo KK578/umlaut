@@ -81,6 +81,12 @@ namespace UmlAnnotator
 
 		private void buttonSave_Click(object sender, RoutedEventArgs e)
 		{
+			// Save data to nodes before save
+			foreach (UmlClassNode node in classes.Values)
+			{
+				node.UpdateNodes();
+			}
+
 			SaveFileDialog dialog = new SaveFileDialog();
 
 			if (dialog.ShowDialog() == true)
