@@ -27,12 +27,14 @@ namespace UmlAnnotator
 		Dictionary<string, UmlClassNode> classes;
 
 		UmlMethodNode selectedMethod;
+		OclCondition selectedCondition;
 
 		public MainWindow()
 		{
 			InitializeComponent();
 
 			umlFile = new XmlDocument();
+			comboBoxComparator.ItemsSource = new string[] { ">", ">=", "<", "<=", "=", "!=" };
 		}
 
 		private void UmlFindClasses()
@@ -121,7 +123,7 @@ namespace UmlAnnotator
 			this.listBoxConditions.ItemsSource = this.selectedMethod.Postconditions;
 		}
 
-		private void button_Click(object sender, RoutedEventArgs e)
+		private void buttonAddCondition_Click(object sender, RoutedEventArgs e)
 		{
 			if (radioButtonPreconditions.IsChecked == true)
 			{
@@ -132,6 +134,23 @@ namespace UmlAnnotator
 				selectedMethod.AddCondition("post");
 			}
 
+			listBoxConditions.Items.Refresh();
+		}
+
+		private void listBoxConditions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			selectedCondition = listBoxConditions.SelectedItem as OclCondition;
+		}
+
+		private void comboBoxComparator_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			selectedCondition.Comparator = comboBoxComparator.SelectedItem.ToString();
+			listBoxConditions.Items.Refresh();
+		}
+
+		private void textBoxArguments_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			selectedCondition.SetArguments(textBoxArguments.Text);
 			listBoxConditions.Items.Refresh();
 		}
 	}
