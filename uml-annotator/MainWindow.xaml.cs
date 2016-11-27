@@ -107,26 +107,50 @@ namespace UmlAnnotator
 			UmlClassNode node = classes[selectedClass];
 
 			comboBoxMethod.ItemsSource = node.Methods.Keys;
+
+			radioButtonPreconditions.IsChecked = false;
+			radioButtonPostconditions.IsChecked = false;
+
+			listBoxConditions.ItemsSource = null;
+			listBoxConditions.Items.Refresh();
+			comboBoxComparator.SelectedIndex = -1;
+			textBoxArguments.Text = "";
 		}
 
 		private void comboBoxMethod_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			string selectedClass = comboBoxClass.SelectedValue.ToString();
-			string selectedMethod = comboBoxMethod.SelectedValue.ToString();
-			UmlClassNode classNode = classes[selectedClass];
-			UmlMethodNode methodNode = classNode.Methods[selectedMethod];
+			if (comboBoxClass.SelectedIndex >= 0 && comboBoxMethod.SelectedIndex >= 0)
+			{
+				string selectedClass = comboBoxClass.SelectedValue.ToString();
+				string selectedMethod = comboBoxMethod.SelectedValue.ToString();
+				UmlClassNode classNode = classes[selectedClass];
+				UmlMethodNode methodNode = classNode.Methods[selectedMethod];
 
-			this.selectedMethod = methodNode;
+				this.selectedMethod = methodNode;
+
+				if (radioButtonPreconditions.IsChecked == true)
+				{
+					this.listBoxConditions.ItemsSource = this.selectedMethod.Preconditions;
+				}
+				else
+				{
+					this.listBoxConditions.ItemsSource = this.selectedMethod.Postconditions;
+				}
+
+				listBoxConditions.Items.Refresh();
+			}
 		}
 
 		private void radioButtonPreconditions_Checked(object sender, RoutedEventArgs e)
 		{
 			this.listBoxConditions.ItemsSource = this.selectedMethod.Preconditions;
+			listBoxConditions.Items.Refresh();
 		}
 
 		private void radioButtonPostconditions_Checked(object sender, RoutedEventArgs e)
 		{
 			this.listBoxConditions.ItemsSource = this.selectedMethod.Postconditions;
+			listBoxConditions.Items.Refresh();
 		}
 
 		private void buttonAddCondition_Click(object sender, RoutedEventArgs e)
@@ -145,18 +169,26 @@ namespace UmlAnnotator
 
 		private void listBoxConditions_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			selectedCondition = listBoxConditions.SelectedItem as OclCondition;
-
-			if (!String.IsNullOrWhiteSpace(selectedCondition.Comparator))
+			if (listBoxConditions.SelectedIndex >= 0)
 			{
-				comboBoxComparator.SelectedItem = selectedCondition.Comparator;
+				selectedCondition = listBoxConditions.SelectedItem as OclCondition;
+
+				if (!String.IsNullOrWhiteSpace(selectedCondition.Comparator))
+				{
+					comboBoxComparator.SelectedItem = selectedCondition.Comparator;
+				}
+				else
+				{
+					comboBoxComparator.SelectedIndex = -1;
+				}
+
+				textBoxArguments.Text = selectedCondition.GetArgumentsString();
 			}
 			else
 			{
 				comboBoxComparator.SelectedIndex = -1;
+				textBoxArguments.Text = "";
 			}
-
-			textBoxArguments.Text = selectedCondition.GetArgumentsString();
 		}
 
 		private void comboBoxComparator_SelectionChanged(object sender, SelectionChangedEventArgs e)
