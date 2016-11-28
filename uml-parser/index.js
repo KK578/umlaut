@@ -5,9 +5,7 @@ const xmlParser = new xml2js.Parser();
 
 const parser = require('./util/parser.js');
 
-{
-	const filePath = path.resolve(process.cwd(), process.argv[2]);
-
+module.exports = (filePath) => {
 	fs.readFile(filePath, (err, data) => {
 		if (err) {
 			throw err;
@@ -19,8 +17,9 @@ const parser = require('./util/parser.js');
 				throw err;
 			}
 
-			// TODO: Write data to file.
-			parser.parse(uml);
+			const parsed = parser.parse(uml);
+			const output = JSON.stringify(parsed, null, 2);
+			fs.writeFile(path.join(__dirname, '../build/SimpleMath.json'), output, 'utf-8');
 		});
 	});
 }
