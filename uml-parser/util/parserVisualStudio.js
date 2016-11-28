@@ -39,8 +39,10 @@ function parseMethods(umlClass) {
 	// Helper function to get function return type.
 	function getReturnType(parameters) {
 		// Must iterate through all and find first that is a return property.
-		for (let i = 0; i < parameters.length; i++) {
-			const parameter = parameters[i].operationHasOwnedParameters[0].parameter[0];
+		const parameterList = parameters[0].operationHasOwnedParameters;
+
+		for (let i = 0; i < parameterList.length; i++) {
+			const parameter = parameterList[i].parameter[0];
 
 			// Direction 'Return' indicates the function's return type.
 			// TODO: Will the system support Python's multiple object return?'
@@ -66,8 +68,10 @@ function parseMethods(umlClass) {
 	function getArguments(parameters) {
 		const args = [];
 
-		for (let i = 0; i < parameters.length; i++) {
-			const parameter = parameters[i].operationHasOwnedParameters[0].parameter[0];
+		const parameterList = parameters[0].operationHasOwnedParameters;
+
+		for (let i = 0; i < parameterList.length; i++) {
+			const parameter = parameterList[i].parameter[0];
 
 			// Direction 'In' indicates a function argument.
 			if (parameter.$.direction === 'In') {
