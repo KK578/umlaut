@@ -15,7 +15,6 @@ bower[-_]components/
 ### Editor Specific ###
 ## Visual Studio
 *.suo
-*.sln
 .vs/
 [Oo]bj/
 typings/
