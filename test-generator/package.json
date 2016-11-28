@@ -1,0 +1,16 @@
+{
+  "name": "generator-umltotest",
+  "version": "0.0.0",
+  "keywords": ["yeoman-generator"],
+  "author": {
+    "name": "Kevin Kwan",
+    "email": "KevinKwan@googlemail.com"
+  },
+  "license": "BSD-3-Clause",
+  "files": [
+    "generators/nunit"
+  ],
+  "dependencies": {
+    "yeoman-generator": "^0.24.1"
+  }
+}
