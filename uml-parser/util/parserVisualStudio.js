@@ -105,7 +105,6 @@ function parseMethods(umlClass) {
 
 		function setupCondition(condition, index) {
 			condition = condition.substring(1, condition.length - 1);
-			console.log(condition);
 
 			const split = condition.split(' ');
 
@@ -118,7 +117,6 @@ function parseMethods(umlClass) {
 
 		function parseConditions(conditions) {
 			const split = conditions.split('-----');
-			console.log(split);
 
 			c = split.map(setupCondition);
 		}
@@ -193,8 +191,6 @@ function parse(uml) {
 			}
 		});
 	});
-
-	console.log(JSON.stringify(classes, null, 2));
 
 	return classes;
 }
