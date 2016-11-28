@@ -17,6 +17,24 @@ namespace UmlAnnotator
 			arguments = new List<string>();
 		}
 
+		public OclCondition(string condition)
+		{
+			string innerCondition = condition;
+			if (innerCondition.StartsWith("("))
+			{
+				innerCondition = innerCondition.Substring(1, innerCondition.Length - 2);
+			}
+
+			string[] items = innerCondition.Split(' ');
+			Comparator = items[0];
+
+			arguments = new List<string>();
+			for (int i = 1; i < items.Length; i++)
+			{
+				arguments.Add(items[i]);
+			}
+		}
+
 		public void SetArguments(string argument)
 		{
 			arguments = new List<string>(Regex.Split(argument, "\r?\n"));

@@ -30,10 +30,10 @@ namespace UmlAnnotator
 			this.node = node;
 			this.name = node.Attributes.GetNamedItem("name").Value;
 
-			ParseMethod();
-
 			Preconditions = new List<OclCondition>();
 			Postconditions = new List<OclCondition>();
+
+			ParseMethod();
 		}
 
 		private void ParseMethod()
@@ -54,6 +54,12 @@ namespace UmlAnnotator
 						if (node.Name == "specification")
 						{
 							preconditionNode = node.FirstChild.Attributes.GetNamedItem("value");
+							List<string> split = ConditionSplit(preconditionNode.InnerText);
+							foreach (string s in split)
+							{
+								Preconditions.Add(new OclCondition(s));
+							}
+
 							break;
 						}
 					}
@@ -66,6 +72,12 @@ namespace UmlAnnotator
 						if (node.Name == "specification")
 						{
 							postconditionNode = node.FirstChild.Attributes.GetNamedItem("value");
+							List<string> split = ConditionSplit(postconditionNode.InnerText);
+							foreach (string s in split)
+							{
+								Console.WriteLine(s);
+								Postconditions.Add(new OclCondition(s));
+							}
 							break;
 						}
 					}
@@ -90,6 +102,42 @@ namespace UmlAnnotator
 
 				postconditionNode = PopulateConstraintNode(postconditionNode);
 			}
+		}
+
+		private List<string> ConditionSplit(string conditions)
+		{
+			List<string> strings = new List<string>();
+			int i = 0;
+			int start = 0;
+			int depth = 0;
+
+			while (i < conditions.Length)
+			{
+				if (conditions[i] == '(')
+				{
+					depth++;
+
+					if (depth == 1)
+					{
+						start = i;
+					}
+				}
+				if (conditions[i] == ')')
+				{
+					depth--;
+
+					if (depth == 0)
+					{
+						string condition = conditions.Substring(start, i - start + 1);
+						Console.WriteLine(condition);
+						strings.Add(condition);
+					}
+				}
+
+				i++;
+			}
+
+			return strings;
 		}
 
 		private XmlNode PopulateConstraintNode(XmlNode node)
