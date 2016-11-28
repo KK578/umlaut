@@ -18,7 +18,7 @@ function declareConst(argumentObj) {
 
 function declareFunction(methodObj) {
 	const name = methodObj.name;
-	const returnType = methodObj.return.type;
+	const returnType = methodObj.returnType.type;
 	const args = methodObj.arguments.map((a) => {
 		const type = a.type;
 

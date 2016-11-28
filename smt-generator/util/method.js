@@ -45,8 +45,8 @@ class SmtMethod {
 		});
 
 		// Declare a variable for the result
-		if (method.return.type !== 'void') {
-			const resultDeclare = smt.declareConst({ name: 'result', type: method.return.type });
+		if (method.returnType.type !== 'void') {
+			const resultDeclare = smt.declareConst({ name: 'result', type: method.returnType.type });
 			const functionCall = smt.functionCall(method);
 			const resultAssert = smt.assertion({
 				comparison: '=',

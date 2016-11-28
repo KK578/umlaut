@@ -15,9 +15,10 @@ bower[-_]components/
 ### Editor Specific ###
 ## Visual Studio
 *.suo
-*.sln
 .vs/
 [Oo]bj/
+[Bb]in/
+[Dd]ebug/
 typings/
 
 ## NodeJS Tools for Visual Studio
