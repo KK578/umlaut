@@ -17,6 +17,8 @@ bower[-_]components/
 *.suo
 .vs/
 [Oo]bj/
+[Bb]in/
+[Dd]ebug/
 typings/
 
 ## NodeJS Tools for Visual Studio

@@ -4,6 +4,14 @@
     <logicalClassDesignerModelHasTypes>
       <class Id="e1945232-2630-4c93-9f12-03a8a46dfe99" name="SimpleMath" isAbstract="false" isLeaf="false" isActiveClass="false">
         <elementDefinition Id="46e607e7-41e5-418d-90cd-fb194d15320e" />
+        <ownedAttributesInternal>
+          <property Id="1d15c2ac-73d1-4dba-a308-3e170a890915" name="Nop" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="3fe7d607-bdcf-4fe6-b33d-957eae44978a" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="5ffc2f3d-fba3-47d2-915d-e15a1959fa14" LastKnownName="Integer" />
+            </type_NamedElement>
+          </property>
+        </ownedAttributesInternal>
         <ownedOperationsInternal>
           <operation Id="aa7366ab-2c19-43c7-a7b7-6f05870d5969" name="Add" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
             <elementDefinition Id="a4cdb724-1cbc-4e46-a8ae-9b06b2710d3f" />
@@ -33,6 +41,26 @@
                 </parameter>
               </operationHasOwnedParameters>
             </ownedParameters>
+            <preconditionsInternal>
+              <constraint Id="dc787a25-0a1b-4bba-8692-9d87dce60d09">
+                <elementDefinition Id="2cfc7d0f-3680-452b-82b4-5cf38ae947de" />
+                <specification>
+                  <literalString Id="446ea9f9-9625-4e21-8c0d-106eb449b4ff" value="(&gt;= a 0)">
+                    <elementDefinition Id="2e8a41b2-1eac-4261-8e2a-2f3c70a337db" />
+                  </literalString>
+                </specification>
+              </constraint>
+            </preconditionsInternal>
+            <postconditionsInternal>
+              <constraint Id="5d85da5c-d02a-4cbb-9686-e31c56839e27">
+                <elementDefinition Id="475b35cb-3963-4996-bab3-434eaa09868c" />
+                <specification>
+                  <literalString Id="0ce06c98-4b00-4c7b-abe6-8865160d88f4" value="()">
+                    <elementDefinition Id="9448e913-e9ec-4049-bc4a-7aed7c267603" />
+                  </literalString>
+                </specification>
+              </constraint>
+            </postconditionsInternal>
           </operation>
           <operation Id="65f24db5-71b2-4002-ab39-30179bd6fff0" name="Subtract" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
             <elementDefinition Id="948a0b1f-5dfc-4e12-8b60-6fb95ad0fe99" />
@@ -62,6 +90,26 @@
                 </parameter>
               </operationHasOwnedParameters>
             </ownedParameters>
+            <preconditionsInternal>
+              <constraint Id="f6ea7ab8-cfbc-4eac-8d45-783719eecdbb">
+                <elementDefinition Id="234c6639-7a6c-4bcd-a086-ae57b78fb6ee" />
+                <specification>
+                  <literalString Id="32b82f93-59fd-43ab-a4cd-e21bf8130a16" value="()">
+                    <elementDefinition Id="582a2ea4-05cf-4874-b138-152a8fa92f3b" />
+                  </literalString>
+                </specification>
+              </constraint>
+            </preconditionsInternal>
+            <postconditionsInternal>
+              <constraint Id="34885094-f3a1-4d78-aa1d-7aca1b5fae23">
+                <elementDefinition Id="a29bf9f7-ba71-41b7-9df9-6fe57aa9ed84" />
+                <specification>
+                  <literalString Id="d496dc9c-7f51-4676-b42e-12bc287bf60e" value="()">
+                    <elementDefinition Id="0598634c-f96f-491f-b90c-8addc07bb9e8" />
+                  </literalString>
+                </specification>
+              </constraint>
+            </postconditionsInternal>
           </operation>
           <operation Id="396cac19-3804-409f-982c-7dbd5fd28af3" name="Divide" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
             <elementDefinition Id="20ff6c40-4f9d-4573-826a-64eaf826aab1" />
@@ -91,6 +139,26 @@
                 </parameter>
               </operationHasOwnedParameters>
             </ownedParameters>
+            <preconditionsInternal>
+              <constraint Id="2ad654e8-61d2-4a20-847c-11bbdf93996f">
+                <elementDefinition Id="f964f821-b72d-4f0d-86a3-ae1a88789600" />
+                <specification>
+                  <literalString Id="7177c9ea-a2e3-43df-a98a-b2262610df04" value="()">
+                    <elementDefinition Id="250b85ac-892a-4d7c-9081-75b36374f972" />
+                  </literalString>
+                </specification>
+              </constraint>
+            </preconditionsInternal>
+            <postconditionsInternal>
+              <constraint Id="72a4c926-d377-42ef-9474-87e2987942d4">
+                <elementDefinition Id="a0e0ac82-08a2-486d-be4c-d8604c2dcc8c" />
+                <specification>
+                  <literalString Id="114720f9-ee7d-48cf-934d-9c805c697588" value="()">
+                    <elementDefinition Id="7134b395-77c2-4a7d-918b-1ef1c92ce459" />
+                  </literalString>
+                </specification>
+              </constraint>
+            </postconditionsInternal>
           </operation>
           <operation Id="d4e15e05-b39d-497f-9942-cb846a3c2eca" name="SquareRoot" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
             <elementDefinition Id="91f7b180-e15f-4243-9dad-c5a6013b3384" />
@@ -112,6 +180,26 @@
                 </parameter>
               </operationHasOwnedParameters>
             </ownedParameters>
+            <preconditionsInternal>
+              <constraint Id="bce69324-ded8-4809-9a63-5857d78ec327">
+                <elementDefinition Id="a99dc94e-b893-4e30-a982-05221b4f7d98" />
+                <specification>
+                  <literalString Id="5ba07b2e-8203-429b-80b6-4e8dedeb5041" value="()">
+                    <elementDefinition Id="5fb3694c-36e8-4428-8f39-2289d312bf78" />
+                  </literalString>
+                </specification>
+              </constraint>
+            </preconditionsInternal>
+            <postconditionsInternal>
+              <constraint Id="26bf06da-139a-4d77-baa5-379887aa9489">
+                <elementDefinition Id="c94393ee-5553-4f96-89dd-ab18a7dbbd95" />
+                <specification>
+                  <literalString Id="5383b0c4-a536-4113-88d4-d13242e0ab99" value="()">
+                    <elementDefinition Id="f4ac8502-a394-44af-93a9-773110b9f97e" />
+                  </literalString>
+                </specification>
+              </constraint>
+            </postconditionsInternal>
           </operation>
         </ownedOperationsInternal>
       </class>
