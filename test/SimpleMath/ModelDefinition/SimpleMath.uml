@@ -25,6 +25,27 @@
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false">
+        <ownedAttributesInternal>
+          <property
+            Id="3fe7d607-bdcf-4fe6-b33d-957eae44978a"
+            name="Nop"
+            visibility="Private"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false">
+            <type_NamedElement>
+              <primitiveTypeMoniker
+                Id="220a3521-e091-4221-bae9-3ef9018e845c"
+                LastKnownName="Integer"
+                LastKnownLocation="SimpleMath.uml" />
+            </type_NamedElement>
+          </property>
+        </ownedAttributesInternal>
         <ownedOperationsInternal>
           <operation
             Id="a4cdb724-1cbc-4e46-a8ae-9b06b2710d3f"
@@ -74,6 +95,26 @@
                 </parameter>
               </operationHasOwnedParameters>
             </ownedParameters>
+            <preconditionsInternal>
+              <constraint
+                Id="2cfc7d0f-3680-452b-82b4-5cf38ae947de">
+                <specification>
+                  <literalString
+                    Id="2e8a41b2-1eac-4261-8e2a-2f3c70a337db"
+                    value="(&gt;= a 0)" />
+                </specification>
+              </constraint>
+            </preconditionsInternal>
+            <postconditionsInternal>
+              <constraint
+                Id="475b35cb-3963-4996-bab3-434eaa09868c">
+                <specification>
+                  <literalString
+                    Id="9448e913-e9ec-4049-bc4a-7aed7c267603"
+                    value="()" />
+                </specification>
+              </constraint>
+            </postconditionsInternal>
           </operation>
           <operation
             Id="948a0b1f-5dfc-4e12-8b60-6fb95ad0fe99"
@@ -123,6 +164,26 @@
                 </parameter>
               </operationHasOwnedParameters>
             </ownedParameters>
+            <preconditionsInternal>
+              <constraint
+                Id="234c6639-7a6c-4bcd-a086-ae57b78fb6ee">
+                <specification>
+                  <literalString
+                    Id="582a2ea4-05cf-4874-b138-152a8fa92f3b"
+                    value="()" />
+                </specification>
+              </constraint>
+            </preconditionsInternal>
+            <postconditionsInternal>
+              <constraint
+                Id="a29bf9f7-ba71-41b7-9df9-6fe57aa9ed84">
+                <specification>
+                  <literalString
+                    Id="0598634c-f96f-491f-b90c-8addc07bb9e8"
+                    value="()" />
+                </specification>
+              </constraint>
+            </postconditionsInternal>
           </operation>
           <operation
             Id="20ff6c40-4f9d-4573-826a-64eaf826aab1"
@@ -172,6 +233,26 @@
                 </parameter>
               </operationHasOwnedParameters>
             </ownedParameters>
+            <preconditionsInternal>
+              <constraint
+                Id="f964f821-b72d-4f0d-86a3-ae1a88789600">
+                <specification>
+                  <literalString
+                    Id="250b85ac-892a-4d7c-9081-75b36374f972"
+                    value="()" />
+                </specification>
+              </constraint>
+            </preconditionsInternal>
+            <postconditionsInternal>
+              <constraint
+                Id="a0e0ac82-08a2-486d-be4c-d8604c2dcc8c">
+                <specification>
+                  <literalString
+                    Id="7134b395-77c2-4a7d-918b-1ef1c92ce459"
+                    value="()" />
+                </specification>
+              </constraint>
+            </postconditionsInternal>
           </operation>
           <operation
             Id="91f7b180-e15f-4243-9dad-c5a6013b3384"
@@ -208,6 +289,26 @@
                 </parameter>
               </operationHasOwnedParameters>
             </ownedParameters>
+            <preconditionsInternal>
+              <constraint
+                Id="a99dc94e-b893-4e30-a982-05221b4f7d98">
+                <specification>
+                  <literalString
+                    Id="5fb3694c-36e8-4428-8f39-2289d312bf78"
+                    value="()" />
+                </specification>
+              </constraint>
+            </preconditionsInternal>
+            <postconditionsInternal>
+              <constraint
+                Id="c94393ee-5553-4f96-89dd-ab18a7dbbd95">
+                <specification>
+                  <literalString
+                    Id="f4ac8502-a394-44af-93a9-773110b9f97e"
+                    value="()" />
+                </specification>
+              </constraint>
+            </postconditionsInternal>
           </operation>
         </ownedOperationsInternal>
       </class>
