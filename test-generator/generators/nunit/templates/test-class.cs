@@ -17,6 +17,9 @@ namespace AutomatedTestSuite
 		<%_		method.tests.map((test) => { _%>
 		<%_			if (test) { %>
 		[TestMethod]
+		<%_ 			if (test.exception) { _%>
+		[ExpectedException(typeof(<%= test.exception.type %>))]
+		<%_ 			} _%>
 		public void <%= test.name %>()
 		{
 			<%_ test.args.map((arg) => { _%>

@@ -6,10 +6,66 @@ let uml;
 let smt;
 const classes = [];
 
-function generateTestMethodName(methodName, condition) {
-	const clean = condition.replace(/[<>=() \t]/g, '');
+function comparatorString(comparator) {
+	let value = '';
 
-	return `test_${methodName}_${clean}`;
+	switch (comparator) {
+		case '=':
+			value = 'Equal';
+			break;
+
+		case '<':
+			value = 'LessThan';
+			break;
+
+		case '<=':
+			value = 'LessThanOrEqual';
+			break;
+
+		case '>':
+			value = 'GreaterThan';
+			break;
+
+		case '>=':
+			value = 'GreaterThanOrEqual';
+			break;
+
+		case '&':
+			value = 'And';
+			break;
+
+		case '|':
+			value = 'Or';
+			break;
+
+		default:
+			break;
+	}
+
+	return value;
+}
+
+function generateTestMethodName(method, testId) {
+	let condition;
+	let clean;
+
+	if (testId === 'Valid') {
+		clean = 'Valid';
+	}
+	else {
+		for (let i = 0; i < method.preconditions.length; i++) {
+			const c = method.preconditions[i];
+
+			if (c.id === testId) {
+				condition = c;
+				break;
+			}
+		}
+
+		clean = `Not${comparatorString(condition.comparison)}_${condition.arguments.join('_')}`;
+	}
+
+	return `test_${method.name}_${clean}`;
 }
 
 function getValue(arg, value) {
@@ -36,12 +92,14 @@ function getValue(arg, value) {
 function getLanguageType(type) {
 	// TODO: Expand this to a config file lookup
 	switch (type) {
+		case 'Integer':
 		case 'Int':
 		case 'int':
 			return 'int';
 
 		default:
 			console.log(`Undefined type "${type}"`);
+
 			return type;
 	}
 }
@@ -79,25 +137,58 @@ function readClass(uml) {
 	const umlClass = {};
 
 	umlClass.name = uml.name;
-	umlClass.methods = uml.methods.map((m) => {
+	umlClass.methods = Object.keys(uml.methods).map((key) => {
+		const m = uml.methods[key];
+		const preconditions = {};
+		m.preconditions.map((c) => {
+			preconditions[c.id] = c;
+		});
+
 		const tests = smt[m.name].map((t) => {
 			if (t.args === 'Unsatisfiable') {
 				return null;
 			}
 
+			// TODO: Organise this better.
+			// Redundant search through preconditions occurs in generateTestMethodName.
+			// Could pass value directly via preconditions object.
+			let testId;
+			let exception = undefined;
+
+			if (t.condition.indexOf(' ') >= 0) {
+				testId = t.condition.split(' ')[1];
+				// This will mean exception is either defined to the corresponding
+				//  precondition's exception, or it will be undefined.'
+				try {
+					exception = preconditions[testId].exception;
+				}
+				catch (ex) {
+					exception = undefined;
+				}
+			}
+			else {
+				// Else the condition is probably 'Valid'.
+				testId = t.condition;
+			}
+
 			const test = {
-				name: generateTestMethodName(m.name, t.condition),
+				name: generateTestMethodName(m, testId),
 				args: generateArguments(m.arguments, t.args),
-				argumentString: generateArgumentString(m.arguments)
+				argumentString: generateArgumentString(m.arguments),
+				exception: exception
 			};
 
 			return test;
 		});
 
+		const r = m.return;
+		r.type = getLanguageType(r.type);
+
 		const method = {
 			name: m.name,
 			arguments: m.arguments,
-			return: m.return,
+			return: r,
+			preconditions: preconditions,
 			postconditions: m.postconditions,
 			tests: tests
 		};
@@ -105,7 +196,7 @@ function readClass(uml) {
 		return method;
 	});
 
-	// console.log(JSON.stringify(umlClass, null, 2));
+	console.log(JSON.stringify(umlClass, null, 2));
 
 	return umlClass;
 }
@@ -132,7 +223,7 @@ const generator = generators.Base.extend({
 	},
 
 	configuring() {
-		classes[0] = readClass(uml);
+		classes[0] = readClass(uml.SimpleMath);
 	},
 
 	writing() {
