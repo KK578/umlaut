@@ -181,7 +181,7 @@ function readClass(uml) {
 			return test;
 		});
 
-		const r = m.return;
+		const r = m.returnType;
 		r.type = getLanguageType(r.type);
 
 		const method = {
