@@ -193,8 +193,8 @@ namespace UmlAnnotator
 
 		public void UpdateNodes()
 		{
-			preconditionNode.InnerText = String.Join(" ", Preconditions);
-			postconditionNode.InnerText = String.Join(" ", Postconditions);
+			preconditionNode.InnerText = String.Join("-----", Preconditions);
+			postconditionNode.InnerText = String.Join("-----", Postconditions);
 		}
 	}
 }

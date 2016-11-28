@@ -100,19 +100,40 @@ function parseMethods(umlClass) {
 
 	// Helper function to take a condition from XML format to standardised format.
 	function getConditions(conditions) {
-		const c = {};
+		let c = [];
+		let id = "";
+
+		function setupCondition(condition, index) {
+			condition = condition.substring(1, condition.length - 1);
+			console.log(condition);
+
+			const split = condition.split(' ');
+
+			return {
+				id: `${id}-${index}`,
+				comparison: split[0],
+				arguments: split.slice(1)
+			};
+		}
+
+		function parseConditions(conditions) {
+			const split = conditions.split('-----');
+			console.log(split);
+
+			c = split.map(setupCondition);
+		}
 
 		if (conditions) {
 			const constraint = conditions[0].constraint[0];
 			const rawString = constraint.specification[0].literalString[0].$.value;
 
-			c.id = constraint.$.Id;
+			id = constraint.$.Id;
 			// TODO: Add a character to split off of while using Visual Studio's inbuilt
 			//  property conditions.
 			// TODO: Parse condition string into object splitting into comparison and arguments.
 			// NOTE: Leave parsing until after Visual Studio plugin is designed, may use a
 			//  simpler system.
-			c.string = rawString;
+			parseConditions(rawString);
 		}
 
 		return c;
