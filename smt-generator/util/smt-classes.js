@@ -9,26 +9,28 @@ const SmtClasses = {
 	StackModifier: require('../classes/StackModifier.js')
 };
 
+function typeToZ3Type(type) {
+	switch (type) {
+		case 'Integer':
+			return 'Int';
+
+		default:
+			return '';
+	}
+}
+
 function declareConst(argumentObj) {
 	const n = argumentObj.name;
-	const t = argumentObj.type;
+	const t = typeToZ3Type(argumentObj.type);
 
 	return new SmtClasses.DeclareConst(n, t);
 }
 
 function declareFunction(methodObj) {
 	const name = methodObj.name;
-	const returnType = methodObj.returnType.type;
+	const returnType = typeToZ3Type(methodObj.returnType.type);
 	const args = methodObj.arguments.map((a) => {
-		const type = a.type;
-
-		switch (type) {
-			case 'Integer':
-				return 'Int';
-
-			default:
-				return '';
-		}
+		return typeToZ3Type(a.type);
 	});
 
 	return new SmtClasses.DeclareFunction(name, returnType, args);

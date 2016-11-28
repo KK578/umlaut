@@ -33,7 +33,7 @@ function solveSmt(filename, callback) {
 }
 
 function solve() {
-	const dir = path.join(__dirname, '../build/');
+	const dir = path.join(process.cwd(), './build/');
 
 	readFiles(dir, (smtFiles) => {
 		let count = smtFiles.length;
