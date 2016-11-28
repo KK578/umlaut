@@ -92,6 +92,7 @@ function getValue(arg, value) {
 function getLanguageType(type) {
 	// TODO: Expand this to a config file lookup
 	switch (type) {
+		case 'Integer':
 		case 'Int':
 		case 'int':
 			return 'int';
@@ -136,7 +137,8 @@ function readClass(uml) {
 	const umlClass = {};
 
 	umlClass.name = uml.name;
-	umlClass.methods = uml.methods.map((m) => {
+	umlClass.methods = Object.keys(uml.methods).map((key) => {
+		const m = uml.methods[key];
 		const preconditions = {};
 		m.preconditions.map((c) => {
 			preconditions[c.id] = c;
@@ -157,7 +159,12 @@ function readClass(uml) {
 				testId = t.condition.split(' ')[1];
 				// This will mean exception is either defined to the corresponding
 				//  precondition's exception, or it will be undefined.'
-				exception = preconditions[testId].exception;
+				try {
+					exception = preconditions[testId].exception;
+				}
+				catch (ex) {
+					exception = undefined;
+				}
 			}
 			else {
 				// Else the condition is probably 'Valid'.
@@ -216,7 +223,7 @@ const generator = generators.Base.extend({
 	},
 
 	configuring() {
-		classes[0] = readClass(uml);
+		classes[0] = readClass(uml.SimpleMath);
 	},
 
 	writing() {
