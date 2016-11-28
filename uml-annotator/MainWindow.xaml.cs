@@ -132,7 +132,7 @@ namespace UmlAnnotator
 				{
 					this.listBoxConditions.ItemsSource = this.selectedMethod.Preconditions;
 				}
-				else
+				else if (radioButtonPostconditions.IsChecked == true)
 				{
 					this.listBoxConditions.ItemsSource = this.selectedMethod.Postconditions;
 				}
@@ -159,7 +159,7 @@ namespace UmlAnnotator
 			{
 				selectedMethod.AddCondition("pre");
 			}
-			else
+			else if (radioButtonPostconditions.IsChecked == true)
 			{
 				selectedMethod.AddCondition("post");
 			}
