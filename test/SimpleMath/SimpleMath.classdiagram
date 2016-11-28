@@ -42,21 +42,21 @@
               </operationHasOwnedParameters>
             </ownedParameters>
             <preconditionsInternal>
-              <constraint Id="dc787a25-0a1b-4bba-8692-9d87dce60d09">
-                <elementDefinition Id="2cfc7d0f-3680-452b-82b4-5cf38ae947de" />
+              <constraint Id="29128137-274d-42ed-a6c5-58230e139f4e">
+                <elementDefinition Id="db238a05-09a1-486a-be59-e0195ae25e78" />
                 <specification>
-                  <literalString Id="446ea9f9-9625-4e21-8c0d-106eb449b4ff" value="(&gt;= a 0)">
-                    <elementDefinition Id="2e8a41b2-1eac-4261-8e2a-2f3c70a337db" />
+                  <literalString Id="fcb1cdd8-3d8c-48a8-aa08-656c8ff66b02" value="(&gt;= a 0)-----(&gt;= b 0)">
+                    <elementDefinition Id="54878f33-c014-40e2-aae1-0a5019d72556" />
                   </literalString>
                 </specification>
               </constraint>
             </preconditionsInternal>
             <postconditionsInternal>
-              <constraint Id="5d85da5c-d02a-4cbb-9686-e31c56839e27">
-                <elementDefinition Id="475b35cb-3963-4996-bab3-434eaa09868c" />
+              <constraint Id="61de6492-4aa2-4a46-a358-8b63ff27878b">
+                <elementDefinition Id="4774798f-d24c-47b5-b1b7-8c4000643dfe" />
                 <specification>
-                  <literalString Id="0ce06c98-4b00-4c7b-abe6-8865160d88f4" value="()">
-                    <elementDefinition Id="9448e913-e9ec-4049-bc4a-7aed7c267603" />
+                  <literalString Id="13932d9e-71bd-463e-af7d-063d634b215b" value="(&gt;= result a)">
+                    <elementDefinition Id="559cf724-825b-4cce-9245-8e33edc46b26" />
                   </literalString>
                 </specification>
               </constraint>
@@ -91,21 +91,21 @@
               </operationHasOwnedParameters>
             </ownedParameters>
             <preconditionsInternal>
-              <constraint Id="f6ea7ab8-cfbc-4eac-8d45-783719eecdbb">
-                <elementDefinition Id="234c6639-7a6c-4bcd-a086-ae57b78fb6ee" />
+              <constraint Id="565caf9e-8816-4f7c-b2cd-04a592a8ca81">
+                <elementDefinition Id="7e395e15-84d9-4397-9eb9-0d5459e92e03" />
                 <specification>
-                  <literalString Id="32b82f93-59fd-43ab-a4cd-e21bf8130a16" value="()">
-                    <elementDefinition Id="582a2ea4-05cf-4874-b138-152a8fa92f3b" />
+                  <literalString Id="6c63449a-35be-4613-b885-dc105163c96d" value="(&gt;= a 0)-----(&gt;= b 0)-----(&gt;= a b)">
+                    <elementDefinition Id="749ecbe0-c44e-4d65-ae6a-af5f9232059c" />
                   </literalString>
                 </specification>
               </constraint>
             </preconditionsInternal>
             <postconditionsInternal>
-              <constraint Id="34885094-f3a1-4d78-aa1d-7aca1b5fae23">
-                <elementDefinition Id="a29bf9f7-ba71-41b7-9df9-6fe57aa9ed84" />
+              <constraint Id="b9d965a7-2042-4bee-809e-d8c5df66f239">
+                <elementDefinition Id="86d048ee-3c97-48bf-8630-d07cf8671c9c" />
                 <specification>
-                  <literalString Id="d496dc9c-7f51-4676-b42e-12bc287bf60e" value="()">
-                    <elementDefinition Id="0598634c-f96f-491f-b90c-8addc07bb9e8" />
+                  <literalString Id="03ac5ff7-e960-458d-a04f-664f355210c4" value="(&lt;= result a)">
+                    <elementDefinition Id="1412b40d-6841-4265-9198-a2e80ace7c3b" />
                   </literalString>
                 </specification>
               </constraint>
@@ -140,21 +140,21 @@
               </operationHasOwnedParameters>
             </ownedParameters>
             <preconditionsInternal>
-              <constraint Id="2ad654e8-61d2-4a20-847c-11bbdf93996f">
-                <elementDefinition Id="f964f821-b72d-4f0d-86a3-ae1a88789600" />
+              <constraint Id="c59fff82-5c66-4786-bc1c-aef15eabb554">
+                <elementDefinition Id="9bba92de-4d78-4c4b-a0b4-9192e79d76fc" />
                 <specification>
-                  <literalString Id="7177c9ea-a2e3-43df-a98a-b2262610df04" value="()">
-                    <elementDefinition Id="250b85ac-892a-4d7c-9081-75b36374f972" />
+                  <literalString Id="59c4eef6-a8e4-42c4-8e60-3ebe0addfbeb" value="(&gt;= a 0)-----(&gt;= b 0)-----(&gt;= a b)">
+                    <elementDefinition Id="95dc3dff-306b-46b6-84e0-92cae7a2bf19" />
                   </literalString>
                 </specification>
               </constraint>
             </preconditionsInternal>
             <postconditionsInternal>
-              <constraint Id="72a4c926-d377-42ef-9474-87e2987942d4">
-                <elementDefinition Id="a0e0ac82-08a2-486d-be4c-d8604c2dcc8c" />
+              <constraint Id="98cd554b-12ee-43d0-a102-2478d695e006">
+                <elementDefinition Id="523718d3-418b-42aa-8500-bda7333002d9" />
                 <specification>
-                  <literalString Id="114720f9-ee7d-48cf-934d-9c805c697588" value="()">
-                    <elementDefinition Id="7134b395-77c2-4a7d-918b-1ef1c92ce459" />
+                  <literalString Id="4010f5bf-c34e-4260-b1f5-03b5248f35f8" value="(= result result)">
+                    <elementDefinition Id="ffac6c7b-3eba-4d1b-b8fc-6c07d8c3d823" />
                   </literalString>
                 </specification>
               </constraint>
@@ -181,21 +181,21 @@
               </operationHasOwnedParameters>
             </ownedParameters>
             <preconditionsInternal>
-              <constraint Id="bce69324-ded8-4809-9a63-5857d78ec327">
-                <elementDefinition Id="a99dc94e-b893-4e30-a982-05221b4f7d98" />
+              <constraint Id="a61be185-1b2c-4878-9434-3dee1b0a8366">
+                <elementDefinition Id="d406f284-fabe-4f4e-9b21-293526a4b7de" />
                 <specification>
-                  <literalString Id="5ba07b2e-8203-429b-80b6-4e8dedeb5041" value="()">
-                    <elementDefinition Id="5fb3694c-36e8-4428-8f39-2289d312bf78" />
+                  <literalString Id="2fb9701b-47e5-48c0-987d-8dad387fb16c" value="(&gt;= a 0)">
+                    <elementDefinition Id="1a38891c-730b-463c-9181-52e67b7c2757" />
                   </literalString>
                 </specification>
               </constraint>
             </preconditionsInternal>
             <postconditionsInternal>
-              <constraint Id="26bf06da-139a-4d77-baa5-379887aa9489">
-                <elementDefinition Id="c94393ee-5553-4f96-89dd-ab18a7dbbd95" />
+              <constraint Id="e178cee3-129e-42e4-9058-38471a853e5a">
+                <elementDefinition Id="3213a608-60c6-4e26-a9d9-3cceda35c7d4" />
                 <specification>
-                  <literalString Id="5383b0c4-a536-4113-88d4-d13242e0ab99" value="()">
-                    <elementDefinition Id="f4ac8502-a394-44af-93a9-773110b9f97e" />
+                  <literalString Id="e4340c62-cffa-41e1-a66c-c25347626b5c" value="(= result result)">
+                    <elementDefinition Id="4084ffdf-aba0-44df-a2f7-fa7def0ea47d" />
                   </literalString>
                 </specification>
               </constraint>

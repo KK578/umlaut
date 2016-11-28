@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <modelStoreModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
   dslVersion="1.0.0.0"
   Id="552be105-034a-423f-b185-bcd7d3d99247"
@@ -97,21 +97,21 @@
             </ownedParameters>
             <preconditionsInternal>
               <constraint
-                Id="2cfc7d0f-3680-452b-82b4-5cf38ae947de">
+                Id="db238a05-09a1-486a-be59-e0195ae25e78">
                 <specification>
                   <literalString
-                    Id="2e8a41b2-1eac-4261-8e2a-2f3c70a337db"
-                    value="(&gt;= a 0)" />
+                    Id="54878f33-c014-40e2-aae1-0a5019d72556"
+                    value="(&gt;= a 0)-----(&gt;= b 0)" />
                 </specification>
               </constraint>
             </preconditionsInternal>
             <postconditionsInternal>
               <constraint
-                Id="475b35cb-3963-4996-bab3-434eaa09868c">
+                Id="4774798f-d24c-47b5-b1b7-8c4000643dfe">
                 <specification>
                   <literalString
-                    Id="9448e913-e9ec-4049-bc4a-7aed7c267603"
-                    value="()" />
+                    Id="559cf724-825b-4cce-9245-8e33edc46b26"
+                    value="(&gt;= result a)" />
                 </specification>
               </constraint>
             </postconditionsInternal>
@@ -166,21 +166,21 @@
             </ownedParameters>
             <preconditionsInternal>
               <constraint
-                Id="234c6639-7a6c-4bcd-a086-ae57b78fb6ee">
+                Id="7e395e15-84d9-4397-9eb9-0d5459e92e03">
                 <specification>
                   <literalString
-                    Id="582a2ea4-05cf-4874-b138-152a8fa92f3b"
-                    value="()" />
+                    Id="749ecbe0-c44e-4d65-ae6a-af5f9232059c"
+                    value="(&gt;= a 0)-----(&gt;= b 0)-----(&gt;= a b)" />
                 </specification>
               </constraint>
             </preconditionsInternal>
             <postconditionsInternal>
               <constraint
-                Id="a29bf9f7-ba71-41b7-9df9-6fe57aa9ed84">
+                Id="86d048ee-3c97-48bf-8630-d07cf8671c9c">
                 <specification>
                   <literalString
-                    Id="0598634c-f96f-491f-b90c-8addc07bb9e8"
-                    value="()" />
+                    Id="1412b40d-6841-4265-9198-a2e80ace7c3b"
+                    value="(&lt;= result a)" />
                 </specification>
               </constraint>
             </postconditionsInternal>
@@ -235,21 +235,21 @@
             </ownedParameters>
             <preconditionsInternal>
               <constraint
-                Id="f964f821-b72d-4f0d-86a3-ae1a88789600">
+                Id="9bba92de-4d78-4c4b-a0b4-9192e79d76fc">
                 <specification>
                   <literalString
-                    Id="250b85ac-892a-4d7c-9081-75b36374f972"
-                    value="()" />
+                    Id="95dc3dff-306b-46b6-84e0-92cae7a2bf19"
+                    value="(&gt;= a 0)-----(&gt;= b 0)-----(&gt;= a b)" />
                 </specification>
               </constraint>
             </preconditionsInternal>
             <postconditionsInternal>
               <constraint
-                Id="a0e0ac82-08a2-486d-be4c-d8604c2dcc8c">
+                Id="523718d3-418b-42aa-8500-bda7333002d9">
                 <specification>
                   <literalString
-                    Id="7134b395-77c2-4a7d-918b-1ef1c92ce459"
-                    value="()" />
+                    Id="ffac6c7b-3eba-4d1b-b8fc-6c07d8c3d823"
+                    value="(= result result)" />
                 </specification>
               </constraint>
             </postconditionsInternal>
@@ -291,21 +291,21 @@
             </ownedParameters>
             <preconditionsInternal>
               <constraint
-                Id="a99dc94e-b893-4e30-a982-05221b4f7d98">
+                Id="d406f284-fabe-4f4e-9b21-293526a4b7de">
                 <specification>
                   <literalString
-                    Id="5fb3694c-36e8-4428-8f39-2289d312bf78"
-                    value="()" />
+                    Id="1a38891c-730b-463c-9181-52e67b7c2757"
+                    value="(&gt;= a 0)" />
                 </specification>
               </constraint>
             </preconditionsInternal>
             <postconditionsInternal>
               <constraint
-                Id="c94393ee-5553-4f96-89dd-ab18a7dbbd95">
+                Id="3213a608-60c6-4e26-a9d9-3cceda35c7d4">
                 <specification>
                   <literalString
-                    Id="f4ac8502-a394-44af-93a9-773110b9f97e"
-                    value="()" />
+                    Id="4084ffdf-aba0-44df-a2f7-fa7def0ea47d"
+                    value="(= result result)" />
                 </specification>
               </constraint>
             </postconditionsInternal>
