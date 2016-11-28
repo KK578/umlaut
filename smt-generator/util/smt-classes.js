@@ -20,7 +20,15 @@ function declareFunction(methodObj) {
 	const name = methodObj.name;
 	const returnType = methodObj.return.type;
 	const args = methodObj.arguments.map((a) => {
-		return a.type;
+		const type = a.type;
+
+		switch (type) {
+			case 'Integer':
+				return 'Int';
+
+			default:
+				return '';
+		}
 	});
 
 	return new SmtClasses.DeclareFunction(name, returnType, args);
