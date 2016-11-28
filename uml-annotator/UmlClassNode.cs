@@ -28,6 +28,9 @@ namespace UmlAnnotator
 		{
 			this.umlClass = umlClass;
 
+			this.variables = new Dictionary<string, XmlNode>();
+			this.methods = new Dictionary<string, UmlMethodNode>();
+
 			ParseClass();
 		}
 
