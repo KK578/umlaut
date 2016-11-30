@@ -4,6 +4,11 @@
 *			text=auto
 
 ###############################################################################
+# Line endings to work in CI.
+###############################################################################
+*.js		text eol=crlf
+
+###############################################################################
 # Behavior for image files
 ###############################################################################
 *.jpg		binary
@@ -13,9 +18,9 @@
 
 ###############################################################################
 # diff behavior for common document formats
-# 
+#
 # Convert binary document formats to text before diffing them. This feature
-# is only available from the command line. Turn it on by uncommenting the 
+# is only available from the command line. Turn it on by uncommenting the
 # entries below.
 ###############################################################################
 #*.doc		diff=astextplain
