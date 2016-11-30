@@ -19,7 +19,8 @@ module.exports = (filePath) => {
 
 			const parsed = parser.parse(uml);
 			const output = JSON.stringify(parsed, null, 2);
+
 			fs.writeFile(path.join(__dirname, '../build/SimpleMath.json'), output, 'utf-8');
 		});
 	});
-}
+};
