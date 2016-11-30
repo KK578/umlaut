@@ -1,6 +1,6 @@
 const parsers = {
 	visualStudio: require('./parserVisualStudio.js')
-}
+};
 
 function parse(umlData) {
 	let parser;

@@ -5,7 +5,7 @@ function parseVariables(umlClass) {
 	umlClass.ownedAttributesInternal[0].property.map((property) => {
 		const v = {
 			id: property.$.Id,
-			name: property.$.name,
+			name: property.$.name
 		};
 
 		let type = '';
@@ -101,7 +101,7 @@ function parseMethods(umlClass) {
 	// Helper function to take a condition from XML format to standardised format.
 	function getConditions(conditions) {
 		let c = [];
-		let id = "";
+		let id = '';
 
 		function setupCondition(condition, index) {
 			condition = condition.substring(1, condition.length - 1);
@@ -142,7 +142,7 @@ function parseMethods(umlClass) {
 		// Generic method properties
 		const v = {
 			id: operation.$.Id,
-			name: operation.$.name,
+			name: operation.$.name
 		};
 
 		// Types
