@@ -36,11 +36,11 @@
     },
     {
       "name": "GreaterThan",
-      "symbol": "<"
+      "symbol": ">"
     },
     {
       "name": "GreaterThanOrEqual",
-      "symbol": "<="
+      "symbol": ">="
     },
     {
       "name": "Equal",
