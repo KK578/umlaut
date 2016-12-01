@@ -167,6 +167,24 @@ namespace UmlAnnotator
 			listBoxConditions.Items.Refresh();
 		}
 
+		private void buttonRemoveCondition_Click(object sender, RoutedEventArgs e)
+		{
+			int index = listBoxConditions.SelectedIndex;
+
+			if (index >= 0) {
+				if (radioButtonPreconditions.IsChecked == true)
+				{
+					selectedMethod.RemoveCondition("pre", index);
+				}
+				else if (radioButtonPostconditions.IsChecked == true)
+				{
+					selectedMethod.RemoveCondition("post", index);
+				}
+
+				listBoxConditions.Items.Refresh();
+			}
+		}
+
 		private void listBoxConditions_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			if (listBoxConditions.SelectedIndex >= 0)

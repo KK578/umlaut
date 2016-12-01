@@ -21,6 +21,7 @@
 		<Label x:Name="label2" Content="Arguments:" HorizontalAlignment="Left" Margin="165,130,0,0" VerticalAlignment="Top"/>
 		<TextBox x:Name="textBoxArguments" HorizontalAlignment="Left" Height="177" Margin="246,132,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="261" AcceptsReturn="True" TextChanged="textBoxArguments_TextChanged"/>
 		<Button x:Name="buttonAddCondition" Content="+" HorizontalAlignment="Left" Margin="140,115,0,0" VerticalAlignment="Top" Width="20" RenderTransformOrigin="1,0.609" Click="buttonAddCondition_Click"/>
+		<Button x:Name="buttonRemoveCondition" Content="-" HorizontalAlignment="Left" Margin="115,115,0,0" VerticalAlignment="Top" Width="20" RenderTransformOrigin="1,0.609" Click="buttonRemoveCondition_Click"/>
 
 	</Grid>
 </Window>
