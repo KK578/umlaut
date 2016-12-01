@@ -226,5 +226,11 @@ namespace UmlAnnotator
 				listBoxConditions.Items.Refresh();
 			}
 		}
+
+		private void textBoxExceptionCondition_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			selectedCondition.SetException(textBoxExceptionCondition.Text);
+			listBoxConditions.Items.Refresh();
+		}
 	}
 }

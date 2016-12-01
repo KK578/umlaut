@@ -11,6 +11,7 @@ namespace UmlAnnotator
 	{
 		public string Comparator { get; set; }
 		private List<string> arguments;
+		private string exception;
 
 		public OclCondition()
 		{
@@ -45,9 +46,33 @@ namespace UmlAnnotator
 			return String.Join("\r\n", arguments);
 		}
 
+		public void SetException(string ex)
+		{
+			if (!String.IsNullOrWhiteSpace(ex))
+			{
+				exception = String.Format("(Exception:{0})", ex);
+			}
+			else
+			{
+				exception = "";
+			}
+		}
+
 		public override string ToString()
 		{
-			return String.Format("({0} {1})", Comparator, String.Join(" ", arguments));
+			string main = String.Format("{0} {1}", Comparator, String.Join(" ", arguments));
+			string result;
+
+			if (!String.IsNullOrWhiteSpace(exception))
+			{
+				result = String.Format("({0} {1})", main, exception);
+			}
+			else
+			{
+				result = String.Format("({0})", main);
+			}
+
+			return result;
 		}
 	}
 }
