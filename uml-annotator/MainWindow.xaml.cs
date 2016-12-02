@@ -14,7 +14,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml;
 
+using Newtonsoft.Json;
+
 using Microsoft.Win32;
+using System.IO;
 
 namespace UmlAnnotator
 {
@@ -34,7 +37,34 @@ namespace UmlAnnotator
 			InitializeComponent();
 
 			umlFile = new XmlDocument();
-			comboBoxComparator.ItemsSource = new string[] { ">", ">=", "<", "<=", "=", "!=" };
+			string comparisons = File.ReadAllText(@"../../../util/comparisons.json");
+			Dictionary<string, List<dynamic>> items = JsonConvert.DeserializeObject<Dictionary<string, List<dynamic>>>(comparisons);
+			Dictionary<string, List<Comparison>> comparisonLists = new Dictionary<string, List<Comparison>>();
+			foreach (KeyValuePair<string, List<dynamic>> a in items)
+			{
+				List<Comparison> list = new List<Comparison>();
+
+				foreach (dynamic b in a.Value)
+				{
+					string name = b.name;
+					string symbol = b.symbol;
+					string smtSymbol = null;
+					bool? invertable = null;
+
+					try { smtSymbol = b.smtSymbol; }
+					catch (Exception ex) { }
+
+					try { invertable = b.invertable; }
+					catch (Exception ex) { }
+
+					list.Add(new Comparison(name, symbol, smtSymbol, invertable));
+				}
+
+				comparisonLists.Add(a.Key, list);
+			}
+
+			comboBoxComparator.ItemsSource = comparisonLists["numeric"]; // new string[] { ">", ">=", "<", "<=", "=", "!=" };
+
 		}
 
 		private void UmlFindClasses()
@@ -195,7 +225,8 @@ namespace UmlAnnotator
 		{
 			if (comboBoxComparator.SelectedItem != null)
 			{
-				selectedCondition.Comparator = comboBoxComparator.SelectedItem.ToString();
+				Comparison item = comboBoxComparator.SelectedItem as Comparison;
+				selectedCondition.Comparator = item.SymbolString();
 				listBoxConditions.Items.Refresh();
 			}
 		}
@@ -206,6 +237,41 @@ namespace UmlAnnotator
 			{
 				selectedCondition.SetArguments(textBoxArguments.Text);
 				listBoxConditions.Items.Refresh();
+			}
+		}
+
+		private class Comparison
+		{
+			string name;
+			string symbol;
+			string smtSymbol;
+			bool invertable;
+
+			public Comparison(string name, string symbol, string smtSymbol, bool? invertable)
+			{
+				this.name = name;
+				this.symbol = symbol;
+
+				if (!String.IsNullOrEmpty(smtSymbol))
+				{
+					this.smtSymbol = smtSymbol;
+				}
+				else
+				{
+					this.smtSymbol = symbol;
+				}
+
+				this.invertable = invertable == true;
+			}
+
+			public string SymbolString()
+			{
+				return smtSymbol;
+			}
+
+			public override string ToString()
+			{
+				return String.Format("{0} ({1})", name, symbol);
 			}
 		}
 	}
