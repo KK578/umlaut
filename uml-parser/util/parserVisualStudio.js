@@ -4,6 +4,7 @@ function parseVariables(umlClass) {
 	// Iterate through list of attributes.
 	if (umlClass.ownedAttributesInternal !== undefined) {
 		const properties = umlClass.ownedAttributesInternal[0].property;
+
 		properties.map((property) => {
 			const v = {
 				id: property.$.Id,
@@ -143,6 +144,7 @@ function parseMethods(umlClass) {
 	// Iterate through all methods.
 	if (umlClass.ownedOperationsInternal !== undefined) {
 		const operations = umlClass.ownedOperationsInternal[0].operation;
+
 		operations.map((operation) => {
 			// Generic method properties
 			const v = {
