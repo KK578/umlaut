@@ -139,7 +139,10 @@ function readClass(uml) {
 	umlClass.name = uml.name;
 	umlClass.methods = Object.keys(uml.methods).map((key) => {
 		const m = uml.methods[key];
+
+		// Handling tests
 		const preconditions = {};
+
 		m.preconditions.map((c) => {
 			preconditions[c.id] = c;
 		});
@@ -181,13 +184,15 @@ function readClass(uml) {
 			return test;
 		});
 
-		const r = m.returnType;
-		r.type = getLanguageType(r.type);
+		// Return type handling
+		const returnType = m.returnType;
+
+		returnType.type = getLanguageType(returnType.type);
 
 		const method = {
 			name: m.name,
 			arguments: m.arguments,
-			return: r,
+			return: returnType,
 			preconditions: preconditions,
 			postconditions: m.postconditions,
 			tests: tests
