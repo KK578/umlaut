@@ -46,8 +46,8 @@ function booleanExpression(conditionObj) {
 			return booleanExpression(a);
 		}
 	});
-
 	const expression = new SmtClasses.BooleanExpression(comparison, args);
+
 	expression.setInverted(conditionObj.inverted);
 
 	return expression;

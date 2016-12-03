@@ -51,6 +51,7 @@ function parseCondition(text) {
 
 	if (split[1] === 'sat') {
 		const values = split.slice(2).join('');
+
 		args = parseValues(values);
 	}
 	else {
@@ -65,6 +66,7 @@ function parseCondition(text) {
 
 function parseZ3(text) {
 	let split = text.split('-----');
+
 	// Ignore first as it will be empty.
 	split = split.slice(1);
 
