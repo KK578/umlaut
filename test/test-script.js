@@ -22,7 +22,7 @@ setTimeout(() => {
 		setTimeout(() => {
 			console.log("Generate Test Suite");
 			// Invoke generator.
-			const yo = spawn('yo', ['umltotest:nunit', 'build/uml/SimpleMath.json', 'build/smt/SimpleMath/solved.json']);
+			const yo = spawn('yo', ['umltotest:nunit', 'build/uml/', 'build/smt/']);
 
 			yo.stdout.on('data', (data) => {
 				console.log(data.toString('utf8'));
