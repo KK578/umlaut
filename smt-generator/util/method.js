@@ -34,7 +34,7 @@ class SmtMethod {
 
 	allValidConditions(method) {
 		// Add a layer to the stack so we can pop later and keep the declarations.
-		this.commands.push(smt.echo("-----Valid"));
+		this.commands.push(smt.echo('-----Valid'));
 		this.commands.push(smt.stackPush());
 
 		// For each precondition, add it to the stack.
@@ -45,8 +45,8 @@ class SmtMethod {
 		});
 
 		// Declare a variable for the result
-		if (method.return.type !== 'void') {
-			const resultDeclare = smt.declareConst({ name: 'result', type: method.return.type });
+		if (method.returnType.type !== 'void') {
+			const resultDeclare = smt.declareConst({ name: 'result', type: method.returnType.type });
 			const functionCall = smt.functionCall(method);
 			const resultAssert = smt.assertion({
 				comparison: '=',
@@ -76,7 +76,8 @@ class SmtMethod {
 		method.preconditions.map((a, i) => {
 			// For each precondition, add it to the stack.
 			const inverted = smt.booleanExpression(a);
-			this.commands.push(smt.echo(`-----Invalid ${inverted.toString()}`));
+
+			this.commands.push(smt.echo(`-----Complement ${a.id}`));
 			this.commands.push(smt.stackPush());
 
 			method.preconditions.map((c, j) => {

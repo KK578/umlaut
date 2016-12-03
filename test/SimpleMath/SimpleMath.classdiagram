@@ -1,0 +1,265 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<logicalClassDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" dslVersion="1.0.0.0" Id="63e167d7-45e5-4ab2-92d1-ed6f76aebc2a" name="SimpleMath" linkedPackageId="259f0b2e-31ba-481b-9752-19bbd7c2d52e" xmlns="http://schemas.microsoft.com/dsltools/LogicalClassDesigner">
+  <packagedElements>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="e1945232-2630-4c93-9f12-03a8a46dfe99" name="SimpleMath" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="46e607e7-41e5-418d-90cd-fb194d15320e" />
+        <ownedAttributesInternal>
+          <property Id="1d15c2ac-73d1-4dba-a308-3e170a890915" name="Nop" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="3fe7d607-bdcf-4fe6-b33d-957eae44978a" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="5ffc2f3d-fba3-47d2-915d-e15a1959fa14" LastKnownName="Integer" />
+            </type_NamedElement>
+          </property>
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation Id="aa7366ab-2c19-43c7-a7b7-6f05870d5969" name="Add" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="a4cdb724-1cbc-4e46-a8ae-9b06b2710d3f" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="56320f22-dc84-4544-81f8-2539eb33444e" name="a" direction="In">
+                  <elementDefinition Id="77d9e1d7-ac55-4cbf-be83-cac60537eee2" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="5ffc2f3d-fba3-47d2-915d-e15a1959fa14" LastKnownName="Integer" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="2a51758a-ca1f-4cdf-9449-ace565e2cc79" name="b" direction="In">
+                  <elementDefinition Id="80b7e4d6-bb9d-4384-9830-11ffefe24a9a" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="5ffc2f3d-fba3-47d2-915d-e15a1959fa14" LastKnownName="Integer" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="e2a2f2fc-b432-4416-89b1-14029908bc8f" direction="Return">
+                  <elementDefinition Id="ccee8d2b-38e8-43e9-9f49-9529aff9a73c" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="93f0c918-4d95-42cc-8e52-0a7cecb2c0de" LastKnownName="Integer" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+            <preconditionsInternal>
+              <constraint Id="29128137-274d-42ed-a6c5-58230e139f4e">
+                <elementDefinition Id="db238a05-09a1-486a-be59-e0195ae25e78" />
+                <specification>
+                  <literalString Id="fcb1cdd8-3d8c-48a8-aa08-656c8ff66b02" value="(&gt;= a 0)-----(&gt;= b 0)">
+                    <elementDefinition Id="54878f33-c014-40e2-aae1-0a5019d72556" />
+                  </literalString>
+                </specification>
+              </constraint>
+            </preconditionsInternal>
+            <postconditionsInternal>
+              <constraint Id="61de6492-4aa2-4a46-a358-8b63ff27878b">
+                <elementDefinition Id="4774798f-d24c-47b5-b1b7-8c4000643dfe" />
+                <specification>
+                  <literalString Id="13932d9e-71bd-463e-af7d-063d634b215b" value="(&gt;= result a)">
+                    <elementDefinition Id="559cf724-825b-4cce-9245-8e33edc46b26" />
+                  </literalString>
+                </specification>
+              </constraint>
+            </postconditionsInternal>
+          </operation>
+          <operation Id="65f24db5-71b2-4002-ab39-30179bd6fff0" name="Subtract" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="948a0b1f-5dfc-4e12-8b60-6fb95ad0fe99" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="19f5945a-8ee5-4f72-a05f-5e32b88ce92a" name="a" direction="In">
+                  <elementDefinition Id="f3bf0b34-283a-4d7a-b252-c49432f73ff0" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="a0cdd245-50ea-40ea-9628-d67521992184" LastKnownName="Integer" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="b9899dd9-b4f7-4bc4-bdfd-a875460bfdfc" name="b" direction="In">
+                  <elementDefinition Id="e875a0a5-1e80-4970-a852-96c94e7224a9" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="a0cdd245-50ea-40ea-9628-d67521992184" LastKnownName="Integer" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="a1e00490-7f25-4c99-b4ac-648304e8a6f0" direction="Return">
+                  <elementDefinition Id="2e91799e-f573-47f7-a683-387f9bfdc113" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="f7669d34-2c03-4c0a-b3d7-4f7a99a69daf" LastKnownName="Integer" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+            <preconditionsInternal>
+              <constraint Id="565caf9e-8816-4f7c-b2cd-04a592a8ca81">
+                <elementDefinition Id="7e395e15-84d9-4397-9eb9-0d5459e92e03" />
+                <specification>
+                  <literalString Id="6c63449a-35be-4613-b885-dc105163c96d" value="(&gt;= a 0)-----(&gt;= b 0)-----(&gt;= a b)">
+                    <elementDefinition Id="749ecbe0-c44e-4d65-ae6a-af5f9232059c" />
+                  </literalString>
+                </specification>
+              </constraint>
+            </preconditionsInternal>
+            <postconditionsInternal>
+              <constraint Id="b9d965a7-2042-4bee-809e-d8c5df66f239">
+                <elementDefinition Id="86d048ee-3c97-48bf-8630-d07cf8671c9c" />
+                <specification>
+                  <literalString Id="03ac5ff7-e960-458d-a04f-664f355210c4" value="(&lt;= result a)">
+                    <elementDefinition Id="1412b40d-6841-4265-9198-a2e80ace7c3b" />
+                  </literalString>
+                </specification>
+              </constraint>
+            </postconditionsInternal>
+          </operation>
+          <operation Id="396cac19-3804-409f-982c-7dbd5fd28af3" name="Divide" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="20ff6c40-4f9d-4573-826a-64eaf826aab1" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="0b37482a-e8b9-4268-ba5a-c6bd6752275a" name="a" direction="In">
+                  <elementDefinition Id="473b5151-99f5-4fb2-80a8-d3a7faf80788" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="583de381-7743-4e32-b848-d2b0beff4b84" LastKnownName="Integer" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="0ca7b310-6af8-4f7b-a694-c84912080e35" name="b" direction="In">
+                  <elementDefinition Id="3e1a575b-77cf-4b75-bc37-103f57bbf0fb" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="583de381-7743-4e32-b848-d2b0beff4b84" LastKnownName="Integer" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="839be46b-4179-4279-b376-7479da1e7beb" direction="Return">
+                  <elementDefinition Id="9c5bd804-760d-412d-87a8-5ff89156ac09" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="d1ce88bc-159c-43d1-89e1-dce1be2f6170" LastKnownName="Integer" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+            <preconditionsInternal>
+              <constraint Id="c59fff82-5c66-4786-bc1c-aef15eabb554">
+                <elementDefinition Id="9bba92de-4d78-4c4b-a0b4-9192e79d76fc" />
+                <specification>
+                  <literalString Id="59c4eef6-a8e4-42c4-8e60-3ebe0addfbeb" value="(&gt;= a 0)-----(&gt;= b 0)-----(&gt;= a b)">
+                    <elementDefinition Id="95dc3dff-306b-46b6-84e0-92cae7a2bf19" />
+                  </literalString>
+                </specification>
+              </constraint>
+            </preconditionsInternal>
+            <postconditionsInternal>
+              <constraint Id="98cd554b-12ee-43d0-a102-2478d695e006">
+                <elementDefinition Id="523718d3-418b-42aa-8500-bda7333002d9" />
+                <specification>
+                  <literalString Id="4010f5bf-c34e-4260-b1f5-03b5248f35f8" value="(= result result)">
+                    <elementDefinition Id="ffac6c7b-3eba-4d1b-b8fc-6c07d8c3d823" />
+                  </literalString>
+                </specification>
+              </constraint>
+            </postconditionsInternal>
+          </operation>
+          <operation Id="d4e15e05-b39d-497f-9942-cb846a3c2eca" name="SquareRoot" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="91f7b180-e15f-4243-9dad-c5a6013b3384" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="0e3e1ad7-46c8-4888-b4ee-905717c4e4d6" name="a" direction="In">
+                  <elementDefinition Id="0f9bc812-d785-4265-b42b-592dcbec800c" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="a3315c05-2a74-49b4-ba90-a8d2a08ab241" LastKnownName="Integer" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="cfeb7917-ac83-4beb-b0fe-1e571e98cbbc" direction="Return">
+                  <elementDefinition Id="e84949bb-8e8a-4bb9-8290-fdd756b8c4c1" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="eb164259-0eea-4698-b124-64b6b83de0cd" LastKnownName="Integer" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+            <preconditionsInternal>
+              <constraint Id="a61be185-1b2c-4878-9434-3dee1b0a8366">
+                <elementDefinition Id="d406f284-fabe-4f4e-9b21-293526a4b7de" />
+                <specification>
+                  <literalString Id="2fb9701b-47e5-48c0-987d-8dad387fb16c" value="(&gt;= a 0)">
+                    <elementDefinition Id="1a38891c-730b-463c-9181-52e67b7c2757" />
+                  </literalString>
+                </specification>
+              </constraint>
+            </preconditionsInternal>
+            <postconditionsInternal>
+              <constraint Id="e178cee3-129e-42e4-9058-38471a853e5a">
+                <elementDefinition Id="3213a608-60c6-4e26-a9d9-3cceda35c7d4" />
+                <specification>
+                  <literalString Id="e4340c62-cffa-41e1-a66c-c25347626b5c" value="(= result result)">
+                    <elementDefinition Id="4084ffdf-aba0-44df-a2f7-fa7def0ea47d" />
+                  </literalString>
+                </specification>
+              </constraint>
+            </postconditionsInternal>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <packageHasNamedElement>
+      <referencedType Id="5ffc2f3d-fba3-47d2-915d-e15a1959fa14" name="Integer" isAbstract="false" isLeaf="false" cachedFullName="Integer">
+        <elementDefinition Id="220a3521-e091-4221-bae9-3ef9018e845c" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="93f0c918-4d95-42cc-8e52-0a7cecb2c0de" name="Integer" isAbstract="false" isLeaf="false" cachedFullName="Integer">
+        <elementDefinition Id="220a3521-e091-4221-bae9-3ef9018e845c" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="a0cdd245-50ea-40ea-9628-d67521992184" name="Integer" isAbstract="false" isLeaf="false" cachedFullName="Integer">
+        <elementDefinition Id="220a3521-e091-4221-bae9-3ef9018e845c" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="f7669d34-2c03-4c0a-b3d7-4f7a99a69daf" name="Integer" isAbstract="false" isLeaf="false" cachedFullName="Integer">
+        <elementDefinition Id="220a3521-e091-4221-bae9-3ef9018e845c" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="583de381-7743-4e32-b848-d2b0beff4b84" name="Integer" isAbstract="false" isLeaf="false" cachedFullName="Integer">
+        <elementDefinition Id="220a3521-e091-4221-bae9-3ef9018e845c" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="d1ce88bc-159c-43d1-89e1-dce1be2f6170" name="Integer" isAbstract="false" isLeaf="false" cachedFullName="Integer">
+        <elementDefinition Id="220a3521-e091-4221-bae9-3ef9018e845c" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="a3315c05-2a74-49b4-ba90-a8d2a08ab241" name="Integer" isAbstract="false" isLeaf="false" cachedFullName="Integer">
+        <elementDefinition Id="220a3521-e091-4221-bae9-3ef9018e845c" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="eb164259-0eea-4698-b124-64b6b83de0cd" name="Integer" isAbstract="false" isLeaf="false" cachedFullName="Integer">
+        <elementDefinition Id="220a3521-e091-4221-bae9-3ef9018e845c" />
+      </referencedType>
+    </packageHasNamedElement>
+  </packagedElements>
+  <package Id="259f0b2e-31ba-481b-9752-19bbd7c2d52e" name="SimpleMath">
+    <elementDefinition Id="552be105-034a-423f-b185-bcd7d3d99247" />
+    <profileInstances>
+      <packageHasProfileInstances Id="a2b31fd9-cc28-458f-a5df-620698b198b3">
+        <profileInstance Id="384c39de-bd46-4d1e-a315-e728c2491ed8" name="StandardProfileL2">
+          <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
+        </profileInstance>
+        <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
+      </packageHasProfileInstances>
+      <packageHasProfileInstances Id="ddf79bb9-e792-489d-9291-6fc7331e90bb">
+        <profileInstance Id="ffda045f-093e-45f3-9d65-ad48f686b36f" name="StandardProfileL3">
+          <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
+        </profileInstance>
+        <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
+      </packageHasProfileInstances>
+    </profileInstances>
+  </package>
+</logicalClassDesignerModel>

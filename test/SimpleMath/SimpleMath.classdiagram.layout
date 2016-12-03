@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<logicalClassDesignerDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="SimpleMath">
+  <logicalClassDesignerModelMoniker Id="63e167d7-45e5-4ab2-92d1-ed6f76aebc2a" />
+  <nestedChildShapes>
+    <classShape Id="c9c8fcfe-6fcd-49ce-bd67-0557e93b6a7e" absoluteBounds="6.75, 2.75, 3.25, 1.7031249602635699" hideQualifiedName="false" increaseHeight="0" customColor="181, 193, 223">
+      <classMoniker Id="e1945232-2630-4c93-9f12-03a8a46dfe99" LastKnownName="SimpleMath" />
+      <nestedChildShapes>
+        <AttributeElementListCompartment Id="0d7e1274-4d95-46fd-9543-01cd94541f08" absoluteBounds="6.765, 3.14, 3.2199999999999998, 0.36132811258236563" name="AttributesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <OperationElementListCompartment Id="07b95cda-09a8-41fd-b356-662802a1a0c1" absoluteBounds="6.765, 3.5113281125823654, 3.2199999999999998, 0.84179684768120455" name="OperationsCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</logicalClassDesignerDiagram>

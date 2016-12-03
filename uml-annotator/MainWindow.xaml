@@ -1,0 +1,26 @@
+﻿<Window x:Class="UmlAnnotator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UmlAnnotator"
+        mc:Ignorable="d"
+        Title="UML Annotator" Height="350" Width="525" MinWidth="320" MinHeight="180">
+	<Grid>
+		<Button x:Name="buttonLoad" Content="Load" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="40" Click="buttonLoad_Click"/>
+		<Button x:Name="buttonSave" Content="Save" HorizontalAlignment="Left" Margin="55,10,0,0" VerticalAlignment="Top" Width="40" Click="buttonSave_Click"/>
+		<ComboBox x:Name="comboBoxClass" Margin="70,40,10,0" VerticalAlignment="Top" SelectionChanged="comboBoxClass_SelectionChanged"/>
+		<ComboBox x:Name="comboBoxMethod" Margin="70,70,10,0" VerticalAlignment="Top" SelectionChanged="comboBoxMethod_SelectionChanged"/>
+		<Label x:Name="label" Content="Class:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="60"/>
+		<Label x:Name="label_Copy" Content="Method:" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="60"/>
+		<RadioButton x:Name="radioButtonPreconditions" Content="Preconditions" HorizontalAlignment="Left" Margin="10,101,0,0" VerticalAlignment="Top" GroupName="conditionType" Checked="radioButtonPreconditions_Checked"/>
+		<RadioButton x:Name="radioButtonPostconditions" Content="Postconditions" HorizontalAlignment="Left" Margin="10,122,0,0" VerticalAlignment="Top" GroupName="conditionType" Checked="radioButtonPostconditions_Checked"/>
+		<ListBox x:Name="listBoxConditions" Margin="10,143,357,10" Padding="0" Width="150" HorizontalAlignment="Left" SelectionChanged="listBoxConditions_SelectionChanged"/>
+		<Label x:Name="label1" Content="Comparator:" HorizontalAlignment="Left" Margin="165,99,0,0" VerticalAlignment="Top"/>
+		<ComboBox x:Name="comboBoxComparator" HorizontalAlignment="Left" Margin="246,101,0,0" VerticalAlignment="Top" Width="261" SelectionChanged="comboBoxComparator_SelectionChanged"/>
+		<Label x:Name="label2" Content="Arguments:" HorizontalAlignment="Left" Margin="165,130,0,0" VerticalAlignment="Top"/>
+		<TextBox x:Name="textBoxArguments" HorizontalAlignment="Left" Height="177" Margin="246,132,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="261" AcceptsReturn="True" TextChanged="textBoxArguments_TextChanged"/>
+		<Button x:Name="buttonAddCondition" Content="+" HorizontalAlignment="Left" Margin="140,115,0,0" VerticalAlignment="Top" Width="20" RenderTransformOrigin="1,0.609" Click="buttonAddCondition_Click"/>
+
+	</Grid>
+</Window>

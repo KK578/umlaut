@@ -24,5 +24,27 @@ module.exports = {
 				]
 			}
 		]
+	},
+	'uml-parser': {
+		files: [
+			{
+				expand: true,
+				src: [
+					'uml-parser/**/*.js',
+					'!uml-parser/node_modules/**/*.js'
+				]
+			}
+		]
+	},
+	'test-generator': {
+		files: [
+			{
+				expand: true,
+				src: [
+					'test-generator/**/*.js',
+					'!test-generator/node_modules/**/*.js'
+				]
+			}
+		]
 	}
 };

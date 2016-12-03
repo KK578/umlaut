@@ -5,7 +5,9 @@ const spawn = require('child_process').spawnSync;
 
 // TODO: Keep updated with projects list.
 const projects = [
-	'smt-generator'
+	'smt-generator',
+	'uml-parser',
+	'test-generator'
 ];
 
 projects.map((project) => {

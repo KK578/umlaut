@@ -1,167 +1,140 @@
 {
-	"name": "SimpleMath",
-	"methods": [
-		{
-			"name": "Add",
-			"arguments": [
-				{
-					"name": "a",
-					"type": "Int"
-				},
-				{
-					"name": "b",
-					"type": "Int"
-				}
-			],
-			"return": { "type": "Int" },
-			"preconditions": [
-				{
-					"comparison": ">=",
-					"arguments": [
+  "name": "SimpleMath",
+  "methods": [
+    {
+      "name": "Add",
+      "arguments": [
+        {
+          "name": "a",
+          "type": "Int"
+        },
+        {
+          "name": "b",
+          "type": "Int"
+        }
+      ],
+      "return": { "type": "Int" },
+      "preconditions": [
+        {
+          "id": "000001",
+          "comparison": ">=",
+          "arguments": [
             "a",
             "0"
-          ]
-				},
-				{
-					"comparison": ">=",
-					"arguments": [
+          ],
+          "exception": {
+            "type": "NegativeNumberException"
+          }
+        },
+        {
+          "id": "000002",
+          "comparison": ">=",
+          "arguments": [
             "b",
             "0"
-          ]
-				}
-			],
-			"postconditions": [
-				{
-					"comparison": ">=",
-					"arguments": [
+          ],
+          "exception": {
+            "type": "NegativeNumberException"
+          }
+        }
+      ],
+      "postconditions": [
+        {
+          "id": "000003",
+          "comparison": ">=",
+          "arguments": [
             "result",
             "a"
-          ]
-				}
-			]
-		},
-		{
-			"name": "Subtract",
-			"arguments": [
-				{
-					"name": "a",
-					"type": "Int"
-				},
-				{
-					"name": "b",
-					"type": "Int"
-				}
-			],
-			"return": { "type": "Int" },
-			"preconditions": [
-				{
-					"comparison": ">=",
-					"arguments": [
+          ],
+          "exception": {
+            "type": "NegativeNumberException"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Subtract",
+      "arguments": [
+        {
+          "name": "a",
+          "type": "Int"
+        },
+        {
+          "name": "b",
+          "type": "Int"
+        }
+      ],
+      "return": { "type": "Int" },
+      "preconditions": [
+        {
+          "id": "000004",
+          "comparison": ">=",
+          "arguments": [
             "a",
             "0"
           ]
-				},
-				{
-					"comparison": ">=",
-					"arguments": [
+        },
+        {
+          "id": "000005",
+          "comparison": ">=",
+          "arguments": [
             "b",
             "0"
           ]
-				},
-				{
-					"comparison": ">=",
-					"arguments": [
+        },
+        {
+          "id": "000006",
+          "comparison": ">=",
+          "arguments": [
             "a",
             "b"
           ]
-				}
-			],
-			"postconditions": [
-				{
-					"comparison": "<=",
-					"arguments": [
+        }
+      ],
+      "postconditions": [
+        {
+          "id": "000007",
+          "comparison": "<=",
+          "arguments": [
             "result",
             "a"
           ]
-				}
-			]
-		},
+        }
+      ]
+    },
     {
-			"name": "Divide",
-			"arguments": [
-				{
-					"name": "a",
-					"type": "Int"
-				},
-				{
-					"name": "b",
-					"type": "Int"
-				}
-			],
-			"return": { "type": "Int" },
-			"preconditions": [
-				{
-					"comparison": ">=",
-					"arguments": [
+      "name": "Divide",
+      "arguments": [
+        {
+          "name": "a",
+          "type": "Int"
+        },
+        {
+          "name": "b",
+          "type": "Int"
+        }
+      ],
+      "return": { "type": "Int" },
+      "preconditions": [
+        {
+          "id": "000008",
+          "comparison": ">=",
+          "arguments": [
             "a",
             "0"
           ]
-				},
-				{
-					"comparison": ">",
-					"arguments": [
+        },
+        {
+          "id": "000009",
+          "comparison": ">",
+          "arguments": [
             "b",
             "0"
           ]
-				}
-			],
-			"postconditions": [
-				{
-					"comparison": "ite",
-					"arguments": [
-            {
-              "comparison": ">=",
-              "arguments": [
-                "a",
-                "b"
-              ]
-            },
-            {
-              "comparison": "ite",
-              "arguments": [
-                {
-                  "comparison": ">",
-                  "arguments": [
-                    "a",
-                    "b"
-                  ]
-                },
-                {
-                  "comparison": ">",
-                  "arguments": [
-                    "result",
-                    "a"
-                  ]
-                },
-                {
-                  "comparison": "=",
-                  "arguments": [
-                    "result",
-                    "1"
-                  ]
-                }
-              ]
-            },
-            {
-              "comparison": "<",
-              "arguments": [
-                "result",
-                "a"
-              ]
-            }
-          ]
-				}
-			]
-		}
-	]
+        }
+      ],
+      "postconditions": [
+      ]
+    }
+  ]
 }

@@ -60,7 +60,7 @@ function parseCondition(text) {
 	return {
 		condition,
 		args
-	}
+	};
 }
 
 function parseZ3(text) {
@@ -75,4 +75,4 @@ function parseZ3(text) {
 
 module.exports = {
 	parseZ3
-}
+};
