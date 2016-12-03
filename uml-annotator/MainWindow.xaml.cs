@@ -39,10 +39,11 @@ namespace UmlAnnotator
 			umlFile = new XmlDocument();
 			string comparisons = File.ReadAllText(@"../../../util/comparisons.json");
 			Dictionary<string, List<dynamic>> items = JsonConvert.DeserializeObject<Dictionary<string, List<dynamic>>>(comparisons);
-			Dictionary<string, List<Comparison>> comparisonLists = new Dictionary<string, List<Comparison>>();
+			Dictionary<string, List<OclComparison>> comparisonLists = new Dictionary<string, List<OclComparison>>();
+
 			foreach (KeyValuePair<string, List<dynamic>> a in items)
 			{
-				List<Comparison> list = new List<Comparison>();
+				List<OclComparison> list = new List<OclComparison>();
 
 				foreach (dynamic b in a.Value)
 				{
@@ -57,14 +58,14 @@ namespace UmlAnnotator
 					try { invertable = b.invertable; }
 					catch (Exception ex) { }
 
-					list.Add(new Comparison(name, symbol, smtSymbol, invertable));
+					list.Add(new OclComparison(name, symbol, smtSymbol, invertable));
 				}
 
 				comparisonLists.Add(a.Key, list);
 			}
 
-			comboBoxComparator.ItemsSource = comparisonLists["numeric"]; // new string[] { ">", ">=", "<", "<=", "=", "!=" };
-
+			// TODO: This should change depending on the current types being compared.
+			comboBoxComparator.ItemsSource = comparisonLists["numeric"];
 		}
 
 		private void UmlFindClasses()
@@ -225,7 +226,7 @@ namespace UmlAnnotator
 		{
 			if (comboBoxComparator.SelectedItem != null)
 			{
-				Comparison item = comboBoxComparator.SelectedItem as Comparison;
+				OclComparison item = comboBoxComparator.SelectedItem as OclComparison;
 				selectedCondition.Comparator = item.SymbolString();
 				listBoxConditions.Items.Refresh();
 			}
@@ -237,41 +238,6 @@ namespace UmlAnnotator
 			{
 				selectedCondition.SetArguments(textBoxArguments.Text);
 				listBoxConditions.Items.Refresh();
-			}
-		}
-
-		private class Comparison
-		{
-			string name;
-			string symbol;
-			string smtSymbol;
-			bool invertable;
-
-			public Comparison(string name, string symbol, string smtSymbol, bool? invertable)
-			{
-				this.name = name;
-				this.symbol = symbol;
-
-				if (!String.IsNullOrEmpty(smtSymbol))
-				{
-					this.smtSymbol = smtSymbol;
-				}
-				else
-				{
-					this.smtSymbol = symbol;
-				}
-
-				this.invertable = invertable == true;
-			}
-
-			public string SymbolString()
-			{
-				return smtSymbol;
-			}
-
-			public override string ToString()
-			{
-				return String.Format("{0} ({1})", name, symbol);
 			}
 		}
 	}
