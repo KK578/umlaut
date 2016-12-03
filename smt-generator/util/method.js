@@ -27,9 +27,7 @@ class SmtMethod {
 
 	declareFunction(method) {
 		// Declare the function to SMT.
-		const command = smt.declareFunction(method);
-
-		this.commands.push(command);
+		this.commands.push(smt.declareFunction(method));
 	}
 
 	allValidConditions(method) {
@@ -39,9 +37,7 @@ class SmtMethod {
 
 		// For each precondition, add it to the stack.
 		method.preconditions.map((c) => {
-			const command = smt.assertion(c);
-
-			this.commands.push(command);
+			this.commands.push(smt.assertion(c));
 		});
 
 		// Declare a variable for the result
@@ -62,9 +58,7 @@ class SmtMethod {
 
 		// Add postconditions so that the inputs may be more interesting.
 		method.postconditions.map((c) => {
-			const command = smt.assertion(c);
-
-			this.commands.push(command);
+			this.commands.push(smt.assertion(c));
 		});
 
 		// Check satisfiability and get values of arguments.
@@ -75,8 +69,6 @@ class SmtMethod {
 	singularInvalidConditions(method) {
 		method.preconditions.map((a, i) => {
 			// For each precondition, add it to the stack.
-			const inverted = smt.booleanExpression(a);
-
 			this.commands.push(smt.echo(`-----Complement ${a.id}`));
 			this.commands.push(smt.stackPush());
 
@@ -89,8 +81,7 @@ class SmtMethod {
 					expression.setInverted(!expression.isInverted);
 				}
 
-				const command = smt.assertion(expression);
-				this.commands.push(command);
+				this.commands.push(smt.assertion(expression));
 			});
 
 			this.commands.push(smt.getValues(this.getConstants()));
