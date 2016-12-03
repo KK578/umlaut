@@ -33,7 +33,7 @@ namespace UmlAnnotator
 		// Passing through files would involve passing the list through:
 		//  UmlClassNode -> UmlMethodNode -> OclCondition
 		// Would still like this to be neater somehow.
-		public static Dictionary<string, List<OclComparison>> comparisonLists;
+		public static List<OclComparison> comparisonList;
 
 		UmlMethodNode selectedMethod;
 		OclCondition selectedCondition;
@@ -44,35 +44,28 @@ namespace UmlAnnotator
 
 			umlFile = new XmlDocument();
 			string comparisons = File.ReadAllText(@"../../../util/comparisons.json");
-			Dictionary<string, List<dynamic>> items = JsonConvert.DeserializeObject<Dictionary<string, List<dynamic>>>(comparisons);
+			List<dynamic> items = JsonConvert.DeserializeObject<List<dynamic>>(comparisons);
 
-			comparisonLists = new Dictionary<string, List<OclComparison>>();
+			comparisonList = new List<OclComparison>();
 
-			foreach (KeyValuePair<string, List<dynamic>> a in items)
+			foreach (dynamic b in items)
 			{
-				List<OclComparison> list = new List<OclComparison>();
+				string name = b.name;
+				string symbol = b.symbol;
+				string smtSymbol = null;
+				bool? invertable = null;
 
-				foreach (dynamic b in a.Value)
-				{
-					string name = b.name;
-					string symbol = b.symbol;
-					string smtSymbol = null;
-					bool? invertable = null;
+				try { smtSymbol = b.smtSymbol; }
+				catch (Exception ex) { }
 
-					try { smtSymbol = b.smtSymbol; }
-					catch (Exception ex) { }
+				try { invertable = b.invertable; }
+				catch (Exception ex) { }
 
-					try { invertable = b.invertable; }
-					catch (Exception ex) { }
-
-					list.Add(new OclComparison(name, symbol, smtSymbol, invertable));
-				}
-
-				comparisonLists.Add(a.Key, list);
+				comparisonList.Add(new OclComparison(name, symbol, smtSymbol, invertable));
 			}
 
 			// TODO: This should change depending on the current types being compared.
-			comboBoxComparator.ItemsSource = comparisonLists["numeric"];
+			comboBoxComparator.ItemsSource = comparisonList;
 		}
 
 		private void UmlFindClasses()

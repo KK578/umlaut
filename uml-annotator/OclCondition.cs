@@ -48,7 +48,7 @@ namespace UmlAnnotator
 		private OclComparison FindComparison(string comparison)
 		{
 			// HACK: See MainWindow for explanation.
-			List<OclComparison> comparisons = MainWindow.comparisonLists["numeric"];
+			List<OclComparison> comparisons = MainWindow.comparisonList;
 
 			foreach (OclComparison c in comparisons)
 			{
