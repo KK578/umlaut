@@ -29,6 +29,12 @@ namespace UmlAnnotator
 		XmlDocument umlFile;
 		Dictionary<string, UmlClassNode> classes;
 
+		// HACK: Exposed due to use at OclCondition.
+		// Passing through files would involve passing the list through:
+		//  UmlClassNode -> UmlMethodNode -> OclCondition
+		// Would still like this to be neater somehow.
+		public static Dictionary<string, List<OclComparison>> comparisonLists;
+
 		UmlMethodNode selectedMethod;
 		OclCondition selectedCondition;
 
@@ -39,7 +45,8 @@ namespace UmlAnnotator
 			umlFile = new XmlDocument();
 			string comparisons = File.ReadAllText(@"../../../util/comparisons.json");
 			Dictionary<string, List<dynamic>> items = JsonConvert.DeserializeObject<Dictionary<string, List<dynamic>>>(comparisons);
-			Dictionary<string, List<OclComparison>> comparisonLists = new Dictionary<string, List<OclComparison>>();
+
+			comparisonLists = new Dictionary<string, List<OclComparison>>();
 
 			foreach (KeyValuePair<string, List<dynamic>> a in items)
 			{
@@ -204,7 +211,7 @@ namespace UmlAnnotator
 			{
 				selectedCondition = listBoxConditions.SelectedItem as OclCondition;
 
-				if (!String.IsNullOrWhiteSpace(selectedCondition.Comparator))
+				if (selectedCondition.Comparator != null)
 				{
 					comboBoxComparator.SelectedItem = selectedCondition.Comparator;
 				}
@@ -227,7 +234,7 @@ namespace UmlAnnotator
 			if (comboBoxComparator.SelectedItem != null)
 			{
 				OclComparison item = comboBoxComparator.SelectedItem as OclComparison;
-				selectedCondition.Comparator = item.SymbolString();
+				selectedCondition.Comparator = item;
 				listBoxConditions.Items.Refresh();
 			}
 		}

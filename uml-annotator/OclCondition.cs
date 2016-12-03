@@ -9,7 +9,7 @@ namespace UmlAnnotator
 {
 	public class OclCondition
 	{
-		public string Comparator { get; set; }
+		public OclComparison Comparator { get; set; }
 		private List<string> arguments;
 
 		public OclCondition()
@@ -26,7 +26,7 @@ namespace UmlAnnotator
 			}
 
 			string[] items = innerCondition.Split(' ');
-			Comparator = items[0];
+			Comparator = FindComparison(items[0]);
 
 			arguments = new List<string>();
 			for (int i = 1; i < items.Length; i++)
@@ -45,9 +45,32 @@ namespace UmlAnnotator
 			return String.Join("\r\n", arguments);
 		}
 
+		private OclComparison FindComparison(string comparison)
+		{
+			// HACK: See MainWindow for explanation.
+			List<OclComparison> comparisons = MainWindow.comparisonLists["numeric"];
+
+			foreach (OclComparison c in comparisons)
+			{
+				if (comparison == c.SymbolString())
+				{
+					return c;
+				}
+			}
+
+			return null;
+		}
+
 		public override string ToString()
 		{
-			return String.Format("({0} {1})", Comparator, String.Join(" ", arguments));
+			string comparison = "";
+
+			if (Comparator != null)
+			{
+				comparison = Comparator.SymbolString();
+			}
+
+			return String.Format("({0} {1})", comparison, String.Join(" ", arguments));
 		}
 	}
 }
