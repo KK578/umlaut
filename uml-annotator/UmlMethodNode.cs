@@ -191,6 +191,20 @@ namespace UmlAnnotator
 			}
 		}
 
+		public void RemoveCondition(string type, int index)
+		{
+			switch (type)
+			{
+				case "pre":
+					Preconditions.RemoveAt(index);
+					break;
+
+				case "post":
+					Postconditions.RemoveAt(index);
+					break;
+			}
+		}
+
 		public void UpdateNodes()
 		{
 			preconditionNode.InnerText = String.Join("-----", Preconditions);

@@ -9,8 +9,9 @@ namespace UmlAnnotator
 {
 	public class OclCondition
 	{
-		public string Comparator { get; set; }
+		public OclComparison Comparator { get; set; }
 		private List<string> arguments;
+		private string exception;
 
 		public OclCondition()
 		{
@@ -26,7 +27,7 @@ namespace UmlAnnotator
 			}
 
 			string[] items = innerCondition.Split(' ');
-			Comparator = items[0];
+			Comparator = FindComparison(items[0]);
 
 			arguments = new List<string>();
 			for (int i = 1; i < items.Length; i++)
@@ -45,9 +46,56 @@ namespace UmlAnnotator
 			return String.Join("\r\n", arguments);
 		}
 
+		public void SetException(string ex)
+		{
+			if (!String.IsNullOrWhiteSpace(ex))
+			{
+				exception = String.Format("(Exception:{0})", ex);
+			}
+			else
+			{
+				exception = "";
+			}
+		}
+
+		private OclComparison FindComparison(string comparison)
+		{
+			// HACK: See MainWindow for explanation.
+			List<OclComparison> comparisons = MainWindow.comparisonList;
+
+			foreach (OclComparison c in comparisons)
+			{
+				if (comparison == c.SymbolString())
+				{
+					return c;
+				}
+			}
+
+			return null;
+		}
+
 		public override string ToString()
 		{
-			return String.Format("({0} {1})", Comparator, String.Join(" ", arguments));
+			string comparison = "";
+
+			if (Comparator != null)
+			{
+				comparison = Comparator.SymbolString();
+			}
+
+			string main = String.Format("{0} {1}", comparison, String.Join(" ", arguments));
+			string result;
+
+			if (!String.IsNullOrWhiteSpace(exception))
+			{
+				result = String.Format("({0} {1})", main, exception);
+			}
+			else
+			{
+				result = String.Format("({0})", main);
+			}
+
+			return result;
 		}
 	}
 }

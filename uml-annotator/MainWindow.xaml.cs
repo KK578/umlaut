@@ -14,7 +14,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml;
 
+using Newtonsoft.Json;
+
 using Microsoft.Win32;
+using System.IO;
 
 namespace UmlAnnotator
 {
@@ -26,6 +29,12 @@ namespace UmlAnnotator
 		XmlDocument umlFile;
 		Dictionary<string, UmlClassNode> classes;
 
+		// HACK: Exposed due to use at OclCondition.
+		// Passing through files would involve passing the list through:
+		//  UmlClassNode -> UmlMethodNode -> OclCondition
+		// Would still like this to be neater somehow.
+		public static List<OclComparison> comparisonList;
+
 		UmlMethodNode selectedMethod;
 		OclCondition selectedCondition;
 
@@ -34,7 +43,29 @@ namespace UmlAnnotator
 			InitializeComponent();
 
 			umlFile = new XmlDocument();
-			comboBoxComparator.ItemsSource = new string[] { ">", ">=", "<", "<=", "=", "!=" };
+			string comparisons = File.ReadAllText(@"../../../util/comparisons.json");
+			List<dynamic> items = JsonConvert.DeserializeObject<List<dynamic>>(comparisons);
+
+			comparisonList = new List<OclComparison>();
+
+			foreach (dynamic b in items)
+			{
+				string name = b.name;
+				string symbol = b.symbol;
+				string smtSymbol = null;
+				bool? invertable = null;
+
+				try { smtSymbol = b.smtSymbol; }
+				catch (Exception ex) { }
+
+				try { invertable = b.invertable; }
+				catch (Exception ex) { }
+
+				comparisonList.Add(new OclComparison(name, symbol, smtSymbol, invertable));
+			}
+
+			// TODO: This should change depending on the current types being compared.
+			comboBoxComparator.ItemsSource = comparisonList;
 		}
 
 		private void UmlFindClasses()
@@ -167,13 +198,31 @@ namespace UmlAnnotator
 			listBoxConditions.Items.Refresh();
 		}
 
+		private void buttonRemoveCondition_Click(object sender, RoutedEventArgs e)
+		{
+			int index = listBoxConditions.SelectedIndex;
+
+			if (index >= 0) {
+				if (radioButtonPreconditions.IsChecked == true)
+				{
+					selectedMethod.RemoveCondition("pre", index);
+				}
+				else if (radioButtonPostconditions.IsChecked == true)
+				{
+					selectedMethod.RemoveCondition("post", index);
+				}
+
+				listBoxConditions.Items.Refresh();
+			}
+		}
+
 		private void listBoxConditions_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			if (listBoxConditions.SelectedIndex >= 0)
 			{
 				selectedCondition = listBoxConditions.SelectedItem as OclCondition;
 
-				if (!String.IsNullOrWhiteSpace(selectedCondition.Comparator))
+				if (selectedCondition.Comparator != null)
 				{
 					comboBoxComparator.SelectedItem = selectedCondition.Comparator;
 				}
@@ -195,7 +244,8 @@ namespace UmlAnnotator
 		{
 			if (comboBoxComparator.SelectedItem != null)
 			{
-				selectedCondition.Comparator = comboBoxComparator.SelectedItem.ToString();
+				OclComparison item = comboBoxComparator.SelectedItem as OclComparison;
+				selectedCondition.Comparator = item;
 				listBoxConditions.Items.Refresh();
 			}
 		}
@@ -207,6 +257,12 @@ namespace UmlAnnotator
 				selectedCondition.SetArguments(textBoxArguments.Text);
 				listBoxConditions.Items.Refresh();
 			}
+		}
+
+		private void textBoxExceptionCondition_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			selectedCondition.SetException(textBoxExceptionCondition.Text);
+			listBoxConditions.Items.Refresh();
 		}
 	}
 }
