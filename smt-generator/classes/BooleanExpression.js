@@ -1,7 +1,7 @@
 const comparisonList = require('../../util/comparisons.json');
 
 function findComparison(comparison) {
-	const result = comparison;
+	let result = comparison;
 
 	comparisonList.map((c) => {
 		if (comparison === c.symbol) {
