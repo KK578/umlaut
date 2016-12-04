@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Equal",
+    "symbol": "==",
+    "smtSymbol": "=",
+    "invertable": true
+  },
+  {
+    "name": "LessThan",
+    "symbol": "<"
+  },
+  {
+    "name": "LessThanOrEqual",
+    "symbol": "<="
+  },
+  {
+    "name": "GreaterThan",
+    "symbol": ">"
+  },
+  {
+    "name": "GreaterThanOrEqual",
+    "symbol": ">="
+  },
+  {
+    "name": "And",
+    "symbol": "&&",
+    "smtSymbol": "and",
+    "invertable": true
+  },
+  {
+    "name": "Or",
+    "symbol": "||",
+    "smtSymbol": "or",
+    "invertable": true
+  },
+  {
+    "name": "Implies",
+    "symbol": "=>",
+    "smtSymbol": "=>",
+    "invertable": true
+  },
+]
