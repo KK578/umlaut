@@ -1,6 +1,20 @@
+const comparisonList = require('../../util/comparisons.json');
+
+function findComparison(comparison) {
+	const result = comparison;
+
+	comparisonList.map((c) => {
+		if (comparison === c.symbol) {
+			result = c.smtSymbol ? c.smtSymbol : c.symbol;
+		}
+	});
+
+	return result;
+}
+
 module.exports = class SmtBooleanExpression {
 	constructor(comparison, args) {
-		this.comparison = comparison;
+		this.comparison = findComparison(comparison);
 		this.args = args;
 		this.isInverted = false;
 	}
