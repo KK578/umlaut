@@ -32,8 +32,8 @@ function solveSmt(filename, callback) {
 	});
 }
 
-function solve() {
-	const dir = path.join(process.cwd(), './build/');
+function solve(dir) {
+	dir = path.resolve(dir);
 
 	readFiles(dir, (smtFiles) => {
 		let count = smtFiles.length;
@@ -50,8 +50,7 @@ function solve() {
 					const output = JSON.stringify(result, null, 2);
 
 					// Store solved data to file after all done.
-					// TODO: Save as ClassName to a SMT directory.
-					fs.writeFile(`${dir}/solved.json`, output, 'utf-8');
+					fs.writeFile(path.join(dir, 'solved.json'), output, 'utf-8');
 				}
 			});
 		});
