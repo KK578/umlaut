@@ -18,9 +18,13 @@ module.exports = (filePath) => {
 			}
 
 			const parsed = parser.parse(uml);
-			const output = JSON.stringify(parsed, null, 2);
 
-			fs.writeFile(path.join(__dirname, '../build/SimpleMath.json'), output, 'utf-8');
+			Object.keys(parsed).map((className) => {
+				const output = JSON.stringify(parsed[className], null, 2);
+				const outputFile = `${className}.json`;
+
+				fs.writeFile(path.join(__dirname, `../build/uml/${outputFile}`), output, 'utf-8');
+			});
 		});
 	});
 };

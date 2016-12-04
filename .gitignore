@@ -2,7 +2,7 @@
 ### Project ###
 .env
 .cache/
-tmp/
+[Tt]mp/
 build/
 
 ## Dependencies
@@ -21,10 +21,12 @@ bower[-_]components/
 [Ll]ib/
 packages/
 [Dd]ebug/
-typings/
 
 ## NodeJS Tools for Visual Studio
 *.njsproj
+
+## Visual Studio Code
+typings/
 
 ## Vim
 # Swap Files
@@ -50,4 +52,4 @@ ehthumbs.db
 
 #############
 ### Misc. ###
-.[tT][mM][pP]
+*.[Tt][Mm][Pp]

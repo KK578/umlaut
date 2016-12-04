@@ -1,10 +1,7 @@
 const generators = require('yeoman-generator');
 
 const path = require('path');
-
-let uml;
-let smt;
-const classes = [];
+const glob = require('glob');
 
 function comparatorString(comparator) {
 	let value = '';
@@ -133,13 +130,16 @@ function generateArgumentString(methodArgs) {
 	return names.join(', ');
 }
 
-function readClass(uml) {
+function readClass(uml, smt) {
 	const umlClass = {};
 
 	umlClass.name = uml.name;
 	umlClass.methods = Object.keys(uml.methods).map((key) => {
 		const m = uml.methods[key];
+
+		// Handling tests
 		const preconditions = {};
+
 		m.preconditions.map((c) => {
 			preconditions[c.id] = c;
 		});
@@ -181,13 +181,15 @@ function readClass(uml) {
 			return test;
 		});
 
-		const r = m.returnType;
-		r.type = getLanguageType(r.type);
+		// Return type handling
+		const returnType = m.returnType;
+
+		returnType.type = getLanguageType(returnType.type);
 
 		const method = {
 			name: m.name,
 			arguments: m.arguments,
-			return: r,
+			return: returnType,
 			preconditions: preconditions,
 			postconditions: m.postconditions,
 			tests: tests
@@ -205,30 +207,56 @@ const generator = generators.Base.extend({
 	constructor: function () {
 		generators.Base.apply(this, arguments);
 
-		this.argument('umlFile', {
+		this.argument('umlFolder', {
 			type: String,
-			description: 'Filepath for JSON describing the class',
+			description: 'Directory path for JSON objects describing the model',
 			required: true
 		});
-		this.argument('smtFile', {
+		this.argument('smtFolder', {
 			type: String,
-			description: 'Filepath for JSON describing solved SMT',
+			description: 'Directory path for JSON objects describing the solved conditions',
 			required: true
 		});
+
+		this.uml = {};
+		this.smt = {};
 	},
 
 	initializing() {
-		uml = require(path.resolve(process.cwd(), this.umlFile));
-		smt = require(path.resolve(process.cwd(), this.smtFile));
+		const done = this.async();
+		const umlPath = path.resolve(process.cwd(), this.umlFolder);
+
+		glob('*.json', { cwd: umlPath }, (err, files) => {
+			if (err) {
+				throw err;
+			}
+
+			let count = files.length;
+
+			files.map((umlFile) => {
+				const className = umlFile.substring(0, umlFile.length - 5);
+
+				// UML/ClassName.json
+				this.uml[className] = require(path.resolve(umlPath, umlFile));
+				// SMT/ClassName/solved.json
+				this.smt[className] = require(path.resolve(this.smtFolder, className, 'solved.json'));
+
+				if (--count === 0) {
+					done();
+				}
+			});
+		});
 	},
 
 	configuring() {
-		classes[0] = readClass(uml.SimpleMath);
+		this.classes = Object.keys(this.uml).map((className) => {
+			return readClass(this.uml[className], this.smt[className]);
+		});
 	},
 
 	writing() {
-		classes.map((c) => {
-			this.template('test-class.cs', `build/${c.name}.cs`, { classObject: c });
+		this.classes.map((c) => {
+			this.template('test-class.cs', `build/${c.name}Test.cs`, { classObject: c });
 		});
 	}
 });

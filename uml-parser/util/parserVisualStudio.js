@@ -2,33 +2,37 @@ function parseVariables(umlClass) {
 	const variables = {};
 
 	// Iterate through list of attributes.
-	umlClass.ownedAttributesInternal[0].property.map((property) => {
-		const v = {
-			id: property.$.Id,
-			name: property.$.name
-		};
+	if (umlClass.ownedAttributesInternal !== undefined) {
+		const properties = umlClass.ownedAttributesInternal[0].property;
 
-		let type = '';
+		properties.map((property) => {
+			const v = {
+				id: property.$.Id,
+				name: property.$.name
+			};
 
-		// Get argument type defaulting to Object.
-		if (property.type_NamedElement) {
-			type = property.type_NamedElement[0];
+			let type = '';
 
-			if (type.primitiveTypeMoniker) {
-				type = type.primitiveTypeMoniker[0].$.LastKnownName;
+			// Get argument type defaulting to Object.
+			if (property.type_NamedElement) {
+				type = property.type_NamedElement[0];
+
+				if (type.primitiveTypeMoniker) {
+					type = type.primitiveTypeMoniker[0].$.LastKnownName;
+				}
+				else if (type.undefinedTypeMoniker) {
+					type = type.undefinedTypeMoniker[0].$.LastKnownName;
+				}
 			}
-			else if (type.undefinedTypeMoniker) {
-				type = type.undefinedTypeMoniker[0].$.LastKnownName;
+			else {
+				type = 'Object';
 			}
-		}
-		else {
-			type = 'Object';
-		}
 
-		v.type = type;
+			v.type = type;
 
-		variables[v.name] = v;
-	});
+			variables[v.name] = v;
+		});
+	}
 
 	return variables;
 }
@@ -138,24 +142,28 @@ function parseMethods(umlClass) {
 	}
 
 	// Iterate through all methods.
-	umlClass.ownedOperationsInternal[0].operation.map((operation) => {
-		// Generic method properties
-		const v = {
-			id: operation.$.Id,
-			name: operation.$.name
-		};
+	if (umlClass.ownedOperationsInternal !== undefined) {
+		const operations = umlClass.ownedOperationsInternal[0].operation;
 
-		// Types
-		v.returnType = getReturnType(operation.ownedParameters);
-		v.arguments = getArguments(operation.ownedParameters);
+		operations.map((operation) => {
+			// Generic method properties
+			const v = {
+				id: operation.$.Id,
+				name: operation.$.name
+			};
 
-		// Conditions
-		v.preconditions = getConditions(operation.preconditionsInternal);
-		v.postconditions = getConditions(operation.postconditionsInternal);
+			// Types
+			v.returnType = getReturnType(operation.ownedParameters);
+			v.arguments = getArguments(operation.ownedParameters);
 
-		// TODO: Keep method list as a hashmap of method name?
-		methods[v.name] = v;
-	});
+			// Conditions
+			v.preconditions = getConditions(operation.preconditionsInternal);
+			v.postconditions = getConditions(operation.postconditionsInternal);
+
+			// TODO: Keep method list as a hashmap of method name?
+			methods[v.name] = v;
+		});
+	}
 
 	return methods;
 }
