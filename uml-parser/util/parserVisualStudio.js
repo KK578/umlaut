@@ -103,6 +103,7 @@ function parseMethods(umlClass) {
 	}
 
 	// Helper function to take a condition from XML format to standardised format.
+	// TODO: Replace inner workings with an AST parser.
 	function getConditions(conditions) {
 		let c = [];
 		let id = '';
@@ -159,11 +160,6 @@ function parseMethods(umlClass) {
 			const rawString = constraint.specification[0].literalString[0].$.value;
 
 			id = constraint.$.Id;
-			// TODO: Add a character to split off of while using Visual Studio's inbuilt
-			//  property conditions.
-			// TODO: Parse condition string into object splitting into comparison and arguments.
-			// NOTE: Leave parsing until after Visual Studio plugin is designed, may use a
-			//  simpler system.
 			parseConditions(rawString);
 		}
 
