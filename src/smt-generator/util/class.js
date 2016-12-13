@@ -1,6 +1,4 @@
 const SmtMethod = require('./method.js');
-const path = require('path');
-const fs = require('fs');
 
 class SmtClass {
 	constructor(classObject) {
