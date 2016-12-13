@@ -4,9 +4,6 @@ node_js:
 cache:
   directories:
     - node_modules
-    - uml-parser/node_modules
-    - test-generator/node_modules
-    - smt-generator/node_modules
 install:
   - npm install
   - npm install -g grunt-cli
