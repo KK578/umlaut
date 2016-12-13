@@ -10,4 +10,4 @@ install:
 before_script:
   - grunt lint
 script:
-  - echo "1"
+  - grunt mochaTest
