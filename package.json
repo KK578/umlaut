@@ -6,6 +6,13 @@
     "email": "KevinKwan@googlemail.com"
   },
   "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KK578/compm091-code.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KK578/compm091-code/issues"
+  },
   "dependencies": {
     "glob": "^7.1.1",
     "xml2js": "^0.4.17",
