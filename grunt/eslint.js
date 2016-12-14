@@ -9,7 +9,6 @@ module.exports = {
 				src: [
 					'gruntfile.js',
 					'grunt/*.js',
-					'test/*.js',
 					'util/*.js'
 				]
 			}
@@ -20,7 +19,8 @@ module.exports = {
 			{
 				expand: true,
 				src: [
-					'src/smt-generator/**/*.js'
+					'src/smt-generator/**/*.js',
+					'test/smt-generator/*.js'
 				]
 			}
 		]
@@ -30,7 +30,8 @@ module.exports = {
 			{
 				expand: true,
 				src: [
-					'src/uml-parser/**/*.js'
+					'src/uml-parser/**/*.js',
+					'test/uml-parser/*.js'
 				]
 			}
 		]
@@ -40,7 +41,8 @@ module.exports = {
 			{
 				expand: true,
 				src: [
-					'generators/**/*.js'
+					'generators/**/*.js',
+					'test/test-generator/*.js'
 				]
 			}
 		]
