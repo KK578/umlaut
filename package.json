@@ -1,6 +1,7 @@
 {
-  "name": "compm091-code",
+  "name": "generator-model-driven-testing",
   "version": "0.0.0",
+  "description": "",
   "author": {
     "name": "Kevin Kwan",
     "email": "KevinKwan@googlemail.com"
@@ -13,6 +14,13 @@
   "bugs": {
     "url": "https://github.com/KK578/compm091-code/issues"
   },
+  "files": [
+    "generators/junit",
+    "generators/nunit"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ],
   "dependencies": {
     "glob": "^7.1.1",
     "xml2js": "^0.4.17",
