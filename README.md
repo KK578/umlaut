@@ -1,5 +1,7 @@
 # compm091-code
 
+[![Build Status](https://travis-ci.com/KK578/compm091-code.svg?token=hs1VhKpTNLLpkBzhwkbp&branch=master)](https://travis-ci.com/KK578/compm091-code)
+
 ## Projects in this Repository
 
 ### UML-Annotator
