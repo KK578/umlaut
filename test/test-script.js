@@ -27,7 +27,7 @@ setTimeout(() => {
 			console.log('Generate Test Suite');
 
 			// Invoke generator.
-			const yo = spawn('yo', ['umltotest:nunit', 'build/uml/', 'build/smt/']);
+			const yo = spawn('yo', ['model-driven-testing:nunit', 'build/uml/', 'build/smt/']);
 
 			yo.stdout.on('data', (data) => {
 				console.log(data.toString('utf8'));
