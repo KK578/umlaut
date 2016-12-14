@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.com/KK578/compm091-code.svg?token=hs1VhKpTNLLpkBzhwkbp&branch=master)](https://travis-ci.com/KK578/compm091-code)
 
+This project is part of a submission for the MEng Degree in Computer Science at UCL (University College London).
+
 ## Projects in this Repository
 
 ### UML-Annotator
