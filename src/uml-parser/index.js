@@ -23,7 +23,7 @@ module.exports = (filePath) => {
 				const output = JSON.stringify(parsed[className], null, 2);
 				const outputFile = `${className}.json`;
 
-				fs.writeFile(path.join(__dirname, `../build/uml/${outputFile}`), output, 'utf-8');
+				fs.writeFile(path.join(__dirname, `../../build/uml/${outputFile}`), output, 'utf-8');
 			});
 		});
 	});
