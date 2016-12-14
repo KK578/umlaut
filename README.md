@@ -24,9 +24,9 @@ Tool to take the UML model and inputs and generate the test suite.
 
 This project has been templated by [generator-kk578](https://github.com/KK578/generator-kk578).
 
-[BSD-2 License](http://opensource.org/licenses/bsd-license.php)
+[BSD-3 License](https://opensource.org/licenses/BSD-3-Clause)
 
-Copyright (c) 2015, Kevin Kwan (KevinKwan@googlemail.com).  
+Copyright (c) 2016, Kevin Kwan (KevinKwan@googlemail.com).  
 All rights reserved.
 
 *See `LICENSE.md` for full license text.*
