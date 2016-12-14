@@ -10,4 +10,4 @@ install:
 before_script:
   - grunt lint
 script:
-  - grunt mochaTest
+  - grunt mochaTest:all
