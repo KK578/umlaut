@@ -2,7 +2,7 @@ module.exports = {
 	default: {
 		tasks: [
 			'lint',
-			'mochaTest'
+			'mochaTest:all'
 		]
 	},
 	lint: {

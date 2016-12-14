@@ -40,7 +40,7 @@ module.exports = {
 			{
 				expand: true,
 				src: [
-					'src/test-generator/**/*.js'
+					'generators/**/*.js'
 				]
 			}
 		]
