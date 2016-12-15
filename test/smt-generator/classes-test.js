@@ -2,15 +2,22 @@ const chai = require('chai');
 const expect = chai.expect;
 
 const testee = require('../../src/smt-generator/util/smt-classes.js');
+let TestClass;
 
 describe('SMT Classes', () => {
 	describe('Assertion', () => {
+		before(() => {
+			TestClass = testee.Assertion;
+		});
+
 		it('should error on empty input', () => {
-			expect(testee.createAssertion).to.throw(Error);
+			expect(() => {
+				new TestClass();
+			}).to.throw(Error);
 		});
 
 		it('should take a string input', () => {
-			const obj = testee.createAssertion('string');
+			const obj = new TestClass('string');
 
 			expect(obj.toString()).to.equal('(assert string)');
 		});
@@ -21,7 +28,7 @@ describe('SMT Classes', () => {
 				a: 'a',
 				b: '0'
 			});
-			const obj = testee.createAssertion(booleanExpression);
+			const obj = new TestClass(booleanExpression);
 
 			expect(obj.toString()).to.equal('(assert (< a b))');
 		});
