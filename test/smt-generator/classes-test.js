@@ -51,4 +51,35 @@ describe('SMT Classes', () => {
 			expect(obj.toString()).to.equal('(assert (< a b))');
 		});
 	});
+
+	describe('DeclareConst', () => {
+		before(() => {
+			TestClass = testee.DeclareConst;
+		});
+
+		it('should error on empty input', () => {
+			expect(() => {
+				new TestClass();
+			}).to.throw(Error);
+		});
+
+		it('should error on an unknown type name');
+		it('should take a name and type name');
+	});
+
+	describe('DeclareFunction', () => {
+		before(() => {
+			TestClass = testee.DeclareFunction;
+		});
+
+		it('should error on empty input', () => {
+			expect(() => {
+				new TestClass();
+			}).to.throw(Error);
+		});
+
+		it('should error on an unknown type name');
+		it('should error on unknown type names in arguments type list');
+		it('should take a name and type name and arguments type list');
+	});
 });
