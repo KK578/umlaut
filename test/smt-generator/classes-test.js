@@ -20,7 +20,7 @@ describe('SMT Classes', () => {
 		it('should take a comparison and argument list containing BooleanExpressions');
 		it('should do a lookup to convert a comparison to SMT-LIB2 version');
 		it('should change isInverted with setInverted');
-		it('should represent SMT-LIB2 string differently if inverted');
+		it('should represent SMT-LIB2 command differently if inverted');
 	});
 
 	describe('Assertion', () => {
@@ -81,5 +81,56 @@ describe('SMT Classes', () => {
 		it('should error on an unknown type name');
 		it('should error on unknown type names in arguments type list');
 		it('should take a name and type name and arguments type list');
+	});
+
+	describe('FunctionCall', () => {
+		before(() => {
+			TestClass = testee.FunctionCall;
+		});
+
+		it('should error on empty input', () => {
+			expect(() => {
+				new TestClass();
+			}).to.throw(Error);
+		});
+
+		it('should error on unknown function name');
+		it('should take a name and arguments list');
+	});
+
+	describe('Echo', () => {
+		before(() => {
+			TestClass = testee.Echo;
+		});
+
+		it('should take an empty input');
+		it('should take a string');
+		it('should take a string with "double quotes"');
+	});
+
+	describe('GetValue', () => {
+		before(() => {
+			TestClass = testee.GetValue;
+		});
+
+		it('should error on empty input', () => {
+			expect(() => {
+				new TestClass();
+			}).to.throw(Error);
+		});
+
+		it('should take an arguments list');
+		it('should generate a check-sat before the get-value');
+	});
+
+	describe('Stack', () => {
+		before(() => {
+			TestClass = testee.GetValue;
+		});
+
+		it('should default to push on empty input');
+		it('should take a string for mode');
+		it('should error if string is not "push" or "pop"');
+		it('should create correct SMT-LIB2 command depending on the mode');
 	});
 });
