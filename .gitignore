@@ -4,6 +4,7 @@
 .cache/
 [Tt]mp/
 build/
+coverage/
 
 ## Dependencies
 node_modules/
