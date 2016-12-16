@@ -121,7 +121,7 @@ describe('SMT Classes', () => {
 		it('should take a name and type name and arguments type list', () => {
 			const obj = new TestClass('foo', 'Int', ['Int', 'Int']);
 
-			expect(obj.toString()).to.equal('(declare-fun a (Int Int) Int)');
+			expect(obj.toString()).to.equal('(declare-fun foo (Int Int) Int)');
 		});
 	});
 
