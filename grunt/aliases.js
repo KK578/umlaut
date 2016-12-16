@@ -2,7 +2,7 @@ module.exports = {
 	default: {
 		tasks: [
 			'lint',
-			'mochaTest:all'
+			'test'
 		]
 	},
 	lint: {
@@ -10,5 +10,7 @@ module.exports = {
 		tasks: [
 			'eslint'
 		]
-	}
+	},
+	test: ['mochaTest:all'],
+	coverage: ['mocha_istanbul:all']
 };

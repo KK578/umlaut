@@ -11,6 +11,6 @@ install:
 before_script:
   - grunt lint
 script:
-  - grunt mocha_istanbul:all
+  - grunt coverage
 after_script:
   - codecov
