@@ -13,10 +13,18 @@ function findComparison(comparison) {
 }
 
 module.exports = class SmtBooleanExpression {
-	constructor(comparison, args) {
+	constructor(comparison, args, isInverted) {
+		if (!comparison) {
+			throw new Error('Argument "comparison" is required.');
+		}
+
+		if (!Array.isArray(args)) {
+			throw new Error('Expected argument "args" to be Array.');
+		}
+
 		this.comparison = findComparison(comparison);
 		this.args = args;
-		this.isInverted = false;
+		this.isInverted = typeof isInverted === 'boolean' ? isInverted : false;
 	}
 
 	setInverted(value) {
