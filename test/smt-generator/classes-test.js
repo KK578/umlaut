@@ -203,7 +203,6 @@ describe('SMT Classes', () => {
 
 			expect(obj.toString()).to.match(/\(get-value \(a b\)\)/);
 		});
-
 	});
 
 	describe('Stack', () => {
