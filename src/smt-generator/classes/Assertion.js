@@ -1,5 +1,9 @@
 module.exports = class SmtDeclareFunction {
 	constructor(expression) {
+		if (!expression) {
+			throw new Error('Argument "expression" is required.');
+		}
+
 		this.expression = expression;
 	}
 
