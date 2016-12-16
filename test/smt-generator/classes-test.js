@@ -82,11 +82,7 @@ describe('SMT Classes', () => {
 		});
 
 		it('should take a SmtBooleanExpression', () => {
-			const booleanExpression = testee.createBooleanExpression({
-				comparison: '<',
-				a: 'a',
-				b: '0'
-			});
+			const booleanExpression = new testee.BooleanExpression('>', ['a', 'b']);
 			const obj = new TestClass(booleanExpression);
 
 			expect(obj.toString()).to.equal('(assert (< a b))');
@@ -104,8 +100,11 @@ describe('SMT Classes', () => {
 			}).to.throw(Error);
 		});
 
-		it('should error on an unknown type name');
-		it('should take a name and type name');
+		it('should take a name and type name', () => {
+			const obj = new TestClass('a', 'Int');
+
+			expect(obj.toString()).to.equal('(declare-const a Int)');
+		});
 	});
 
 	describe('DeclareFunction', () => {
@@ -119,8 +118,6 @@ describe('SMT Classes', () => {
 			}).to.throw(Error);
 		});
 
-		it('should error on an unknown type name');
-		it('should error on unknown type names in arguments type list');
 		it('should take a name and type name and arguments type list');
 	});
 
@@ -135,7 +132,6 @@ describe('SMT Classes', () => {
 			}).to.throw(Error);
 		});
 
-		it('should error on unknown function name');
 		it('should take a name and arguments list');
 	});
 
