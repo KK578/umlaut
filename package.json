@@ -1,6 +1,7 @@
 {
-  "name": "compm091-code",
+  "name": "generator-model-driven-testing",
   "version": "0.0.0",
+  "description": "",
   "author": {
     "name": "Kevin Kwan",
     "email": "KevinKwan@googlemail.com"
@@ -13,6 +14,13 @@
   "bugs": {
     "url": "https://github.com/KK578/compm091-code/issues"
   },
+  "files": [
+    "generators/junit",
+    "generators/nunit"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ],
   "dependencies": {
     "glob": "^7.1.1",
     "xml2js": "^0.4.17",
@@ -23,7 +31,9 @@
     "eslint-formatter-pretty": "^0.2.2",
     "grunt": "^1.0.1",
     "grunt-eslint": "KK578/grunt-eslint",
+    "grunt-mocha-istanbul": "^5.0.2",
     "grunt-mocha-test": "^0.13.2",
+    "istanbul": "^0.4.5",
     "jit-grunt": "^0.10.0",
     "load-grunt-config": "^0.19.2",
     "mocha": "^3.1.2",

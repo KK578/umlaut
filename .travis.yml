@@ -1,3 +1,4 @@
+sudo: false
 language: node_js
 node_js:
   - "6"
@@ -6,8 +7,10 @@ cache:
     - node_modules
 install:
   - npm install
-  - npm install -g grunt-cli
+  - npm install -g grunt-cli codecov
 before_script:
   - grunt lint
 script:
-  - grunt mochaTest
+  - grunt coverage
+after_script:
+  - codecov
