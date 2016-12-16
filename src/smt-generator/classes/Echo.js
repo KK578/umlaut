@@ -1,7 +1,7 @@
 module.exports = class SmtEcho {
 	constructor(output) {
 		if (!output) {
-			output = "";
+			output = '';
 		}
 
 		this.output = output;
