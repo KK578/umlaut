@@ -1,5 +1,7 @@
 # compm091-code
 
+[![codecov](https://codecov.io/gh/KK578/compm091-code/branch/master/graph/badge.svg?token=IVRG99xGEK)](https://codecov.io/gh/KK578/compm091-code)
+
 ## Projects in this Repository
 
 ### UML-Annotator
