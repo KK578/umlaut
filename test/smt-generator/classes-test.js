@@ -5,7 +5,7 @@ const testee = require('../../src/smt-generator/util/smt-classes.js');
 let TestClass;
 
 describe('SMT Classes', () => {
-	describe('Boolean Expression', () => {
+	describe('BooleanExpression', () => {
 		before(() => {
 			TestClass = testee.BooleanExpression;
 		});
@@ -16,11 +16,52 @@ describe('SMT Classes', () => {
 			}).to.throw(Error);
 		});
 
-		it('should take a comparison and argument list');
-		it('should take a comparison and argument list containing BooleanExpressions');
-		it('should do a lookup to convert a comparison to SMT-LIB2 version');
-		it('should change isInverted with setInverted');
-		it('should represent SMT-LIB2 command differently if inverted');
+		it('should take a comparison and argument list', () => {
+			const obj = new TestClass('>', ['a', 'b']);
+
+			// Default inversion is false
+			expect(obj.isInverted).to.not.be.true();
+			expect(obj.toString()).to.equal('(> a b)');
+		});
+
+		it('should take a comparison and argument list and boolean for inversion mode', () => {
+			const obj = new TestClass('>', ['a', 'b'], true);
+
+			expect(obj.isInverted).to.be.true();
+			expect(obj.toString()).to.equal('(not (> a b))');
+		});
+
+		it('should change isInverted with setInverted', () => {
+			const obj = new TestClass('>', ['a', 'b']);
+
+			obj.setInverted(true);
+			expect(obj.isInverted).to.be.true();
+			obj.setInverted(false);
+			expect(obj.isInverted).to.not.be.true();
+		});
+
+		it('should do a lookup to convert a comparison to SMT-LIB2 version', () => {
+			const obj = new TestClass('==', ['a', '0']);
+
+			expect(obj.toString()).to.equal('(= a 0)');
+		});
+
+		it('should handle comparator "!=" correctly as a SMT-LIB2 command', () => {
+			const obj = new TestClass('!=', ['a', '0']);
+
+			expect(obj.isInverted).to.be.true();
+			expect(obj.toString()).to.equal('(not (= a 0))');
+		});
+
+		it('should take a comparison and argument list containing BooleanExpressions', () => {
+			const obj = new TestClass('=', ['a', 'b']);
+			const obj2 = new TestClass('=', ['a', '0']);
+			const joinedObj = new TestClass('=', obj, obj2);
+
+			expect(obj.toString()).to.equal('(= a b)');
+			expect(obj2.toString()).to.equal('(= a 0)');
+			expect(joinedObj.toString()).to.equal('(= (= a b) (= a 0))');
+		});
 	});
 
 	describe('Assertion', () => {
