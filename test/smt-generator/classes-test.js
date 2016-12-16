@@ -20,14 +20,14 @@ describe('SMT Classes', () => {
 			const obj = new TestClass('>', ['a', 'b']);
 
 			// Default inversion is false
-			expect(obj.isInverted).to.not.be.true();
+			expect(obj.isInverted).to.not.be.true;
 			expect(obj.toString()).to.equal('(> a b)');
 		});
 
 		it('should take a comparison and argument list and boolean for inversion mode', () => {
 			const obj = new TestClass('>', ['a', 'b'], true);
 
-			expect(obj.isInverted).to.be.true();
+			expect(obj.isInverted).to.be.true;
 			expect(obj.toString()).to.equal('(not (> a b))');
 		});
 
@@ -35,9 +35,9 @@ describe('SMT Classes', () => {
 			const obj = new TestClass('>', ['a', 'b']);
 
 			obj.setInverted(true);
-			expect(obj.isInverted).to.be.true();
+			expect(obj.isInverted).to.be.true;
 			obj.setInverted(false);
-			expect(obj.isInverted).to.not.be.true();
+			expect(obj.isInverted).to.not.be.true;
 		});
 
 		it('should do a lookup to convert a comparison to SMT-LIB2 version', () => {
@@ -49,14 +49,14 @@ describe('SMT Classes', () => {
 		it('should handle comparator "!=" correctly as a SMT-LIB2 command', () => {
 			const obj = new TestClass('!=', ['a', '0']);
 
-			expect(obj.isInverted).to.be.true();
+			expect(obj.isInverted).to.be.true;
 			expect(obj.toString()).to.equal('(not (= a 0))');
 		});
 
 		it('should take a comparison and argument list containing BooleanExpressions', () => {
 			const obj = new TestClass('=', ['a', 'b']);
 			const obj2 = new TestClass('=', ['a', '0']);
-			const joinedObj = new TestClass('=', obj, obj2);
+			const joinedObj = new TestClass('=', [obj, obj2]);
 
 			expect(obj.toString()).to.equal('(= a b)');
 			expect(obj2.toString()).to.equal('(= a 0)');
@@ -81,11 +81,11 @@ describe('SMT Classes', () => {
 			expect(obj.toString()).to.equal('(assert string)');
 		});
 
-		it('should take a SmtBooleanExpression', () => {
+		it('should take a BooleanExpression', () => {
 			const booleanExpression = new testee.BooleanExpression('>', ['a', 'b']);
 			const obj = new TestClass(booleanExpression);
 
-			expect(obj.toString()).to.equal('(assert (< a b))');
+			expect(obj.toString()).to.equal('(assert (> a b))');
 		});
 	});
 
@@ -205,9 +205,9 @@ describe('SMT Classes', () => {
 		});
 	});
 
-	describe('Stack', () => {
+	describe('StackModifier', () => {
 		before(() => {
-			TestClass = testee.GetValue;
+			TestClass = testee.StackModifier;
 		});
 
 		it('should default to push on empty input', () => {
