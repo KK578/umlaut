@@ -5,7 +5,7 @@ const SmtClasses = {
 	DeclareFunction: require('../classes/DeclareFunction.js'),
 	Echo: require('../classes/Echo.js'),
 	FunctionCall: require('../classes/FunctionCall.js'),
-	Model: require('../classes/Model.js'),
+	GetValue: require('../classes/Model.js'),
 	StackModifier: require('../classes/StackModifier.js')
 };
 
@@ -87,14 +87,15 @@ function stackPush() {
 	return new SmtClasses.StackModifier('push');
 }
 
-module.exports = {
-	assertion,
-	booleanExpression,
-	declareConst,
-	declareFunction,
-	echo,
-	functionCall,
-	getValues,
-	stackPop,
-	stackPush
-};
+module.exports = SmtClasses;
+// module.exports = {
+// 	assertion,
+// 	booleanExpression,
+// 	declareConst,
+// 	declareFunction,
+// 	echo,
+// 	functionCall,
+// 	getValues,
+// 	stackPop,
+// 	stackPush
+// };
