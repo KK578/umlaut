@@ -11,5 +11,5 @@ before_script:
   - grunt lint
 script:
   - grunt mocha_istanbul:all
-after_success:
+after_script:
   - codecov
