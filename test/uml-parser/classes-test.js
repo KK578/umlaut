@@ -36,7 +36,7 @@ describe('UML Parser Classes', () => {
 
 			describe('#addVariable', () => {
 				beforeEach(() => {
-					obj = new TestClass();
+					obj = new TestClass('foo');
 				});
 
 				it('should error on empty input', () => {
@@ -69,7 +69,7 @@ describe('UML Parser Classes', () => {
 
 			describe('#addInvariant', () => {
 				beforeEach(() => {
-					obj = new TestClass();
+					obj = new TestClass('foo');
 				});
 
 				it('should error on empty', () => {
@@ -97,7 +97,7 @@ describe('UML Parser Classes', () => {
 
 			describe('#addMethod', () => {
 				beforeEach(() => {
-					obj = new TestClass();
+					obj = new TestClass('foo');
 				});
 
 				it('should error on empty input', () => {
