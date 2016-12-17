@@ -6,6 +6,10 @@ let TestClass;
 
 describe('UML Parser Classes', () => {
 	describe('AnnotatedUmlClass', () => {
+		before(() => {
+			TestClass = testee.AnnotatedUmlClass;
+		});
+
 		it('should error on empty input', () => {
 			expect(() => {
 				new TestClass();
