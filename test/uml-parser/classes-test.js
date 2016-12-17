@@ -189,7 +189,9 @@ describe('UML Parser Classes', () => {
 			});
 
 			it('should take a type name', () => {
-				obj.setType('foo', 'Integer');
+				expect(obj.type).to.not.equal('Integer');
+
+				obj.setType('Integer');
 
 				expect(obj.type).to.equal('Integer');
 			});
@@ -199,9 +201,7 @@ describe('UML Parser Classes', () => {
 			let obj;
 
 			beforeEach(() => {
-				obj = new TestClass();
-
-				obj.addMethod('foo', 'Integer');
+				obj = new TestClass('foo', 'Integer');
 			});
 
 			it('should error on empty', () => {
@@ -224,27 +224,27 @@ describe('UML Parser Classes', () => {
 					type: 'Integer'
 				});
 
-				expect(obj.methods['foo'].arguments).to.include({ a: 'Integer' });
+				expect(obj.arguments).to.include({ a: 'Integer' });
 			});
 
 			it('should error if argument object does not have a name', () => {
-				expect(obj.addArgument.bind(obj, 'foo', { type: 'Integer' })).to.throw(Error);
+				expect(obj.addArgument.bind(obj, { type: 'Integer' })).to.throw(Error);
 			});
 
 			it('should error if argument object does not have a type', () => {
-				expect(obj.addArgument.bind(obj, 'foo', { name: 'a' })).to.throw(Error);
+				expect(obj.addArgument.bind(obj, { name: 'a' })).to.throw(Error);
 			});
 
 			it('should error if argument name already exists in that method', () => {
-				obj.addArgument('foo', {
+				obj.addArgument({
 					name: 'a',
 					type: 'Integer'
 				});
 
 				// Validate the argument now exists.
-				expect(obj.methods['foo'].arguments).to.include({ a: 'Integer' });
+				expect(obj.arguments).to.include({ a: 'Integer' });
 
-				expect(obj.addArgument.bind(obj, 'foo', {
+				expect(obj.addArgument.bind(obj, {
 					name: 'a',
 					type: 'Integer'
 				})).to.throw(Error);
