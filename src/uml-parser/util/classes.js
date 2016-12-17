@@ -1,5 +1,9 @@
 class AnnotatedUmlClass {
 	constructor(name) {
+		if (!name) {
+			throw new Error('Argument "name" is required.');
+		}
+
 		this.name = name;
 
 		this.variables = {};

@@ -19,8 +19,16 @@ describe('UML Parser Classes', () => {
 		it('should take a name', () => {
 			const obj = new TestClass('foo');
 
-			expect(obj.id).to.be.a('string').and.not.equal('');
+			// expect(obj.id).to.be.a('string').and.not.equal('');
 			expect(obj.name).to.equal('foo');
+		});
+
+		it('should define hashmaps after initialisation', () => {
+			const obj = new TestClass('foo');
+
+			expect(obj.variables).to.be.an('object');
+			expect(obj.methods).to.be.an('object');
+			expect(obj.invariants).to.be.an('object');
 		});
 
 		describe('Class Variable Modifiers', () => {
