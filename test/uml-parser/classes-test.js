@@ -128,22 +128,127 @@ describe('UML Parser Classes', () => {
 			});
 
 			describe('#setMethodType', () => {
-				it('should error on empty');
-				it('should error with just a name');
-				it('should change the named method\'s return type');
-				it('should error if method does not exist');
+				beforeEach(() => {
+					obj = new TestClass();
+
+					obj.addMethod('foo', 'Integer');
+				});
+
+				it('should error on empty', () => {
+					expect(obj.setMethodType).to.throw(Error);
+				});
+
+				it('should error with just a name', () => {
+					expect(obj.setMethodType.bind(obj, 'foo')).to.throw(Error);
+				});
+
+				it('should change the named method\'s return type', () => {
+					// Validate the method does exist.
+					expect(obj.methods).to.include.keys('foo');
+					expect(obj.methods['foo']).to.include({ type: 'Integer' });
+
+					obj.setMethodType('foo', 'String');
+
+					expect(obj.methods['foo']).to.not.include({ type: 'Integer' });
+					expect(obj.methods['foo']).to.include({ type: 'String' });
+				});
+
+				it('should error if method does not exist', () => {
+					obj = new TestClass();
+
+					// Validate the method does not exist.
+					expect(obj.methods).to.not.include.keys('foo');
+
+					// Attempt to set method type of method that doesn't exist.
+					expect(obj.setMethodType.bind(obj, 'foo', 'String')).to.throw(Error);
+				});
 			});
 
 			describe('#addMethodArgument', () => {
-				it('should error on empty');
-				it('should error with just a name');
-				it('should add a new argument, as a string, to the named method');
-				it('should error if argument string does not specify a type');
-				it('should add a new argument, as an object, to the named method');
-				it('should error if added argument does not have a name');
-				it('should error if added argument does not have a type');
-				it('should error if method does not exist');
-				it('should error if argument name already exists in that method');
+				beforeEach(() => {
+					obj = new TestClass();
+
+					obj.addMethod('foo', 'Integer');
+				});
+
+				it('should error on empty', () => {
+					expect(obj.addMethodArgument).to.throw(Error);
+				});
+
+				it('should error with just a name', () => {
+					expect(obj.addMethodArgument.bind(obj, 'foo')).to.throw(Error);
+				});
+
+				it('should add a new argument, as a string, to the named method', () => {
+					expect(obj.methods).to.include.keys('foo');
+					expect(obj.methods['foo'].arguments).to.not.include({ a: 'Integer' });
+
+					obj.addMethodArgument('foo', 'a:Integer');
+
+					expect(obj.methods['foo'].arguments).to.include({ a: 'Integer' });
+				});
+
+				it('should error if argument string does not specify a type', () => {
+					expect(obj.methods).to.include.keys('foo');
+
+					expect(obj.addMethodArgument.bind(obj, 'foo', 'a')).to.throw(Error);
+				});
+
+				it('should add a new argument, as an object, to the named method', () => {
+					expect(obj.methods).to.include.keys('foo');
+					expect(obj.methods['foo'].arguments).to.not.include({ a: 'Integer' });
+
+					obj.addMethodArgument('foo', {
+						name: 'a',
+						type: 'Integer'
+					});
+
+					expect(obj.methods['foo'].arguments).to.include({ a: 'Integer' });
+				});
+
+				it('should error if added argument does not have a name', () => {
+					expect(obj.methods).to.include.keys('foo');
+					expect(obj.methods['foo'].arguments).to.not.include({ a: 'Integer' });
+
+					expect(obj.addMethodArgument.bind(obj, 'foo', { type: 'Integer' })).to.throw(Error);
+				});
+
+				it('should error if added argument does not have a type', () => {
+					expect(obj.methods).to.include.keys('foo');
+					expect(obj.methods['foo'].arguments).to.not.include({ a: 'Integer' });
+
+					expect(obj.addMethodArgument.bind(obj, 'foo', { name: 'a' })).to.throw(Error);
+				});
+
+				it('should error if method does not exist', () => {
+					obj = new TestClass();
+
+					// Validate the method does not exist.
+					expect(obj.methods).to.not.include.keys('foo');
+
+					expect(obj.addMethodArgument.bind(obj, 'foo', {
+						name: 'a',
+						type: 'Integer'
+					})).to.throw(Error);
+				});
+
+				it('should error if argument name already exists in that method', () => {
+					expect(obj.methods).to.include.keys('foo');
+					expect(obj.methods['foo'].arguments).to.not.include({ a: 'Integer' });
+
+					obj.addMethodArgument('foo', {
+						name: 'a',
+						type: 'Integer'
+					});
+
+					// Validate the argument now exists.
+					expect(obj.methods['foo'].arguments).to.include({ a: 'Integer' });
+
+					expect(obj.addMethodArgument.bind(obj, 'foo', {
+						name: 'a',
+						type: 'Integer'
+					})).to.throw(Error);
+				});
 			});
 
 			describe('#addMethodPrecondition', () => {
