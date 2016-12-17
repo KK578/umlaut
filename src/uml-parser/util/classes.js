@@ -17,6 +17,17 @@ class AnnotatedUmlClass {
 	AddInvariant(comparison) { }
 }
 
+class AnnotatedUmlMethod {
+	constructor(name, type, args) { }
+
+	setType(type) { }
+
+	addArgument(arg) { }
+	addPrecondition(arg) { }
+	addPostcondition(arg) { }
+}
+
 module.exports = {
-	AnnotatedUmlClass
+	AnnotatedUmlClass,
+	AnnotatedUmlMethod
 };
