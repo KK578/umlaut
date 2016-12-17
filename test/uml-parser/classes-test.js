@@ -96,20 +96,17 @@ describe('UML Parser Classes', () => {
 					expect(obj.addMethod).to.throw(Error);
 				});
 
-				it('should take a name', () => {
-					const methodsLength = obj.methods.length;
-
-					obj.addMethod('foo');
-
-					expect(obj.methods.length).to.equal(methodsLength + 1);
-					expect(obj.methods).to.include.keys('foo');
+				it('should error with just name', () => {
+					expect(obj.addMethod.bind(obj, 'foo')).to.throw(Error);
 				});
 
 				it('should take a name and type', () => {
+					const methodsLength = Object.keys(obj.methods).length;
+
 					obj.addMethod('foo', 'Integer');
 
+					expect(Object.keys(obj.methods).length).to.equal(methodsLength + 1);
 					expect(obj.methods).to.include.keys('foo');
-					expect(obj.methods['foo'].type).equal('Integer');
 				});
 
 				it('should take a name and type and list of arguments', () => {
@@ -211,7 +208,7 @@ describe('UML Parser Classes', () => {
 			it('should add a new argument, as a string', () => {
 				obj.addArgument('a:Integer');
 
-				expect(obj.arguments).to.include({ a: 'Integer' });
+				expect(obj.args).to.include({ a: 'Integer' });
 			});
 
 			it('should error if argument string does not specify a type', () => {
@@ -224,7 +221,7 @@ describe('UML Parser Classes', () => {
 					type: 'Integer'
 				});
 
-				expect(obj.arguments).to.include({ a: 'Integer' });
+				expect(obj.args).to.include({ a: 'Integer' });
 			});
 
 			it('should error if argument object does not have a name', () => {
@@ -242,7 +239,7 @@ describe('UML Parser Classes', () => {
 				});
 
 				// Validate the argument now exists.
-				expect(obj.arguments).to.include({ a: 'Integer' });
+				expect(obj.args).to.include({ a: 'Integer' });
 
 				expect(obj.addArgument.bind(obj, {
 					name: 'a',
