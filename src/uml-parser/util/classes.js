@@ -8,7 +8,9 @@ class AnnotatedUmlClass {
 		this.invariants = {};
 	}
 
-	addVariable(name, type) { }
+	addVariable(name, type) {
+		throw new Error('Not yet implemented');
+	}
 
 	addMethod(name, type, args) {
 		if (!name) {
@@ -26,10 +28,17 @@ class AnnotatedUmlClass {
 		this.methods[name] = new AnnotatedUmlMethod(name, type, args);
 	}
 
-	setMethodType(name, type) { }
-	addMethodArgument(name, arg) { }
+	setMethodType(name, type) {
+		throw new Error('Not yet implemented');
+	}
 
-	AddInvariant(comparison) { }
+	addMethodArgument(name, arg) {
+		throw new Error('Not yet implemented');
+	}
+
+	AddInvariant(comparison) {
+		throw new Error('Not yet implemented');
+	}
 }
 
 class AnnotatedUmlMethod {
@@ -39,11 +48,21 @@ class AnnotatedUmlMethod {
 		this.args = args;
 	}
 
-	setType(type) { }
+	setType(type) {
+		throw new Error('Not yet implemented');
+	}
 
-	addArgument(arg) { }
-	addPrecondition(arg) { }
-	addPostcondition(arg) { }
+	addArgument(arg) {
+		throw new Error('Not yet implemented');
+	}
+
+	addPrecondition(arg) {
+		throw new Error('Not yet implemented');
+	}
+
+	addPostcondition(arg) {
+		throw new Error('Not yet implemented');
+	}
 }
 
 module.exports = {
