@@ -20,16 +20,58 @@ describe('UML Parser Classes', () => {
 		});
 
 		describe('Class Variable Modifiers', () => {
+			let obj;
+
 			describe('#addVariable', () => {
-				it('should error on empty input');
-				it('should take a name');
-				it('should take a name and type');
-				it('should error if variable name already exists');
+				beforeEach(() => {
+					obj = new TestClass();
+				});
+
+				it('should error on empty input', () => {
+					expect(obj.addVariable).to.throw(Error);
+				});
+
+				it('should take a name', () => {
+					obj.addVariable('a');
+
+					expect(obj.variables).to.include.keys('a');
+					expect(obj.variables['a']).to.include({ type: 'object' });
+				});
+
+				it('should take a name and type', () => {
+					obj.addVariable('a', 'int');
+
+					expect(obj.variables).to.include.keys('a');
+					expect(obj.variables['a']).to.include({ type: 'Integer' });
+				});
+
+				it('should error if variable name already exists', () => {
+					obj.addVariable('a', 'int');
+
+					expect(obj.variables).to.include.keys('a');
+					expect(obj.variables['a']).to.include({ type: 'Integer' });
+
+					expect(obj.addVariable.bind(obj, 'a', 'int')).to.throw(Error);
+				});
 			});
 
 			describe('#addInvariant', () => {
-				it('should error on empty');
-				it('should add a new invariant, as a string, to the class');
+				beforeEach(() => {
+					obj = new TestClass();
+				});
+
+				it('should error on empty', () => {
+					expect(obj.addInvariant).to.throw(Error);
+				});
+
+				it('should add a new invariant, as a string, to the class', () => {
+					const invariantsLength = obj.invariants.length;
+
+					obj.addInvariant('(> a 0)');
+
+					expect(obj.invariants.length).to.equal(invariantsLength + 1);
+				});
+
 				it('should error if invariant string is not bracketed');
 				it('should error if invariant string does not specify the comparator');
 				it('should add a new invariant, as an object, to the class');
@@ -41,17 +83,48 @@ describe('UML Parser Classes', () => {
 		describe('Class Method Modifiers', () => {
 			let obj;
 
-			beforeEach(() => {
-				obj = new TestClass();
-			});
-
 			describe('#addMethod', () => {
-				it('should error on empty input');
-				it('should error if list of arguments is not an array');
-				it('should take a name');
-				it('should take a name and type');
-				it('should take a name and type and list of arguments');
-				it('should error if method name already exists');
+				beforeEach(() => {
+					obj = new TestClass();
+				});
+
+				it('should error on empty input', () => {
+					expect(obj.addMethod).to.throw(Error);
+				});
+
+				it('should take a name', () => {
+					const methodsLength = obj.methods.length;
+
+					obj.addMethod('foo');
+
+					expect(obj.methods.length).to.equal(methodsLength + 1);
+					expect(obj.methods).to.include.keys('foo');
+				});
+
+				it('should take a name and type', () => {
+					obj.addMethod('foo', 'Integer');
+
+					expect(obj.methods).to.include.keys('foo');
+					expect(obj.methods['foo']).to.include({ type: 'Integer' });
+				});
+
+				it('should take a name and type and list of arguments', () => {
+					obj.addMethod('foo', 'Integer', [{ a: { type: 'Integer' } }]);
+
+					expect(obj.methods).to.include.keys('foo');
+					expect(obj.methods['foo']).to.include({ type: 'Integer' });
+					expect(obj.methods['foo']).to.include({ a: { type: 'Integer' } });
+				});
+
+				it('should error if list of arguments is not an array', () => {
+					expect(obj.addMethod.bind(obj, 'foo', 'Integer', 'a')).to.throw(Error);
+				});
+
+				it('should error if method name already exists', () => {
+					obj.addMethod('foo', 'Integer');
+
+					expect(obj.addMethod.bind(obj, 'foo', 'Integer')).to.throw(Error);
+				});
 			});
 
 			describe('#setMethodType', () => {
