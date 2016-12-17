@@ -109,175 +109,170 @@ describe('UML Parser Classes', () => {
 					obj.addMethod('foo', 'Integer');
 
 					expect(obj.methods).to.include.keys('foo');
-					expect(obj.methods['foo']).to.include({ type: 'Integer' });
+					expect(obj.methods['foo'].type).equal('Integer');
 				});
 
 				it('should take a name and type and list of arguments', () => {
 					obj.addMethod('foo', 'Integer', [{ a: { type: 'Integer' } }]);
 
 					expect(obj.methods).to.include.keys('foo');
-					expect(obj.methods['foo']).to.include({ type: 'Integer' });
-					expect(obj.methods['foo']).to.include({ a: { type: 'Integer' } });
+					expect(obj.methods['foo'].type).equal('Integer');
+					expect(obj.methods['foo'].args).to.include({ a: { type: 'Integer' } });
 				});
 
-				it('should error if list of arguments is not an array', () => {
+				it('should error if list of arguments is not an Array', () => {
 					expect(obj.addMethod.bind(obj, 'foo', 'Integer', 'a')).to.throw(Error);
 				});
 
 				it('should error if method name already exists', () => {
 					obj.addMethod('foo', 'Integer');
 
+					// Validate method is added.
+					expect(obj.methods).to.include.keys('foo');
+
+					// Test adding method again.
 					expect(obj.addMethod.bind(obj, 'foo', 'Integer')).to.throw(Error);
 				});
 			});
+		});
+	});
 
-			describe('#setMethodType', () => {
-				beforeEach(() => {
-					obj = new TestClass();
+	describe('UmlAnnotatedMethod', () => {
+		before(() => {
+			TestClass = testee.AnnotatedUmlMethod;
+		});
 
-					obj.addMethod('foo', 'Integer');
-				});
+		it('should error on empty input', () => {
+			expect(() => {
+				new TestClass();
+			}).to.throw(Error);
+		});
 
-				it('should error on empty', () => {
-					expect(obj.setMethodType).to.throw(Error);
-				});
+		it('should take a name', () => {
+			const obj = new TestClass('foo');
 
-				it('should error with just a name', () => {
-					expect(obj.setMethodType.bind(obj, 'foo')).to.throw(Error);
-				});
+			// expect(obj.id).to.be.a('string').and.not.equal('');
+			expect(obj.name).to.equal('foo');
+			expect(obj.type).to.equal('void');
+		});
 
-				it('should change the named method\'s return type', () => {
-					// Validate the method does exist.
-					expect(obj.methods).to.include.keys('foo');
-					expect(obj.methods['foo']).to.include({ type: 'Integer' });
+		it('should take a name and type', () => {
+			const obj = new TestClass('foo', 'Integer');
 
-					obj.setMethodType('foo', 'String');
+			expect(obj.name).to.equal('foo');
+			expect(obj.type).to.equal('Integer');
+		});
 
-					expect(obj.methods['foo']).to.not.include({ type: 'Integer' });
-					expect(obj.methods['foo']).to.include({ type: 'String' });
-				});
+		it('should take a name and type and list of arguments', () => {
+			const obj = new TestClass('foo', 'Integer', [{ a: { type: 'Integer' } }]);
 
-				it('should error if method does not exist', () => {
-					obj = new TestClass();
+			expect(obj.name).to.equal('foo');
+			expect(obj.type).to.equal('Integer');
+			expect(obj.args).to.include({ a: { type: 'Integer' } });
+		});
 
-					// Validate the method does not exist.
-					expect(obj.methods).to.not.include.keys('foo');
+		it('should error if list of arguments is not an array', () => {
+			expect(() => {
+				new TestClass('foo', 'Integer', 'a');
+			}).to.throw(Error);
+		});
 
-					// Attempt to set method type of method that doesn't exist.
-					expect(obj.setMethodType.bind(obj, 'foo', 'String')).to.throw(Error);
-				});
+		describe('#setType', () => {
+			let obj;
+
+			beforeEach(() => {
+				obj = new TestClass('foo');
 			});
 
-			describe('#addMethodArgument', () => {
-				beforeEach(() => {
-					obj = new TestClass();
-
-					obj.addMethod('foo', 'Integer');
-				});
-
-				it('should error on empty', () => {
-					expect(obj.addMethodArgument).to.throw(Error);
-				});
-
-				it('should error with just a name', () => {
-					expect(obj.addMethodArgument.bind(obj, 'foo')).to.throw(Error);
-				});
-
-				it('should add a new argument, as a string, to the named method', () => {
-					expect(obj.methods).to.include.keys('foo');
-					expect(obj.methods['foo'].arguments).to.not.include({ a: 'Integer' });
-
-					obj.addMethodArgument('foo', 'a:Integer');
-
-					expect(obj.methods['foo'].arguments).to.include({ a: 'Integer' });
-				});
-
-				it('should error if argument string does not specify a type', () => {
-					expect(obj.methods).to.include.keys('foo');
-
-					expect(obj.addMethodArgument.bind(obj, 'foo', 'a')).to.throw(Error);
-				});
-
-				it('should add a new argument, as an object, to the named method', () => {
-					expect(obj.methods).to.include.keys('foo');
-					expect(obj.methods['foo'].arguments).to.not.include({ a: 'Integer' });
-
-					obj.addMethodArgument('foo', {
-						name: 'a',
-						type: 'Integer'
-					});
-
-					expect(obj.methods['foo'].arguments).to.include({ a: 'Integer' });
-				});
-
-				it('should error if added argument does not have a name', () => {
-					expect(obj.methods).to.include.keys('foo');
-					expect(obj.methods['foo'].arguments).to.not.include({ a: 'Integer' });
-
-					expect(obj.addMethodArgument.bind(obj, 'foo', { type: 'Integer' })).to.throw(Error);
-				});
-
-				it('should error if added argument does not have a type', () => {
-					expect(obj.methods).to.include.keys('foo');
-					expect(obj.methods['foo'].arguments).to.not.include({ a: 'Integer' });
-
-					expect(obj.addMethodArgument.bind(obj, 'foo', { name: 'a' })).to.throw(Error);
-				});
-
-				it('should error if method does not exist', () => {
-					obj = new TestClass();
-
-					// Validate the method does not exist.
-					expect(obj.methods).to.not.include.keys('foo');
-
-					expect(obj.addMethodArgument.bind(obj, 'foo', {
-						name: 'a',
-						type: 'Integer'
-					})).to.throw(Error);
-				});
-
-				it('should error if argument name already exists in that method', () => {
-					expect(obj.methods).to.include.keys('foo');
-					expect(obj.methods['foo'].arguments).to.not.include({ a: 'Integer' });
-
-					obj.addMethodArgument('foo', {
-						name: 'a',
-						type: 'Integer'
-					});
-
-					// Validate the argument now exists.
-					expect(obj.methods['foo'].arguments).to.include({ a: 'Integer' });
-
-					expect(obj.addMethodArgument.bind(obj, 'foo', {
-						name: 'a',
-						type: 'Integer'
-					})).to.throw(Error);
-				});
+			it('should error on empty', () => {
+				expect(obj.setType).to.throw(Error);
 			});
 
-			describe('#addMethodPrecondition', () => {
-				it('should error on empty');
-				it('should error with just a name');
-				it('should add a new precondition, as a string, to the named method');
-				it('should error if precondition string is not bracketed');
-				it('should error if precondition string does not specify the comparator');
-				it('should add a new precondition, as an object, to the named method');
-				it('should error if precondition object does not specify the comparator');
-				it('should error if precondition object does not specify at least 1 item in arguments');
-				it('should error if method does not exist');
+			it('should take a type name', () => {
+				obj.setType('foo', 'Integer');
+
+				expect(obj.type).to.equal('Integer');
+			});
+		});
+
+		describe('#addArgument', () => {
+			let obj;
+
+			beforeEach(() => {
+				obj = new TestClass();
+
+				obj.addMethod('foo', 'Integer');
 			});
 
-			describe('#addMethodPostcondition', () => {
-				it('should error on empty');
-				it('should error with just a name');
-				it('should add a new precondition, as a string, to the named method');
-				it('should error if precondition string is not bracketed');
-				it('should error if precondition string does not specify the comparator');
-				it('should add a new precondition, as an object, to the named method');
-				it('should error if precondition object does not specify the comparator');
-				it('should error if precondition object does not specify at least 1 item in arguments');
-				it('should error if method does not exist');
+			it('should error on empty', () => {
+				expect(obj.addArgument).to.throw(Error);
 			});
+
+			it('should add a new argument, as a string', () => {
+				obj.addArgument('a:Integer');
+
+				expect(obj.arguments).to.include({ a: 'Integer' });
+			});
+
+			it('should error if argument string does not specify a type', () => {
+				expect(obj.addArgument.bind(obj, 'foo', 'a')).to.throw(Error);
+			});
+
+			it('should add a new argument, as an object', () => {
+				obj.addArgument('foo', {
+					name: 'a',
+					type: 'Integer'
+				});
+
+				expect(obj.methods['foo'].arguments).to.include({ a: 'Integer' });
+			});
+
+			it('should error if argument object does not have a name', () => {
+				expect(obj.addArgument.bind(obj, 'foo', { type: 'Integer' })).to.throw(Error);
+			});
+
+			it('should error if argument object does not have a type', () => {
+				expect(obj.addArgument.bind(obj, 'foo', { name: 'a' })).to.throw(Error);
+			});
+
+			it('should error if argument name already exists in that method', () => {
+				obj.addArgument('foo', {
+					name: 'a',
+					type: 'Integer'
+				});
+
+				// Validate the argument now exists.
+				expect(obj.methods['foo'].arguments).to.include({ a: 'Integer' });
+
+				expect(obj.addArgument.bind(obj, 'foo', {
+					name: 'a',
+					type: 'Integer'
+				})).to.throw(Error);
+			});
+		});
+
+		describe('#addPrecondition', () => {
+			it('should error on empty');
+			it('should error with just a name');
+			it('should add a new precondition, as a string, to the named method');
+			it('should error if precondition string is not bracketed');
+			it('should error if precondition string does not specify the comparator');
+			it('should add a new precondition, as an object, to the named method');
+			it('should error if precondition object does not specify the comparator');
+			it('should error if precondition object does not specify at least 1 item in arguments');
+			it('should error if method does not exist');
+		});
+
+		describe('#addPostcondition', () => {
+			it('should error on empty');
+			it('should error with just a name');
+			it('should add a new precondition, as a string, to the named method');
+			it('should error if precondition string is not bracketed');
+			it('should error if precondition string does not specify the comparator');
+			it('should add a new precondition, as an object, to the named method');
+			it('should error if precondition object does not specify the comparator');
+			it('should error if precondition object does not specify at least 1 item in arguments');
+			it('should error if method does not exist');
 		});
 	});
 });
