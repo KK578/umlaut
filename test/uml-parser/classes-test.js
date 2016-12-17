@@ -182,6 +182,13 @@ describe('UML Parser Classes', () => {
 			}).to.throw(Error);
 		});
 
+		it('should define hashmaps after initialisation', () => {
+			const obj = new TestClass('foo', 'Integer');
+
+			expect(obj.preconditions).to.be.an('object');
+			expect(obj.postconditions).to.be.an('object');
+		});
+
 		describe('#setType', () => {
 			let obj;
 

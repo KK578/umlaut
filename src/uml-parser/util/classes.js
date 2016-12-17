@@ -50,6 +50,9 @@ class AnnotatedUmlMethod {
 		this.name = name;
 		this.type = type;
 		this.args = args;
+
+		this.preconditions = {};
+		this.postconditions = {};
 	}
 
 	setType(type) {
