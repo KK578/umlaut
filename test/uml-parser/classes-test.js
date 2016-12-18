@@ -153,12 +153,10 @@ describe('UML Parser Classes', () => {
 			}).to.throw(Error);
 		});
 
-		it('should take a name', () => {
-			const obj = new TestClass('foo');
-
-			// expect(obj.id).to.be.a('string').and.not.equal('');
-			expect(obj.name).to.equal('foo');
-			expect(obj.type).to.equal('void');
+		it('should error with just name', () => {
+			expect(() => {
+				new TestClass('foo');
+			}).to.throw(Error);
 		});
 
 		it('should take a name and type', () => {
@@ -193,7 +191,7 @@ describe('UML Parser Classes', () => {
 			let obj;
 
 			beforeEach(() => {
-				obj = new TestClass('foo');
+				obj = new TestClass('foo', 'Integer');
 			});
 
 			it('should error on empty', () => {
@@ -201,11 +199,11 @@ describe('UML Parser Classes', () => {
 			});
 
 			it('should take a type name', () => {
-				expect(obj.type).to.not.equal('Integer');
+				expect(obj.type).to.not.equal('String');
 
-				obj.setType('Integer');
+				obj.setType('String');
 
-				expect(obj.type).to.equal('Integer');
+				expect(obj.type).to.equal('String');
 			});
 		});
 
