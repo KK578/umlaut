@@ -1,4 +1,4 @@
-const smt = require('./smt-classes.js');
+const smt = require('../../util/smt-solver/classes.js');
 
 class SmtMethod {
 	constructor(method) {

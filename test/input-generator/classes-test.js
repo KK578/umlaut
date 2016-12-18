@@ -1,7 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const testee = require('../../src/smt-generator/util/smt-classes.js');
+const testee = require('../../src/input-generator/util/smt-solver/classes.js');
 let TestClass;
 
 describe('SMT Classes', () => {
@@ -29,6 +29,12 @@ describe('SMT Classes', () => {
 
 			expect(obj.isInverted).to.be.true;
 			expect(obj.toString()).to.equal('(not (> a b))');
+		});
+
+		it('should error if argument list is not an array', () => {
+			expect(() => {
+				new TestClass('>', 'a', 'b');
+			}).to.throw(Error);
 		});
 
 		it('should change isInverted with setInverted', () => {
@@ -100,6 +106,12 @@ describe('SMT Classes', () => {
 			}).to.throw(Error);
 		});
 
+		it('should error with just name', () => {
+			expect(() => {
+				new TestClass('a');
+			}).to.throw(Error);
+		});
+
 		it('should take a name and type name', () => {
 			const obj = new TestClass('a', 'Int');
 
@@ -116,6 +128,24 @@ describe('SMT Classes', () => {
 			expect(() => {
 				new TestClass();
 			}).to.throw(Error);
+		});
+
+		it('should error with just name', () => {
+			expect(() => {
+				new TestClass('a');
+			}).to.throw(Error);
+		});
+
+		it('should error if argument list is not an array', () => {
+			expect(() => {
+				new TestClass('foo', 'Int', 'Int');
+			}).to.throw(Error);
+		});
+
+		it('should take a name and type name and empty arguments type list', () => {
+			const obj = new TestClass('foo', 'Int', []);
+
+			expect(obj.toString()).to.equal('(declare-fun foo () Int)');
 		});
 
 		it('should take a name and type name and arguments type list', () => {

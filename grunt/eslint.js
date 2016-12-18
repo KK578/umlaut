@@ -14,13 +14,13 @@ module.exports = {
 			}
 		]
 	},
-	'smt-generator': {
+	'input-generator': {
 		files: [
 			{
 				expand: true,
 				src: [
-					'src/smt-generator/**/*.js',
-					'test/smt-generator/*.js'
+					'src/input-generator/**/*.js',
+					'test/input-generator/*.js'
 				]
 			}
 		]
