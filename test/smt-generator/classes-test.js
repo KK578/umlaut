@@ -138,7 +138,7 @@ describe('SMT Classes', () => {
 
 		it('should error if argument list is not an array', () => {
 			expect(() => {
-			const obj = new TestClass('foo', 'Int', 'Int');
+				new TestClass('foo', 'Int', 'Int');
 			}).to.throw(Error);
 		});
 
