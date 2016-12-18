@@ -1,4 +1,4 @@
-const comparisonList = require('../../util/comparisons.json');
+const comparisonList = require('../../../../util/comparisons.json');
 
 function findComparison(comparison) {
 	let result = comparison;

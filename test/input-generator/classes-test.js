@@ -1,7 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const testee = require('../../src/smt-generator/util/smt-classes.js');
+const testee = require('../../src/input-generator/util/smt-solver/classes.js');
 let TestClass;
 
 describe('SMT Classes', () => {
