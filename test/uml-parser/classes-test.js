@@ -273,11 +273,70 @@ describe('UML Parser Classes', () => {
 			}).to.throw(Error);
 		});
 
-		it('should error if condition is not an object');
-		it('should take a condition object');
-		it('should error if condition does not have a comparison');
-		it('should error if condition does not have at least one argument');
-		it('should default isInverted to false');
+		it('should error if condition is not an object', () => {
+			expect(() => {
+				new TestClass('(> a b)');
+			}).to.throw(Error);
+		});
+
+		it('should take a condition object', () => {
+			obj = new TestClass({
+				comparison: 'LessThan',
+				args: [
+					'a',
+					'b'
+				]
+			});
+
+			expect(obj.comparison).to.equal('LessThan');
+			expect(obj.args).to.include('a').and.include('b');
+			expect(obj.isInverted).to.not.be.ok();
+		});
+
+		it('should error if condition does not have a comparison', () => {
+			expect(() => {
+				new TestClass({
+					comparison: undefined,
+					args: [
+						'a',
+						'b'
+					]
+				});
+			}).to.throw(Error);
+		});
+
+		it('should error if condition is not an Array', () => {
+			expect(() => {
+				new TestClass({
+					comparison: 'GreaterThan',
+					args: 'a, b'
+				});
+			}).to.throw(Error);
+		});
+
+		it('should error if condition does not have at least one argument', () => {
+			expect(() => {
+				new TestClass({
+					comparison: 'GreaterThan',
+					args: []
+				});
+			}).to.throw(Error);
+		});
+
+		it('should set isInverted value in object', () => {
+			obj = new TestClass({
+				comparison: 'LessThan',
+				args: [
+					'a',
+					'b'
+				],
+				isInverted: true
+			});
+
+			expect(obj.comparison).to.equal('LessThan');
+			expect(obj.args).to.include('a').and.include('b');
+			expect(obj.isInverted).to.be.ok();
+		});
 
 		describe('#setInverted', () => {
 			it('should default to false');
