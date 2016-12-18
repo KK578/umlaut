@@ -139,7 +139,7 @@ describe('UML Parser Classes', () => {
 					]
 				});
 
-				expect(Object.keys(obj.invariants).length).to.equal(invariantLength);
+				expect(Object.keys(obj.invariants).length).to.equal(invariantLength + 1);
 			});
 
 			it('should error if invariant object does not specify the comparison', () => {
@@ -304,7 +304,7 @@ describe('UML Parser Classes', () => {
 					]
 				});
 
-				expect(Object.keys(obj.preconditions).length).to.equal(preconditionsLength);
+				expect(Object.keys(obj.preconditions).length).to.equal(preconditionsLength + 1);
 			});
 
 			it('should error if precondition object does not specify the comparison', () => {
@@ -353,7 +353,7 @@ describe('UML Parser Classes', () => {
 					]
 				});
 
-				expect(Object.keys(obj.postconditions).length).to.equal(postconditionsLength);
+				expect(Object.keys(obj.postconditions).length).to.equal(postconditionsLength + 1);
 			});
 
 			it('should error if postcondition object does not specify the comparison', () => {

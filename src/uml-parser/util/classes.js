@@ -48,12 +48,10 @@ class AnnotatedUmlClass {
 		this.methods[name] = new AnnotatedUmlMethod(name, type, args);
 	}
 
-	addInvariant(comparison) {
-		if (!comparison) {
-			throw new Error('Argument "comparison" is required.');
-		}
+	addInvariant(arg) {
+		const condition = new OclCondition(arg);
 
-		throw new Error('Not yet implemented');
+		this.invariants[arg.name] = condition;
 	}
 }
 
@@ -106,11 +104,15 @@ class AnnotatedUmlMethod {
 	}
 
 	addPrecondition(arg) {
-		throw new Error('Not yet implemented');
+		const condition = new OclCondition(arg);
+
+		this.preconditions[arg.name] = condition;
 	}
 
 	addPostcondition(arg) {
-		throw new Error('Not yet implemented');
+		const condition = new OclCondition(arg);
+
+		this.postconditions[arg.name] = condition;
 	}
 }
 
