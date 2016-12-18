@@ -48,7 +48,11 @@ class AnnotatedUmlClass {
 		this.methods[name] = new AnnotatedUmlMethod(name, type, args);
 	}
 
-	AddInvariant(comparison) {
+	addInvariant(comparison) {
+		if (!comparison) {
+			throw new Error('Argument "comparison" is required.');
+		}
+
 		throw new Error('Not yet implemented');
 	}
 }
