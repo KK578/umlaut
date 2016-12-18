@@ -251,7 +251,6 @@ describe('UML Parser Classes', () => {
 			it('should add a new precondition, as an object, to the named method');
 			it('should error if precondition object does not specify the comparator');
 			it('should error if precondition object does not specify at least 1 item in arguments');
-			it('should error if method does not exist');
 		});
 
 		describe('#addPostcondition', () => {
@@ -260,7 +259,30 @@ describe('UML Parser Classes', () => {
 			it('should add a new precondition, as an object, to the named method');
 			it('should error if precondition object does not specify the comparator');
 			it('should error if precondition object does not specify at least 1 item in arguments');
-			it('should error if method does not exist');
+		});
+	});
+
+	describe('OclCondition', () => {
+		before(() => {
+			TestClass = testee.OclCondition;
+		});
+
+		it('should error on empty');
+		it('should error if condition is not an object');
+		it('should take a condition object');
+		it('should error if condition does not have a comparison');
+		it('should error if condition does not have at least one argument');
+		it('should default isInverted to false');
+
+		describe('#setInverted', () => {
+			it('should default to false');
+			it('should error if value is not a boolean');
+			it('should set isInverted flag to value');
+		});
+
+		describe('#setException', () => {
+			it('should error on empty');
+			it('should take a name');
 		});
 	});
 });
