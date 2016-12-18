@@ -76,16 +76,6 @@ describe('UML Parser Classes', () => {
 					expect(obj.addInvariant).to.throw(Error);
 				});
 
-				it('should add a new invariant, as a string, to the class', () => {
-					const invariantsLength = obj.invariants.length;
-
-					obj.addInvariant('(> a 0)');
-
-					expect(obj.invariants.length).to.equal(invariantsLength + 1);
-				});
-
-				it('should error if invariant string is not bracketed');
-				it('should error if invariant string does not specify the comparator');
 				it('should add a new invariant, as an object, to the class');
 				it('should error if invariant object does not specify the comparator');
 				it('should error if invariant object does not specify at least 1 item in arguments');
@@ -218,16 +208,6 @@ describe('UML Parser Classes', () => {
 				expect(obj.addArgument).to.throw(Error);
 			});
 
-			it('should add a new argument, as a string', () => {
-				obj.addArgument('a:Integer');
-
-				expect(obj.args).to.include({ a: 'Integer' });
-			});
-
-			it('should error if argument string does not specify a type', () => {
-				expect(obj.addArgument.bind(obj, 'foo', 'a')).to.throw(Error);
-			});
-
 			it('should add a new argument, as an object', () => {
 				obj.addArgument('foo', {
 					name: 'a',
@@ -264,9 +244,6 @@ describe('UML Parser Classes', () => {
 		describe('#addPrecondition', () => {
 			it('should error on empty');
 			it('should error with just a name');
-			it('should add a new precondition, as a string, to the named method');
-			it('should error if precondition string is not bracketed');
-			it('should error if precondition string does not specify the comparator');
 			it('should add a new precondition, as an object, to the named method');
 			it('should error if precondition object does not specify the comparator');
 			it('should error if precondition object does not specify at least 1 item in arguments');
@@ -276,9 +253,6 @@ describe('UML Parser Classes', () => {
 		describe('#addPostcondition', () => {
 			it('should error on empty');
 			it('should error with just a name');
-			it('should add a new precondition, as a string, to the named method');
-			it('should error if precondition string is not bracketed');
-			it('should error if precondition string does not specify the comparator');
 			it('should add a new precondition, as an object, to the named method');
 			it('should error if precondition object does not specify the comparator');
 			it('should error if precondition object does not specify at least 1 item in arguments');
