@@ -114,7 +114,26 @@ class AnnotatedUmlMethod {
 	}
 }
 
+class OclCondition {
+	constructor(condition) {
+		if (!condition) {
+			throw new Error('Argument "condition" is required.');
+		}
+
+		this.condition = condition;
+	}
+
+	setInverted(value) {
+		throw new Error('Not yet implemented');
+	}
+
+	setException(value) {
+		throw new Error('Not yet implemented');
+	}
+}
+
 module.exports = {
 	AnnotatedUmlClass,
-	AnnotatedUmlMethod
+	AnnotatedUmlMethod,
+	OclCondition
 };

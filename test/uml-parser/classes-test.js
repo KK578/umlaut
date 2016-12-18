@@ -267,7 +267,12 @@ describe('UML Parser Classes', () => {
 			TestClass = testee.OclCondition;
 		});
 
-		it('should error on empty');
+		it('should error on empty', () => {
+			expect(() => {
+				new TestClass();
+			}).to.throw(Error);
+		});
+
 		it('should error if condition is not an object');
 		it('should take a condition object');
 		it('should error if condition does not have a comparison');
