@@ -124,9 +124,42 @@ describe('UML Parser Classes', () => {
 				expect(obj.addInvariant).to.throw(Error);
 			});
 
-			it('should add a new invariant, as an object, to the class');
-			it('should error if invariant object does not specify the comparator');
-			it('should error if invariant object does not specify at least 1 item in arguments');
+			it('should error if argument is not an object', () => {
+				expect(obj.addInvariant.bind(obj, '(> a b)')).to.throw(Error);
+			});
+
+			it('should add a new invariant', () => {
+				const invariantLength = Object.keys(obj.invariants).length;
+
+				obj.addInvariant({
+					comparison: 'LessThan',
+					args: [
+						'a',
+						'b'
+					]
+				});
+
+				expect(Object.keys(obj.invariants).length).to.equal(invariantLength);
+			});
+
+			it('should error if invariant object does not specify the comparison', () => {
+				expect(obj.addInvariant.bind(obj, {
+					comparison: undefined,
+					args: [
+						'a',
+						'b'
+					]
+				})).to.throw(Error);
+			});
+
+			it('should error if invariant object does not specify at least 1 item in arguments', () => {
+				expect(obj.addInvariant.bind(obj, {
+					comparison: 'LessThan',
+					args: []
+				})).to.throw(Error);
+			});
+
+			it('should generate a unique ID for the condition');
 		});
 	});
 
@@ -246,19 +279,101 @@ describe('UML Parser Classes', () => {
 		});
 
 		describe('#addPrecondition', () => {
-			it('should error on empty');
-			it('should error with just a name');
-			it('should add a new precondition, as an object, to the named method');
-			it('should error if precondition object does not specify the comparator');
-			it('should error if precondition object does not specify at least 1 item in arguments');
+			let obj;
+
+			beforeEach(() => {
+				obj = new TestClass('foo', 'Integer');
+			});
+
+			it('should error on empty', () => {
+				expect(obj.addPrecondition).to.throw(Error);
+			});
+
+			it('should error if argument is not an object', () => {
+				expect(obj.addPrecondition.bind(obj, '(> a b)')).to.throw(Error);
+			});
+
+			it('should add a new precondition', () => {
+				const preconditionsLength = Object.keys(obj.preconditions).length;
+
+				obj.addPrecondition({
+					comparison: 'LessThan',
+					args: [
+						'a',
+						'b'
+					]
+				});
+
+				expect(Object.keys(obj.preconditions).length).to.equal(preconditionsLength);
+			});
+
+			it('should error if precondition object does not specify the comparison', () => {
+				expect(obj.addPrecondition.bind(obj, {
+					comparison: undefined,
+					args: [
+						'a',
+						'b'
+					]
+				})).to.throw(Error);
+			});
+
+			it('should error if precondition object does not specify at least 1 item in arguments', () => {
+				expect(obj.addPrecondition.bind(obj, {
+					comparison: 'LessThan',
+					args: []
+				})).to.throw(Error);
+			});
+
+			it('should generate a unique ID for the condition');
 		});
 
 		describe('#addPostcondition', () => {
-			it('should error on empty');
-			it('should error with just a name');
-			it('should add a new precondition, as an object, to the named method');
-			it('should error if precondition object does not specify the comparator');
-			it('should error if precondition object does not specify at least 1 item in arguments');
+			let obj;
+
+			beforeEach(() => {
+				obj = new TestClass('foo', 'Integer');
+			});
+
+			it('should error on empty', () => {
+				expect(obj.addPostcondition).to.throw(Error);
+			});
+
+			it('should error if argument is not an object', () => {
+				expect(obj.addPostcondition.bind(obj, '(> a b)')).to.throw(Error);
+			});
+
+			it('should add a new postcondition', () => {
+				const postconditionsLength = Object.keys(obj.postconditions).length;
+
+				obj.addPostcondition({
+					comparison: 'LessThan',
+					args: [
+						'a',
+						'b'
+					]
+				});
+
+				expect(Object.keys(obj.postconditions).length).to.equal(postconditionsLength);
+			});
+
+			it('should error if postcondition object does not specify the comparison', () => {
+				expect(obj.addPostcondition.bind(obj, {
+					comparison: undefined,
+					args: [
+						'a',
+						'b'
+					]
+				})).to.throw(Error);
+			});
+
+			it('should error if postcondition object does not specify at least 1 item in arguments', () => {
+				expect(obj.addPostcondition.bind(obj, {
+					comparison: 'LessThan',
+					args: []
+				})).to.throw(Error);
+			});
+
+			it('should generate a unique ID for the condition');
 		});
 	});
 
