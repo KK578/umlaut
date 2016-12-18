@@ -114,6 +114,8 @@ describe('UML Parser Classes', () => {
 		});
 
 		describe('#addInvariant', () => {
+			let obj;
+
 			beforeEach(() => {
 				obj = new TestClass('foo');
 			});
