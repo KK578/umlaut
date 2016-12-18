@@ -44,14 +44,6 @@ class AnnotatedUmlClass {
 		this.methods[name] = new AnnotatedUmlMethod(name, type, args);
 	}
 
-	setMethodType(name, type) {
-		throw new Error('Not yet implemented');
-	}
-
-	addMethodArgument(name, arg) {
-		throw new Error('Not yet implemented');
-	}
-
 	AddInvariant(comparison) {
 		throw new Error('Not yet implemented');
 	}
@@ -73,18 +65,30 @@ class AnnotatedUmlMethod {
 
 		this.name = name;
 		this.type = type;
-		this.args = args;
+		this.args = args ? args : [];
 
 		this.preconditions = {};
 		this.postconditions = {};
 	}
 
 	setType(type) {
-		throw new Error('Not yet implemented');
+		if (!type) {
+			throw new Error('Argument "type" is required.');
+		}
+
+		this.type = type;
 	}
 
 	addArgument(arg) {
-		throw new Error('Not yet implemented');
+		if (!arg.name) {
+			throw new Error('Argument "name" is required.');
+		}
+
+		if (!arg.type) {
+			throw new Error('Argument "type" is required.');
+		}
+
+		this.args.push(arg);
 	}
 
 	addPrecondition(arg) {

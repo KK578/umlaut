@@ -209,12 +209,15 @@ describe('UML Parser Classes', () => {
 			});
 
 			it('should add a new argument, as an object', () => {
-				obj.addArgument('foo', {
+				obj.addArgument({
 					name: 'a',
 					type: 'Integer'
 				});
 
-				expect(obj.args).to.include({ a: 'Integer' });
+				expect(obj.args).to.include({
+					name: 'a',
+					type: 'Integer'
+				});
 			});
 
 			it('should error if argument object does not have a name', () => {
@@ -232,7 +235,10 @@ describe('UML Parser Classes', () => {
 				});
 
 				// Validate the argument now exists.
-				expect(obj.args).to.include({ a: 'Integer' });
+				expect(obj.args).to.include({
+					name: 'a',
+					type: 'Integer'
+				});
 
 				expect(obj.addArgument.bind(obj, {
 					name: 'a',
