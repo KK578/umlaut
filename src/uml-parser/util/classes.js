@@ -13,7 +13,19 @@ class AnnotatedUmlClass {
 	}
 
 	addVariable(name, type) {
-		throw new Error('Not yet implemented');
+		if (!name) {
+			throw new Error('Argument "name" is required.');
+		}
+
+		if (!type) {
+			type = 'object';
+		}
+
+		if (this.variables[name] !== undefined) {
+			throw new Error(`Variable "${name}" is already defined.`);
+		}
+
+		this.variables[name] = { type };
 	}
 
 	addMethod(name, type, args) {

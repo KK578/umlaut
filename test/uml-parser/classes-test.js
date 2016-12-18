@@ -51,19 +51,19 @@ describe('UML Parser Classes', () => {
 				});
 
 				it('should take a name and type', () => {
-					obj.addVariable('a', 'int');
+					obj.addVariable('a', 'Integer');
 
 					expect(obj.variables).to.include.keys('a');
 					expect(obj.variables['a']).to.include({ type: 'Integer' });
 				});
 
 				it('should error if variable name already exists', () => {
-					obj.addVariable('a', 'int');
+					obj.addVariable('a', 'Integer');
 
 					expect(obj.variables).to.include.keys('a');
 					expect(obj.variables['a']).to.include({ type: 'Integer' });
 
-					expect(obj.addVariable.bind(obj, 'a', 'int')).to.throw(Error);
+					expect(obj.addVariable.bind(obj, 'a', 'Integer')).to.throw(Error);
 				});
 			});
 
