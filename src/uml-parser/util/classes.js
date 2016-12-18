@@ -41,6 +41,10 @@ class AnnotatedUmlClass {
 			throw new Error('Expected argument "args" to be Array.');
 		}
 
+		if (this.methods[name] !== undefined) {
+			throw new Error(`Method "${name}" is already defined.`);
+		}
+
 		this.methods[name] = new AnnotatedUmlMethod(name, type, args);
 	}
 
@@ -86,6 +90,12 @@ class AnnotatedUmlMethod {
 
 		if (!arg.type) {
 			throw new Error('Argument "type" is required.');
+		}
+
+		for (let i = 0; i < this.args.length; i++) {
+			if (this.args[i].name === arg.name) {
+				throw new Error(`Argument "${name}" is already defined.`);
+			}
 		}
 
 		this.args.push(arg);
