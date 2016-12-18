@@ -280,7 +280,7 @@ describe('UML Parser Classes', () => {
 		});
 
 		it('should take a condition object', () => {
-			obj = new TestClass({
+			const obj = new TestClass({
 				comparison: 'LessThan',
 				args: [
 					'a',
@@ -290,7 +290,7 @@ describe('UML Parser Classes', () => {
 
 			expect(obj.comparison).to.equal('LessThan');
 			expect(obj.args).to.include('a').and.include('b');
-			expect(obj.isInverted).to.not.be.ok();
+			expect(obj.isInverted).to.not.be.ok;
 		});
 
 		it('should error if condition does not have a comparison', () => {
@@ -324,7 +324,7 @@ describe('UML Parser Classes', () => {
 		});
 
 		it('should set isInverted value in object', () => {
-			obj = new TestClass({
+			const obj = new TestClass({
 				comparison: 'LessThan',
 				args: [
 					'a',
@@ -335,13 +335,38 @@ describe('UML Parser Classes', () => {
 
 			expect(obj.comparison).to.equal('LessThan');
 			expect(obj.args).to.include('a').and.include('b');
-			expect(obj.isInverted).to.be.ok();
+			expect(obj.isInverted).to.be.ok;
 		});
 
 		describe('#setInverted', () => {
-			it('should default to false');
-			it('should error if value is not a boolean');
-			it('should set isInverted flag to value');
+			let obj;
+
+			beforeEach(() => {
+				obj = new TestClass({
+					comparison: 'LessThan',
+					args: [
+						'a',
+						'b'
+					]
+				});
+			});
+
+			it('should error on empty input', () => {
+				expect(obj.setInverted).to.throw(Error);
+			});
+
+			it('should error if value is not a boolean', () => {
+				expect(obj.setInverted.bind(obj, 'true')).to.throw(Error);
+			});
+
+			it('should set isInverted flag to value', () => {
+				// Validate change occurs due to method call.
+				expect(obj.isInverted).to.be.not.ok;
+
+				obj.setInverted(true);
+
+				expect(obj.isInverted).to.be.ok;
+			});
 		});
 
 		describe('#setException', () => {
