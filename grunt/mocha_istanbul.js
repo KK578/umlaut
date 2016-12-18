@@ -11,6 +11,6 @@ module.exports = {
 		src: 'test/*/*-test.js'
 	},
 	'uml-parser': { src: 'test/uml-parser/*-test.js' },
-	'smt-generator': { src: 'test/smt-generator/*-test.js' },
+	'input-generator': { src: 'test/input-generator/*-test.js' },
 	'test-generator': { src: 'test/test-generator/*-test.js' }
 };

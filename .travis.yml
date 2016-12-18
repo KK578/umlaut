@@ -13,4 +13,4 @@ before_script:
 script:
   - grunt coverage
 after_script:
-  - codecov
+  - codecov -f coverage/coverage.json

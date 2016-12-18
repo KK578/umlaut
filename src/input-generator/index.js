@@ -1,6 +1,7 @@
-const SmtClass = require('./util/class.js');
 const path = require('path');
 const fs = require('fs');
+
+const SmtClass = require('./smt-solver/uml-to-smt/class.js');
 
 function parseUml(uml) {
 	const smtClass = new SmtClass(uml);
