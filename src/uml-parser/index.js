@@ -3,7 +3,7 @@ const path = require('path');
 const xml2js = require('xml2js');
 const xmlParser = new xml2js.Parser();
 
-const parser = require('./util/parser.js');
+const parser = require('./parsers/parser.js');
 
 module.exports = (filePath) => {
 	fs.readFile(filePath, (err, data) => {
