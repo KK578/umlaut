@@ -150,7 +150,11 @@ class OclCondition {
 	}
 
 	setException(value) {
-		throw new Error('Not yet implemented');
+		if (!value) {
+			throw new Error('Argument "value" is required.');
+		}
+
+		this.exception = { type: value };
 	}
 }
 

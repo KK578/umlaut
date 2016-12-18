@@ -370,8 +370,29 @@ describe('UML Parser Classes', () => {
 		});
 
 		describe('#setException', () => {
-			it('should error on empty');
-			it('should take a name');
+			let obj;
+
+			beforeEach(() => {
+				obj = new TestClass({
+					comparison: 'LessThan',
+					args: [
+						'a',
+						'b'
+					]
+				});
+			});
+
+			it('should error on empty', () => {
+				expect(obj.setException).to.throw(Error);
+			});
+
+			it('should take type name for an Exception', () => {
+				expect(obj.exception).to.be.undefined;
+
+				obj.setException('NullException');
+
+				expect(obj.exception).to.include({ type: 'NullException' });
+			});
 		});
 	});
 });
