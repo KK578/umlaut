@@ -1,4 +1,3 @@
-const fs = require('fs');
 const glob = require('glob');
 const path = require('path');
 const spawn = require('child_process').spawn;
@@ -30,7 +29,9 @@ function promiseSpawnZ3(filename) {
 			output += data.toString('utf8');
 		});
 
-		z3.on('close', (code) => {
+		z3.on('close', () => {
+			// No code check as errors whilst z3 closes itself are not major errors.
+			//  e.g. get-value may have failed to generate due to impossible conditions.
 			resolve(output);
 		});
 
@@ -68,6 +69,4 @@ function solve(dir) {
 	});
 }
 
-module.exports = {
-	solve
-};
+module.exports = solve;
