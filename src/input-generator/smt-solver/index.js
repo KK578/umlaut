@@ -50,5 +50,5 @@ function writeSmt(dir, smtClass) {
 module.exports = (uml) => {
 	const parsedUml = parseUml(uml);
 
-	return writeSmt('build/test/', parsedUml);
+	return writeSmt('build/', parsedUml);
 };
