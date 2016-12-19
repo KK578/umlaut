@@ -9,7 +9,7 @@ function promiseParse(data, parserCount) {
 
 	const parser = parsers[parserCount];
 
-	return parser.detect(data).then((valid) => {
+	return Promise.resolve(parser.detect(data)).then((valid) => {
 		if (valid) {
 			// Parser has claimed it can parse the model.
 			return parser.parse(data);
