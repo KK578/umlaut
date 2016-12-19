@@ -4,10 +4,10 @@ const assert = require('yeoman-assert');
 const path = require('path');
 const expect = chai.expect;
 
-describe('Test Generator NUnit', () => {
+describe('Test Generator JUnit', () => {
 	beforeEach(() => {
-		return helpers.run(path.join(__dirname, '../../generators/nunit'))
-			.inDir('test/tmp/nunit/')
+		return helpers.run(path.join(__dirname, '../../generators/junit'))
+			.inDir('test/tmp/junit/')
 			.withArguments([
 				'../../fixtures/test-generator/uml/',
 				'../../fixtures/test-generator/smt/'
@@ -15,7 +15,7 @@ describe('Test Generator NUnit', () => {
 	});
 
 	it('should make a test suite for SimpleMath', () => {
-		assert.file('build/SimpleMathTest.cs');
+		assert.file('build/SimpleMathTest.java');
 	});
 
 	afterEach(() => {
