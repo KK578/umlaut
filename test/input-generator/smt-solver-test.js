@@ -6,7 +6,7 @@ chai.use(chaiAsPromised);
 
 const expect = chai.expect;
 
-const testee = require('../../src/input-generator/smt-solver/index.js');
+const testee = require('../../input-generator/smt-solver/index.js');
 
 describe('Input Generator SMT Solver', () => {
 	before((done) => {

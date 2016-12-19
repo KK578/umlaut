@@ -6,7 +6,7 @@ chai.use(chaiAsPromised);
 
 const expect = chai.expect;
 
-const testee = require('../../src/uml-parser/index.js');
+const testee = require('../../uml-parser/index.js');
 
 describe('Uml Parser Entry Point', () => {
 	it('should parse SimpleMath test fixture', () => {
