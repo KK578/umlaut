@@ -1,5 +1,5 @@
 const chai = require('chai');
-const chaiAsPromised = require("chai-as-promised");
+const chaiAsPromised = require('chai-as-promised');
 const path = require('path');
 
 chai.use(chaiAsPromised);

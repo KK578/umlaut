@@ -244,7 +244,7 @@ function parse(data) {
 		});
 
 		return classes;
-	})
+	});
 }
 
 module.exports = parse;
