@@ -1,8 +1,8 @@
 const path = require('path');
 const fs = require('fs');
 
-const SmtClass = require('./uml-to-smt/class.js');
-const solver = require('./z3-runner/smt-solve.js');
+const umlToSmt = require('./uml-to-smt/index.js');
+const solver = require('./z3-runner/index.js');
 
 function promiseFsWriteFile(filepath, data) {
 	return new Promise((resolve, reject) => {
@@ -37,9 +37,7 @@ function promiseWriteAllFiles(dir, data, index) {
 }
 
 function parseUml(uml) {
-	const smtClass = new SmtClass(uml);
-
-	return smtClass;
+	return umlToSmt(uml);
 }
 
 function writeSmt(dir, smtClass) {

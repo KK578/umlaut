@@ -10,7 +10,7 @@ function convertType(type) {
 	}
 }
 
-class SmtMethod {
+module.exports = class SmtMethod {
 	constructor(method) {
 		this.commands = [];
 		this.constants = [];
@@ -118,6 +118,4 @@ class SmtMethod {
 	getCommands() {
 		return this.commands;
 	}
-}
-
-module.exports = SmtMethod;
+};
