@@ -5,7 +5,7 @@ const path = require('path');
 const expect = chai.expect;
 
 
-describe.only('model-driven-testing:nunit test/fixtures/test-generator/uml/ test/fixtures/test-generator/smt/', () => {
+describe('model-driven-testing:nunit test/fixtures/test-generator/uml/ test/fixtures/test-generator/smt/', () => {
 	beforeEach(() => {
 		return helpers.run(path.join(__dirname, '../../generators/nunit'))
 			.inDir('test/tmp/')
