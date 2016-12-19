@@ -1,4 +1,4 @@
-module.exports = class SmtDeclareFunction {
+module.exports = class SmtFunctionCall {
 	constructor(name, args) {
 		if (!name) {
 			throw new Error('Argument "name" is required.');
