@@ -10,7 +10,7 @@ const testee = require('../../src/input-generator/smt-solver/index.js');
 
 describe('Input Generator SMT Solver', () => {
 	it('should run against SimpleMath test fixture', () => {
-		const fixture = require(path.join(__dirname, '../../build/uml/SimpleMath.json'));
+		const fixture = require(path.join(__dirname, '../fixtures/test-generator/uml/SimpleMath.json'));
 		const promise = testee(fixture);
 
 		return expect(promise).to.be.fulfilled;
