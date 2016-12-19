@@ -1,4 +1,4 @@
-module.exports = class SmtDeclareFunction {
+module.exports = class SmtAssertion {
 	constructor(expression) {
 		if (!expression) {
 			throw new Error('Argument "expression" is required.');

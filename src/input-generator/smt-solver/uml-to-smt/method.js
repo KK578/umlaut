@@ -1,4 +1,4 @@
-const smt = require('../../util/smt-solver/classes.js');
+const Smt = require('../../util/smt-solver/classes.js');
 
 class SmtMethod {
 	constructor(method) {
@@ -14,7 +14,7 @@ class SmtMethod {
 	declareArguments(args) {
 		// For every argument to the function, add a declaration to SMT.
 		args.map((a) => {
-			const command = smt.declareConst(a);
+			const command = new Smt.DeclareConst(a.name, a.type);
 
 			// Note the existence of the argument to the class for get-value calls later.
 			if (!this.constants[a.name]) {
@@ -27,30 +27,32 @@ class SmtMethod {
 
 	declareFunction(method) {
 		// Declare the function to SMT.
-		this.commands.push(smt.declareFunction(method));
+		const command = new Smt.DeclareFunction(
+			method.name,
+			method.returnType.type,
+			method.arguments
+		);
+
+		this.commands.push(command);
 	}
 
 	allValidConditions(method) {
 		// Add a layer to the stack so we can pop later and keep the declarations.
-		this.commands.push(smt.echo('-----Valid'));
-		this.commands.push(smt.stackPush());
+		this.commands.push(new Smt.Echo('-----Valid'));
+		this.commands.push(new Smt.StackModifier('push'));
 
 		// For each precondition, add it to the stack.
 		method.preconditions.map((c) => {
-			this.commands.push(smt.assertion(c));
+			this.commands.push(new Smt.BooleanExpression(c.comparison, c.arguments));
 		});
 
 		// Declare a variable for the result
 		if (method.returnType.type !== 'void') {
-			const resultDeclare = smt.declareConst({ name: 'result', type: method.returnType.type });
-			const functionCall = smt.functionCall(method);
-			const resultAssert = smt.assertion({
-				comparison: '=',
-				arguments: [
-					'result',
-					functionCall
-				]
-			});
+			const resultDeclare = new Smt.DeclareConst('result', method.returnType.type);
+			const functionCall = new Smt.FunctionCall(method.name, method.arguments);
+			const resultAssert = new Smt.Assertion(
+				new Smt.BooleanExpression('=', ['result', functionCall])
+			);
 
 			this.commands.push(resultDeclare);
 			this.commands.push(resultAssert);
@@ -58,22 +60,22 @@ class SmtMethod {
 
 		// Add postconditions so that the inputs may be more interesting.
 		method.postconditions.map((c) => {
-			this.commands.push(smt.assertion(c));
+			this.commands.push(new Smt.BooleanExpression(c.comparison, c.arguments));
 		});
 
 		// Check satisfiability and get values of arguments.
-		this.commands.push(smt.getValues(this.getConstants()));
-		this.commands.push(smt.stackPop());
+		this.commands.push(new Smt.GetValue(this.getConstants()));
+		this.commands.push(new Smt.StackModifier('pop'));
 	}
 
 	singularInvalidConditions(method) {
 		method.preconditions.map((a, i) => {
 			// For each precondition, add it to the stack.
-			this.commands.push(smt.echo(`-----Complement ${a.id}`));
-			this.commands.push(smt.stackPush());
+			this.commands.push(new Smt.Echo(`-----Complement ${a.id}`));
+			this.commands.push(new Smt.StackModifier('push'));
 
 			method.preconditions.map((c, j) => {
-				const expression = smt.booleanExpression(c);
+				const expression = new Smt.BooleanExpression(c.comparison, c.arguments);
 
 				// If it is the one that we are testing,
 				//  invert the result and get the values to use as inputs.
@@ -81,11 +83,11 @@ class SmtMethod {
 					expression.setInverted(!expression.isInverted);
 				}
 
-				this.commands.push(smt.assertion(expression));
+				this.commands.push(new Smt.Assertion(expression));
 			});
 
-			this.commands.push(smt.getValues(this.getConstants()));
-			this.commands.push(smt.stackPop());
+			this.commands.push(new Smt.GetValue(this.getConstants()));
+			this.commands.push(new Smt.StackModifier('pop'));
 		});
 	}
 

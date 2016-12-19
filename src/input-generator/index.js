@@ -20,6 +20,6 @@ function write(smtClass, dir) {
 }
 
 module.exports = {
-	parseUml,
+	smtSolve: require('./smt-solver/index.js'),
 	write
 };
