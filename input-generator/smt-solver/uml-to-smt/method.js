@@ -4,6 +4,9 @@ function convertType(type) {
 	switch (type) {
 		case 'Integer':
 			return 'Int';
+
+		default:
+			return type;
 	}
 }
 
