@@ -1,5 +1,12 @@
 const Smt = require('../../util/smt-solver/classes.js');
 
+function convertType(type) {
+	switch (type) {
+		case 'Integer':
+			return 'Int';
+	}
+}
+
 class SmtMethod {
 	constructor(method) {
 		this.commands = [];
@@ -14,7 +21,8 @@ class SmtMethod {
 	declareArguments(args) {
 		// For every argument to the function, add a declaration to SMT.
 		args.map((a) => {
-			const command = new Smt.DeclareConst(a.name, a.type);
+			const type = convertType(a.type);
+			const command = new Smt.DeclareConst(a.name, type);
 
 			// Note the existence of the argument to the class for get-value calls later.
 			if (!this.constants[a.name]) {
@@ -27,9 +35,9 @@ class SmtMethod {
 
 	declareFunction(method) {
 		// Declare the function to SMT.
-		const type = method.returnType.type;
+		const type = convertType(method.returnType.type);
 		const args = method.arguments.map((a) => {
-			return a.name;
+			return convertType(a.type);
 		});
 		const command = new Smt.DeclareFunction(method.name, type, args);
 
@@ -43,16 +51,20 @@ class SmtMethod {
 
 		// For each precondition, add it to the stack.
 		method.preconditions.map((c) => {
-			this.commands.push(new Smt.BooleanExpression(c.comparison, c.arguments));
+			const conditionCommand = new Smt.BooleanExpression(c.comparison, c.arguments);
+
+			this.commands.push(new Smt.Assertion(conditionCommand));
 		});
 
 		// Declare a variable for the result
 		if (method.returnType.type !== 'void') {
-			const resultDeclare = new Smt.DeclareConst('result', method.returnType.type);
-			const args = method.arguments.map((a) => {
+			const resultType = convertType(method.returnType.type);
+			const resultDeclare = new Smt.DeclareConst('result', resultType);
+
+			const functionArgs = method.arguments.map((a) => {
 				return a.name;
 			});
-			const functionCall = new Smt.FunctionCall(method.name, args);
+			const functionCall = new Smt.FunctionCall(method.name, functionArgs);
 			const resultAssert = new Smt.Assertion(
 				new Smt.BooleanExpression('=', ['result', functionCall])
 			);
@@ -63,7 +75,9 @@ class SmtMethod {
 
 		// Add postconditions so that the inputs may be more interesting.
 		method.postconditions.map((c) => {
-			this.commands.push(new Smt.BooleanExpression(c.comparison, c.arguments));
+			const conditionCommand = new Smt.BooleanExpression(c.comparison, c.arguments);
+
+			this.commands.push(new Smt.Assertion(conditionCommand));
 		});
 
 		// Check satisfiability and get values of arguments.
