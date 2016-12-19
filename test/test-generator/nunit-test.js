@@ -1,7 +1,9 @@
 const chai = require('chai');
 const helpers = require('yeoman-test');
+const assert = require('yeoman-assert');
 const path = require('path');
 const expect = chai.expect;
+
 
 describe.only('model-driven-testing:nunit test/fixtures/test-generator/uml/ test/fixtures/test-generator/smt/', () => {
 	beforeEach(() => {
@@ -13,7 +15,7 @@ describe.only('model-driven-testing:nunit test/fixtures/test-generator/uml/ test
 			]);
 	});
 
-	it('should make a test', () => {
-		expect(1).to.equal(1);
+	it('should make a test suite for SimpleMath', () => {
+		assert.file('build/SimpleMathTest.cs');
 	});
 });
