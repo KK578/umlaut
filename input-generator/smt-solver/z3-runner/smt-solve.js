@@ -5,55 +5,66 @@ const spawn = require('child_process').spawn;
 
 const parser = require('./smt-parser.js');
 
-function readFiles(dir, callback) {
-	glob('**/*.smt2', { cwd: dir }, (err, files) => {
-		if (err) {
-			throw err;
-		}
+function promiseReadFiles(dir) {
+	return new Promise((resolve, reject) => {
+		glob('**/*.smt2', { cwd: dir }, (err, files) => {
+			if (err) {
+				reject(err);
+			}
 
-		callback(files);
+			resolve(files);
+		});
 	});
 }
 
-function solveSmt(filename, callback) {
-	const z3 = spawn('z3', [filename]);
-	let output = '';
+function promiseSpawnZ3(filename) {
+	return new Promise((resolve, reject) => {
+		const z3 = spawn('z3', [filename]);
+		let output = '';
 
-	z3.stdout.on('data', (data) => {
-		output += data.toString('utf8');
+		z3.stdout.on('data', (data) => {
+			output += data.toString('utf8');
+		});
+
+		z3.stderr.on('data', (data) => {
+			output += data.toString('utf8');
+		});
+
+		z3.on('close', (code) => {
+			resolve(output);
+		});
+
+		z3.on('error', (err) => {
+			reject(err);
+		});
 	});
+}
 
-	z3.stderr.on('data', (data) => {
-		output += data.toString('utf8');
-	});
+function promiseHandleAllFiles(dir, files, result, index) {
+	return new Promise((resolve, reject) => {
+		if (index >= files.length) {
+			resolve(result);
+		}
+		else {
+			const filename = files[index];
+			// Remove .smt2 from filename for method name.
+			const methodName = filename.substring(0, filename.length - 5);
+			const filepath = path.join(dir, filename);
 
-	z3.on('close', () => {
-		callback(`${output}`);
+			return promiseSpawnZ3(filepath).then((solved) => {
+				result[methodName] = parser.parseZ3(solved);
+
+				return promiseHandleAllFiles(dir, files, result, index + 1).then(resolve);
+			}).catch(reject);
+		}
 	});
 }
 
 function solve(dir) {
 	dir = path.resolve(dir);
 
-	readFiles(dir, (smtFiles) => {
-		let count = smtFiles.length;
-		const result = {};
-
-		smtFiles.map((smtFile) => {
-			solveSmt(`${dir}/${smtFile}`, (solved) => {
-				const methodName = smtFile.substring(0, smtFile.length - 5);
-
-				// Put method into table describing all methods.
-				result[methodName] = parser.parseZ3(solved);
-
-				if (--count === 0) {
-					const output = JSON.stringify(result, null, 2);
-
-					// Store solved data to file after all done.
-					fs.writeFile(path.join(dir, 'solved.json'), output, 'utf-8');
-				}
-			});
-		});
+	return promiseReadFiles(dir).then((smtFiles) => {
+		return promiseHandleAllFiles(dir, smtFiles, {}, 0);
 	});
 }
 
