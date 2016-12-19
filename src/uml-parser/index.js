@@ -19,6 +19,6 @@ module.exports = (filePath) => {
 	return promiseFsReadFile(filePath).then((data) => {
 		return parser.parse(data);
 	}).catch((error) => {
-		return error;
+		throw error;
 	});
 };

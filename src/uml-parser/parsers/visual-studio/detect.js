@@ -1,8 +1,9 @@
 const xml2js = require('xml2js');
-const xmlParser = new xml2js.Parser();
 
 function promiseXmlParseString(xml) {
 	return new Promise((resolve, reject) => {
+		const xmlParser = new xml2js.Parser();
+
 		xmlParser.parseString(xml, (err, data) => {
 			if (err) {
 				reject(err);
@@ -18,6 +19,7 @@ module.exports = (data) => {
 	return promiseXmlParseString(data).then((xml) => {
 		if (xml.modelStoreModel !== undefined) {
 			// Contains elements that hint towards a UML model made in Visual Studio.
+			// TODO: More validation?
 			return true;
 		}
 		else {
