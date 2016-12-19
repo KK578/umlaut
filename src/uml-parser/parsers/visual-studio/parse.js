@@ -1,3 +1,5 @@
+const xml2js = require('xml2js');
+
 function parseVariables(umlClass) {
 	const variables = {};
 
@@ -207,25 +209,42 @@ function parseClass(umlClass) {
 	return c;
 }
 
-function parse(uml) {
-	// Enter root item.
-	const classes = {};
+function parse(data) {
+	function promiseXmlParseString(xml) {
+		const xmlParser = new xml2js.Parser();
 
-	uml = uml.modelStoreModel;
-
-	uml.packagedElements.map((element) => {
-		// All related items are stored as namedElement objects in the package's elements.
-		// Iterate through all and for objects representing classes, parse them.
-		element.packageHasNamedElement.map((namedElement) => {
-			if (namedElement.class) {
-				const c = parseClass(namedElement.class[0]);
-
-				classes[c.name] = c;
-			}
+		return new Promise((resolve, reject) => {
+			xmlParser.parseString(xml, (err, data) => {
+				if (err) {
+					reject(err);
+				}
+				else {
+					resolve(data);
+				}
+			});
 		});
-	});
+	}
 
-	return classes;
+	return promiseXmlParseString(data).then((uml) => {
+		// Enter root item.
+		const classes = {};
+
+		uml = uml.modelStoreModel;
+
+		uml.packagedElements.map((element) => {
+			// All related items are stored as namedElement objects in the package's elements.
+			// Iterate through all and for objects representing classes, parse them.
+			element.packageHasNamedElement.map((namedElement) => {
+				if (namedElement.class) {
+					const c = parseClass(namedElement.class[0]);
+
+					classes[c.name] = c;
+				}
+			});
+		});
+
+		return classes;
+	});
 }
 
 module.exports = parse;

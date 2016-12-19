@@ -198,7 +198,7 @@ function readClass(uml, smt) {
 		return method;
 	});
 
-	console.log(JSON.stringify(umlClass, null, 2));
+	// console.log(JSON.stringify(umlClass, null, 2));
 
 	return umlClass;
 }
