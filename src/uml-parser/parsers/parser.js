@@ -3,21 +3,23 @@ const parsers = [
 ];
 
 function promiseParse(data, parserCount) {
-	if (parserCount > parsers.length) {
-		return false;
+	if (parserCount >= parsers.length) {
+		throw new Error('No valid parser found.');
 	}
 
 	const parser = parsers[parserCount];
 
-	return parser.detect(data).catch((error) => {
-		return false;
-	}).then((valid) => {
+	return parser.detect(data).then((valid) => {
 		if (valid) {
+			// Parser has claimed it can parse the model.
 			return parser.parse(data);
 		}
 		else {
-			return false;
+			// Throw error to go to next parser.
+			throw new Error();
 		}
+	}).catch((error) => {
+		return promiseParse(data, parserCount + 1);
 	});
 }
 
