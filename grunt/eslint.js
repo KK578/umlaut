@@ -19,7 +19,7 @@ module.exports = {
 			{
 				expand: true,
 				src: [
-					'src/input-generator/**/*.js',
+					'input-generator/**/*.js',
 					'test/input-generator/*.js'
 				]
 			}
@@ -30,7 +30,7 @@ module.exports = {
 			{
 				expand: true,
 				src: [
-					'src/uml-parser/**/*.js',
+					'uml-parser/**/*.js',
 					'test/uml-parser/*.js'
 				]
 			}
