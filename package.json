@@ -37,6 +37,8 @@
     "jit-grunt": "^0.10.0",
     "load-grunt-config": "^0.19.2",
     "mocha": "^3.1.2",
-    "time-grunt": "^1.4.0"
+    "time-grunt": "^1.4.0",
+    "yeoman-assert": "^2.2.2",
+    "yeoman-test": "^1.6.0"
   }
 }
