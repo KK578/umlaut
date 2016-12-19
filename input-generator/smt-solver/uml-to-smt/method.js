@@ -27,11 +27,11 @@ class SmtMethod {
 
 	declareFunction(method) {
 		// Declare the function to SMT.
-		const command = new Smt.DeclareFunction(
-			method.name,
-			method.returnType.type,
-			method.arguments
-		);
+		const type = method.returnType.type;
+		const args = method.arguments.map((a) => {
+			return a.name;
+		});
+		const command = new Smt.DeclareFunction(method.name, type, args);
 
 		this.commands.push(command);
 	}
@@ -49,7 +49,10 @@ class SmtMethod {
 		// Declare a variable for the result
 		if (method.returnType.type !== 'void') {
 			const resultDeclare = new Smt.DeclareConst('result', method.returnType.type);
-			const functionCall = new Smt.FunctionCall(method.name, method.arguments);
+			const args = method.arguments.map((a) => {
+				return a.name;
+			});
+			const functionCall = new Smt.FunctionCall(method.name, args);
 			const resultAssert = new Smt.Assertion(
 				new Smt.BooleanExpression('=', ['result', functionCall])
 			);
