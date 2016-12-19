@@ -1,18 +1,28 @@
-const parsers = {
-	visualStudio: require('./parserVisualStudio.js')
-};
+const parsers = [
+	require('./visual-studio/index.js')
+];
 
-function parse(umlData) {
-	let parser;
-
-	if (umlData.modelStoreModel) {
-		// Probably Visual Studio Modeling File.
-		parser = parsers.visualStudio;
+function promiseParse(data, parserCount) {
+	if (parserCount > parsers.length) {
+		return false;
 	}
 
-	const classes = parser(umlData);
+	const parser = parsers[parserCount];
 
-	return classes;
+	return parser.detect(data).catch((error) => {
+		return false;
+	}).then((valid) => {
+		if (valid) {
+			return parser.parse(data);
+		}
+		else {
+			return false;
+		}
+	});
+}
+
+function parse(umlData) {
+	return promiseParse(umlData, 0);
 }
 
 module.exports = {
