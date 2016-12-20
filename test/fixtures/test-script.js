@@ -1,41 +1,41 @@
 const path = require('path');
-const spawn = require('child_process').spawn;
-const umlParser = require('../src/uml-parser/index.js');
+// const spawn = require('child_process').spawn;
 
-console.log('Parse UML');
-umlParser(path.join(__dirname, '../build/AnnotatedSimpleMath.uml'));
+const umlParser = require('../../uml-parser/index.js');
+const inputGenerator = require('../../input-generator/index.js');
 
-setTimeout(() => {
-	console.log('Create SMT');
+function stringify(data) {
+	return JSON.stringify(data, null, 2);
+};
 
-	// Take the annotated UML and create SMT files under 'build'.
-	const smtGenerator = require('../src/smt-generator/index.js');
-	const data = require('../build/uml/SimpleMath.json');
-	const smt = smtGenerator.parseUml(data);
+let parsedData;
+let solvedData;
 
-	smtGenerator.write(smt, path.join(__dirname, '../build/'));
+return umlParser(path.join(__dirname, '../../build/AnnotatedSimpleMath.uml')).then((data) => {
+	console.log('Parsed UML');
+	parsedData = data;
+	console.log(stringify(parsedData));
 
-	setTimeout(() => {
-		console.log('Solve SMT');
+	return inputGenerator.smtSolve(parsedData.SimpleMath);
+}).then((data) => {
+	console.log('Created SMT');
+	solvedData = data;
+	console.log(stringify(solvedData));
+}).catch((err) => {
+	console.error(err);
+});
 
-		// Solves all SMT files to 'build/solved.json'.
-		const z3Solver = require('../src/smt-generator/util/smt-solve.js');
+// setTimeout(() => {
+// 	console.log('Generate Test Suite');
 
-		z3Solver.solve(path.join(__dirname, '../build/smt/SimpleMath/'));
+// 	// Invoke generator.
+// 	const yo = spawn('yo', ['model-driven-testing:nunit', 'build/uml/', 'build/smt/']);
 
-		setTimeout(() => {
-			console.log('Generate Test Suite');
+// 	yo.stdout.on('data', (data) => {
+// 		console.log(data.toString('utf8'));
+// 	});
 
-			// Invoke generator.
-			const yo = spawn('yo', ['model-driven-testing:nunit', 'build/uml/', 'build/smt/']);
-
-			yo.stdout.on('data', (data) => {
-				console.log(data.toString('utf8'));
-			});
-
-			yo.stderr.on('data', (data) => {
-				console.log(data.toString('utf8'));
-			});
-		}, 500);
-	}, 500);
-}, 500);
+// 	yo.stderr.on('data', (data) => {
+// 		console.log(data.toString('utf8'));
+// 	});
+// }, 500);
