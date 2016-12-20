@@ -9,11 +9,9 @@ cache:
 install:
   - npm install
   - npm install -g grunt-cli codecov
-  - wget -q https://github.com/Z3Prover/z3/releases/download/z3-4.5.0/z3-4.5.0-x86-ubuntu-14.04.zip
-  - unzip -q z3-4.5.0-x86-ubuntu-14.04.zip
-  - export PATH=$PATH:$PWD/z3-4.5.0-x86-ubuntu-14.04/bin
-  - echo $PATH
-  - which z3
+  - wget -q https://github.com/Z3Prover/z3/releases/download/z3-4.5.0/z3-4.5.0-x64-ubuntu-14.04.zip
+  - unzip -q z3-4.5.0-x64-ubuntu-14.04.zip
+  - export PATH=$PATH:$PWD/z3-4.5.0-x64-ubuntu-14.04/bin
 before_script:
   - grunt lint
 script:
