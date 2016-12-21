@@ -1,21 +1,8 @@
 const path = require('path');
-const fs = require('fs');
+const promises = require('../util/promises.js');
 
 const umlToSmt = require('./uml-to-smt/index.js');
 const solver = require('./z3-runner/index.js');
-
-function promiseFsWriteFile(filepath, data) {
-	return new Promise((resolve, reject) => {
-		fs.writeFile(filepath, data, 'utf-8', (err) => {
-			if (err) {
-				reject(err);
-			}
-			else {
-				resolve();
-			}
-		});
-	});
-}
 
 function promiseWriteAllFiles(dir, data, index) {
 	return new Promise((resolve, reject) => {
@@ -27,7 +14,7 @@ function promiseWriteAllFiles(dir, data, index) {
 			const method = data.smtCommands[index];
 			const filepath = path.join(dir, `${method.name}.smt2`);
 
-			return promiseFsWriteFile(filepath, method.commands).then(() => {
+			return promises.fsWriteFile(filepath, method.commands).then(() => {
 				return promiseWriteAllFiles(dir, data, index + 1).then(resolve);
 			}).catch((err) => {
 				reject(err);
