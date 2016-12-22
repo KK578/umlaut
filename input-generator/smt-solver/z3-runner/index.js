@@ -1,34 +1,6 @@
-const glob = require('glob');
-const path = require('path');
-const fs = require('fs');
 const spawn = require('child_process').spawn;
 
 const parser = require('./smt-parser.js');
-
-function promiseReadFiles(dir) {
-	return new Promise((resolve, reject) => {
-		glob('**/*.smt2', { cwd: dir }, (err, files) => {
-			if (err) {
-				reject(err);
-			}
-
-			resolve(files);
-		});
-	});
-}
-
-function promiseFsReadFile(filename) {
-	return new Promise((resolve, reject) => {
-		fs.readFile(filename, 'utf-8', (err, data) => {
-			if (err) {
-				reject(err);
-			}
-			else {
-				resolve(data);
-			}
-		});
-	});
-}
 
 function promiseSpawnZ3(smtData) {
 	return new Promise((resolve, reject) => {
@@ -56,10 +28,6 @@ function promiseSpawnZ3(smtData) {
 		z3.stdin.write(smtData);
 		z3.stdin.end();
 	});
-}
-
-function promiseRun(filename) {
-	return promiseFsReadFile(filename).then(promiseSpawnZ3);
 }
 
 function promiseHandleSmt(smtCommands, result, index) {
