@@ -81,10 +81,10 @@ describe('SMT Classes', () => {
 			}).to.throw(Error);
 		});
 
-		it('should take a string input', () => {
-			const obj = new TestClass('string');
-
-			expect(obj.toString()).to.equal('(assert string)');
+		it('should error on string input', () => {
+			expect(() => {
+				new TestClass('string');
+			}).to.throw(Error);
 		});
 
 		it('should take a BooleanExpression', () => {

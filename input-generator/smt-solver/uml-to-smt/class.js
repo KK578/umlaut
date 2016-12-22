@@ -1,6 +1,6 @@
 const SmtMethod = require('./method.js');
 
-class SmtClass {
+module.exports = class SmtClass {
 	constructor(classObject) {
 		this.name = classObject.name;
 		this.smtCommands = Object.keys(classObject.methods).map((m) => {
@@ -14,6 +14,4 @@ class SmtClass {
 			};
 		});
 	}
-}
-
-module.exports = SmtClass;
+};
