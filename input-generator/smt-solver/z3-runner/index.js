@@ -1,6 +1,6 @@
 const spawn = require('child_process').spawn;
 
-const parser = require('./smt-parser.js');
+const parser = require('./value-parser.js');
 
 function promiseSpawnZ3(smtData) {
 	return new Promise((resolve, reject) => {
@@ -40,7 +40,7 @@ function promiseHandleSmt(smtCommands, result, index) {
 			const methodName = smtMethod.name;
 
 			return promiseSpawnZ3(smtMethod.commands).then((solved) => {
-				result[methodName] = parser.parseZ3(solved);
+				result[methodName] = parser(solved);
 
 				return promiseHandleSmt(smtCommands, result, index + 1).then(resolve);
 			}).catch(reject);

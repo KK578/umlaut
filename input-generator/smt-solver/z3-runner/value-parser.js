@@ -64,7 +64,7 @@ function parseCondition(text) {
 	};
 }
 
-function parseZ3(text) {
+function parse(text) {
 	let split = text.split('-----');
 
 	// Ignore first as it will be empty.
@@ -75,6 +75,4 @@ function parseZ3(text) {
 	return results;
 }
 
-module.exports = {
-	parseZ3
-};
+module.exports = parse;
