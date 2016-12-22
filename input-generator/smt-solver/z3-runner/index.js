@@ -28,14 +28,23 @@ function promiseSpawnZ3(smtData) {
 	});
 }
 
-function promiseHandleSmt(smtCommands) {
+function promiseHandleSmt(smt) {
+	const smtCommands = smt.smtCommands;
+
 	// Fold promise chain passing the result object along.
-	return smtCommands.reduce((previous, current) => {
+	// Pass initial value as uninitialised object to use as a hashmap.
+	return smtCommands.reduce((previous, smtMethod) => {
 		return previous.then((result) => {
-			const smtMethod = current;
 			const methodName = smtMethod.name;
 
+			// Run z3 and wait for data.
 			return promiseSpawnZ3(smtMethod.commands).then((solved) => {
+				// Error if method has already been parsed or been created twice.
+				if (result[methodName] !== undefined) {
+					throw new Error(`Method "${methodName}" already exists in Class "${smt.name}".`);
+				}
+
+				// Otherwise commit to hashmap and return to next smtMethod.
 				result[methodName] = parser(solved);
 
 				return result;
@@ -45,7 +54,7 @@ function promiseHandleSmt(smtCommands) {
 }
 
 function solve(smt) {
-	return promiseHandleSmt(smt.smtCommands);
+	return promiseHandleSmt(smt);
 }
 
 module.exports = solve;
