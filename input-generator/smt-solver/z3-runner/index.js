@@ -62,32 +62,26 @@ function promiseRun(filename) {
 	return promiseFsReadFile(filename).then(promiseSpawnZ3);
 }
 
-function promiseHandleAllFiles(dir, files, result, index) {
+function promiseHandleSmt(smtCommands, result, index) {
 	return new Promise((resolve, reject) => {
-		if (index >= files.length) {
+		if (index >= smtCommands.length) {
 			resolve(result);
 		}
 		else {
-			const filename = files[index];
-			// Remove .smt2 from filename for method name.
-			const methodName = filename.substring(0, filename.length - 5);
-			const filepath = path.join(dir, filename);
+			const smtMethod = smtCommands[index];
+			const methodName = smtMethod.name;
 
-			return promiseRun(filepath).then((solved) => {
+			return promiseSpawnZ3(smtMethod.commands).then((solved) => {
 				result[methodName] = parser.parseZ3(solved);
 
-				return promiseHandleAllFiles(dir, files, result, index + 1).then(resolve);
+				return promiseHandleSmt(smtCommands, result, index + 1).then(resolve);
 			}).catch(reject);
 		}
 	});
 }
 
-function solve(dir) {
-	dir = path.resolve(dir);
-
-	return promiseReadFiles(dir).then((smtFiles) => {
-		return promiseHandleAllFiles(dir, smtFiles, {}, 0);
-	});
+function solve(smt) {
+	return promiseHandleSmt(smt.smtCommands, {}, 0);
 }
 
 module.exports = solve;

@@ -38,10 +38,7 @@ function solveSmt(dir) {
 }
 
 module.exports = (uml) => {
-	const parsedUml = parseUml(uml);
-	const dir = 'build/';
+	const smt = parseUml(uml);
 
-	return writeSmt(dir, parsedUml).then(() => {
-		return solveSmt(path.join(dir, 'smt/'));
-	});
+	return solveSmt(smt);
 };
