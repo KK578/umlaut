@@ -1,5 +1,6 @@
 const glob = require('glob');
 const path = require('path');
+const fs = require('fs');
 const spawn = require('child_process').spawn;
 
 const parser = require('./smt-parser.js');
@@ -16,9 +17,22 @@ function promiseReadFiles(dir) {
 	});
 }
 
-function promiseSpawnZ3(filename) {
+function promiseFsReadFile(filename) {
 	return new Promise((resolve, reject) => {
-		const z3 = spawn('z3', [filename]);
+		fs.readFile(filename, 'utf-8', (err, data) => {
+			if (err) {
+				reject(err);
+			}
+			else {
+				resolve(data);
+			}
+		});
+	});
+}
+
+function promiseSpawnZ3(smtData) {
+	return new Promise((resolve, reject) => {
+		const z3 = spawn('z3', ['--in']);
 		let output = '';
 
 		z3.stdout.on('data', (data) => {
@@ -38,7 +52,14 @@ function promiseSpawnZ3(filename) {
 		z3.on('error', (err) => {
 			reject(err);
 		});
+
+		z3.stdin.write(smtData);
+		z3.stdin.end();
 	});
+}
+
+function promiseRun(filename) {
+	return promiseFsReadFile(filename).then(promiseSpawnZ3);
 }
 
 function promiseHandleAllFiles(dir, files, result, index) {
@@ -52,7 +73,7 @@ function promiseHandleAllFiles(dir, files, result, index) {
 			const methodName = filename.substring(0, filename.length - 5);
 			const filepath = path.join(dir, filename);
 
-			return promiseSpawnZ3(filepath).then((solved) => {
+			return promiseRun(filepath).then((solved) => {
 				result[methodName] = parser.parseZ3(solved);
 
 				return promiseHandleAllFiles(dir, files, result, index + 1).then(resolve);
