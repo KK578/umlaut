@@ -16,7 +16,7 @@ return umlParser(path.join(__dirname, '../../build/AnnotatedSimpleMath.uml')).th
 	parsedData = data;
 	console.log(stringify(parsedData));
 
-	return inputGenerator.smtSolve(parsedData.SimpleMath);
+	return inputGenerator(parsedData);
 }).then((data) => {
 	console.log('Created SMT');
 	solvedData = data;
