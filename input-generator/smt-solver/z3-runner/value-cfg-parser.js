@@ -14,6 +14,7 @@ const Rule = parsey.Rule;
  * 	identifier	::=	[a-zA-Z_][a-zA-Z0-9_]*
  *
  * 	inputValue	::= [0-9]+
+ * 					| '(' '-' [0-9]+ ')'
  */
 const smtResult = new Sym('smtResult');
 const smtValue = new Sym('smtValue');
@@ -41,12 +42,15 @@ const grammar = [
 		return name;
 	}),
 
+	new Rule(inputValue, ['(', '-', /[0-9]+/, ')'], (_, __, v) => {
+		return -1 * parseInt(v);
+	}),
 	new Rule(inputValue, [/[0-9]+/], (v) => {
 		return v;
 	})
 ];
 
-const parsed = parsey.parse(`((a 0)(b 1)(c 5))`, grammar);
+const parsed = parsey.parse(`((a 0)(b (- 1))(c 5))`, grammar);
 
 // Note: From parsey/examples/calc.
 function interpret(parseTree) {
