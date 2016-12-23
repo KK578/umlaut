@@ -5,7 +5,7 @@ function parseModel(model) {
 		const result = JSON.parse(model);
 	}
 	catch (err) {
-
+		// Should attempt to load data from file here.
 	}
 }
 
@@ -15,7 +15,7 @@ module.exports = generators.Base.extend({
 
 		this.option('model', {
 			type: String,
-			desc: 'JSON object, or path to a JSON file, describing the model.',
+			desc: 'JSON object, or path to a JSON file, describing the model.'
 		});
 	},
 
