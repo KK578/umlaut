@@ -73,7 +73,7 @@ function promiseHandleSmt(smt) {
 }
 
 function solve(smt) {
-	return promiseHandleSmt(smt)
+	return promiseHandleSmt(smt);
 }
 
 module.exports = solve;
