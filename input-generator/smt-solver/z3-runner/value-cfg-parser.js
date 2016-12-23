@@ -8,6 +8,12 @@ const identifier = new Sym('identifier');
 const inputValue = new Sym('inputValue');
 
 const grammar = [
+	new Rule(smtResult, [smtResult, '(', identifier, inputValue, ')'], (next, _, id, v, __) => {
+		let result = { [id]: v };
+		result = Object.assign(next, result);
+
+		return result;
+	}),
 	new Rule(smtResult, ['(', identifier, inputValue, ')'], (_, id, v, __) => {
 		const result = { [id]: v };
 
@@ -23,8 +29,9 @@ const grammar = [
 	})
 ];
 
-const parsed = parsey.parse(`(a 0)`, grammar);
+const parsed = parsey.parse(`(a 0)(b 1)(c 5)`, grammar);
 
+// Note: From parsey/examples/calc.
 function interpret(parseTree) {
   if (typeof parseTree === 'string' || parseTree == null) {
     return parseTree;
