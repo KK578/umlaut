@@ -28,7 +28,7 @@ function promiseSpawnZ3(smtData) {
 	});
 }
 
-function promiseHandleSmt(smt) {
+function promiseHandleSmtClass(smt) {
 	const smtCommands = smt.smtCommands;
 
 	// Fold promise chain passing the result object along.
@@ -46,6 +46,25 @@ function promiseHandleSmt(smt) {
 
 				// Otherwise commit to hashmap and return to next smtMethod.
 				result[methodName] = parser(solved);
+
+				return result;
+			});
+		});
+	}, Promise.resolve({}));
+}
+
+function promiseHandleSmt(smt) {
+	return Object.keys(smt).reduce((previous, current) => {
+		return previous.then((result) => {
+			const smtClass = smt[current];
+			const className = smtClass.name;
+
+			return promiseHandleSmtClass(smtClass).then((methodTestInputs) => {
+				if (result[className] !== undefined) {
+					throw new Error(`Class ${className} already exists.`);
+				}
+
+				result[className] = methodTestInputs;
 
 				return result;
 			});

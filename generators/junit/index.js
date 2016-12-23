@@ -237,7 +237,7 @@ const generator = generators.Base.extend({
 				const className = umlFile.substring(0, umlFile.length - 5);
 
 				// UML/ClassName.json
-				this.uml[className] = require(path.resolve(umlPath, umlFile));
+				this.uml = require(path.resolve(umlPath, umlFile));
 				// SMT/ClassName/solved.json
 				this.smt[className] = require(path.resolve(this.smtFolder, className, 'solved.json'));
 

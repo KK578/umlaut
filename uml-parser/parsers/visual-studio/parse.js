@@ -1,4 +1,4 @@
-const xml2js = require('xml2js');
+const promises = require('../../util/promises.js');
 
 function parseVariables(umlClass) {
 	const variables = {};
@@ -210,22 +210,7 @@ function parseClass(umlClass) {
 }
 
 function parse(data) {
-	function promiseXmlParseString(xml) {
-		const xmlParser = new xml2js.Parser();
-
-		return new Promise((resolve, reject) => {
-			xmlParser.parseString(xml, (err, data) => {
-				if (err) {
-					reject(err);
-				}
-				else {
-					resolve(data);
-				}
-			});
-		});
-	}
-
-	return promiseXmlParseString(data).then((uml) => {
+	return promises.xmlParseString(data).then((uml) => {
 		// Enter root item.
 		const classes = {};
 
