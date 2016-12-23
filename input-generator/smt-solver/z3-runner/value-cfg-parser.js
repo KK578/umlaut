@@ -4,17 +4,22 @@ const Sym = parsey.Sym;
 const Rule = parsey.Rule;
 
 const smtResult = new Sym('smtResult');
+const smtValue = new Sym('smtValue');
 const identifier = new Sym('identifier');
 const inputValue = new Sym('inputValue');
 
 const grammar = [
-	new Rule(smtResult, [smtResult, '(', identifier, inputValue, ')'], (next, _, id, v, __) => {
+	new Rule(smtResult, ['(', smtValue, ')'], (_, values, __) => {
+		return values;
+	}),
+
+	new Rule(smtValue, [smtValue, '(', identifier, inputValue, ')'], (next, _, id, v, __) => {
 		let result = { [id]: v };
 		result = Object.assign(next, result);
 
 		return result;
 	}),
-	new Rule(smtResult, ['(', identifier, inputValue, ')'], (_, id, v, __) => {
+	new Rule(smtValue, ['(', identifier, inputValue, ')'], (_, id, v, __) => {
 		const result = { [id]: v };
 
 		return result;
@@ -29,7 +34,7 @@ const grammar = [
 	})
 ];
 
-const parsed = parsey.parse(`(a 0)(b 1)(c 5)`, grammar);
+const parsed = parsey.parse(`((a 0)(b 1)(c 5))`, grammar);
 
 // Note: From parsey/examples/calc.
 function interpret(parseTree) {
