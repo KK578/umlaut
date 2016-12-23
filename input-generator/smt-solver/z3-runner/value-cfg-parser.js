@@ -3,6 +3,18 @@ const parsey = require('parsey');
 const Sym = parsey.Sym;
 const Rule = parsey.Rule;
 
+/**
+ * CFG for results from get-value of SMT-LIB2 run through z3.
+ *
+ * 	smtResult	::= '(' smtValue ')'
+ *
+ * 	smtValue	::= '(' identifier WHITESPACE inputValue ')'
+ * 					| smtValue WHITESPACE '(' identifier WHITESPACE inputValue ')'
+ *
+ * 	identifier	::=	[a-zA-Z_][a-zA-Z0-9_]*
+ *
+ * 	inputValue	::= [0-9]+
+ */
 const smtResult = new Sym('smtResult');
 const smtValue = new Sym('smtValue');
 const identifier = new Sym('identifier');
