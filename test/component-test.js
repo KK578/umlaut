@@ -62,5 +62,5 @@ describe('Component Tests', () => {
 		});
 	});
 
-	describe('test-generator', () => {})
+	describe('test-generator', () => {});
 });
