@@ -7,25 +7,38 @@ const Rule = parsey.Rule;
  * CFG for results from get-value of SMT-LIB2 run through z3.
  *
  * 	smtResult	::= '(' smtValue ')'
+ * 					;
  *
  * 	smtValue	::= '(' identifier WHITESPACE inputValue ')'
  * 					| smtValue WHITESPACE '(' identifier WHITESPACE inputValue ')'
+ * 					;
  *
  * 	identifier	::=	[a-zA-Z_][a-zA-Z0-9_]*
+ * 					;
  *
- * 	inputValue	::= [0-9]+
- * 					| '(' '-' [0-9]+ ')'
+ * 	inputValue	::= numericValue
+ * 					;
+ *
+ * 	numericValue	::= '(' '-' numericValue2 ')'
+ * 						| numericValue2
+ * 						;
+ *
+ *  numericValue2	::= [0-9]+
  */
 const smtResult = new Sym('smtResult');
 const smtValue = new Sym('smtValue');
 const identifier = new Sym('identifier');
 const inputValue = new Sym('inputValue');
+const numericValue = new Sym('numericValue');
+const numericValue2 = new Sym('numericValue2');
 
 const grammar = [
+	// smtResult
 	new Rule(smtResult, ['(', smtValue, ')'], (_, values) => {
 		return values;
 	}),
 
+	// smtValue
 	new Rule(smtValue, [smtValue, '(', identifier, inputValue, ')'], (next, _, id, v) => {
 		let result = { [id]: v };
 
@@ -39,14 +52,26 @@ const grammar = [
 		return result;
 	}),
 
+	// identifier
 	new Rule(identifier, [/[a-zA-Z]+/], (name) => {
 		return name;
 	}),
 
-	new Rule(inputValue, ['(', '-', /[0-9]+/, ')'], (_, __, v) => {
-		return -1 * parseInt(v);
+	// inputValue
+	new Rule(inputValue, [numericValue], (v) => {
+		return v;
 	}),
-	new Rule(inputValue, [/[0-9]+/], (v) => {
+
+	// numericValue
+	new Rule(numericValue, ['(', '-', numericValue2, ')'], (_, __, v) => {
+		return -1 * v;
+	}),
+	new Rule(numericValue, [numericValue2], (v) => {
+		return v;
+	}),
+
+	// numericValue2
+	new Rule(numericValue2, [/[0-9]+/], (v) => {
 		return parseInt(v);
 	})
 ];
