@@ -16,9 +16,10 @@ function findClosingParen(text, start) {
 	return end;
 }
 
+const parser = require('./value-cfg-parser.js');
+
 function parseValues(text) {
-	// Strip outer parentheses.
-	text = text.slice(1, text.length - 1);
+	return parser(text);
 
 	const values = [];
 	// Find the first occurance of a space and split on that to determine name and value.
