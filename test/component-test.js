@@ -1,16 +1,21 @@
-const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
 const path = require('path');
 
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+const chaiFiles = require('chai-files');
+
 chai.use(chaiAsPromised);
+chai.use(chaiFiles);
 
 const expect = chai.expect;
+const file = chaiFiles.file;
+const yeomanHelpers = require('yeoman-test');
 
 const promises = require('../util/promises.js');
 
 describe('Component Tests', () => {
-	describe('uml-parser', () => {
-		describe('Visual Studio', () => {
+	describe('Uml-Parser', () => {
+		describe('Visual Studio models', () => {
 			let testee;
 
 			before(() => {
@@ -43,10 +48,10 @@ describe('Component Tests', () => {
 		});
 	});
 
-	describe('input-generator', () => {
+	describe('Input-Ienerator', () => {
 		let testee;
 
-		describe('smt-solver', () => {
+		describe('SMT-Solver', () => {
 			before(() => {
 				testee = require('../input-generator/smt-solver/index.js');
 			});
@@ -62,5 +67,47 @@ describe('Component Tests', () => {
 		});
 	});
 
-	describe('test-generator', () => {});
+	describe('Test-Generator', () => {
+		describe('JUnit', () => {
+			beforeEach(() => {
+				return yeomanHelpers.run(path.join(__dirname, '../generators/junit'))
+					.inDir('test/tmp/junit/')
+					.withArguments([
+						// Relative to the above directory.
+						'../../fixtures/test-generator/uml/',
+						'../../fixtures/test-generator/smt/'
+					]);
+			});
+
+			it('should make a test suite for SimpleMath', () => {
+				expect(file('build/SimpleMathTest.java')).to.exist;
+			});
+
+			afterEach(() => {
+				// Reset location due to changing from helpers running in specific directory.
+				process.chdir('../../../');
+			});
+		});
+
+		describe('NUnit', () => {
+			beforeEach(() => {
+				return yeomanHelpers.run(path.join(__dirname, '../generators/nunit'))
+					.inDir('test/tmp/nunit/')
+					.withArguments([
+						// Relative to the above directory.
+						'../../fixtures/test-generator/uml/',
+						'../../fixtures/test-generator/smt/'
+					]);
+			});
+
+			it('should make a test suite for SimpleMath', () => {
+				expect(file('build/SimpleMathTest.cs')).to.exist;
+			});
+
+			afterEach(() => {
+				// Reset location due to changing from helpers running in specific directory.
+				process.chdir('../../../');
+			});
+		});
+	});
 });
