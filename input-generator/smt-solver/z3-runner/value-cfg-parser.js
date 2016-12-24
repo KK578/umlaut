@@ -47,7 +47,7 @@ const grammar = [
 		return -1 * parseInt(v);
 	}),
 	new Rule(inputValue, [/[0-9]+/], (v) => {
-		return v;
+		return parseInt(v);
 	})
 ];
 
