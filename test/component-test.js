@@ -26,6 +26,23 @@ describe('Component Tests', () => {
 		});
 	});
 
-	describe('input-generator', () => {});
+	describe('input-generator', () => {
+		let testee;
+		describe('smt-solver', () => {
+			before(() => {
+				testee = require('../input-generator/smt-solver/index.js');
+			});
+
+			it('should run against SimpleMath test fixture', () => {
+				const fixture = require(path.join(__dirname, './fixtures/test-generator/uml/SimpleMath.json'));
+				const promise = testee(fixture);
+
+				return expect(promise).to.be.fulfilled.then((result) => {
+					expect(result.SimpleMath).to.be.an('object');
+				});
+			});
+		});
+	});
+
 	describe('test-generator', () => {})
 });
