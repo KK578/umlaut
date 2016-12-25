@@ -10,7 +10,17 @@ function comparisonValid(comparison) {
 		if (comparisons[i].name === comparison) {
 			return true;
 		}
+
+		if (comparisons[i].symbol === comparison) {
+			return true;
+		}
 	}
+
+	// DEBUG
+	if (comparison === '=') {
+		return true;
+	}
+	// END DEBUG
 
 	return false;
 }
@@ -56,6 +66,16 @@ const grammar = [
 			throw new Error(`Comparison ${c} does not exist.`);
 		}
 	}),
+	// DEBUG
+	new Rule(comparison, [/[a-zA-Z<>=!&|]+/], (c) => {
+		if (comparisonValid(c)) {
+			return c;
+		}
+		else {
+			throw new Error(`Comparison ${c} does not exist.`);
+		}
+	}),
+	// END DEBUG
 
 	new Rule(argumentList, [argumentList, argument], (next, a) => {
 		return next.concat(a);
