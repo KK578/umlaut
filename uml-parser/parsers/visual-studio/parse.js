@@ -111,34 +111,9 @@ function parseMethods(umlClass) {
 		let c = [];
 		let id = '';
 
-		function getConditionArguments(args) {
-			const result = [];
-
-			args.map((a) => {
-				if (!a.startsWith('Exception')) {
-					result.push(a);
-				}
-			});
-
-			return result;
-		}
-
-		function getConditionException(args) {
-			let result = undefined;
-
-			args.map((a) => {
-				if (a.startsWith('Exception')) {
-					result = {
-						type: a.split(':')[1]
-					};
-				}
-			});
-
-			return result;
-		}
-
 		function setupCondition(condition, index) {
 			const result = cfgParser(condition);
+
 			result.id = `${id}-${index}`;
 
 			return result;
