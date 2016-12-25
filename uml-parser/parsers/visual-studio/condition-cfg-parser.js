@@ -3,6 +3,18 @@ const parsey = require('parsey');
 const Sym = parsey.Sym;
 const Rule = parsey.Rule;
 
+const comparisons = require('../../../util/comparisons.json');
+
+function comparisonValid(comparison) {
+	for (let i = 0; i < comparisons.length; i++) {
+		if (comparisons[i].name === comparison) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 /**
  * CFG for conditions annotated on UML models.
  *
@@ -36,8 +48,13 @@ const grammar = [
 		};
 	}),
 
-	new Rule(comparison, ['LessThan'], (c) => {
-		return c;
+	new Rule(comparison, [/[a-zA-Z]+/], (c) => {
+		if (comparisonValid(c)) {
+			return c;
+		}
+		else {
+			throw new Error(`Comparison ${c} does not exist.`);
+		}
 	}),
 
 	new Rule(argumentList, [argumentList, argument], (next, a) => {
