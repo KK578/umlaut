@@ -13,7 +13,7 @@ const Rule = parsey.Rule;
  * 					| smtValue WHITESPACE '(' identifier WHITESPACE inputValue ')'
  * 					;
  *
- * 	identifier	::=	[a-zA-Z_][a-zA-Z0-9_]*
+ * 	identifier	::=	[a-zA-Z_][-_a-zA-Z0-9]*
  * 					;
  *
  * 	inputValue	::= numericValue
@@ -53,7 +53,7 @@ const grammar = [
 	}),
 
 	// identifier
-	new Rule(identifier, [/[a-zA-Z]+/], (name) => {
+	new Rule(identifier, [/[a-zA-Z_][-_a-zA-Z0-9]*/], (name) => {
 		return name;
 	}),
 
