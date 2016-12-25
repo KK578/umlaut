@@ -22,6 +22,13 @@ const argument = new Sym('argument');
 const exception = new Sym('exception');
 
 const grammar = [
+	new Rule(condition, ['(', comparison, argumentList, exception, ')'], (_, c, a, e) => {
+		return {
+			comparison: c,
+			arguments: a,
+			exception: e
+		};
+	}),
 	new Rule(condition, ['(', comparison, argumentList, ')'], (_, c, a) => {
 		return {
 			comparison: c,
@@ -43,6 +50,13 @@ const grammar = [
 	new Rule(argument, [/[a-zA-Z_][-_a-zA-Z0-9]*/], (a) => {
 		return a;
 	}),
+	new Rule(argument, [/-?[0-9]+/], (a) => {
+		return parseInt(a);
+	}),
+
+	new Rule(exception, ['Exception', ':', /[a-zA-Z_][-_a-zA-Z0-9]*/], (_, __, e) => {
+		return e;
+	})
 ];
 
 // Note: From parsey/examples/calc.
