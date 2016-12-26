@@ -64,6 +64,8 @@ describe('Component Tests', () => {
 			it('should parse Visual Studio model with multiple classes');
 
 			describe('SimpleMath Test Fixture', () => {
+				let testResult;
+
 				it('should successfully be detected as parsable', () => {
 					const fixture = path.join(__dirname, './fixtures/SimpleMath/ModelDefinition/SimpleMath.uml');
 
@@ -85,6 +87,32 @@ describe('Component Tests', () => {
 						return expect(promise).to.be.fulfilled;
 					}).then((result) => {
 						expect(result.SimpleMath).to.be.an('object');
+						testResult = result.SimpleMath;
+					});
+				});
+
+				describe('Variables', () => {
+					it('should contain a single variable "Nop"', () => {
+						const variable = testResult.variables.Nop;
+
+						expect(variable).to.be.an('object');
+						expect(variable.id).to.be.a('string').and.match(
+							/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i);
+						expect(variable.visibility).to.equal('private');
+						expect(variable.type).to.equal('Integer');
+					});
+				});
+
+				describe('Methods', () => {
+					it('should contain a method "Add"', () => {
+						const method = testResult.methods.Add;
+
+						expect(method).to.be.an('object');
+						expect(method.id).to.be.a('string').and.match(
+							/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i);
+						expect(method.visibility).to.equal('public');
+						expect(method.type).to.equal('Integer');
+						expect(method.arguments).to.be.instanceOf(Array).and.have.all.keys(['a', 'b']);
 					});
 				});
 			});
