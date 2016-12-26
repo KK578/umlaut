@@ -9,7 +9,8 @@ module.exports = {
 				src: [
 					'gruntfile.js',
 					'grunt/*.js',
-					'util/*.js'
+					'util/*.js',
+					'test/*.js'
 				]
 			}
 		]
