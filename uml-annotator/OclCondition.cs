@@ -50,7 +50,7 @@ namespace UmlAnnotator
 		{
 			if (!String.IsNullOrWhiteSpace(ex))
 			{
-				exception = String.Format("(Exception:{0})", ex);
+				exception = String.Format("Exception:{0}", ex);
 			}
 			else
 			{

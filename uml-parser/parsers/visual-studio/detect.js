@@ -10,7 +10,7 @@ module.exports = (data) => {
 		else {
 			return false;
 		}
-	}).catch((error) => {
+	}).catch(() => {
 		// Failed to indicate the file was XML -> Not Visual Studio UML model.
 		return false;
 	});
