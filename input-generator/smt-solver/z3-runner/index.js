@@ -31,45 +31,58 @@ function promiseSpawnZ3(smtData) {
 function promiseHandleSmtClass(smt) {
 	const smtCommands = smt.smtCommands;
 
-	// Fold promise chain passing the result object along.
-	// Pass initial value as uninitialised object to use as a hashmap.
-	return smtCommands.reduce((previous, smtMethod) => {
-		return previous.then((result) => {
-			const methodName = smtMethod.name;
+	const promises = smtCommands.map((smtMethod) => {
+		const methodName = smtMethod.name;
 
-			// Run z3 and wait for data.
-			return promiseSpawnZ3(smtMethod.commands).then((solved) => {
-				// Error if method has already been parsed or been created twice.
-				if (result[methodName] !== undefined) {
-					throw new Error(`Method "${methodName}" already exists in Class "${smt.name}".`);
-				}
-
-				// Otherwise commit to hashmap and return to next smtMethod.
-				result[methodName] = parser(solved);
-
-				return result;
-			});
+		return promiseSpawnZ3(smtMethod.commands).then((solved) => {
+			return {
+				name: methodName,
+				inputs: parser(solved)
+			};
 		});
-	}, Promise.resolve({}));
+	});
+
+	return Promise.all(promises).then((resolved) => {
+		const result = {};
+
+		resolved.map((resolvedMethod) => {
+			if (result[resolvedMethod.name] !== undefined) {
+				throw new Error(`Method ${resolvedMethod.name} already exists.`);
+			}
+
+			result[resolvedMethod.name] = resolvedMethod.inputs;
+		});
+
+		return result;
+	});
 }
 
 function promiseHandleSmt(smt) {
-	return Object.keys(smt).reduce((previous, current) => {
-		return previous.then((result) => {
-			const smtClass = smt[current];
-			const className = smtClass.name;
+	const promises = Object.keys(smt).map((key) => {
+		const smtClass = smt[key];
+		const className = smtClass.name;
 
-			return promiseHandleSmtClass(smtClass).then((methodTestInputs) => {
-				if (result[className] !== undefined) {
-					throw new Error(`Class ${className} already exists.`);
-				}
-
-				result[className] = methodTestInputs;
-
-				return result;
-			});
+		return promiseHandleSmtClass(smtClass).then((inputs) => {
+			return {
+				name: className,
+				inputs: inputs
+			};
 		});
-	}, Promise.resolve({}));
+	});
+
+	return Promise.all(promises).then((resolved) => {
+		const result = {};
+
+		resolved.map((resolvedClass) => {
+			if (result[resolvedClass.name] !== undefined) {
+				throw new Error(`Class ${resolvedClass.name} already exists.`);
+			}
+
+			result[resolvedClass.name] = resolvedClass.inputs;
+		});
+
+		return result;
+	});
 }
 
 function solve(smt) {

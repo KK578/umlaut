@@ -1,4 +1,5 @@
 const promises = require('../../util/promises.js');
+const cfgParser = require('./condition-cfg-parser.js');
 
 function parseVariables(umlClass) {
 	const variables = {};
@@ -110,45 +111,12 @@ function parseMethods(umlClass) {
 		let c = [];
 		let id = '';
 
-		function getConditionArguments(args) {
-			const result = [];
-
-			args.map((a) => {
-				if (!a.startsWith('Exception')) {
-					result.push(a);
-				}
-			});
-
-			return result;
-		}
-
-		function getConditionException(args) {
-			let result = undefined;
-
-			args.map((a) => {
-				if (a.startsWith('Exception')) {
-					result = {
-						type: a.split(':')[1]
-					};
-				}
-			});
-
-			return result;
-		}
-
 		function setupCondition(condition, index) {
-			condition = condition.substring(1, condition.length - 1);
+			const result = cfgParser(condition);
 
-			const split = condition.split(' ');
-			const args = getConditionArguments(split.slice(1));
-			const exception = getConditionException(split.slice(1));
+			result.id = `${id}-${index}`;
 
-			return {
-				id: `${id}-${index}`,
-				comparison: split[0],
-				arguments: args,
-				exception: exception
-			};
+			return result;
 		}
 
 		function parseConditions(conditions) {
