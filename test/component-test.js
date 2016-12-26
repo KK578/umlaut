@@ -22,10 +22,42 @@ describe('Component Tests', () => {
 				testee = require('../uml-parser/parsers/visual-studio/index.js');
 			});
 
-			it('should fail to parse a non XML string');
-			it('should fail to parse an arbitrary XML string');
-			it('should parse if the XML root contains a "modelStoreModel" attribute');
-			it('should parse if the XML root contains a "logicalClassDesignerModel" attribute');
+			it('should state it cannot parse a non XML string', () => {
+				const notXml = 'FooBar';
+				const promise = testee.detect(notXml);
+
+				return expect(promise).to.be.fulfilled.then((result) => {
+					expect(result).to.not.be.ok;
+				});
+			});
+
+			it('should state it cannot parse an arbitrary XML string', () => {
+				const notModelXml = '<foo><bar id="bar"></bar</foo>';
+				const promise = testee.detect(notModelXml);
+
+				return expect(promise).to.be.fulfilled.then((result) => {
+					expect(result).to.not.be.ok;
+				});
+			});
+
+			it('should state it can parse if the XML root contains a "modelStoreModel" node', () => {
+				const modelXml = '<modelStoreModel></modelStoreModel>';
+				const promise = testee.detect(modelXml);
+
+				return expect(promise).to.be.fulfilled.then((result) => {
+					expect(result).to.be.ok;
+				});
+			});
+
+			it('should state it can parse if the XML root contains a "logicalClassDesignerModel" node', () => {
+				const modelXml = '<logicalClassDesignerModel></logicalClassDesignerModel>';
+				const promise = testee.detect(modelXml);
+
+				return expect(promise).to.be.fulfilled.then((result) => {
+					expect(result).to.be.ok;
+				});
+			});
+
 			it('should parse Visual Studio model with class with no variables');
 			it('should parse Visual Studio model with class with no methods');
 			it('should parse Visual Studio model with no classes');
