@@ -438,11 +438,9 @@ describe('Component Tests', () => {
 						expect(results).to.include(true);
 					});
 
-					it('should describe a test case where precondition 1 is not true', () => {
+					it('should state forcing only precondition 1 not to true is unsatisfiable', () => {
 						const results = method.map((test) => {
-							return !(test.arguments.a >= 0) &&
-								test.arguments.b >= 0 &&
-								test.arguments.a >= test.arguments.b;
+							return test.arguments === 'Unsatisfiable'
 						});
 
 						expect(results).to.include(true);

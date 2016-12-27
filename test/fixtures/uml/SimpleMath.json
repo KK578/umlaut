@@ -115,18 +115,10 @@
           },
           {
             "id": "f964f821-b72d-4f0d-86a3-ae1a88789600-1",
-            "comparison": "GreaterThanOrEqual",
+            "comparison": "GreaterThan",
             "arguments": [
               "b",
               0
-            ]
-          },
-          {
-            "id": "f964f821-b72d-4f0d-86a3-ae1a88789600-2",
-            "comparison": "GreaterThanOrEqual",
-            "arguments": [
-              "a",
-              "b"
             ]
           }
         ],

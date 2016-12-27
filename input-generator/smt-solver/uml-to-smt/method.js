@@ -1,4 +1,5 @@
 const Smt = require('../../util/smt-solver/classes.js');
+const comparisons = require('../../../util/comparisons.json');
 
 function convertType(type) {
 	switch (type) {
@@ -8,6 +9,20 @@ function convertType(type) {
 		default:
 			return type;
 	}
+}
+
+function convertComparison(comparison) {
+	for (let i = 0; i < comparisons.length; i++) {
+		const c = comparisons[i];
+
+		if (c.name === comparison) {
+			const symbol = c.smtSymbol ? c.smtSymbol : c.symbol;
+
+			return symbol;
+		}
+	}
+
+	return false;
 }
 
 module.exports = class SmtMethod {
@@ -23,13 +38,13 @@ module.exports = class SmtMethod {
 
 	declareArguments(args) {
 		// For every argument to the function, add a declaration to SMT.
-		args.map((a) => {
-			const type = convertType(a.type);
-			const command = new Smt.DeclareConst(a.name, type);
+		Object.keys(args).map((name) => {
+			const type = convertType(args[name]);
+			const command = new Smt.DeclareConst(name, type);
 
 			// Note the existence of the argument to the class for get-value calls later.
-			if (!this.constants[a.name]) {
-				this.constants[a.name] = true;
+			if (!this.constants[name]) {
+				this.constants[name] = true;
 			}
 
 			this.commands.push(command);
@@ -38,9 +53,9 @@ module.exports = class SmtMethod {
 
 	declareFunction(method) {
 		// Declare the function to SMT.
-		const type = convertType(method.returnType.type);
-		const args = method.arguments.map((a) => {
-			return convertType(a.type);
+		const type = convertType(method.type);
+		const args = Object.keys(method.arguments).map((t) => {
+			return convertType(method.arguments[t]);
 		});
 		const command = new Smt.DeclareFunction(method.name, type, args);
 
@@ -54,19 +69,18 @@ module.exports = class SmtMethod {
 
 		// For each precondition, add it to the stack.
 		method.preconditions.map((c) => {
-			const conditionCommand = new Smt.BooleanExpression(c.comparison, c.arguments);
+			const comparison = convertComparison(c.comparison);
+			const conditionCommand = new Smt.BooleanExpression(comparison, c.arguments);
 
 			this.commands.push(new Smt.Assertion(conditionCommand));
 		});
 
 		// Declare a variable for the result
-		if (method.returnType.type !== 'void') {
-			const resultType = convertType(method.returnType.type);
+		if (method.type !== 'void') {
+			const resultType = convertType(method.type);
 			const resultDeclare = new Smt.DeclareConst('result', resultType);
 
-			const functionArgs = method.arguments.map((a) => {
-				return a.name;
-			});
+			const functionArgs = Object.keys(method.arguments);
 			const functionCall = new Smt.FunctionCall(method.name, functionArgs);
 			const resultAssert = new Smt.Assertion(
 				new Smt.BooleanExpression('=', ['result', functionCall])
@@ -78,7 +92,8 @@ module.exports = class SmtMethod {
 
 		// Add postconditions so that the inputs may be more interesting.
 		method.postconditions.map((c) => {
-			const conditionCommand = new Smt.BooleanExpression(c.comparison, c.arguments);
+			const comparison = convertComparison(c.comparison);
+			const conditionCommand = new Smt.BooleanExpression(comparison, c.arguments);
 
 			this.commands.push(new Smt.Assertion(conditionCommand));
 		});
@@ -95,7 +110,8 @@ module.exports = class SmtMethod {
 			this.commands.push(new Smt.StackModifier('push'));
 
 			method.preconditions.map((c, j) => {
-				const expression = new Smt.BooleanExpression(c.comparison, c.arguments);
+				const comparison = convertComparison(c.comparison);
+				const expression = new Smt.BooleanExpression(comparison, c.arguments);
 
 				// If it is the one that we are testing,
 				//  invert the result and get the values to use as inputs.
