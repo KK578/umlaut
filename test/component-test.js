@@ -358,7 +358,7 @@ describe('Component Tests', () => {
 				let testResult;
 
 				before(() => {
-					const fixture = require(path.join(__dirname, './fixtures/test-generator/uml/SimpleMath.json'));
+					const fixture = require(path.join(__dirname, './fixtures/uml/SimpleMath.json'));
 					const promise = testee(fixture);
 
 					return expect(promise).to.be.fulfilled.then((result) => {
