@@ -1,6 +1,29 @@
 const promises = require('../../util/promises.js');
 const cfgParser = require('./condition-cfg-parser.js');
 
+function getTypeFromNode(parameter) {
+	let type = '';
+
+	if (parameter.type_NamedElement) {
+		const namedElement = parameter.type_NamedElement[0];
+
+		if (namedElement.primitiveTypeMoniker) {
+			type = namedElement.primitiveTypeMoniker[0].$.LastKnownName;
+		}
+		else if (namedElement.undefinedTypeMoniker) {
+			type = namedElement.undefinedTypeMoniker[0].$.LastKnownName;
+		}
+		else {
+			throw new Error('Could not find type.');
+		}
+	}
+	else {
+		type = 'Object';
+	}
+
+	return type;
+}
+
 function parseVariables(umlClass) {
 	const variables = {};
 
@@ -15,25 +38,7 @@ function parseVariables(umlClass) {
 			};
 
 			v.visibility = property.$.visibility ? property.$.visibility : 'Public';
-
-			let type = '';
-
-			// Get argument type defaulting to Object.
-			if (property.type_NamedElement) {
-				type = property.type_NamedElement[0];
-
-				if (type.primitiveTypeMoniker) {
-					type = type.primitiveTypeMoniker[0].$.LastKnownName;
-				}
-				else if (type.undefinedTypeMoniker) {
-					type = type.undefinedTypeMoniker[0].$.LastKnownName;
-				}
-			}
-			else {
-				type = 'Object';
-			}
-
-			v.type = type;
+			v.type = getTypeFromNode(property);
 
 			variables[v.name] = v;
 		});
@@ -56,14 +61,7 @@ function parseMethods(umlClass) {
 			// Direction 'Return' indicates the function's return type.
 			// TODO: Will the system support Python's multiple object return?'
 			if (parameter.$.direction === 'Return') {
-				let type = '';
-
-				if (parameter.$.name) {
-					type = parameter.$.name;
-				}
-				else if (parameter.type_NamedElement) {
-					type = parameter.type_NamedElement[0].primitiveTypeMoniker[0].$.LastKnownName;
-				}
+				const type = getTypeFromNode(parameter);
 
 				return type;
 			}
@@ -84,21 +82,8 @@ function parseMethods(umlClass) {
 
 			// Direction 'In' indicates a function argument.
 			if (parameter.$.direction === 'In') {
-				let name = '';
-				let type = '';
-
-				// Get argument name.
-				if (parameter.$.name) {
-					name = parameter.$.name;
-				}
-
-				// Get argument type defaulting to Object.
-				if (parameter.type_NamedElement) {
-					type = parameter.type_NamedElement[0].primitiveTypeMoniker[0].$.LastKnownName;
-				}
-				else {
-					type = 'Object';
-				}
+				const name = parameter.$.name;
+				const type = getTypeFromNode(parameter);
 
 				args[name] = type;
 			}
