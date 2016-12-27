@@ -99,7 +99,7 @@ describe('Component Tests', () => {
 
 						expect(variable).to.be.an('object');
 						expect(variable.id).to.be.a('string').and.match(REGEX_UUID);
-						expect(variable.visibility).to.equal('private');
+						expect(variable.visibility).to.equal('Private');
 						expect(variable.type).to.equal('Integer');
 					});
 				});
@@ -129,12 +129,12 @@ describe('Component Tests', () => {
 						it('should exist with method properties', () => {
 							expect(method).to.be.an('object');
 							expect(method.id).to.be.a('string').and.match(REGEX_UUID);
-							expect(method.visibility).to.equal('public');
+							expect(method.visibility).to.equal('Public');
 							expect(method.type).to.equal('Integer');
 						});
 
 						it('should describe arguments', () => {
-							expect(method.arguments).to.be.instanceOf(Array)
+							expect(method.arguments).to.be.an('Object')
 								.and.have.all.keys(['a', 'b']);
 							expect(method.arguments.a).to.equal('Integer');
 							expect(method.arguments.b).to.equal('Integer');
@@ -172,7 +172,7 @@ describe('Component Tests', () => {
 							];
 
 							expectedConditions.map((condition, index) => {
-								assertCondition(method.preconditions[index], condition);
+								assertCondition(method.postconditions[index], condition);
 							});
 						});
 					});
@@ -187,12 +187,13 @@ describe('Component Tests', () => {
 						it('should exist with method properties', () => {
 							expect(method).to.be.an('object');
 							expect(method.id).to.be.a('string').and.match(REGEX_UUID);
-							expect(method.visibility).to.equal('public');
+							expect(method.visibility).to.equal('Public');
 							expect(method.type).to.equal('Integer');
 						});
 
 						it('should describe arguments', () => {
-							expect(method.arguments).to.be.instanceOf(Array).and.have.all.keys(['a', 'b']);
+							expect(method.arguments).to.be.an('Object')
+								.and.have.all.keys(['a', 'b']);
 							expect(method.arguments.a).to.equal('Integer');
 							expect(method.arguments.b).to.equal('Integer');
 						});
@@ -233,7 +234,7 @@ describe('Component Tests', () => {
 							];
 
 							expectedConditions.map((condition, index) => {
-								assertCondition(method.preconditions[index], condition);
+								assertCondition(method.postconditions[index], condition);
 							});
 						});
 					});
@@ -248,12 +249,13 @@ describe('Component Tests', () => {
 						it('should exist with method properties', () => {
 							expect(method).to.be.an('object');
 							expect(method.id).to.be.a('string').and.match(REGEX_UUID);
-							expect(method.visibility).to.equal('public');
+							expect(method.visibility).to.equal('Public');
 							expect(method.type).to.equal('Integer');
 						});
 
 						it('should describe arguments', () => {
-							expect(method.arguments).to.be.instanceOf(Array).and.have.all.keys(['a', 'b']);
+							expect(method.arguments).to.be.an('Object')
+								.and.have.all.keys(['a', 'b']);
 							expect(method.arguments.a).to.equal('Integer');
 							expect(method.arguments.b).to.equal('Integer');
 						});
@@ -294,7 +296,7 @@ describe('Component Tests', () => {
 							];
 
 							expectedConditions.map((condition, index) => {
-								assertCondition(method.preconditions[index], condition);
+								assertCondition(method.postconditions[index], condition);
 							});
 						});
 					});
@@ -303,18 +305,19 @@ describe('Component Tests', () => {
 						let method;
 
 						before(() => {
-							method = testResult.methods.Divide;
+							method = testResult.methods.SquareRoot;
 						});
 
 						it('should exist with method properties', () => {
 							expect(method).to.be.an('object');
 							expect(method.id).to.be.a('string').and.match(REGEX_UUID);
-							expect(method.visibility).to.equal('public');
+							expect(method.visibility).to.equal('Public');
 							expect(method.type).to.equal('Integer');
 						});
 
 						it('should describe arguments', () => {
-							expect(method.arguments).to.be.instanceOf(Array).and.have.all.keys(['a']);
+							expect(method.arguments).to.be.an('Object')
+								.and.have.all.keys(['a']);
 							expect(method.arguments.a).to.equal('Integer');
 						});
 
@@ -346,7 +349,7 @@ describe('Component Tests', () => {
 							];
 
 							expectedConditions.map((condition, index) => {
-								assertCondition(method.preconditions[index], condition);
+								assertCondition(method.postconditions[index], condition);
 							});
 						});
 					});
