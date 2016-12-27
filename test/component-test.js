@@ -65,12 +65,10 @@ describe('Component Tests', () => {
 			it('should parse Visual Studio model with no classes');
 			it('should parse Visual Studio model with multiple classes');
 
-			describe('SimpleMath Test Fixture', () => {
+			function simpleMathTestSuite(fixture) {
 				let testResult;
 
 				it('should successfully be detected as parsable', () => {
-					const fixture = path.join(__dirname, './fixtures/SimpleMath/ModelDefinition/SimpleMath.uml');
-
 					return promises.fsReadFile(fixture).then((data) => {
 						const promise = testee.detect(data);
 
@@ -81,8 +79,6 @@ describe('Component Tests', () => {
 				});
 
 				it('should successfully be parsed', () => {
-					const fixture = path.join(__dirname, './fixtures/SimpleMath/ModelDefinition/SimpleMath.uml');
-
 					return promises.fsReadFile(fixture).then((data) => {
 						const promise = testee.parse(data);
 
@@ -342,6 +338,18 @@ describe('Component Tests', () => {
 						});
 					});
 				});
+			}
+
+			describe('SimpleMath.uml', () => {
+				const fixture = path.join(__dirname, './fixtures/SimpleMath/ModelDefinition/SimpleMath.uml');
+
+				simpleMathTestSuite(fixture);
+			});
+
+			describe('SimpleMath.classdiagram', () => {
+				const fixture = path.join(__dirname, './fixtures/SimpleMath/SimpleMath.classdiagram');
+
+				simpleMathTestSuite(fixture);
 			});
 		});
 	});
