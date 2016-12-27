@@ -23,13 +23,13 @@ module.exports = class SmtMethod {
 
 	declareArguments(args) {
 		// For every argument to the function, add a declaration to SMT.
-		args.map((a) => {
-			const type = convertType(a.type);
-			const command = new Smt.DeclareConst(a.name, type);
+		Object.keys(args).map((name) => {
+			const type = convertType(args[name]);
+			const command = new Smt.DeclareConst(name, type);
 
 			// Note the existence of the argument to the class for get-value calls later.
-			if (!this.constants[a.name]) {
-				this.constants[a.name] = true;
+			if (!this.constants[name]) {
+				this.constants[name] = true;
 			}
 
 			this.commands.push(command);
@@ -38,9 +38,9 @@ module.exports = class SmtMethod {
 
 	declareFunction(method) {
 		// Declare the function to SMT.
-		const type = convertType(method.returnType.type);
-		const args = method.arguments.map((a) => {
-			return convertType(a.type);
+		const type = convertType(method.type);
+		const args = Object.keys(method.arguments).map((t) => {
+			return convertType(t);
 		});
 		const command = new Smt.DeclareFunction(method.name, type, args);
 
@@ -60,13 +60,11 @@ module.exports = class SmtMethod {
 		});
 
 		// Declare a variable for the result
-		if (method.returnType.type !== 'void') {
-			const resultType = convertType(method.returnType.type);
+		if (method.type !== 'void') {
+			const resultType = convertType(method.type);
 			const resultDeclare = new Smt.DeclareConst('result', resultType);
 
-			const functionArgs = method.arguments.map((a) => {
-				return a.name;
-			});
+			const functionArgs = Object.keys(method.arguments);
 			const functionCall = new Smt.FunctionCall(method.name, functionArgs);
 			const resultAssert = new Smt.Assertion(
 				new Smt.BooleanExpression('=', ['result', functionCall])
