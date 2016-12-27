@@ -65,17 +65,17 @@ function parseMethods(umlClass) {
 					type = parameter.type_NamedElement[0].primitiveTypeMoniker[0].$.LastKnownName;
 				}
 
-				return { type };
+				return type;
 			}
 		}
 
 		// Did not find a return type, so function has void type.
-		return { type: 'Void' };
+		return 'Void';
 	}
 
 	// Helper function to get function arguments to array of { name, type }.
 	function getArguments(parameters) {
-		const args = [];
+		const args = {};
 
 		const parameterList = parameters[0].operationHasOwnedParameters;
 
@@ -100,7 +100,7 @@ function parseMethods(umlClass) {
 					type = 'Object';
 				}
 
-				args.push({ name, type });
+				args[name] = type;
 			}
 		}
 
@@ -149,7 +149,7 @@ function parseMethods(umlClass) {
 			v.visibility = operation.$.visibility ? operation.$.visibility : 'Public';
 
 			// Types
-			v.returnType = getReturnType(operation.ownedParameters);
+			v.type = getReturnType(operation.ownedParameters);
 			v.arguments = getArguments(operation.ownedParameters);
 
 			// Conditions
