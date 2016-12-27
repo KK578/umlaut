@@ -440,7 +440,7 @@ describe('Component Tests', () => {
 
 					it('should state forcing only precondition 1 not to true is unsatisfiable', () => {
 						const results = method.map((test) => {
-							return test.arguments === 'Unsatisfiable'
+							return test.arguments === 'Unsatisfiable';
 						});
 
 						expect(results).to.include(true);
