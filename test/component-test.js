@@ -262,7 +262,7 @@ describe('Component Tests', () => {
 
 						it('should describe preconditions', () => {
 							expect(method.preconditions).to.be.instanceOf(Array)
-								.and.to.have.length(3);
+								.and.to.have.length(2);
 
 							const expectedConditions = [
 								{
@@ -270,12 +270,8 @@ describe('Component Tests', () => {
 									arguments: ['a', 0]
 								},
 								{
-									comparison: 'GreaterThanOrEqual',
+									comparison: 'GreaterThan',
 									arguments: ['b', 0]
-								},
-								{
-									comparison: 'GreaterThanOrEqual',
-									arguments: ['a', 'b']
 								}
 							];
 
@@ -467,6 +463,65 @@ describe('Component Tests', () => {
 							return test.arguments.a >= 0 &&
 								test.arguments.b >= 0 &&
 								!(test.arguments.a >= test.arguments.b);
+						});
+
+						expect(results).to.include(true);
+					});
+				});
+
+				describe('SimpleMath#Divide', () => {
+					let method;
+
+					before(() => {
+						method = testResult.Divide;
+					});
+
+					it('should describe a test case where all preconditions are satisfied', () => {
+						const results = method.map((test) => {
+							return test.arguments.a >= 0 &&
+								test.arguments.b > 0;
+						});
+
+						expect(results).to.include(true);
+					});
+
+					it('should describe a test case where precondition 1 is not true', () => {
+						const results = method.map((test) => {
+							return !(test.arguments.a >= 0) &&
+								test.arguments.b > 0;
+						});
+
+						expect(results).to.include(true);
+					});
+
+					it('should describe a test case where precondition 2 is not true', () => {
+						const results = method.map((test) => {
+							return test.arguments.a >= 0 &&
+								!(test.arguments.b > 0);
+						});
+
+						expect(results).to.include(true);
+					});
+				});
+
+				describe('SimpleMath#SquareRoot', () => {
+					let method;
+
+					before(() => {
+						method = testResult.SquareRoot;
+					});
+
+					it('should describe a test case where all preconditions are satisfied', () => {
+						const results = method.map((test) => {
+							return test.arguments.a >= 0;
+						});
+
+						expect(results).to.include(true);
+					});
+
+					it('should describe a test case where precondition 1 is not true', () => {
+						const results = method.map((test) => {
+							return !(test.arguments.a >= 0);
 						});
 
 						expect(results).to.include(true);

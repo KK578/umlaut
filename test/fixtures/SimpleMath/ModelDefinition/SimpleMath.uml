@@ -239,7 +239,7 @@
                 <specification>
                   <literalString
                     Id="95dc3dff-306b-46b6-84e0-92cae7a2bf19"
-                    value="(&gt;= a 0)-----(&gt;= b 0)-----(&gt;= a b)" />
+                    value="(&gt;= a 0)-----(&gt; b 0)" />
                 </specification>
               </constraint>
             </preconditionsInternal>
