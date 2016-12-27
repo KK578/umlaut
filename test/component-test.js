@@ -141,9 +141,6 @@ describe('Component Tests', () => {
 						});
 
 						it('should describe preconditions', () => {
-							expect(method.preconditions).to.be.instanceOf(Array)
-								.and.to.have.length(2);
-
 							const expectedConditions = [
 								{
 									comparison: 'GreaterThanOrEqual',
@@ -155,15 +152,14 @@ describe('Component Tests', () => {
 								}
 							];
 
+							expect(method.preconditions).to.be.instanceOf(Array)
+								.and.to.have.length(expectedConditions.length);
 							expectedConditions.map((condition, index) => {
 								assertCondition(method.preconditions[index], condition);
 							});
 						});
 
 						it('should describe postconditions', () => {
-							expect(method.postconditions).to.be.instanceOf(Array)
-								.and.to.have.length(1);
-
 							const expectedConditions = [
 								{
 									comparison: 'GreaterThanOrEqual',
@@ -171,6 +167,8 @@ describe('Component Tests', () => {
 								}
 							];
 
+							expect(method.postconditions).to.be.instanceOf(Array)
+								.and.to.have.length(expectedConditions.length);
 							expectedConditions.map((condition, index) => {
 								assertCondition(method.postconditions[index], condition);
 							});
@@ -199,9 +197,6 @@ describe('Component Tests', () => {
 						});
 
 						it('should describe preconditions', () => {
-							expect(method.preconditions).to.be.instanceOf(Array)
-								.and.to.have.length(3);
-
 							const expectedConditions = [
 								{
 									comparison: 'GreaterThanOrEqual',
@@ -217,15 +212,14 @@ describe('Component Tests', () => {
 								}
 							];
 
+							expect(method.preconditions).to.be.instanceOf(Array)
+								.and.to.have.length(expectedConditions.length);
 							expectedConditions.map((condition, index) => {
 								assertCondition(method.preconditions[index], condition);
 							});
 						});
 
 						it('should describe postconditions', () => {
-							expect(method.postconditions).to.be.instanceOf(Array)
-								.and.to.have.length(1);
-
 							const expectedConditions = [
 								{
 									comparison: 'LessThanOrEqual',
@@ -233,6 +227,8 @@ describe('Component Tests', () => {
 								}
 							];
 
+							expect(method.postconditions).to.be.instanceOf(Array)
+								.and.to.have.length(expectedConditions.length);
 							expectedConditions.map((condition, index) => {
 								assertCondition(method.postconditions[index], condition);
 							});
@@ -261,9 +257,6 @@ describe('Component Tests', () => {
 						});
 
 						it('should describe preconditions', () => {
-							expect(method.preconditions).to.be.instanceOf(Array)
-								.and.to.have.length(2);
-
 							const expectedConditions = [
 								{
 									comparison: 'GreaterThanOrEqual',
@@ -275,15 +268,14 @@ describe('Component Tests', () => {
 								}
 							];
 
+							expect(method.preconditions).to.be.instanceOf(Array)
+								.and.to.have.length(expectedConditions.length);
 							expectedConditions.map((condition, index) => {
 								assertCondition(method.preconditions[index], condition);
 							});
 						});
 
 						it.skip('should describe postconditions', () => {
-							expect(method.postconditions).to.be.instanceOf(Array)
-								.and.to.have.length(1);
-
 							const expectedConditions = [
 								{
 									comparison: 'Equal',
@@ -291,6 +283,8 @@ describe('Component Tests', () => {
 								}
 							];
 
+							expect(method.postconditions).to.be.instanceOf(Array)
+								.and.to.have.length(expectedConditions.length);
 							expectedConditions.map((condition, index) => {
 								assertCondition(method.postconditions[index], condition);
 							});
@@ -318,9 +312,6 @@ describe('Component Tests', () => {
 						});
 
 						it('should describe preconditions', () => {
-							expect(method.preconditions).to.be.instanceOf(Array)
-								.and.to.have.length(1);
-
 							const expectedConditions = [
 								{
 									comparison: 'GreaterThanOrEqual',
@@ -328,15 +319,14 @@ describe('Component Tests', () => {
 								}
 							];
 
+							expect(method.preconditions).to.be.instanceOf(Array)
+								.and.to.have.length(expectedConditions.length);
 							expectedConditions.map((condition, index) => {
 								assertCondition(method.preconditions[index], condition);
 							});
 						});
 
 						it.skip('should describe postconditions', () => {
-							expect(method.postconditions).to.be.instanceOf(Array)
-								.and.to.have.length(1);
-
 							const expectedConditions = [
 								{
 									comparison: 'Equal',
@@ -344,6 +334,8 @@ describe('Component Tests', () => {
 								}
 							];
 
+							expect(method.postconditions).to.be.instanceOf(Array)
+								.and.to.have.length(expectedConditions.length);
 							expectedConditions.map((condition, index) => {
 								assertCondition(method.postconditions[index], condition);
 							});
