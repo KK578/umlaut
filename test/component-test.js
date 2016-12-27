@@ -144,16 +144,19 @@ describe('Component Tests', () => {
 							expect(method.preconditions).to.be.instanceOf(Array)
 								.and.to.have.length(2);
 
-							const condition1 = method.preconditions[0];
-							const condition2 = method.preconditions[1];
+							const expectedConditions = [
+								{
+									comparison: 'GreaterThanOrEqual',
+									arguments: ['a', 0]
+								},
+								{
+									comparison: 'GreaterThanOrEqual',
+									arguments: ['b', 0]
+								}
+							];
 
-							assertCondition(condition1, {
-								comparison: 'GreaterThanOrEqual',
-								arguments: ['a', 0]
-							});
-							assertCondition(condition2, {
-								comparison: 'GreaterThanOrEqual',
-								arguments: ['b', 0]
+							expectedConditions.map((condition, index) => {
+								assertCondition(method.preconditions[index], condition);
 							});
 						});
 
@@ -161,11 +164,15 @@ describe('Component Tests', () => {
 							expect(method.postconditions).to.be.instanceOf(Array)
 								.and.to.have.length(1);
 
-							const condition1 = method.preconditions[0];
+							const expectedConditions = [
+								{
+									comparison: 'GreaterThanOrEqual',
+									arguments: ['result', 'a']
+								}
+							];
 
-							assertCondition(condition1, {
-								comparison: 'GreaterThanOrEqual',
-								arguments: ['result', 'a']
+							expectedConditions.map((condition, index) => {
+								assertCondition(method.preconditions[index], condition);
 							});
 						});
 					});
