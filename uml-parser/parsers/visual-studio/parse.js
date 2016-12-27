@@ -182,7 +182,12 @@ function parse(data) {
 		// Enter root item.
 		const classes = {};
 
-		uml = uml.modelStoreModel;
+		if (uml.modelStoreModel) {
+			uml = uml.modelStoreModel;
+		}
+		else if (uml.logicalClassDesignerModel) {
+			uml = uml.logicalClassDesignerModel;
+		}
 
 		uml.packagedElements.map((element) => {
 			// All related items are stored as namedElement objects in the package's elements.
