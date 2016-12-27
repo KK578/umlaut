@@ -14,6 +14,8 @@ function parseVariables(umlClass) {
 				name: property.$.name
 			};
 
+			v.visibility = property.$.visibility ? property.$.visibility : 'Public';
+
 			let type = '';
 
 			// Get argument type defaulting to Object.
@@ -146,6 +148,8 @@ function parseMethods(umlClass) {
 				id: operation.$.Id,
 				name: operation.$.name
 			};
+
+			v.visibility = operation.$.visibility ? operation.$.visibility : 'Public';
 
 			// Types
 			v.returnType = getReturnType(operation.ownedParameters);
