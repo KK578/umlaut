@@ -1,6 +1,32 @@
 const promises = require('../../util/promises.js');
 const cfgParser = require('./condition-cfg-parser.js');
 
+function getTypeFromNode(parameter) {
+	let type = '';
+
+	if (parameter.type_NamedElement) {
+		const namedElement = parameter.type_NamedElement[0];
+
+		if (namedElement.primitiveTypeMoniker) {
+			type = namedElement.primitiveTypeMoniker[0].$.LastKnownName;
+		}
+		else if (namedElement.undefinedTypeMoniker) {
+			type = namedElement.undefinedTypeMoniker[0].$.LastKnownName;
+		}
+		else if (namedElement.referencedTypeMoniker) {
+			type = namedElement.referencedTypeMoniker[0].$.LastKnownName;
+		}
+		else {
+			throw new Error('Could not find type.');
+		}
+	}
+	else {
+		type = 'Object';
+	}
+
+	return type;
+}
+
 function parseVariables(umlClass) {
 	const variables = {};
 
@@ -14,24 +40,8 @@ function parseVariables(umlClass) {
 				name: property.$.name
 			};
 
-			let type = '';
-
-			// Get argument type defaulting to Object.
-			if (property.type_NamedElement) {
-				type = property.type_NamedElement[0];
-
-				if (type.primitiveTypeMoniker) {
-					type = type.primitiveTypeMoniker[0].$.LastKnownName;
-				}
-				else if (type.undefinedTypeMoniker) {
-					type = type.undefinedTypeMoniker[0].$.LastKnownName;
-				}
-			}
-			else {
-				type = 'Object';
-			}
-
-			v.type = type;
+			v.visibility = property.$.visibility ? property.$.visibility : 'Public';
+			v.type = getTypeFromNode(property);
 
 			variables[v.name] = v;
 		});
@@ -54,26 +64,19 @@ function parseMethods(umlClass) {
 			// Direction 'Return' indicates the function's return type.
 			// TODO: Will the system support Python's multiple object return?'
 			if (parameter.$.direction === 'Return') {
-				let type = '';
+				const type = getTypeFromNode(parameter);
 
-				if (parameter.$.name) {
-					type = parameter.$.name;
-				}
-				else if (parameter.type_NamedElement) {
-					type = parameter.type_NamedElement[0].primitiveTypeMoniker[0].$.LastKnownName;
-				}
-
-				return { type };
+				return type;
 			}
 		}
 
 		// Did not find a return type, so function has void type.
-		return { type: 'Void' };
+		return 'Void';
 	}
 
 	// Helper function to get function arguments to array of { name, type }.
 	function getArguments(parameters) {
-		const args = [];
+		const args = {};
 
 		const parameterList = parameters[0].operationHasOwnedParameters;
 
@@ -82,23 +85,10 @@ function parseMethods(umlClass) {
 
 			// Direction 'In' indicates a function argument.
 			if (parameter.$.direction === 'In') {
-				let name = '';
-				let type = '';
+				const name = parameter.$.name;
+				const type = getTypeFromNode(parameter);
 
-				// Get argument name.
-				if (parameter.$.name) {
-					name = parameter.$.name;
-				}
-
-				// Get argument type defaulting to Object.
-				if (parameter.type_NamedElement) {
-					type = parameter.type_NamedElement[0].primitiveTypeMoniker[0].$.LastKnownName;
-				}
-				else {
-					type = 'Object';
-				}
-
-				args.push({ name, type });
+				args[name] = type;
 			}
 		}
 
@@ -106,31 +96,28 @@ function parseMethods(umlClass) {
 	}
 
 	// Helper function to take a condition from XML format to standardised format.
-	// TODO: Replace inner workings with an AST parser.
 	function getConditions(conditions) {
 		let c = [];
-		let id = '';
 
-		function setupCondition(condition, index) {
-			const result = cfgParser(condition);
-
-			result.id = `${id}-${index}`;
-
-			return result;
-		}
-
-		function parseConditions(conditions) {
+		function parseConditions(id, conditions) {
 			const split = conditions.split('-----');
+			const parsed = split.map((condition, index) => {
+				const result = cfgParser(condition);
 
-			c = split.map(setupCondition);
+				result.id = `${id}-${index}`;
+
+				return result;
+			});
+
+			return parsed;
 		}
 
 		if (conditions) {
 			const constraint = conditions[0].constraint[0];
-			const rawString = constraint.specification[0].literalString[0].$.value;
+			const conditionString = constraint.specification[0].literalString[0].$.value;
+			const id = constraint.$.Id;
 
-			id = constraint.$.Id;
-			parseConditions(rawString);
+			c = parseConditions(id, conditionString);
 		}
 
 		return c;
@@ -147,8 +134,10 @@ function parseMethods(umlClass) {
 				name: operation.$.name
 			};
 
+			v.visibility = operation.$.visibility ? operation.$.visibility : 'Public';
+
 			// Types
-			v.returnType = getReturnType(operation.ownedParameters);
+			v.type = getReturnType(operation.ownedParameters);
 			v.arguments = getArguments(operation.ownedParameters);
 
 			// Conditions
@@ -182,19 +171,34 @@ function parse(data) {
 		// Enter root item.
 		const classes = {};
 
-		uml = uml.modelStoreModel;
+		if (uml.modelStoreModel) {
+			uml = uml.modelStoreModel;
+		}
+		else if (uml.logicalClassDesignerModel) {
+			uml = uml.logicalClassDesignerModel;
+		}
 
-		uml.packagedElements.map((element) => {
-			// All related items are stored as namedElement objects in the package's elements.
-			// Iterate through all and for objects representing classes, parse them.
-			element.packageHasNamedElement.map((namedElement) => {
+		const elements = uml.packagedElements[0];
+
+		if (elements.packageHasNamedElement) {
+			elements.packageHasNamedElement.map((namedElement) => {
 				if (namedElement.class) {
 					const c = parseClass(namedElement.class[0]);
 
 					classes[c.name] = c;
 				}
 			});
-		});
+		}
+
+		if (elements.logicalClassDesignerModelHasTypes) {
+			elements.logicalClassDesignerModelHasTypes.map((namedElement) => {
+				if (namedElement.class) {
+					const c = parseClass(namedElement.class[0]);
+
+					classes[c.name] = c;
+				}
+			});
+		}
 
 		return classes;
 	});

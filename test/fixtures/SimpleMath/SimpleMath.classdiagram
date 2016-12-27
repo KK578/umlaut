@@ -143,7 +143,7 @@
               <constraint Id="c59fff82-5c66-4786-bc1c-aef15eabb554">
                 <elementDefinition Id="9bba92de-4d78-4c4b-a0b4-9192e79d76fc" />
                 <specification>
-                  <literalString Id="59c4eef6-a8e4-42c4-8e60-3ebe0addfbeb" value="(&gt;= a 0)-----(&gt;= b 0)-----(&gt;= a b)">
+                  <literalString Id="59c4eef6-a8e4-42c4-8e60-3ebe0addfbeb" value="(&gt;= a 0)-----(&gt; b 0)">
                     <elementDefinition Id="95dc3dff-306b-46b6-84e0-92cae7a2bf19" />
                   </literalString>
                 </specification>

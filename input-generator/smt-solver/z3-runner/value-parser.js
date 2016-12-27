@@ -20,7 +20,7 @@ function parseCondition(text) {
 
 	return {
 		condition,
-		args
+		arguments: args
 	};
 }
 
