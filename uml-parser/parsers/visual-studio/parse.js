@@ -13,6 +13,9 @@ function getTypeFromNode(parameter) {
 		else if (namedElement.undefinedTypeMoniker) {
 			type = namedElement.undefinedTypeMoniker[0].$.LastKnownName;
 		}
+		else if (namedElement.referencedTypeMoniker) {
+			type = namedElement.referencedTypeMoniker[0].$.LastKnownName;
+		}
 		else {
 			throw new Error('Could not find type.');
 		}
@@ -175,17 +178,27 @@ function parse(data) {
 			uml = uml.logicalClassDesignerModel;
 		}
 
-		uml.packagedElements.map((element) => {
-			// All related items are stored as namedElement objects in the package's elements.
-			// Iterate through all and for objects representing classes, parse them.
-			element.packageHasNamedElement.map((namedElement) => {
+		const elements = uml.packagedElements[0];
+
+		if (elements.packageHasNamedElement) {
+			elements.packageHasNamedElement.map((namedElement) => {
 				if (namedElement.class) {
 					const c = parseClass(namedElement.class[0]);
 
 					classes[c.name] = c;
 				}
 			});
-		});
+		}
+
+		if (elements.logicalClassDesignerModelHasTypes) {
+			elements.logicalClassDesignerModelHasTypes.map((namedElement) => {
+				if (namedElement.class) {
+					const c = parseClass(namedElement.class[0]);
+
+					classes[c.name] = c;
+				}
+			});
+		}
 
 		return classes;
 	});
