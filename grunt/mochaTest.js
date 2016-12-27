@@ -1,5 +1,5 @@
 module.exports = {
-	options: { reporter: 'spec', slow: 1000 },
+	options: { reporter: 'spec' },
 	'all': {
 		src: [
 			'test/*/*-test.js',

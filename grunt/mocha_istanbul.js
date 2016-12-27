@@ -1,8 +1,7 @@
 module.exports = {
 	options: {
 		reporter: 'spec',
-		reportFormats: ['lcovonly'],
-		mochaOptions: ['--slow 1000']
+		reportFormats: ['lcovonly']
 	},
 	'all': {
 		src: [
