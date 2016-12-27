@@ -108,31 +108,28 @@ function parseMethods(umlClass) {
 	}
 
 	// Helper function to take a condition from XML format to standardised format.
-	// TODO: Replace inner workings with an AST parser.
 	function getConditions(conditions) {
 		let c = [];
-		let id = '';
 
-		function setupCondition(condition, index) {
-			const result = cfgParser(condition);
-
-			result.id = `${id}-${index}`;
-
-			return result;
-		}
-
-		function parseConditions(conditions) {
+		function parseConditions(id, conditions) {
 			const split = conditions.split('-----');
+			const parsed = split.map((condition, index) => {
+				const result = cfgParser(condition);
 
-			c = split.map(setupCondition);
+				result.id = `${id}-${index}`;
+
+				return result;
+			});
+
+			return parsed;
 		}
 
 		if (conditions) {
 			const constraint = conditions[0].constraint[0];
-			const rawString = constraint.specification[0].literalString[0].$.value;
+			const conditionString = constraint.specification[0].literalString[0].$.value;
+			const id = constraint.$.Id;
 
-			id = constraint.$.Id;
-			parseConditions(rawString);
+			c = parseConditions(id, conditionString);
 		}
 
 		return c;
