@@ -55,7 +55,7 @@ module.exports = class SmtMethod {
 		// Declare the function to SMT.
 		const type = convertType(method.type);
 		const args = Object.keys(method.arguments).map((t) => {
-			return convertType(t);
+			return convertType(method.arguments[t]);
 		});
 		const command = new Smt.DeclareFunction(method.name, type, args);
 
