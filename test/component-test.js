@@ -406,7 +406,7 @@ describe('Component Tests', () => {
 						expect(results).to.include(true);
 					});
 
-					it('should describe a test case where first precondition is not true', () => {
+					it('should describe a test case where precondition 1 is not true', () => {
 						const results = method.map((test) => {
 							return !(test.arguments.a >= 0) &&
 								test.arguments.b >= 0;
@@ -415,10 +415,58 @@ describe('Component Tests', () => {
 						expect(results).to.include(true);
 					});
 
-					it('should describe a test case where second precondition is not true', () => {
+					it('should describe a test case where precondition 2 is not true', () => {
 						const results = method.map((test) => {
 							return test.arguments.a >= 0 &&
 								!(test.arguments.b >= 0);
+						});
+
+						expect(results).to.include(true);
+					});
+				});
+
+				describe('SimpleMath#Subtract', () => {
+					let method;
+
+					before(() => {
+						method = testResult.Subtract;
+					});
+
+					it('should describe a test case where all preconditions are satisfied', () => {
+						const results = method.map((test) => {
+							return test.arguments.a >= 0 &&
+								test.arguments.b >= 0 &&
+								test.arguments.a >= test.arguments.b;
+						});
+
+						expect(results).to.include(true);
+					});
+
+					it('should describe a test case where precondition 1 is not true', () => {
+						const results = method.map((test) => {
+							return !(test.arguments.a >= 0) &&
+								test.arguments.b >= 0 &&
+								test.arguments.a >= test.arguments.b;
+						});
+
+						expect(results).to.include(true);
+					});
+
+					it('should describe a test case where precondition 2 is not true', () => {
+						const results = method.map((test) => {
+							return test.arguments.a >= 0 &&
+								!(test.arguments.b >= 0) &&
+								test.arguments.a >= test.arguments.b;
+						});
+
+						expect(results).to.include(true);
+					});
+
+					it('should describe a test case where precondition 3 is not true', () => {
+						const results = method.map((test) => {
+							return test.arguments.a >= 0 &&
+								test.arguments.b >= 0 &&
+								!(test.arguments.a >= test.arguments.b);
 						});
 
 						expect(results).to.include(true);
