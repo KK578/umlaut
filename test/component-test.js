@@ -104,15 +104,71 @@ describe('Component Tests', () => {
 				});
 
 				describe('Methods', () => {
-					it('should contain a method "Add"', () => {
-						const method = testResult.methods.Add;
+					it('should contain 4 methods', () => {
+						const methods = testResult.methods;
+						const keys = Object.keys(methods);
 
-						expect(method).to.be.an('object');
-						expect(method.id).to.be.a('string').and.match(
+						expect(keys).to.have.length(4);
+					});
+
+					function assertCondition(condition, expected) {
+						expect(condition.id).to.be.a('string').and.match(
 							/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i);
-						expect(method.visibility).to.equal('public');
-						expect(method.type).to.equal('Integer');
-						expect(method.arguments).to.be.instanceOf(Array).and.have.all.keys(['a', 'b']);
+						expect(condition.comparison).to.equal(expected.comparison);
+						expect(condition.arguments).to.include.members(expected.arguments);
+						expect(condition.exception).to.equal(expected.exception);
+					}
+
+					describe('SimpleMath#Add', () => {
+						let method;
+
+						before(() => {
+							method = testResult.methods.Add;
+						});
+
+						it('should exist with method properties', () => {
+							expect(method).to.be.an('object');
+							expect(method.id).to.be.a('string').and.match(
+								/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i);
+							expect(method.visibility).to.equal('public');
+							expect(method.type).to.equal('Integer');
+						});
+
+						it('should describe arguments', () => {
+							expect(method.arguments).to.be.instanceOf(Array)
+								.and.have.all.keys(['a', 'b']);
+							expect(method.arguments.a).to.equal('Integer');
+							expect(method.arguments.b).to.equal('Integer');
+						});
+
+						it('should describe preconditions', () => {
+							expect(method.preconditions).to.be.instanceOf(Array)
+								.and.to.have.length(2);
+
+							const condition1 = method.preconditions[0];
+							const condition2 = method.preconditions[1];
+
+							assertCondition(condition1, {
+								comparison: 'GreaterThanOrEqual',
+								arguments: ['a', 0]
+							});
+							assertCondition(condition2, {
+								comparison: 'GreaterThanOrEqual',
+								arguments: ['b', 0]
+							});
+						});
+
+						it('should describe postconditions', () => {
+							expect(method.postconditions).to.be.instanceOf(Array)
+								.and.to.have.length(1);
+
+							const condition1 = method.preconditions[0];
+
+							assertCondition(condition1, {
+								comparison: 'GreaterThanOrEqual',
+								arguments: ['result', 'a']
+							});
+						});
 					});
 				});
 			});
