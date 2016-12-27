@@ -358,7 +358,7 @@ describe('Component Tests', () => {
 		});
 	});
 
-	describe('Input-Ienerator', () => {
+	describe('Input-Generator', () => {
 		let testee;
 
 		describe('SMT-Solver', () => {
@@ -366,12 +366,63 @@ describe('Component Tests', () => {
 				testee = require('../input-generator/smt-solver/index.js');
 			});
 
-			it('should run against SimpleMath test fixture', () => {
-				const fixture = require(path.join(__dirname, './fixtures/test-generator/uml/SimpleMath.json'));
-				const promise = testee(fixture);
+			describe('SimpleMath Test Fixture', () => {
+				let testResult;
 
-				return expect(promise).to.be.fulfilled.then((result) => {
-					expect(result.SimpleMath).to.be.an('object');
+				before(() => {
+					const fixture = require(path.join(__dirname, './fixtures/test-generator/uml/SimpleMath.json'));
+					const promise = testee(fixture);
+
+					return expect(promise).to.be.fulfilled.then((result) => {
+						expect(result.SimpleMath).to.be.an('object');
+						testResult = result.SimpleMath;
+					});
+				});
+
+				it('should describe 4 methods', () => {
+					expect(testResult).to.be.an('object');
+					expect(Object.keys(testResult)).to.have.length(4);
+				});
+
+				// it('should describe a "tests" Array on all methods', () => {
+				// 	Object.keys(testResult).map((method) => {
+				// 		expect(method.tests).to.be.instanceOf(Array);
+				// 	});
+				// });
+
+				describe('SimpleMath#Add', () => {
+					let method;
+
+					before(() => {
+						method = testResult.Add;
+					});
+
+					it('should describe a test case where all preconditions are satisfied', () => {
+						const results = method.map((test) => {
+							return test.arguments.a >= 0 &&
+								test.arguments.b >= 0;
+						});
+
+						expect(results).to.include(true);
+					});
+
+					it('should describe a test case where first precondition is not true', () => {
+						const results = method.map((test) => {
+							return !(test.arguments.a >= 0) &&
+								test.arguments.b >= 0;
+						});
+
+						expect(results).to.include(true);
+					});
+
+					it('should describe a test case where second precondition is not true', () => {
+						const results = method.map((test) => {
+							return test.arguments.a >= 0 &&
+								!(test.arguments.b >= 0);
+						});
+
+						expect(results).to.include(true);
+					});
 				});
 			});
 		});
