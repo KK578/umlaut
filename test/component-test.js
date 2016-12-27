@@ -13,6 +13,8 @@ const yeomanHelpers = require('yeoman-test');
 
 const promises = require('../util/promises.js');
 
+const REGEX_UUID = /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i;
+
 describe('Component Tests', () => {
 	describe('Uml-Parser', () => {
 		describe('Visual Studio Parser', () => {
@@ -96,8 +98,7 @@ describe('Component Tests', () => {
 						const variable = testResult.variables.Nop;
 
 						expect(variable).to.be.an('object');
-						expect(variable.id).to.be.a('string').and.match(
-							/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i);
+						expect(variable.id).to.be.a('string').and.match(REGEX_UUID);
 						expect(variable.visibility).to.equal('private');
 						expect(variable.type).to.equal('Integer');
 					});
@@ -112,8 +113,7 @@ describe('Component Tests', () => {
 					});
 
 					function assertCondition(condition, expected) {
-						expect(condition.id).to.be.a('string').and.match(
-							/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i);
+						expect(condition.id).to.be.a('string').and.match(REGEX_UUID);
 						expect(condition.comparison).to.equal(expected.comparison);
 						expect(condition.arguments).to.include.members(expected.arguments);
 						expect(condition.exception).to.equal(expected.exception);
@@ -128,8 +128,7 @@ describe('Component Tests', () => {
 
 						it('should exist with method properties', () => {
 							expect(method).to.be.an('object');
-							expect(method.id).to.be.a('string').and.match(
-								/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i);
+							expect(method.id).to.be.a('string').and.match(REGEX_UUID);
 							expect(method.visibility).to.equal('public');
 							expect(method.type).to.equal('Integer');
 						});
