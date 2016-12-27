@@ -5,20 +5,20 @@ const Rule = parsey.Rule;
 
 const comparisons = require('../../../util/comparisons.json');
 
-function comparisonValid(comparison) {
+function checkValidComparison(comparison) {
 	for (let i = 0; i < comparisons.length; i++) {
 		if (comparisons[i].name === comparison) {
-			return true;
+			return comparison;
 		}
 
 		if (comparisons[i].symbol === comparison) {
-			return true;
+			return comparisons[i].name;
 		}
 	}
 
 	// DEBUG
 	if (comparison === '=') {
-		return true;
+		return '==';
 	}
 	// END DEBUG
 
@@ -59,8 +59,10 @@ const grammar = [
 	}),
 
 	new Rule(comparison, [/[a-zA-Z]+/], (c) => {
-		if (comparisonValid(c)) {
-			return c;
+		const foundComparison = checkValidComparison(c);
+
+		if (foundComparison !== false) {
+			return foundComparison;
 		}
 		else {
 			throw new Error(`Comparison ${c} does not exist.`);
@@ -68,8 +70,10 @@ const grammar = [
 	}),
 	// DEBUG
 	new Rule(comparison, [/[a-zA-Z<>=!&|]+/], (c) => {
-		if (comparisonValid(c)) {
-			return c;
+		const foundComparison = checkValidComparison(c);
+
+		if (foundComparison !== false) {
+			return foundComparison;
 		}
 		else {
 			throw new Error(`Comparison ${c} does not exist.`);
