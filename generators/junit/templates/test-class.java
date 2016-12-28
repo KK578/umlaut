@@ -20,11 +20,11 @@ public class <%= classObject.name %>UnitTestClass
 	@Test<% if (test.exception) { %>(expected=<%= test.exception.type %>.class)<% } %>
 	public void <%= test.name %>()
 	{
-		<%_ test.args.map((arg) => { _%>
-		<%= arg.type %> <%= arg.name %> = <%= arg.value %>;
+		<%_ Object.keys(test.arguments).map((name) => { _%>
+		<%= method.arguments[name] %> <%= name %> = <%= test.arguments[name] %>;
 		<%_ }) _%>
 
-		<%= method.return.type %> result = testee.<%= method.name %>(<%= test.argumentString %>);
+		<%= method.type %> result = testee.<%= method.name %>(<%= test.argumentString %>);
 
 		<%_ method.postconditions.map((condition) => { _%>
 		assertTrue(<%= condition.arguments[0] %> <%- condition.comparison %> <%= condition.arguments[1] %>);

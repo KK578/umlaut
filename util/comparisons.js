@@ -19,9 +19,7 @@ function toSymbol(comparison) {
 		const c = comparisons[i];
 
 		if (c.name === comparison) {
-			const symbol = c.smtSymbol ? c.smtSymbol : c.symbol;
-
-			return symbol;
+			return c.symbol;
 		}
 	}
 

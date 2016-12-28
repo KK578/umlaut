@@ -532,13 +532,14 @@ describe('Component Tests', () => {
 	describe('Test-Generator', () => {
 		describe('JUnit', () => {
 			beforeEach(() => {
-				return yeomanHelpers.run(path.join(__dirname, '../generators/junit'))
+				const fixture = require(path.join(__dirname, './fixtures/inputs/SimpleMath.json'));
+
+				return yeomanHelpers.run(path.join(__dirname, '../generators/app'))
 					.inDir('test/tmp/junit/')
-					.withArguments([
-						// Relative to the above directory.
-						'../../fixtures/test-generator/uml/',
-						'../../fixtures/test-generator/smt/'
-					]);
+					.withOptions({
+						model: JSON.stringify(fixture),
+						framework: 'junit'
+					});
 			});
 
 			it('should make a test suite for SimpleMath', () => {
@@ -553,13 +554,14 @@ describe('Component Tests', () => {
 
 		describe('NUnit', () => {
 			beforeEach(() => {
-				return yeomanHelpers.run(path.join(__dirname, '../generators/nunit'))
+				const fixture = require(path.join(__dirname, './fixtures/inputs/SimpleMath.json'));
+
+				return yeomanHelpers.run(path.join(__dirname, '../generators/app'))
 					.inDir('test/tmp/nunit/')
-					.withArguments([
-						// Relative to the above directory.
-						'../../fixtures/test-generator/uml/',
-						'../../fixtures/test-generator/smt/'
-					]);
+					.withOptions({
+						model: JSON.stringify(fixture),
+						framework: 'nunit'
+					});
 			});
 
 			it('should make a test suite for SimpleMath', () => {
