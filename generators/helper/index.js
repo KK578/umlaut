@@ -159,10 +159,33 @@ module.exports = class extends Generator {
 		})
 	}
 
+	prompting() {
+		if (!this.option.framework) {
+			return this.prompt([{
+				type: 'list',
+				name: 'framework',
+				message: 'Test framework to build for',
+				// TODO: Build this list dynamically.
+				choices: [
+					'junit',
+					'nunit'
+				]
+			}]).then((answers) => {
+				this.options.framework = answers.framework;
+			});
+		}
+	}
+
 	initializing() {
 		this.model = parseModel(this.options.model);
 		this.classes = Object.keys(this.model).map((className) => {
 			return readClass(this.model[className]);
+		});
+	}
+
+	configuring() {
+		this.composeWith(`model-driven-testing:${this.options.framework}`, {
+			classes: JSON.stringify(this.classes)
 		});
 	}
 };
