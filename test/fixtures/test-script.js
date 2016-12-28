@@ -11,7 +11,7 @@ function stringify(data) {
 let parsedData;
 let solvedData;
 
-return umlParser(path.join(__dirname, '../../build/AnnotatedSimpleMath.uml')).then((data) => {
+return umlParser(path.join(__dirname, './SimpleMath/ModelDefinition/SimpleMath.uml')).then((data) => {
 	console.log('Parsed UML');
 	parsedData = data;
 	console.log(stringify(parsedData));
