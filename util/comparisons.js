@@ -32,9 +32,15 @@ function toName(comparison) {
 	for (let i = 0; i < comparisons.length; i++) {
 		const c = comparisons[i];
 
-		if (c.symbol === comparison) {
+		if (c.symbol === comparison || c.name === comparison) {
 			return c.name;
 		}
+	}
+
+	if (comparison === '=') {
+		console.warn('DEBUG: Converting "=" to "Equal"');
+
+		return 'Equal';
 	}
 
 	throw new Error(`Comparison with symbol "${comparison}" does not exist.`);
