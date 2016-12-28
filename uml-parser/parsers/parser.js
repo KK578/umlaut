@@ -12,13 +12,14 @@ function promiseParse(data, parserCount) {
 	return Promise.resolve(parser.detect(data)).then((valid) => {
 		if (valid) {
 			// Parser has claimed it can parse the model.
+			// If this errors, this will throw to the catch and proceed to the next parser.
 			return parser.parse(data);
 		}
 		else {
 			// Throw error to go to next parser.
 			throw new Error();
 		}
-	}).catch((error) => {
+	}).catch(() => {
 		return promiseParse(data, parserCount + 1);
 	});
 }

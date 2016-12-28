@@ -3,44 +3,7 @@ const generators = require('yeoman-generator');
 const path = require('path');
 const glob = require('glob');
 
-function comparatorString(comparator) {
-	let value = '';
-
-	switch (comparator) {
-		case '=':
-			value = 'Equal';
-			break;
-
-		case '<':
-			value = 'LessThan';
-			break;
-
-		case '<=':
-			value = 'LessThanOrEqual';
-			break;
-
-		case '>':
-			value = 'GreaterThan';
-			break;
-
-		case '>=':
-			value = 'GreaterThanOrEqual';
-			break;
-
-		case '&':
-			value = 'And';
-			break;
-
-		case '|':
-			value = 'Or';
-			break;
-
-		default:
-			break;
-	}
-
-	return value;
-}
+const comparisons = require('../../util/comparisons.js');
 
 function generateTestMethodName(method, testId) {
 	let condition;
@@ -59,7 +22,7 @@ function generateTestMethodName(method, testId) {
 			}
 		}
 
-		clean = `Not${comparatorString(condition.comparison)}_${condition.arguments.join('_')}`;
+		clean = `Not${comparisons.toName(condition.comparison)}_${condition.arguments.join('_')}`;
 	}
 
 	return `test_${method.name}_${clean}`;
