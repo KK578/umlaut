@@ -1,12 +1,16 @@
 const generators = require('yeoman-generator');
 
 function parseModel(model) {
+	let result = {};
+
 	try {
-		const result = JSON.parse(model);
+		result = JSON.parse(model);
 	}
 	catch (err) {
 		// Should attempt to load data from file here.
 	}
+
+	return result;
 }
 
 module.exports = generators.Base.extend({
@@ -21,5 +25,9 @@ module.exports = generators.Base.extend({
 
 	initializing() {
 		this.model = parseModel(this.options.model);
+	},
+
+	configuring() {
+		console.log(this.model);
 	}
 });
