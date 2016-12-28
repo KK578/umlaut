@@ -1,4 +1,4 @@
-const generators = require('yeoman-generator');
+const Generator = require('yeoman-generator');
 
 const path = require('path');
 const glob = require('glob');
@@ -28,26 +28,6 @@ function generateTestMethodName(method, testId) {
 	return `test_${method.name}_${clean}`;
 }
 
-function getValue(arg, value) {
-	let v = value;
-
-	switch (arg.type) {
-		case 'Int':
-		case 'int':
-			if (v[0] === '(') {
-				v = v.slice(1, v.length - 1);
-				v = v.replace(' ', '');
-			}
-
-			v = parseInt(v);
-			break;
-
-		default:
-			break;
-	}
-
-	return v;
-}
 
 function getLanguageType(type) {
 	// TODO: Expand this to a config file lookup
@@ -86,14 +66,14 @@ function generateArguments(methodArgs, testArgs) {
 }
 
 function generateArgumentString(methodArgs) {
-	const names = methodArgs.map((arg) => {
+	const names = Object.keys(methodArgs).map((arg) => {
 		return arg.name;
 	});
 
 	return names.join(', ');
 }
 
-function readClass(uml, smt) {
+function readClass(uml) {
 	const umlClass = {};
 
 	umlClass.name = uml.name;
@@ -107,7 +87,7 @@ function readClass(uml, smt) {
 			preconditions[c.id] = c;
 		});
 
-		const tests = smt[m.name].map((t) => {
+		const tests = m.tests.map((t) => {
 			if (t.args === 'Unsatisfiable') {
 				return null;
 			}
@@ -136,7 +116,7 @@ function readClass(uml, smt) {
 
 			const test = {
 				name: generateTestMethodName(m, testId),
-				args: generateArguments(m.arguments, t.args),
+				args: t.args,
 				argumentString: generateArgumentString(m.arguments),
 				exception: exception
 			};
@@ -145,14 +125,12 @@ function readClass(uml, smt) {
 		});
 
 		// Return type handling
-		const returnType = m.returnType;
-
-		returnType.type = getLanguageType(returnType.type);
+		const type = getLanguageType(m.type);
 
 		const method = {
 			name: m.name,
 			arguments: m.arguments,
-			return: returnType,
+			type: type,
 			preconditions: preconditions,
 			postconditions: m.postconditions,
 			tests: tests
@@ -161,67 +139,54 @@ function readClass(uml, smt) {
 		return method;
 	});
 
-	// console.log(JSON.stringify(umlClass, null, 2));
+	console.log(JSON.stringify(umlClass, null, 2));
 
 	return umlClass;
 }
 
-const generator = generators.Base.extend({
-	constructor: function () {
-		generators.Base.apply(this, arguments);
+function parseModel(model) {
+	let result = {};
 
-		this.argument('umlFolder', {
+	try {
+		result = JSON.parse(model);
+	}
+	catch (err) {
+		// Should attempt to load data from file here.
+	}
+
+	return result;
+}
+
+module.exports = class extends Generator {
+	constructor(args, opts) {
+		super(args, opts);
+
+		this.option('model', {
 			type: String,
-			description: 'Directory path for JSON objects describing the model',
-			required: true
-		});
-		this.argument('smtFolder', {
-			type: String,
-			description: 'Directory path for JSON objects describing the solved conditions',
-			required: true
+			desc: 'JSON object, or path to a JSON file, describing the model.'
 		});
 
-		this.uml = {};
-		this.smt = {};
-	},
+		console.log('NUnit');
+	}
 
 	initializing() {
-		const done = this.async();
-		const umlPath = path.resolve(process.cwd(), this.umlFolder);
-
-		glob('*.json', { cwd: umlPath }, (err, files) => {
-			if (err) {
-				throw err;
-			}
-
-			let count = files.length;
-
-			files.map((umlFile) => {
-				const className = umlFile.substring(0, umlFile.length - 5);
-
-				// UML/ClassName.json
-				this.uml = require(path.resolve(umlPath, umlFile));
-				// SMT/ClassName/solved.json
-				this.smt[className] = require(path.resolve(this.smtFolder, className, 'solved.json'));
-
-				if (--count === 0) {
-					done();
-				}
-			});
+		this.model = parseModel(this.options.model);
+		this.composeWith(require.resolve('../helper'), {
+			model: this.options.model
 		});
-	},
+	}
 
 	configuring() {
-		this.classes = Object.keys(this.uml).map((className) => {
-			return readClass(this.uml[className], this.smt[className]);
+		console.log('NUnit');
+		console.log(this.model);
+		this.classes = Object.keys(this.model).map((className) => {
+			return readClass(this.model[className]);
 		});
-	},
+	}
 
 	writing() {
 		this.classes.map((c) => {
 			this.template('test-class.cs', `build/${c.name}Test.cs`, { classObject: c });
 		});
 	}
-});
-
-module.exports = generator;
+};
