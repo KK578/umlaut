@@ -126,7 +126,7 @@ function readClass(uml) {
 		return method;
 	});
 
-	console.log(JSON.stringify(umlClass, null, 2));
+	// console.log(JSON.stringify(umlClass, null, 2));
 
 	return umlClass;
 }
@@ -152,8 +152,6 @@ module.exports = class extends Generator {
 			type: String,
 			desc: 'JSON object, or path to a JSON file, describing the model.'
 		});
-
-		console.log('NUnit');
 	}
 
 	initializing() {
@@ -164,8 +162,6 @@ module.exports = class extends Generator {
 	}
 
 	configuring() {
-		console.log('NUnit');
-		console.log(this.model);
 		this.classes = Object.keys(this.model).map((className) => {
 			return readClass(this.model[className]);
 		});
