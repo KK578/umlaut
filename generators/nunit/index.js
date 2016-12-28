@@ -68,6 +68,9 @@ function readClass(uml) {
 			args[a] = getLanguageType(m.arguments[a]);
 		});
 
+		// Return type handling
+		const type = getLanguageType(m.type);
+
 		const tests = m.tests.map((t) => {
 			if (t.arguments === 'Unsatisfiable') {
 				return null;
@@ -105,15 +108,18 @@ function readClass(uml) {
 			return test;
 		});
 
-		// Return type handling
-		const type = getLanguageType(m.type);
+		const postconditions = m.postconditions.map((c) => {
+			c.comparison = comparisons.toSymbol(c.comparison);
+
+			return c;
+		});
 
 		const method = {
 			name: m.name,
 			arguments: args,
 			type: type,
 			preconditions: preconditions,
-			postconditions: m.postconditions,
+			postconditions: postconditions,
 			tests: tests
 		};
 
