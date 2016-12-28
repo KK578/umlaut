@@ -1,7 +1,4 @@
-const generators = require('yeoman-generator');
-
-const path = require('path');
-const glob = require('glob');
+const Generator = require('yeoman-generator');
 
 const comparisons = require('../../util/comparisons.js');
 
@@ -28,27 +25,6 @@ function generateTestMethodName(method, testId) {
 	return `test_${method.name}_${clean}`;
 }
 
-function getValue(arg, value) {
-	let v = value;
-
-	switch (arg.type) {
-		case 'Int':
-		case 'int':
-			if (v[0] === '(') {
-				v = v.slice(1, v.length - 1);
-				v = v.replace(' ', '');
-			}
-
-			v = parseInt(v);
-			break;
-
-		default:
-			break;
-	}
-
-	return v;
-}
-
 function getLanguageType(type) {
 	// TODO: Expand this to a config file lookup
 	switch (type) {
@@ -64,36 +40,15 @@ function getLanguageType(type) {
 	}
 }
 
-function generateArguments(methodArgs, testArgs) {
-	const keys = Object.keys(testArgs);
-	const values = keys.map((key) => {
-		let value = testArgs[key];
-
-		for (let i = 0; i < keys.length; i++) {
-			if (methodArgs[i].name === key) {
-				value = {
-					name: key,
-					type: getLanguageType(methodArgs[i].type),
-					value: getValue(methodArgs[i], testArgs[key])
-				};
-			}
-		}
-
-		return value;
-	});
-
-	return values;
-}
-
 function generateArgumentString(methodArgs) {
-	const names = methodArgs.map((arg) => {
-		return arg.name;
+	const names = Object.keys(methodArgs).map((arg) => {
+		return arg;
 	});
 
 	return names.join(', ');
 }
 
-function readClass(uml, smt) {
+function readClass(uml) {
 	const umlClass = {};
 
 	umlClass.name = uml.name;
@@ -107,8 +62,17 @@ function readClass(uml, smt) {
 			preconditions[c.id] = c;
 		});
 
-		const tests = smt[m.name].map((t) => {
-			if (t.args === 'Unsatisfiable') {
+		const args = {};
+
+		Object.keys(m.arguments).map((a) => {
+			args[a] = getLanguageType(m.arguments[a]);
+		});
+
+		// Return type handling
+		const type = getLanguageType(m.type);
+
+		const tests = m.tests.map((t) => {
+			if (t.arguments === 'Unsatisfiable') {
 				return null;
 			}
 
@@ -136,7 +100,7 @@ function readClass(uml, smt) {
 
 			const test = {
 				name: generateTestMethodName(m, testId),
-				args: generateArguments(m.arguments, t.args),
+				arguments: t.arguments,
 				argumentString: generateArgumentString(m.arguments),
 				exception: exception
 			};
@@ -144,17 +108,18 @@ function readClass(uml, smt) {
 			return test;
 		});
 
-		// Return type handling
-		const returnType = m.returnType;
+		const postconditions = m.postconditions.map((c) => {
+			c.comparison = comparisons.toSymbol(c.comparison);
 
-		returnType.type = getLanguageType(returnType.type);
+			return c;
+		});
 
 		const method = {
 			name: m.name,
-			arguments: m.arguments,
-			return: returnType,
+			arguments: args,
+			type: type,
 			preconditions: preconditions,
-			postconditions: m.postconditions,
+			postconditions: postconditions,
 			tests: tests
 		};
 
@@ -166,62 +131,51 @@ function readClass(uml, smt) {
 	return umlClass;
 }
 
-const generator = generators.Base.extend({
-	constructor: function () {
-		generators.Base.apply(this, arguments);
+function parseModel(model) {
+	let result = {};
 
-		this.argument('umlFolder', {
-			type: String,
-			description: 'Directory path for JSON objects describing the model',
-			required: true
-		});
-		this.argument('smtFolder', {
-			type: String,
-			description: 'Directory path for JSON objects describing the solved conditions',
-			required: true
-		});
+	try {
+		result = JSON.parse(model);
+	}
+	catch (err) {
+		// Should attempt to load data from file here.
+	}
 
-		this.uml = {};
-		this.smt = {};
-	},
+	return result;
+}
+
+module.exports = class extends Generator {
+	constructor(args, opts) {
+		super(args, opts);
+
+		this.option('model', {
+			type: String,
+			desc: 'JSON object, or path to a JSON file, describing the model.'
+		});
+	}
 
 	initializing() {
-		const done = this.async();
-		const umlPath = path.resolve(process.cwd(), this.umlFolder);
-
-		glob('*.json', { cwd: umlPath }, (err, files) => {
-			if (err) {
-				throw err;
-			}
-
-			let count = files.length;
-
-			files.map((umlFile) => {
-				const className = umlFile.substring(0, umlFile.length - 5);
-
-				// UML/ClassName.json
-				this.uml = require(path.resolve(umlPath, umlFile));
-				// SMT/ClassName/solved.json
-				this.smt[className] = require(path.resolve(this.smtFolder, className, 'solved.json'));
-
-				if (--count === 0) {
-					done();
-				}
-			});
+		this.model = parseModel(this.options.model);
+		this.composeWith(require.resolve('../helper'), {
+			model: this.options.model
 		});
-	},
+	}
 
 	configuring() {
-		this.classes = Object.keys(this.uml).map((className) => {
-			return readClass(this.uml[className], this.smt[className]);
+		this.classes = Object.keys(this.model).map((className) => {
+			return readClass(this.model[className]);
 		});
-	},
+	}
 
 	writing() {
 		this.classes.map((c) => {
-			this.template('test-class.java', `build/${c.name}Test.java`, { classObject: c });
+			const copyTpl = (source, destination, options) => {
+				this.fs.copyTpl(this.templatePath(source),
+					this.destinationPath(destination),
+					options);
+			};
+
+			copyTpl('test-class.java', `build/${c.name}Test.java`, { classObject: c });
 		});
 	}
-});
-
-module.exports = generator;
+};
