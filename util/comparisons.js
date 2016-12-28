@@ -37,12 +37,6 @@ function toName(comparison) {
 		}
 	}
 
-	if (comparison === '=') {
-		console.warn('DEBUG: Converting "=" to "Equal"');
-
-		return 'Equal';
-	}
-
 	throw new Error(`Comparison with symbol "${comparison}" does not exist.`);
 }
 

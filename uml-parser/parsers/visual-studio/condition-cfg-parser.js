@@ -48,18 +48,6 @@ const grammar = [
 			throw new Error(`Comparison ${c} does not exist.`);
 		}
 	}),
-	// DEBUG
-	new Rule(comparison, [/[a-zA-Z<>=!&|]+/], (c) => {
-		const foundComparison = comparisons.toName(c);
-
-		if (foundComparison !== false) {
-			return foundComparison;
-		}
-		else {
-			throw new Error(`Comparison ${c} does not exist.`);
-		}
-	}),
-	// END DEBUG
 
 	new Rule(argumentList, [argumentList, argument], (next, a) => {
 		return next.concat(a);
