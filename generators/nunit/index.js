@@ -1,8 +1,5 @@
 const Generator = require('yeoman-generator');
 
-const path = require('path');
-const glob = require('glob');
-
 const comparisons = require('../../util/comparisons.js');
 
 function generateTestMethodName(method, testId) {
@@ -28,7 +25,6 @@ function generateTestMethodName(method, testId) {
 	return `test_${method.name}_${clean}`;
 }
 
-
 function getLanguageType(type) {
 	// TODO: Expand this to a config file lookup
 	switch (type) {
@@ -44,30 +40,9 @@ function getLanguageType(type) {
 	}
 }
 
-function generateArguments(methodArgs, testArgs) {
-	const keys = Object.keys(testArgs);
-	const values = keys.map((key) => {
-		let value = testArgs[key];
-
-		for (let i = 0; i < keys.length; i++) {
-			if (methodArgs[i].name === key) {
-				value = {
-					name: key,
-					type: getLanguageType(methodArgs[i].type),
-					value: getValue(methodArgs[i], testArgs[key])
-				};
-			}
-		}
-
-		return value;
-	});
-
-	return values;
-}
-
 function generateArgumentString(methodArgs) {
 	const names = Object.keys(methodArgs).map((arg) => {
-		return arg.name;
+		return arg;
 	});
 
 	return names.join(', ');
@@ -87,8 +62,14 @@ function readClass(uml) {
 			preconditions[c.id] = c;
 		});
 
+		const args = {};
+
+		Object.keys(m.arguments).map((a) => {
+			args[a] = getLanguageType(m.arguments[a]);
+		});
+
 		const tests = m.tests.map((t) => {
-			if (t.args === 'Unsatisfiable') {
+			if (t.arguments === 'Unsatisfiable') {
 				return null;
 			}
 
@@ -116,7 +97,7 @@ function readClass(uml) {
 
 			const test = {
 				name: generateTestMethodName(m, testId),
-				args: t.args,
+				arguments: t.arguments,
 				argumentString: generateArgumentString(m.arguments),
 				exception: exception
 			};
@@ -129,7 +110,7 @@ function readClass(uml) {
 
 		const method = {
 			name: m.name,
-			arguments: m.arguments,
+			arguments: args,
 			type: type,
 			preconditions: preconditions,
 			postconditions: m.postconditions,
@@ -186,7 +167,13 @@ module.exports = class extends Generator {
 
 	writing() {
 		this.classes.map((c) => {
-			this.template('test-class.cs', `build/${c.name}Test.cs`, { classObject: c });
+			const copyTpl = (source, destination, options) => {
+				this.fs.copyTpl(this.templatePath(source),
+					this.destinationPath(destination),
+					options);
+			};
+
+			copyTpl('test-class.cs', `build/${c.name}Test.cs`, { classObject: c });
 		});
 	}
 };
