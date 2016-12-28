@@ -534,10 +534,11 @@ describe('Component Tests', () => {
 			beforeEach(() => {
 				const fixture = require(path.join(__dirname, './fixtures/inputs/SimpleMath.json'));
 
-				return yeomanHelpers.run(path.join(__dirname, '../generators/junit'))
+				return yeomanHelpers.run(path.join(__dirname, '../generators/app'))
 					.inDir('test/tmp/junit/')
 					.withOptions({
-						model: JSON.stringify(fixture)
+						model: JSON.stringify(fixture),
+						framework: 'junit'
 					});
 			});
 
@@ -555,10 +556,11 @@ describe('Component Tests', () => {
 			beforeEach(() => {
 				const fixture = require(path.join(__dirname, './fixtures/inputs/SimpleMath.json'));
 
-				return yeomanHelpers.run(path.join(__dirname, '../generators/nunit'))
+				return yeomanHelpers.run(path.join(__dirname, '../generators/app'))
 					.inDir('test/tmp/nunit/')
 					.withOptions({
-						model: JSON.stringify(fixture)
+						model: JSON.stringify(fixture),
+						framework: 'nunit'
 					});
 			});
 

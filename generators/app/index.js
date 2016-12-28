@@ -1,4 +1,5 @@
 const Generator = require('yeoman-generator');
+const path = require('path');
 
 const comparisons = require('../../util/comparisons.js');
 
@@ -156,11 +157,11 @@ module.exports = class extends Generator {
 		this.option('framework', {
 			type: String,
 			desc: 'Name of framework to build tests in.'
-		})
+		});
 	}
 
 	prompting() {
-		if (!this.option.framework) {
+		if (!this.options.framework) {
 			return this.prompt([{
 				type: 'list',
 				name: 'framework',
@@ -184,7 +185,10 @@ module.exports = class extends Generator {
 	}
 
 	configuring() {
-		this.composeWith(`model-driven-testing:${this.options.framework}`, {
+		// TODO: Resolve directly from npm module name.
+		const subGenerator = require.resolve(`../${this.options.framework}`);
+
+		this.composeWith(subGenerator, {
 			classes: JSON.stringify(this.classes)
 		});
 	}
