@@ -1,4 +1,4 @@
-const generators = require('yeoman-generator');
+const Generator = require('yeoman-generator');
 
 function parseModel(model) {
 	let result = {};
@@ -13,21 +13,21 @@ function parseModel(model) {
 	return result;
 }
 
-module.exports = generators.Base.extend({
-	constructor: function () {
-		generators.Base.apply(this, arguments);
+module.exports = class extends Generator {
+	constructor(args, opts) {
+		super(args, opts);
 
 		this.option('model', {
 			type: String,
 			desc: 'JSON object, or path to a JSON file, describing the model.'
 		});
-	},
+	}
 
 	initializing() {
 		this.model = parseModel(this.options.model);
-	},
+	}
 
 	configuring() {
 		console.log(this.model);
 	}
-});
+};
