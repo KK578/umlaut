@@ -45,7 +45,7 @@
               <constraint Id="29128137-274d-42ed-a6c5-58230e139f4e">
                 <elementDefinition Id="db238a05-09a1-486a-be59-e0195ae25e78" />
                 <specification>
-                  <literalString Id="fcb1cdd8-3d8c-48a8-aa08-656c8ff66b02" value="(&gt;= a 0)-----(&gt;= b 0)">
+                  <literalString Id="fcb1cdd8-3d8c-48a8-aa08-656c8ff66b02" value="(GreaterThanOrEqual a 0)-----(GreaterThanOrEqual b 0)">
                     <elementDefinition Id="54878f33-c014-40e2-aae1-0a5019d72556" />
                   </literalString>
                 </specification>
@@ -55,7 +55,7 @@
               <constraint Id="61de6492-4aa2-4a46-a358-8b63ff27878b">
                 <elementDefinition Id="4774798f-d24c-47b5-b1b7-8c4000643dfe" />
                 <specification>
-                  <literalString Id="13932d9e-71bd-463e-af7d-063d634b215b" value="(&gt;= result a)">
+                  <literalString Id="13932d9e-71bd-463e-af7d-063d634b215b" value="(GreaterThanOrEqual result a)">
                     <elementDefinition Id="559cf724-825b-4cce-9245-8e33edc46b26" />
                   </literalString>
                 </specification>
@@ -94,7 +94,7 @@
               <constraint Id="565caf9e-8816-4f7c-b2cd-04a592a8ca81">
                 <elementDefinition Id="7e395e15-84d9-4397-9eb9-0d5459e92e03" />
                 <specification>
-                  <literalString Id="6c63449a-35be-4613-b885-dc105163c96d" value="(&gt;= a 0)-----(&gt;= b 0)-----(&gt;= a b)">
+                  <literalString Id="6c63449a-35be-4613-b885-dc105163c96d" value="(GreaterThanOrEqual a 0)-----(GreaterThanOrEqual b 0)-----(GreaterThanOrEqual a b)">
                     <elementDefinition Id="749ecbe0-c44e-4d65-ae6a-af5f9232059c" />
                   </literalString>
                 </specification>
@@ -104,7 +104,7 @@
               <constraint Id="b9d965a7-2042-4bee-809e-d8c5df66f239">
                 <elementDefinition Id="86d048ee-3c97-48bf-8630-d07cf8671c9c" />
                 <specification>
-                  <literalString Id="03ac5ff7-e960-458d-a04f-664f355210c4" value="(&lt;= result a)">
+                  <literalString Id="03ac5ff7-e960-458d-a04f-664f355210c4" value="(LessThanOrEqual result a)">
                     <elementDefinition Id="1412b40d-6841-4265-9198-a2e80ace7c3b" />
                   </literalString>
                 </specification>
@@ -143,7 +143,7 @@
               <constraint Id="c59fff82-5c66-4786-bc1c-aef15eabb554">
                 <elementDefinition Id="9bba92de-4d78-4c4b-a0b4-9192e79d76fc" />
                 <specification>
-                  <literalString Id="59c4eef6-a8e4-42c4-8e60-3ebe0addfbeb" value="(&gt;= a 0)-----(&gt; b 0)">
+                  <literalString Id="59c4eef6-a8e4-42c4-8e60-3ebe0addfbeb" value="(GreaterThanOrEqual a 0)-----(GreaterThan b 0)">
                     <elementDefinition Id="95dc3dff-306b-46b6-84e0-92cae7a2bf19" />
                   </literalString>
                 </specification>
@@ -153,7 +153,7 @@
               <constraint Id="98cd554b-12ee-43d0-a102-2478d695e006">
                 <elementDefinition Id="523718d3-418b-42aa-8500-bda7333002d9" />
                 <specification>
-                  <literalString Id="4010f5bf-c34e-4260-b1f5-03b5248f35f8" value="(= result result)">
+                  <literalString Id="4010f5bf-c34e-4260-b1f5-03b5248f35f8" value="(Equal result result)">
                     <elementDefinition Id="ffac6c7b-3eba-4d1b-b8fc-6c07d8c3d823" />
                   </literalString>
                 </specification>
@@ -184,7 +184,7 @@
               <constraint Id="a61be185-1b2c-4878-9434-3dee1b0a8366">
                 <elementDefinition Id="d406f284-fabe-4f4e-9b21-293526a4b7de" />
                 <specification>
-                  <literalString Id="2fb9701b-47e5-48c0-987d-8dad387fb16c" value="(&gt;= a 0)">
+                  <literalString Id="2fb9701b-47e5-48c0-987d-8dad387fb16c" value="(GreaterThanOrEqual a 0)">
                     <elementDefinition Id="1a38891c-730b-463c-9181-52e67b7c2757" />
                   </literalString>
                 </specification>
@@ -194,7 +194,7 @@
               <constraint Id="e178cee3-129e-42e4-9058-38471a853e5a">
                 <elementDefinition Id="3213a608-60c6-4e26-a9d9-3cceda35c7d4" />
                 <specification>
-                  <literalString Id="e4340c62-cffa-41e1-a66c-c25347626b5c" value="(= result result)">
+                  <literalString Id="e4340c62-cffa-41e1-a66c-c25347626b5c" value="(Equal result result)">
                     <elementDefinition Id="4084ffdf-aba0-44df-a2f7-fa7def0ea47d" />
                   </literalString>
                 </specification>

@@ -3,27 +3,7 @@ const parsey = require('parsey');
 const Sym = parsey.Sym;
 const Rule = parsey.Rule;
 
-const comparisons = require('../../../util/comparisons.json');
-
-function checkValidComparison(comparison) {
-	for (let i = 0; i < comparisons.length; i++) {
-		if (comparisons[i].name === comparison) {
-			return comparison;
-		}
-
-		if (comparisons[i].symbol === comparison) {
-			return comparisons[i].name;
-		}
-	}
-
-	// DEBUG
-	if (comparison === '=') {
-		return '==';
-	}
-	// END DEBUG
-
-	return false;
-}
+const comparisons = require('../../../util/comparisons.js');
 
 /**
  * CFG for conditions annotated on UML models.
@@ -59,7 +39,7 @@ const grammar = [
 	}),
 
 	new Rule(comparison, [/[a-zA-Z]+/], (c) => {
-		const foundComparison = checkValidComparison(c);
+		const foundComparison = comparisons.toName(c);
 
 		if (foundComparison !== false) {
 			return foundComparison;
@@ -68,18 +48,6 @@ const grammar = [
 			throw new Error(`Comparison ${c} does not exist.`);
 		}
 	}),
-	// DEBUG
-	new Rule(comparison, [/[a-zA-Z<>=!&|]+/], (c) => {
-		const foundComparison = checkValidComparison(c);
-
-		if (foundComparison !== false) {
-			return foundComparison;
-		}
-		else {
-			throw new Error(`Comparison ${c} does not exist.`);
-		}
-	}),
-	// END DEBUG
 
 	new Rule(argumentList, [argumentList, argument], (next, a) => {
 		return next.concat(a);

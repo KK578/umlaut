@@ -101,7 +101,7 @@
                 <specification>
                   <literalString
                     Id="54878f33-c014-40e2-aae1-0a5019d72556"
-                    value="(&gt;= a 0)-----(&gt;= b 0)" />
+                    value="(GreaterThanOrEqual a 0)-----(GreaterThanOrEqual b 0)" />
                 </specification>
               </constraint>
             </preconditionsInternal>
@@ -111,7 +111,7 @@
                 <specification>
                   <literalString
                     Id="559cf724-825b-4cce-9245-8e33edc46b26"
-                    value="(&gt;= result a)" />
+                    value="(GreaterThanOrEqual result a)" />
                 </specification>
               </constraint>
             </postconditionsInternal>
@@ -170,7 +170,7 @@
                 <specification>
                   <literalString
                     Id="749ecbe0-c44e-4d65-ae6a-af5f9232059c"
-                    value="(&gt;= a 0)-----(&gt;= b 0)-----(&gt;= a b)" />
+                    value="(GreaterThanOrEqual a 0)-----(GreaterThanOrEqual b 0)-----(GreaterThanOrEqual a b)" />
                 </specification>
               </constraint>
             </preconditionsInternal>
@@ -180,7 +180,7 @@
                 <specification>
                   <literalString
                     Id="1412b40d-6841-4265-9198-a2e80ace7c3b"
-                    value="(&lt;= result a)" />
+                    value="(LessThanOrEqual result a)" />
                 </specification>
               </constraint>
             </postconditionsInternal>
@@ -239,7 +239,7 @@
                 <specification>
                   <literalString
                     Id="95dc3dff-306b-46b6-84e0-92cae7a2bf19"
-                    value="(&gt;= a 0)-----(&gt; b 0)" />
+                    value="(GreaterThanOrEqual a 0)-----(GreaterThan b 0)" />
                 </specification>
               </constraint>
             </preconditionsInternal>
@@ -249,7 +249,7 @@
                 <specification>
                   <literalString
                     Id="ffac6c7b-3eba-4d1b-b8fc-6c07d8c3d823"
-                    value="(= result result)" />
+                    value="(Equal result result)" />
                 </specification>
               </constraint>
             </postconditionsInternal>
@@ -295,7 +295,7 @@
                 <specification>
                   <literalString
                     Id="1a38891c-730b-463c-9181-52e67b7c2757"
-                    value="(&gt;= a 0)" />
+                    value="(GreaterThanOrEqual a 0)" />
                 </specification>
               </constraint>
             </preconditionsInternal>
@@ -305,7 +305,7 @@
                 <specification>
                   <literalString
                     Id="4084ffdf-aba0-44df-a2f7-fa7def0ea47d"
-                    value="(= result result)" />
+                    value="(Equal result result)" />
                 </specification>
               </constraint>
             </postconditionsInternal>

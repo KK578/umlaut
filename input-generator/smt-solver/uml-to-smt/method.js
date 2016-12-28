@@ -1,5 +1,5 @@
 const Smt = require('../../util/smt-solver/classes.js');
-const comparisons = require('../../../util/comparisons.json');
+const comparisons = require('../../../util/comparisons.js');
 
 function convertType(type) {
 	switch (type) {
@@ -9,20 +9,6 @@ function convertType(type) {
 		default:
 			return type;
 	}
-}
-
-function convertComparison(comparison) {
-	for (let i = 0; i < comparisons.length; i++) {
-		const c = comparisons[i];
-
-		if (c.name === comparison) {
-			const symbol = c.smtSymbol ? c.smtSymbol : c.symbol;
-
-			return symbol;
-		}
-	}
-
-	return false;
 }
 
 module.exports = class SmtMethod {
@@ -69,7 +55,7 @@ module.exports = class SmtMethod {
 
 		// For each precondition, add it to the stack.
 		method.preconditions.map((c) => {
-			const comparison = convertComparison(c.comparison);
+			const comparison = comparisons.toSmtSymbol(c.comparison);
 			const conditionCommand = new Smt.BooleanExpression(comparison, c.arguments);
 
 			this.commands.push(new Smt.Assertion(conditionCommand));
@@ -92,7 +78,7 @@ module.exports = class SmtMethod {
 
 		// Add postconditions so that the inputs may be more interesting.
 		method.postconditions.map((c) => {
-			const comparison = convertComparison(c.comparison);
+			const comparison = comparisons.toSmtSymbol(c.comparison);
 			const conditionCommand = new Smt.BooleanExpression(comparison, c.arguments);
 
 			this.commands.push(new Smt.Assertion(conditionCommand));
@@ -110,7 +96,7 @@ module.exports = class SmtMethod {
 			this.commands.push(new Smt.StackModifier('push'));
 
 			method.preconditions.map((c, j) => {
-				const comparison = convertComparison(c.comparison);
+				const comparison = comparisons.toSmtSymbol(c.comparison);
 				const expression = new Smt.BooleanExpression(comparison, c.arguments);
 
 				// If it is the one that we are testing,
