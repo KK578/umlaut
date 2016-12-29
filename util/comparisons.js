@@ -38,8 +38,21 @@ function toName(comparison) {
 	throw new Error(`Comparison with symbol "${comparison}" does not exist.`);
 }
 
+function verifySmtSymbol(comparison) {
+	for (let i = 0; i < comparisons.length; i++) {
+		const c = comparisons[i];
+
+		if (c.smtSymbol === comparison || c.symbol === comparison) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 module.exports = {
 	toName,
 	toSymbol,
-	toSmtSymbol
+	toSmtSymbol,
+	verifySmtSymbol
 };
