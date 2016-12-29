@@ -42,8 +42,15 @@ function verifySmtSymbol(comparison) {
 	for (let i = 0; i < comparisons.length; i++) {
 		const c = comparisons[i];
 
-		if (c.smtSymbol === comparison || c.symbol === comparison) {
-			return true;
+		if (c.smtSymbol !== undefined) {
+			if (c.smtSymbol === comparison) {
+				return true;
+			}
+		}
+		else {
+			if (c.symbol === comparison) {
+				return true;
+			}
 		}
 	}
 

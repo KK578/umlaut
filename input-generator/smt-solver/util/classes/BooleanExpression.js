@@ -10,7 +10,11 @@ module.exports = class SmtBooleanExpression {
 			throw new Error('Expected argument "args" to be Array.');
 		}
 
-		this.comparison = comparisons.verifySmtSymbol(comparison);
+		if (!comparisons.verifySmtSymbol(comparison)) {
+			throw new Error(`Comparison "${comparison}" is not a valid SMT comparison.`);
+		}
+
+		this.comparison = comparison;
 		this.args = args;
 		this.isInverted = typeof isInverted === 'boolean' ? isInverted : false;
 	}
