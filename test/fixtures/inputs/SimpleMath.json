@@ -1,0 +1,254 @@
+{
+  "SimpleMath": {
+    "id": "46e607e7-41e5-418d-90cd-fb194d15320e",
+    "name": "SimpleMath",
+    "variables": {
+      "Nop": {
+        "id": "3fe7d607-bdcf-4fe6-b33d-957eae44978a",
+        "name": "Nop",
+        "visibility": "Private",
+        "type": "Integer"
+      }
+    },
+    "methods": {
+      "Add": {
+        "id": "a4cdb724-1cbc-4e46-a8ae-9b06b2710d3f",
+        "name": "Add",
+        "visibility": "Public",
+        "type": "Integer",
+        "arguments": {
+          "a": "Integer",
+          "b": "Integer"
+        },
+        "preconditions": [
+          {
+            "comparison": "GreaterThanOrEqual",
+            "arguments": [
+              "a",
+              0
+            ],
+            "id": "db238a05-09a1-486a-be59-e0195ae25e78-0"
+          },
+          {
+            "comparison": "GreaterThanOrEqual",
+            "arguments": [
+              "b",
+              0
+            ],
+            "id": "db238a05-09a1-486a-be59-e0195ae25e78-1"
+          }
+        ],
+        "postconditions": [
+          {
+            "comparison": "GreaterThanOrEqual",
+            "arguments": [
+              "result",
+              "a"
+            ],
+            "id": "4774798f-d24c-47b5-b1b7-8c4000643dfe-0"
+          }
+        ],
+        "tests": [
+          {
+            "condition": "Valid",
+            "arguments": {
+              "a": 0,
+              "b": 38
+            }
+          },
+          {
+            "condition": "Complement db238a05-09a1-486a-be59-e0195ae25e78-0",
+            "arguments": {
+              "a": -1,
+              "b": 0
+            }
+          },
+          {
+            "condition": "Complement db238a05-09a1-486a-be59-e0195ae25e78-1",
+            "arguments": {
+              "a": 0,
+              "b": -1
+            }
+          }
+        ]
+      },
+      "Subtract": {
+        "id": "948a0b1f-5dfc-4e12-8b60-6fb95ad0fe99",
+        "name": "Subtract",
+        "visibility": "Public",
+        "type": "Integer",
+        "arguments": {
+          "a": "Integer",
+          "b": "Integer"
+        },
+        "preconditions": [
+          {
+            "comparison": "GreaterThanOrEqual",
+            "arguments": [
+              "a",
+              0
+            ],
+            "id": "7e395e15-84d9-4397-9eb9-0d5459e92e03-0"
+          },
+          {
+            "comparison": "GreaterThanOrEqual",
+            "arguments": [
+              "b",
+              0
+            ],
+            "id": "7e395e15-84d9-4397-9eb9-0d5459e92e03-1"
+          },
+          {
+            "comparison": "GreaterThanOrEqual",
+            "arguments": [
+              "a",
+              "b"
+            ],
+            "id": "7e395e15-84d9-4397-9eb9-0d5459e92e03-2"
+          }
+        ],
+        "postconditions": [
+          {
+            "comparison": "LessThanOrEqual",
+            "arguments": [
+              "result",
+              "a"
+            ],
+            "id": "86d048ee-3c97-48bf-8630-d07cf8671c9c-0"
+          }
+        ],
+        "tests": [
+          {
+            "condition": "Valid",
+            "arguments": {
+              "a": 0,
+              "b": 0
+            }
+          },
+          {
+            "condition": "Complement 7e395e15-84d9-4397-9eb9-0d5459e92e03-0",
+            "arguments": "Unsatisfiable"
+          },
+          {
+            "condition": "Complement 7e395e15-84d9-4397-9eb9-0d5459e92e03-1",
+            "arguments": {
+              "a": 0,
+              "b": -1
+            }
+          },
+          {
+            "condition": "Complement 7e395e15-84d9-4397-9eb9-0d5459e92e03-2",
+            "arguments": {
+              "a": 0,
+              "b": 1
+            }
+          }
+        ]
+      },
+      "Divide": {
+        "id": "20ff6c40-4f9d-4573-826a-64eaf826aab1",
+        "name": "Divide",
+        "visibility": "Public",
+        "type": "Integer",
+        "arguments": {
+          "a": "Integer",
+          "b": "Integer"
+        },
+        "preconditions": [
+          {
+            "comparison": "GreaterThanOrEqual",
+            "arguments": [
+              "a",
+              0
+            ],
+            "id": "9bba92de-4d78-4c4b-a0b4-9192e79d76fc-0"
+          },
+          {
+            "comparison": "GreaterThan",
+            "arguments": [
+              "b",
+              0
+            ],
+            "id": "9bba92de-4d78-4c4b-a0b4-9192e79d76fc-1"
+          }
+        ],
+        "postconditions": [
+          {
+            "comparison": "Equal",
+            "arguments": [
+              "result",
+              "result"
+            ],
+            "id": "523718d3-418b-42aa-8500-bda7333002d9-0"
+          }
+        ],
+        "tests": [
+          {
+            "condition": "Valid",
+            "arguments": {
+              "a": 0,
+              "b": 1
+            }
+          },
+          {
+            "condition": "Complement 9bba92de-4d78-4c4b-a0b4-9192e79d76fc-0",
+            "arguments": {
+              "a": -1,
+              "b": 1
+            }
+          },
+          {
+            "condition": "Complement 9bba92de-4d78-4c4b-a0b4-9192e79d76fc-1",
+            "arguments": {
+              "a": 0,
+              "b": 0
+            }
+          }
+        ]
+      },
+      "SquareRoot": {
+        "id": "91f7b180-e15f-4243-9dad-c5a6013b3384",
+        "name": "SquareRoot",
+        "visibility": "Public",
+        "type": "Integer",
+        "arguments": {
+          "a": "Integer"
+        },
+        "preconditions": [
+          {
+            "comparison": "GreaterThanOrEqual",
+            "arguments": [
+              "a",
+              0
+            ],
+            "id": "d406f284-fabe-4f4e-9b21-293526a4b7de-0"
+          }
+        ],
+        "postconditions": [
+          {
+            "comparison": "Equal",
+            "arguments": [
+              "result",
+              "result"
+            ],
+            "id": "3213a608-60c6-4e26-a9d9-3cceda35c7d4-0"
+          }
+        ],
+        "tests": [
+          {
+            "condition": "Valid",
+            "arguments": {
+              "a": 0
+            }
+          },
+          {
+            "condition": "Complement d406f284-fabe-4f4e-9b21-293526a4b7de-0",
+            "arguments": {
+              "a": -1
+            }
+          }
+        ]
+      }
+    }
+  }
+}

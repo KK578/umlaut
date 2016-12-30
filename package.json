@@ -23,11 +23,14 @@
   ],
   "dependencies": {
     "glob": "^7.1.1",
+    "parsey": "^0.2.0",
     "xml2js": "^0.4.17",
-    "yeoman-generator": "^0.24.1"
+    "yeoman-generator": "^1.0.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "chai-files": "^1.4.0",
     "eslint-formatter-pretty": "^0.2.2",
     "grunt": "^1.0.1",
     "grunt-eslint": "KK578/grunt-eslint",
@@ -37,6 +40,7 @@
     "jit-grunt": "^0.10.0",
     "load-grunt-config": "^0.19.2",
     "mocha": "^3.1.2",
-    "time-grunt": "^1.4.0"
+    "time-grunt": "^1.4.0",
+    "yeoman-test": "^1.6.0"
   }
 }

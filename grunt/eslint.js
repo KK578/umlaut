@@ -9,18 +9,19 @@ module.exports = {
 				src: [
 					'gruntfile.js',
 					'grunt/*.js',
-					'util/*.js'
+					'util/*.js',
+					'test/*.js'
 				]
 			}
 		]
 	},
-	'smt-generator': {
+	'input-generator': {
 		files: [
 			{
 				expand: true,
 				src: [
-					'src/smt-generator/**/*.js',
-					'test/smt-generator/*.js'
+					'input-generator/**/*.js',
+					'test/input-generator/*.js'
 				]
 			}
 		]
@@ -30,7 +31,7 @@ module.exports = {
 			{
 				expand: true,
 				src: [
-					'src/uml-parser/**/*.js',
+					'uml-parser/**/*.js',
 					'test/uml-parser/*.js'
 				]
 			}
