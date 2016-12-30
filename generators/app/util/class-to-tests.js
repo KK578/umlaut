@@ -38,93 +38,76 @@ function getLanguageType(type) {
 	}
 }
 
-function generateArgumentString(methodArgs) {
-	const names = Object.keys(methodArgs).map((arg) => {
-		return arg;
+function readMethod(m) {
+	// Handling tests
+	const preconditions = {};
+
+	m.preconditions.map((c) => {
+		preconditions[c.id] = c;
 	});
 
-	return names.join(', ');
+	// Return type handling
+	const type = getLanguageType(m.type);
+
+	const tests = m.tests.map((t) => {
+		if (t.arguments === 'Unsatisfiable') {
+			return null;
+		}
+
+		// TODO: Organise this better.
+		// Redundant search through preconditions occurs in generateTestMethodName.
+		// Could pass value directly via preconditions object.
+		let testId;
+		let exception = undefined;
+
+		if (t.condition.indexOf(' ') >= 0) {
+			testId = t.condition.split(' ')[1];
+			// This will mean exception is either defined to the corresponding
+			//  precondition's exception, or it will be undefined.'
+			try {
+				exception = preconditions[testId].exception;
+			}
+			catch (ex) {
+				exception = undefined;
+			}
+		}
+		else {
+			// Else the condition is probably 'Valid'.
+			testId = t.condition;
+		}
+
+		const test = {
+			name: generateTestMethodName(m, testId),
+			arguments: t.arguments,
+			exception: exception
+		};
+
+		return test;
+	});
+
+	const postconditions = m.postconditions.map((c) => {
+		c.comparison = comparisons.toSymbol(c.comparison);
+
+		return c;
+	});
+
+	const method = {
+		name: m.name,
+		type: type,
+		postconditions: postconditions,
+		tests: tests
+	};
+
+	return method;
 }
 
 module.exports = (uml) => {
-	const umlClass = {};
+	const testClass = {};
 
-	umlClass.name = uml.name;
-	umlClass.methods = Object.keys(uml.methods).map((key) => {
-		const m = uml.methods[key];
-
-		// Handling tests
-		const preconditions = {};
-
-		m.preconditions.map((c) => {
-			preconditions[c.id] = c;
-		});
-
-		const args = {};
-
-		Object.keys(m.arguments).map((a) => {
-			args[a] = getLanguageType(m.arguments[a]);
-		});
-
-		// Return type handling
-		const type = getLanguageType(m.type);
-
-		const tests = m.tests.map((t) => {
-			if (t.arguments === 'Unsatisfiable') {
-				return null;
-			}
-
-			// TODO: Organise this better.
-			// Redundant search through preconditions occurs in generateTestMethodName.
-			// Could pass value directly via preconditions object.
-			let testId;
-			let exception = undefined;
-
-			if (t.condition.indexOf(' ') >= 0) {
-				testId = t.condition.split(' ')[1];
-				// This will mean exception is either defined to the corresponding
-				//  precondition's exception, or it will be undefined.'
-				try {
-					exception = preconditions[testId].exception;
-				}
-				catch (ex) {
-					exception = undefined;
-				}
-			}
-			else {
-				// Else the condition is probably 'Valid'.
-				testId = t.condition;
-			}
-
-			const test = {
-				name: generateTestMethodName(m, testId),
-				arguments: t.arguments,
-				argumentString: generateArgumentString(m.arguments),
-				exception: exception
-			};
-
-			return test;
-		});
-
-		const postconditions = m.postconditions.map((c) => {
-			c.comparison = comparisons.toSymbol(c.comparison);
-
-			return c;
-		});
-
-		const method = {
-			name: m.name,
-			arguments: args,
-			type: type,
-			preconditions: preconditions,
-			postconditions: postconditions,
-			tests: tests
-		};
-
-		return method;
+	testClass.name = uml.name;
+	testClass.methods = Object.keys(uml.methods).map((name) => {
+		return readMethod(uml.methods[name]);
 	});
 
-	// console.log(JSON.stringify(umlClass, null, 2));
-
-	return umlClass;
+	return testClass;
 };
