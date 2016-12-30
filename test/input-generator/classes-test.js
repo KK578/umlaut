@@ -194,8 +194,6 @@ describe('SMT Classes', () => {
 
 			expect(obj.toString()).to.equal('(echo "some ""foo"" and ""bar""")');
 		});
-
-		it('could error on double quote, due to z3 not supporting this properly');
 	});
 
 	describe('GetValue', () => {
