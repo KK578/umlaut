@@ -1,16 +1,4 @@
-const comparisonList = require('../../../../util/comparisons.json');
-
-function findComparison(comparison) {
-	let result = comparison;
-
-	comparisonList.map((c) => {
-		if (comparison === c.symbol) {
-			result = c.smtSymbol ? c.smtSymbol : c.symbol;
-		}
-	});
-
-	return result;
-}
+const comparisons = require('../../../../util/comparisons.js');
 
 module.exports = class SmtBooleanExpression {
 	constructor(comparison, args, isInverted) {
@@ -22,7 +10,11 @@ module.exports = class SmtBooleanExpression {
 			throw new Error('Expected argument "args" to be Array.');
 		}
 
-		this.comparison = findComparison(comparison);
+		if (!comparisons.verifySmtSymbol(comparison)) {
+			throw new Error(`Comparison "${comparison}" is not a valid SMT comparison.`);
+		}
+
+		this.comparison = comparison;
 		this.args = args;
 		this.isInverted = typeof isInverted === 'boolean' ? isInverted : false;
 	}

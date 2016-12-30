@@ -1,4 +1,4 @@
-module.exports = class SmtModel {
+module.exports = class SmtGetValue {
 	constructor(args) {
 		if (!Array.isArray(args)) {
 			throw new Error('Expected argument "args" to be Array.');
@@ -9,9 +9,9 @@ module.exports = class SmtModel {
 
 	toString() {
 		const args = this.args.join(' ');
-		const satCommand = '(check-sat)';
-		const getCommand = `(get-value (${args}))`;
+		const checkSatCommand = '(check-sat)';
+		const getValueCommand = `(get-value (${args}))`;
 
-		return `${satCommand}\n${getCommand}`;
+		return `${checkSatCommand}\n${getValueCommand}`;
 	}
 };

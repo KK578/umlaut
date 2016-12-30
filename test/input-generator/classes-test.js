@@ -1,7 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const testee = require('../../input-generator/util/smt-solver/classes.js');
+const testee = require('../../input-generator/smt-solver/util/classes.js');
 let TestClass;
 
 describe('SMT Classes', () => {
@@ -37,6 +37,12 @@ describe('SMT Classes', () => {
 			}).to.throw(Error);
 		});
 
+		it('should error if comparison is not a valid SMT-LIB2 comparison', () => {
+			expect(() => {
+				const obj = new TestClass('==', ['a', '0']);
+			}).to.throw(Error);
+		});
+
 		it('should change isInverted with setInverted', () => {
 			const obj = new TestClass('>', ['a', 'b']);
 
@@ -44,19 +50,6 @@ describe('SMT Classes', () => {
 			expect(obj.isInverted).to.be.true;
 			obj.setInverted(false);
 			expect(obj.isInverted).to.not.be.true;
-		});
-
-		it('should do a lookup to convert a comparison to SMT-LIB2 version', () => {
-			const obj = new TestClass('==', ['a', '0']);
-
-			expect(obj.toString()).to.equal('(= a 0)');
-		});
-
-		it.skip('should handle comparator "!=" correctly as a SMT-LIB2 command', () => {
-			const obj = new TestClass('!=', ['a', '0']);
-
-			expect(obj.isInverted).to.be.true;
-			expect(obj.toString()).to.equal('(not (= a 0))');
 		});
 
 		it('should take a comparison and argument list containing BooleanExpressions', () => {

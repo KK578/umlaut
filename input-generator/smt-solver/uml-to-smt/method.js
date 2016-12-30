@@ -1,4 +1,4 @@
-const Smt = require('../../util/smt-solver/classes.js');
+const Smt = require('../util/classes.js');
 const comparisons = require('../../../util/comparisons.js');
 
 function convertType(type) {

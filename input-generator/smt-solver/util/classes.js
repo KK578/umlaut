@@ -5,6 +5,6 @@ module.exports = {
 	DeclareFunction: require('./classes/DeclareFunction.js'),
 	Echo: require('./classes/Echo.js'),
 	FunctionCall: require('./classes/FunctionCall.js'),
-	GetValue: require('./classes/Model.js'),
+	GetValue: require('./classes/GetValue.js'),
 	StackModifier: require('./classes/StackModifier.js')
 };
