@@ -47,10 +47,8 @@ function verifySmtSymbol(comparison) {
 				return true;
 			}
 		}
-		else {
-			if (c.symbol === comparison) {
-				return true;
-			}
+		else if (c.symbol === comparison) {
+			return true;
 		}
 	}
 
