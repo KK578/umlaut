@@ -2,13 +2,10 @@ const path = require('path');
 
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const chaiFiles = require('chai-files');
 const yeomanHelpers = require('yeoman-test');
 const expect = chai.expect;
-const file = chaiFiles.file;
 
 chai.use(chaiAsPromised);
-chai.use(chaiFiles);
 
 const promises = require('../../util/promises.js');
 

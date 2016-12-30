@@ -1,5 +1,4 @@
 const Generator = require('yeoman-generator');
-const path = require('path');
 
 const classToTests = require('./util/class-to-tests.js');
 
