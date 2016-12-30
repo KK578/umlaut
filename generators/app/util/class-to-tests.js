@@ -74,9 +74,7 @@ function readMethod(m) {
 			return null;
 		}
 
-		const test = readTest(m, t);
-
-		return test;
+		return readTest(m, t);
 	});
 
 	const postconditions = m.postconditions.map((c) => {
@@ -85,14 +83,12 @@ function readMethod(m) {
 		return c;
 	});
 
-	const method = {
+	return {
 		name: m.name,
 		type: m.type,
 		postconditions: postconditions,
 		tests: tests
 	};
-
-	return method;
 }
 
 module.exports = (uml) => {
