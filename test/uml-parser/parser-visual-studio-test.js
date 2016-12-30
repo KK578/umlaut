@@ -8,7 +8,7 @@ chai.use(chaiAsPromised);
 const promises = require('../../util/promises.js');
 const REGEX_UUID = /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i;
 
-let testee = require('../../uml-parser/parsers/visual-studio/index.js');
+const testee = require('../../uml-parser/parsers/visual-studio/index.js');
 
 describe('Visual Studio Parser', () => {
 	it('should state it cannot parse a non XML string', () => {

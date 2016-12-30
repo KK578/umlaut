@@ -5,7 +5,7 @@ const expect = chai.expect;
 
 chai.use(chaiAsPromised);
 
-let testee = require('../../input-generator/smt-solver/index.js');
+const testee = require('../../input-generator/smt-solver/index.js');
 
 describe('SMT-Solver', () => {
 	describe('SimpleMath Test Fixture', () => {
