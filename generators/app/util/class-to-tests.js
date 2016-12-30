@@ -1,44 +1,42 @@
 const comparisons = require('../../../util/comparisons.js');
 
-function generateTestMethodName(method, testId) {
-	let condition;
+function generateTestMethodName(methodName, condition) {
 	let clean;
 
-	if (testId === 'Valid') {
+	if (condition === 'Valid') {
 		clean = 'Valid';
 	}
 	else {
-		for (let i = 0; i < method.preconditions.length; i++) {
-			const c = method.preconditions[i];
-
-			if (c.id === testId) {
-				condition = c;
-				break;
-			}
-		}
-
 		clean = `Not${comparisons.toName(condition.comparison)}_${condition.arguments.join('_')}`;
 	}
 
-	return `test_${method.name}_${clean}`;
+	return `test_${methodName}_${clean}`;
 }
 
-function getLanguageType(type) {
-	// TODO: Expand this to a config file lookup
-	switch (type) {
-		case 'Integer':
-		case 'Int':
-		case 'int':
-			return 'int';
-
-		default:
-			console.log(`Undefined type "${type}"`);
-
-			return type;
+function findCondition(preconditions, condition) {
+	if (condition === 'Valid') {
+		return condition;
 	}
+
+	const id = condition.split(' ')[1];
+
+	for (let i = 0; i < preconditions.length; i++) {
+		const c = preconditions[i];
+
+		if (c.id === id) {
+			return c;
+		}
+	}
+
+	throw new Error('No valid precondition found.');
 }
 
 function readTest(method, test) {
+	const condition = findCondition(method.preconditions, test.condition);
+
+	const name = generateTestMethodName(method.name, condition);
+	const exception = condition.exception;
+
 	const initialise = Object.keys(test.arguments).map((name) => {
 		return {
 			name: name,
@@ -62,6 +60,8 @@ function readTest(method, test) {
 	const assertions = method.postconditions;
 
 	return {
+		name,
+		exception,
 		initialise,
 		run,
 		assertions
@@ -69,48 +69,12 @@ function readTest(method, test) {
 }
 
 function readMethod(m) {
-	// Handling tests
-	const preconditions = {};
-
-	m.preconditions.map((c) => {
-		preconditions[c.id] = c;
-	});
-
-	// Return type handling
-	const type = getLanguageType(m.type);
-
 	const tests = m.tests.map((t) => {
 		if (t.arguments === 'Unsatisfiable') {
 			return null;
 		}
 
-		// TODO: Organise this better.
-		// Redundant search through preconditions occurs in generateTestMethodName.
-		// Could pass value directly via preconditions object.
-		let testId;
-		let exception = undefined;
-
-		if (t.condition.indexOf(' ') >= 0) {
-			testId = t.condition.split(' ')[1];
-			// This will mean exception is either defined to the corresponding
-			//  precondition's exception, or it will be undefined.'
-			try {
-				exception = preconditions[testId].exception;
-			}
-			catch (ex) {
-				exception = undefined;
-			}
-		}
-		else {
-			// Else the condition is probably 'Valid'.
-			testId = t.condition;
-		}
-
-		const test = {
-			name: generateTestMethodName(m, testId),
-			arguments: t.arguments,
-			exception: exception
-		};
+		const test = readTest(m, t);
 
 		return test;
 	});
@@ -123,7 +87,7 @@ function readMethod(m) {
 
 	const method = {
 		name: m.name,
-		type: type,
+		type: m.type,
 		postconditions: postconditions,
 		tests: tests
 	};
