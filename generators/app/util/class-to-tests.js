@@ -38,6 +38,36 @@ function getLanguageType(type) {
 	}
 }
 
+function readTest(method, test) {
+	const initialise = Object.keys(test.arguments).map((name) => {
+		return {
+			name: name,
+			type: method.arguments[name],
+			value: test.arguments[name]
+		};
+	});
+
+	const run = [
+		{
+			name: 'result',
+			type: method.type,
+			value: {
+				type: 'function-call',
+				name: method.name,
+				arguments: Object.keys(method.arguments)
+			}
+		}
+	];
+
+	const assertions = method.postconditions;
+
+	return {
+		initialise,
+		run,
+		assertions
+	};
+}
+
 function readMethod(m) {
 	// Handling tests
 	const preconditions = {};
