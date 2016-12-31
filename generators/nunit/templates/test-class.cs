@@ -22,14 +22,18 @@ namespace AutomatedTestSuite
 		<%_ 			} _%>
 		public void <%= test.name %>()
 		{
-			<%_ Object.keys(test.arguments).map((name) => { _%>
-			<%= method.arguments[name] %> <%= name %> = <%= test.arguments[name] %>;
+			<%_ test.initialise.map((i) => { _%>
+			<%= i.type %> <%= i.name %> = <%= i.value %>;
 			<%_ }) _%>
 
-			<%= method.type %> result = testee.<%= method.name %>(<%= test.argumentString %>);
+			<%_ test.run.map((r) => { _%>
+			<%_ 	if (r.value.type === 'function-call') { _%>
+			<%= r.type %> <%= r.name %> = testee.<%= r.value.name %>(<%= r.value.arguments.join(', ') %>);
+			<%_ 	} _%>
+			<%_ }) _%>
 
-			<%_ method.postconditions.map((condition) => { _%>
-			Assert.isTrue(<%= condition.arguments[0] %> <%- condition.comparison %> <%= condition.arguments[1] %>);
+			<%_ test.assertions.map((a) => { _%>
+			Assert.isTrue(<%= a.arguments[0] %> <%- a.comparison %> <%= a.arguments[1] %>);
 			<%_ }) _%>
 		}
 		<%_			} _%>
