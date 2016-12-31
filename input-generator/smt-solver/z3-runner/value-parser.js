@@ -25,14 +25,7 @@ function parseCondition(text) {
 }
 
 function parse(text) {
-	let split = text.split('-----');
-
-	// Ignore first as it will be empty.
-	split = split.slice(1);
-
-	const results = split.map(parseCondition);
-
-	return results;
+	return parser(text);
 }
 
 module.exports = parse;
