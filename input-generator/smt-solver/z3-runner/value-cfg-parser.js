@@ -1,8 +1,3 @@
-const parsey = require('parsey');
-
-const Sym = parsey.Sym;
-const Rule = parsey.Rule;
-
 /**
  * CFG for results from get-value of SMT-LIB2 run through z3.
  *
@@ -25,13 +20,19 @@ const Rule = parsey.Rule;
  *
  *  numericValue2	::= [0-9]+
  */
-const smtIdResultList = new Sym('smtIdResultList');
-const smtIdResult = new Sym('smtIdResult');
-const conditionId = new Sym('conditionId');
+const parsey = require('parsey');
+
+const Sym = parsey.Sym;
+const Rule = parsey.Rule;
+
+// Parsey symbols
+const smtInputsList = new Sym('smtInputsList');
+const smtTest = new Sym('smtTest');
+const conditionIdentifier = new Sym('conditionIdentifier');
 const smtError = new Sym('smtError');
 const ignoredStrings = new Sym('ignoredStrings');
-const smtResult = new Sym('smtResult');
-const smtValue = new Sym('smtValue');
+const smtInputs = new Sym('smtInputs');
+const smtValues = new Sym('smtValues');
 const identifier = new Sym('identifier');
 const inputValue = new Sym('inputValue');
 const numericValue = new Sym('numericValue');
@@ -41,21 +42,21 @@ const UUID_REGEX = /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
 
 const grammar = [
 	// smtIdResultList
-	new Rule(smtIdResultList, [smtIdResultList, '\\', smtIdResult], (next, _, values) => {
+	new Rule(smtInputsList, [smtInputsList, '\\', smtTest], (next, _, values) => {
 		return next.concat(values);
 	}),
-	new Rule(smtIdResultList, [smtIdResult], (values) => {
+	new Rule(smtInputsList, [smtTest], (values) => {
 		return [values];
 	}),
 
 	// smtIdResult
-	new Rule(smtIdResult, ['[[', conditionId, ']]', 'sat', smtResult], (_, id, __, ___, values) => {
+	new Rule(smtTest, ['[[', conditionIdentifier, ']]', 'sat', smtInputs], (_, id, __, ___, values) => {
 		return {
 			id,
 			values
 		};
 	}),
-	new Rule(smtIdResult, ['[[', conditionId, ']]', 'unsat', smtError], (_, id) => {
+	new Rule(smtTest, ['[[', conditionIdentifier, ']]', 'unsat', smtError], (_, id) => {
 		return {
 			id,
 			unsatisfiable: true
@@ -63,10 +64,10 @@ const grammar = [
 	}),
 
 	// conditionId
-	new Rule(conditionId, [/Valid/], (id) => {
+	new Rule(conditionIdentifier, [/Valid/], (id) => {
 		return id;
 	}),
-	new Rule(conditionId, [UUID_REGEX], (id) => {
+	new Rule(conditionIdentifier, [UUID_REGEX], (id) => {
 		return id;
 	}),
 
@@ -85,19 +86,19 @@ const grammar = [
 
 
 	// smtResult
-	new Rule(smtResult, ['(', smtValue, ')'], (_, values) => {
+	new Rule(smtInputs, ['(', smtValues, ')'], (_, values) => {
 		return values;
 	}),
 
 	// smtValue
-	new Rule(smtValue, [smtValue, '(', identifier, inputValue, ')'], (next, _, id, v) => {
+	new Rule(smtValues, [smtValues, '(', identifier, inputValue, ')'], (next, _, id, v) => {
 		let result = { [id]: v };
 
 		result = Object.assign(next, result);
 
 		return result;
 	}),
-	new Rule(smtValue, ['(', identifier, inputValue, ')'], (_, id, v) => {
+	new Rule(smtValues, ['(', identifier, inputValue, ')'], (_, id, v) => {
 		const result = { [id]: v };
 
 		return result;
