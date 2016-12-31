@@ -37,7 +37,7 @@ function parseVariables(umlClass) {
 
 		properties.map((property) => {
 			const v = {
-				id: property.$.Id,
+				id: uuid(),
 				name: property.$.name
 			};
 
@@ -130,7 +130,7 @@ function parseMethods(umlClass) {
 		operations.map((operation) => {
 			// Generic method properties
 			const v = {
-				id: operation.$.Id,
+				id: uuid(),
 				name: operation.$.name
 			};
 
@@ -156,7 +156,7 @@ function parseClass(umlClass) {
 	const c = {};
 
 	// Locate generic class properties.
-	c.id = umlClass.$.Id;
+	c.id = uuid();
 	c.name = umlClass.$.name;
 
 	// Parse information for class variables and methods.
