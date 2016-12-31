@@ -25,6 +25,8 @@ const Rule = parsey.Rule;
  *
  *  numericValue2	::= [0-9]+
  */
+const smtIdResult = new Sym('smtIdResult');
+const conditionId = new Sym('conditionId');
 const smtResult = new Sym('smtResult');
 const smtValue = new Sym('smtValue');
 const identifier = new Sym('identifier');
@@ -32,7 +34,25 @@ const inputValue = new Sym('inputValue');
 const numericValue = new Sym('numericValue');
 const numericValue2 = new Sym('numericValue2');
 
+const UUID_REGEX = /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i;
+
 const grammar = [
+	// smtIdResult
+	new Rule(smtIdResult, ['[[', conditionId, ']]', 'sat', smtResult], (_, id, __, ___, values) => {
+		return {
+			id,
+			values
+		};
+	}),
+
+	// conditionId
+	new Rule(conditionId, [/Valid/], (id) => {
+		return id;
+	}),
+	new Rule(conditionId, [UUID_REGEX], (id) => {
+		return id;
+	}),
+
 	// smtResult
 	new Rule(smtResult, ['(', smtValue, ')'], (_, values) => {
 		return values;
