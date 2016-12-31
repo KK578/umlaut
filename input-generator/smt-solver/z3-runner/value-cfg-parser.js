@@ -53,7 +53,7 @@ const grammar = [
 	new Rule(smtTest, ['[[', conditionIdentifier, ']]', 'sat', smtInputs], (_, id, __, ___, values) => {
 		return {
 			id,
-			values
+			arguments: values
 		};
 	}),
 	new Rule(smtTest, ['[[', conditionIdentifier, ']]', 'unsat', smtError], (_, id) => {

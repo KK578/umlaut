@@ -50,21 +50,21 @@ describe('CFG Parser for z3 Values', () => {
 		const result = testee('[[Valid]] sat ((a 0))');
 
 		expect(result).to.contain.key('id');
-		expect(result).to.contain.key('values');
+		expect(result).to.contain.key('arguments');
 
 		expect(result.id).to.be.a('string').and.equal('Valid');
-		expect(result.values).to.have.key('a');
-		expect(result.values.a).to.be.a('number').and.equal(0);
+		expect(result.arguments).to.have.key('a');
+		expect(result.arguments.a).to.be.a('number').and.equal(0);
 	});
 
 	it('should handle a UUID written just before the list in [[]]', () => {
 		const result = testee('[[12345678-abcd-efab-cdef-123456789012]] sat ((a 0))');
 
-		expect(result).to.contain.keys(['id', 'values']);
+		expect(result).to.contain.keys(['id', 'arguments']);
 
 		expect(result.id).to.be.a('string').and.equal('12345678-abcd-efab-cdef-123456789012');
-		expect(result.values).to.have.key('a');
-		expect(result.values.a).to.be.a('number').and.equal(0);
+		expect(result.arguments).to.have.key('a');
+		expect(result.arguments.a).to.be.a('number').and.equal(0);
 	});
 
 	it('should handle a UUID written before the list in [[]] after a line break', () => {
@@ -72,11 +72,11 @@ describe('CFG Parser for z3 Values', () => {
 			sat
 			((a 0))`);
 
-		expect(result).to.contain.keys(['id', 'values']);
+		expect(result).to.contain.keys(['id', 'arguments']);
 
 		expect(result.id).to.be.a('string').and.equal('12345678-abcd-efab-cdef-123456789012');
-		expect(result.values).to.have.key('a');
-		expect(result.values.a).to.be.a('number').and.equal(0);
+		expect(result.arguments).to.have.key('a');
+		expect(result.arguments.a).to.be.a('number').and.equal(0);
 	});
 
 	it('should correctly handle an unsatisfiable set of assertions', () => {
@@ -86,7 +86,7 @@ describe('CFG Parser for z3 Values', () => {
 
 		expect(result.id).to.be.a('string').and.equal('12345678-abcd-efab-cdef-123456789012');
 		expect(result.unsatisfiable).to.be.ok;
-		expect(result.values).to.not.exist;
+		expect(result.arguments).to.not.exist;
 	});
 
 	it('should handle multiple objects consecutively', () => {
@@ -95,17 +95,17 @@ describe('CFG Parser for z3 Values', () => {
 
 		expect(result).to.be.instanceOf(Array);
 
-		expect(result[0]).to.contain.keys(['id', 'values']);
+		expect(result[0]).to.contain.keys(['id', 'arguments']);
 		expect(result[0].id).to.equal('12345678-abcd-efab-cdef-123456789012');
-		expect(result[0].values).to.contain.keys(['a', 'b']);
-		expect(result[0].values.a).to.be.a('number').and.equal(0);
-		expect(result[0].values.b).to.be.a('number').and.equal(-1);
+		expect(result[0].arguments).to.contain.keys(['a', 'b']);
+		expect(result[0].arguments.a).to.be.a('number').and.equal(0);
+		expect(result[0].arguments.b).to.be.a('number').and.equal(-1);
 
-		expect(result[1]).to.contain.keys(['id', 'values']);
+		expect(result[1]).to.contain.keys(['id', 'arguments']);
 		expect(result[1].id).to.equal('87654321-abcd-efab-cdef-987654321000');
-		expect(result[1].values).to.contain.keys(['a', 'b']);
-		expect(result[1].values.a).to.be.a('number').and.equal(0);
-		expect(result[1].values.b).to.be.a('number').and.equal(38);
+		expect(result[1].arguments).to.contain.keys(['a', 'b']);
+		expect(result[1].arguments.a).to.be.a('number').and.equal(0);
+		expect(result[1].arguments.b).to.be.a('number').and.equal(38);
 	});
 
 	it('should handle multiple objects consecutively including unsatisfiable', () => {
@@ -115,20 +115,20 @@ describe('CFG Parser for z3 Values', () => {
 
 		expect(result).to.be.instanceOf(Array);
 
-		expect(result[0]).to.contain.keys(['id', 'values']);
+		expect(result[0]).to.contain.keys(['id', 'arguments']);
 		expect(result[0].id).to.equal('Valid');
-		expect(result[0].values).to.contain.keys(['a', 'b']);
-		expect(result[0].values.a).to.be.a('number').and.equal(0);
-		expect(result[0].values.b).to.be.a('number').and.equal(-1);
+		expect(result[0].arguments).to.contain.keys(['a', 'b']);
+		expect(result[0].arguments.a).to.be.a('number').and.equal(0);
+		expect(result[0].arguments.b).to.be.a('number').and.equal(-1);
 
 		expect(result[1].id).to.be.a('string').and.equal('12345678-abcd-efab-cdef-123456789012');
 		expect(result[1].unsatisfiable).to.be.ok;
-		expect(result[1].values).to.not.exist;
+		expect(result[1].arguments).to.not.exist;
 
-		expect(result[2]).to.contain.keys(['id', 'values']);
+		expect(result[2]).to.contain.keys(['id', 'arguments']);
 		expect(result[2].id).to.equal('87654321-abcd-efab-cdef-987654321000');
-		expect(result[2].values).to.contain.keys(['a', 'b']);
-		expect(result[2].values.a).to.be.a('number').and.equal(0);
-		expect(result[2].values.b).to.be.a('number').and.equal(38);
+		expect(result[2].arguments).to.contain.keys(['a', 'b']);
+		expect(result[2].arguments.a).to.be.a('number').and.equal(0);
+		expect(result[2].arguments.b).to.be.a('number').and.equal(38);
 	});
 });
