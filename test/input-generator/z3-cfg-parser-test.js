@@ -91,7 +91,7 @@ describe('CFG Parser for z3 Values', () => {
 
 	it('should handle multiple objects consecutively', () => {
 		const result = testee(`[[12345678-abcd-efab-cdef-123456789012]] sat ((a 0)(b (- 1)))
-			\\[[87654321-abcd-efab-cdef-987654321000]] sat ((a 0)(b 38))`);
+			~~[[87654321-abcd-efab-cdef-987654321000]] sat ((a 0)(b 38))`);
 
 		expect(result).to.be.instanceOf(Array);
 
@@ -110,8 +110,8 @@ describe('CFG Parser for z3 Values', () => {
 
 	it('should handle multiple objects consecutively including unsatisfiable', () => {
 		const result = testee(`[[Valid]] sat ((a 0)(b (- 1)))
-			\\[[12345678-abcd-efab-cdef-123456789012]] unsat (error "line 5 column 5: model is not available")
-			\\[[87654321-abcd-efab-cdef-987654321000]] sat ((a 0)(b 38))`);
+			~~[[12345678-abcd-efab-cdef-123456789012]] unsat (error "line 5 column 5: model is not available")
+			~~[[87654321-abcd-efab-cdef-987654321000]] sat ((a 0)(b 38))`);
 
 		expect(result).to.be.instanceOf(Array);
 

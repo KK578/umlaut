@@ -42,7 +42,7 @@ const UUID_REGEX = /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
 
 const grammar = [
 	// smtIdResultList
-	new Rule(smtInputsList, [smtInputsList, '\\', smtTest], (next, _, values) => {
+	new Rule(smtInputsList, [smtInputsList, '~~', smtTest], (next, _, values) => {
 		return next.concat(values);
 	}),
 	new Rule(smtInputsList, [smtTest], (values) => {
