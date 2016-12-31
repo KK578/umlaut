@@ -76,6 +76,10 @@ describe('SMT-Solver', () => {
 
 			it('should describe a test case where all preconditions are satisfied', () => {
 				const results = method.map((test) => {
+					if (test.unsatisfiable) {
+						return false;
+					}
+
 					return test.arguments.a >= 0 &&
 						test.arguments.b >= 0 &&
 						test.arguments.a >= test.arguments.b;
@@ -94,6 +98,10 @@ describe('SMT-Solver', () => {
 
 			it('should describe a test case where precondition 2 is not true', () => {
 				const results = method.map((test) => {
+					if (test.unsatisfiable) {
+						return false;
+					}
+
 					return test.arguments.a >= 0 &&
 						!(test.arguments.b >= 0) &&
 						test.arguments.a >= test.arguments.b;
@@ -104,6 +112,10 @@ describe('SMT-Solver', () => {
 
 			it('should describe a test case where precondition 3 is not true', () => {
 				const results = method.map((test) => {
+					if (test.unsatisfiable) {
+						return false;
+					}
+
 					return test.arguments.a >= 0 &&
 						test.arguments.b >= 0 &&
 						!(test.arguments.a >= test.arguments.b);
