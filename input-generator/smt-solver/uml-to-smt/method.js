@@ -92,7 +92,7 @@ module.exports = class SmtMethod {
 	singularInvalidConditions(method) {
 		method.preconditions.map((a, i) => {
 			// For each precondition, add it to the stack.
-			this.commands.push(new Smt.Echo(`\\\\[[${a.id}]]`));
+			this.commands.push(new Smt.Echo(`\\[[${a.id}]]`));
 			this.commands.push(new Smt.StackModifier('push'));
 
 			method.preconditions.map((c, j) => {
