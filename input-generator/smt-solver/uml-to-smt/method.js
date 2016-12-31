@@ -50,7 +50,7 @@ module.exports = class SmtMethod {
 
 	allValidConditions(method) {
 		// Add a layer to the stack so we can pop later and keep the declarations.
-		this.commands.push(new Smt.Echo('-----Valid'));
+		this.commands.push(new Smt.Echo('[[Valid]]'));
 		this.commands.push(new Smt.StackModifier('push'));
 
 		// For each precondition, add it to the stack.
@@ -92,7 +92,7 @@ module.exports = class SmtMethod {
 	singularInvalidConditions(method) {
 		method.preconditions.map((a, i) => {
 			// For each precondition, add it to the stack.
-			this.commands.push(new Smt.Echo(`-----Complement ${a.id}`));
+			this.commands.push(new Smt.Echo(`~~[[${a.id}]]`));
 			this.commands.push(new Smt.StackModifier('push'));
 
 			method.preconditions.map((c, j) => {

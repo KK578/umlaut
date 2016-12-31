@@ -39,7 +39,7 @@ describe('SMT Classes', () => {
 
 		it('should error if comparison is not a valid SMT-LIB2 comparison', () => {
 			expect(() => {
-				const obj = new TestClass('==', ['a', '0']);
+				new TestClass('==', ['a', '0']);
 			}).to.throw(Error);
 		});
 

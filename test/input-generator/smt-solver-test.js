@@ -26,12 +26,6 @@ describe('SMT-Solver', () => {
 			expect(Object.keys(testResult)).to.have.length(4);
 		});
 
-		// it('should describe a "tests" Array on all methods', () => {
-		// 	Object.keys(testResult).map((method) => {
-		// 		expect(method.tests).to.be.instanceOf(Array);
-		// 	});
-		// });
-
 		describe('SimpleMath#Add', () => {
 			let method;
 
@@ -76,6 +70,10 @@ describe('SMT-Solver', () => {
 
 			it('should describe a test case where all preconditions are satisfied', () => {
 				const results = method.map((test) => {
+					if (test.unsatisfiable) {
+						return false;
+					}
+
 					return test.arguments.a >= 0 &&
 						test.arguments.b >= 0 &&
 						test.arguments.a >= test.arguments.b;
@@ -86,7 +84,7 @@ describe('SMT-Solver', () => {
 
 			it('should state forcing only precondition 1 not to true is unsatisfiable', () => {
 				const results = method.map((test) => {
-					return test.arguments === 'Unsatisfiable';
+					return test.unsatisfiable;
 				});
 
 				expect(results).to.include(true);
@@ -94,6 +92,10 @@ describe('SMT-Solver', () => {
 
 			it('should describe a test case where precondition 2 is not true', () => {
 				const results = method.map((test) => {
+					if (test.unsatisfiable) {
+						return false;
+					}
+
 					return test.arguments.a >= 0 &&
 						!(test.arguments.b >= 0) &&
 						test.arguments.a >= test.arguments.b;
@@ -104,6 +106,10 @@ describe('SMT-Solver', () => {
 
 			it('should describe a test case where precondition 3 is not true', () => {
 				const results = method.map((test) => {
+					if (test.unsatisfiable) {
+						return false;
+					}
+
 					return test.arguments.a >= 0 &&
 						test.arguments.b >= 0 &&
 						!(test.arguments.a >= test.arguments.b);

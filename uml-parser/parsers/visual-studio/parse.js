@@ -1,3 +1,4 @@
+const uuid = require('uuid/v4');
 const promises = require('../../util/promises.js');
 const cfgParser = require('./condition-cfg-parser.js');
 
@@ -36,7 +37,7 @@ function parseVariables(umlClass) {
 
 		properties.map((property) => {
 			const v = {
-				id: property.$.Id,
+				id: uuid(),
 				name: property.$.name
 			};
 
@@ -99,12 +100,12 @@ function parseMethods(umlClass) {
 	function getConditions(conditions) {
 		let c = [];
 
-		function parseConditions(id, conditions) {
+		function parseConditions(conditions) {
 			const split = conditions.split('-----');
-			const parsed = split.map((condition, index) => {
+			const parsed = split.map((condition) => {
 				const result = cfgParser(condition);
 
-				result.id = `${id}-${index}`;
+				result.id = uuid();
 
 				return result;
 			});
@@ -115,9 +116,8 @@ function parseMethods(umlClass) {
 		if (conditions) {
 			const constraint = conditions[0].constraint[0];
 			const conditionString = constraint.specification[0].literalString[0].$.value;
-			const id = constraint.$.Id;
 
-			c = parseConditions(id, conditionString);
+			c = parseConditions(conditionString);
 		}
 
 		return c;
@@ -130,7 +130,7 @@ function parseMethods(umlClass) {
 		operations.map((operation) => {
 			// Generic method properties
 			const v = {
-				id: operation.$.Id,
+				id: uuid(),
 				name: operation.$.name
 			};
 
@@ -156,7 +156,7 @@ function parseClass(umlClass) {
 	const c = {};
 
 	// Locate generic class properties.
-	c.id = umlClass.$.Id;
+	c.id = uuid();
 	c.name = umlClass.$.name;
 
 	// Parse information for class variables and methods.
