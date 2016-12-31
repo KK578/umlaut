@@ -26,12 +26,6 @@ describe('SMT-Solver', () => {
 			expect(Object.keys(testResult)).to.have.length(4);
 		});
 
-		// it('should describe a "tests" Array on all methods', () => {
-		// 	Object.keys(testResult).map((method) => {
-		// 		expect(method.tests).to.be.instanceOf(Array);
-		// 	});
-		// });
-
 		describe('SimpleMath#Add', () => {
 			let method;
 
