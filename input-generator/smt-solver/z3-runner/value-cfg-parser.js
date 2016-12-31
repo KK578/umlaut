@@ -27,6 +27,8 @@ const Rule = parsey.Rule;
  */
 const smtIdResult = new Sym('smtIdResult');
 const conditionId = new Sym('conditionId');
+const smtError = new Sym('smtError');
+const ignoredStrings = new Sym('ignoredStrings');
 const smtResult = new Sym('smtResult');
 const smtValue = new Sym('smtValue');
 const identifier = new Sym('identifier');
@@ -44,6 +46,12 @@ const grammar = [
 			values
 		};
 	}),
+	new Rule(smtIdResult, ['[[', conditionId, ']]', 'unsat', smtError], (_, id) => {
+		return {
+			id,
+			unsatisfiable: true
+		};
+	}),
 
 	// conditionId
 	new Rule(conditionId, [/Valid/], (id) => {
@@ -52,6 +60,20 @@ const grammar = [
 	new Rule(conditionId, [UUID_REGEX], (id) => {
 		return id;
 	}),
+
+	// smtError
+	new Rule(smtError, ['(', 'error', ignoredStrings, ')'], () => {
+		return null;
+	}),
+
+	// ignoredStrings
+	new Rule(ignoredStrings, [/[a-zA-Z0-9"':]+/, ignoredStrings], () => {
+		return null;
+	}),
+	new Rule(ignoredStrings, [/[a-zA-Z0-9"':]+/], () => {
+		return null;
+	}),
+
 
 	// smtResult
 	new Rule(smtResult, ['(', smtValue, ')'], (_, values) => {

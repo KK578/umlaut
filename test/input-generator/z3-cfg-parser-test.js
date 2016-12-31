@@ -82,7 +82,7 @@ describe('CFG Parser for z3 Values', () => {
 	it('should correctly handle an unsatisfiable set of assertions', () => {
 		const result = testee('[[12345678-abcd-efab-cdef-123456789012]] unsat (error "line 1 column 1: model is not available")');
 
-		expect(result).to.contain.keys(['id', 'values']);
+		expect(result).to.contain.keys(['id', 'unsatisfiable']);
 
 		expect(result.id).to.be.a('string').and.equal('12345678-abcd-efab-cdef-123456789012');
 		expect(result.unsatisfiable).to.be.ok;
