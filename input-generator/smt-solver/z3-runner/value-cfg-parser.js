@@ -1,8 +1,3 @@
-const parsey = require('parsey');
-
-const Sym = parsey.Sym;
-const Rule = parsey.Rule;
-
 /**
  * CFG for results from get-value of SMT-LIB2 run through z3.
  *
@@ -25,28 +20,85 @@ const Rule = parsey.Rule;
  *
  *  numericValue2	::= [0-9]+
  */
-const smtResult = new Sym('smtResult');
-const smtValue = new Sym('smtValue');
+const parsey = require('parsey');
+
+const Sym = parsey.Sym;
+const Rule = parsey.Rule;
+
+// Parsey symbols
+const smtInputsList = new Sym('smtInputsList');
+const smtTest = new Sym('smtTest');
+const conditionIdentifier = new Sym('conditionIdentifier');
+const smtError = new Sym('smtError');
+const ignoredStrings = new Sym('ignoredStrings');
+const smtInputs = new Sym('smtInputs');
+const smtValues = new Sym('smtValues');
 const identifier = new Sym('identifier');
 const inputValue = new Sym('inputValue');
 const numericValue = new Sym('numericValue');
 const numericValue2 = new Sym('numericValue2');
 
+const UUID_REGEX = /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i;
+
 const grammar = [
+	// smtIdResultList
+	new Rule(smtInputsList, [smtInputsList, '~~', smtTest], (next, _, values) => {
+		return next.concat(values);
+	}),
+	new Rule(smtInputsList, [smtTest], (values) => {
+		return [values];
+	}),
+
+	// smtIdResult
+	new Rule(smtTest, ['[[', conditionIdentifier, ']]', 'sat', smtInputs], (_, id, __, ___, values) => {
+		return {
+			id,
+			arguments: values
+		};
+	}),
+	new Rule(smtTest, ['[[', conditionIdentifier, ']]', 'unsat', smtError], (_, id) => {
+		return {
+			id,
+			unsatisfiable: true
+		};
+	}),
+
+	// conditionId
+	new Rule(conditionIdentifier, [/Valid/], (id) => {
+		return id;
+	}),
+	new Rule(conditionIdentifier, [UUID_REGEX], (id) => {
+		return id;
+	}),
+
+	// smtError
+	new Rule(smtError, ['(', 'error', ignoredStrings, ')'], () => {
+		return null;
+	}),
+
+	// ignoredStrings
+	new Rule(ignoredStrings, [/[a-zA-Z0-9"':]+/, ignoredStrings], () => {
+		return null;
+	}),
+	new Rule(ignoredStrings, [/[a-zA-Z0-9"':]+/], () => {
+		return null;
+	}),
+
+
 	// smtResult
-	new Rule(smtResult, ['(', smtValue, ')'], (_, values) => {
+	new Rule(smtInputs, ['(', smtValues, ')'], (_, values) => {
 		return values;
 	}),
 
 	// smtValue
-	new Rule(smtValue, [smtValue, '(', identifier, inputValue, ')'], (next, _, id, v) => {
+	new Rule(smtValues, [smtValues, '(', identifier, inputValue, ')'], (next, _, id, v) => {
 		let result = { [id]: v };
 
 		result = Object.assign(next, result);
 
 		return result;
 	}),
-	new Rule(smtValue, ['(', identifier, inputValue, ')'], (_, id, v) => {
+	new Rule(smtValues, ['(', identifier, inputValue, ')'], (_, id, v) => {
 		const result = { [id]: v };
 
 		return result;
