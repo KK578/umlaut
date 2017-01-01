@@ -23,6 +23,48 @@ Tool to generate inputs for tests.
 
 Tool to take the UML model and inputs and generate the test suite.
 
+## Installation
+
+### Installing Locally
+
+To install this project:
+
+```bash
+git clone https://github.com/KK578/compm091-code.git
+cd compm091-code
+npm install --production
+npm link
+```
+
+This will setup the generator to work locally.
+
+## Developing
+
+### Dependencies
+
+To develop the project, this project uses [`grunt`](https://gruntjs.com).
+
+```bash
+npm install -g grunt-cli
+```
+
+### Setup
+
+```bash
+git clone https://github.com/KK578/compm091-code.git
+cd compm091-code
+npm install
+npm link
+```
+
+### Unit tests
+
+To test the project, this project uses `mocha`, and is setup via `grunt test`.  
+For code coverage statistics, this project uses `istanbul`, and is setup via `grunt coverage`.
+
+Continuous Integration builds is handled via Travis-CI, and is available [here](https://travis-ci.com/KK578/compm091-code).  
+Code coverage information is handled via Codecov, and is available [here](https://codecov.io/gh/KK578/compm091-code).
+
 ## License
 
 This project has been templated by [generator-kk578](https://github.com/KK578/generator-kk578).
