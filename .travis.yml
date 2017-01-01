@@ -17,4 +17,5 @@ before_script:
 script:
   - grunt coverage
 after_script:
+  - grunt clean
   - codecov --disable=gcov
