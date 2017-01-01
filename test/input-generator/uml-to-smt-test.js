@@ -53,9 +53,9 @@ describe('UML-To-SMT', () => {
 			expect(result.Test).to.have.keys('name', 'smtCommands');
 			expect(result.Test.smtCommands).to.be.instanceOf(Array).and.have.length(1);
 			expect(result.Test.smtCommands[0]).to.have.keys('name', 'commands');
-			expect(result.Test.smtCommands[0].name).to.be.a('string').and.equal('Foo');
+			expect(result.Test.smtCommands[0].commands).to.be.instanceOf(Array);
 
-			const commands = result.Test.smtCommands[0].commands.split('\n');
+			const commands = result.Test.smtCommands[0].commands;
 
 			expect(commands[5]).to.include('(assert (= a 0))');
 		});
@@ -96,8 +96,9 @@ describe('UML-To-SMT', () => {
 			expect(result.Test.smtCommands).to.be.instanceOf(Array).and.have.length(1);
 			expect(result.Test.smtCommands[0]).to.have.keys('name', 'commands');
 			expect(result.Test.smtCommands[0].name).to.be.a('string').and.equal('Foo');
+			expect(result.Test.smtCommands[0].commands).to.be.instanceOf(Array);
 
-			const commands = result.Test.smtCommands[0].commands.split('\n');
+			const commands = result.Test.smtCommands[0].commands;
 
 			expect(commands[5]).to.include('(assert (not (= a 0)))');
 		});
