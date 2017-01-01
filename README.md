@@ -20,56 +20,56 @@ Tool to convert UML models to a standard output for this project.
 Output schema:
 ```md
 {
-	"className": {
-		"name": "Name of class",
-		"variables": {
-			"variableName": {
-				"name": "Name of variable",
-				"visibility": "Public/Private",
-				"type": "Type of variable"
-			},
-			/* ...Next variable */
-		},
+  "className": {
+    "name": "Name of class",
+    "variables": {
+      "variableName": {
+        "name": "Name of variable",
+        "visibility": "Public/Private",
+        "type": "Type of variable"
+      },
+      /* ...Next variable */
+    },
 
-		"methods": {
-			"methodName": {
-				"name": "Name of method",
-				"visibility": "Public/Private",
-				"type: "Return type of method",
-				"arguments": {
-					"argument": "Type of argument",
-					/* ...Next argument */
-				},
+    "methods": {
+      "methodName": {
+        "name": "Name of method",
+        "visibility": "Public/Private",
+        "type: "Return type of method",
+        "arguments": {
+          "argument": "Type of argument",
+          /* ...Next argument */
+        },
 
-				"preconditions": [
-					{
-						"id": "UUID for this precondition",
-						"comparison": "Comparison name",
-						"arguments": [
-							"Name of variable or method argument or direct value",
-							/* ...Next argument */
-						]
-					},
-					/* ...Next precondition */
-				],
+        "preconditions": [
+          {
+            "id": "UUID for this precondition",
+            "comparison": "Comparison name",
+            "arguments": [
+              "Name of variable or method argument or direct value",
+              /* ...Next argument */
+            ]
+          },
+          /* ...Next precondition */
+        ],
 
-				"postconditions": [
-					{
-						"id": "UUID for this postcondition",
-						"comparison": "Comparison name",
-						"arguments": [
-							"Name of variable or method argument or direct value",
-							/* ...Next argument */
-						]
-					},
-					/* ...Next postcondition */
-				]
-			},
-			/* ...Next method */
-		}
+        "postconditions": [
+          {
+            "id": "UUID for this postcondition",
+            "comparison": "Comparison name",
+            "arguments": [
+              "Name of variable or method argument or direct value",
+              /* ...Next argument */
+            ]
+          },
+          /* ...Next postcondition */
+        ]
+      },
+      /* ...Next method */
+    }
 
-	},
-	/* ...Next class */
+  },
+  /* ...Next class */
 }
 ```
 
@@ -82,27 +82,27 @@ Tool to generate inputs for tests.
 Extends schema of UML-Parser, with an additional `tests` array on each method:
 ```md
 {
-	"className": {
-		...
-		"methods": {
-			"methodName": {
-				...
-				"tests": [
-					{
-						"condition": "Text identifying the meaning of the test",
-						"arguments: {
-							"argument": "Value of argument",
-							/* ...Next argument */
-						}
-					},
-					/* ...Next test */
-				]
-			},
-			/* ...Next method */
-		}
+  "className": {
+    ...
+    "methods": {
+      "methodName": {
+        ...
+        "tests": [
+          {
+            "condition": "Text identifying the meaning of the test",
+            "arguments: {
+              "argument": "Value of argument",
+              /* ...Next argument */
+            }
+          },
+          /* ...Next test */
+        ]
+      },
+      /* ...Next method */
+    }
 
-	},
-	/* ...Next class */
+  },
+  /* ...Next class */
 }
 ```
 
