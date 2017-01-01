@@ -18,7 +18,7 @@ Tool to annotate Visual Studio UML models.
 Tool to convert UML models to a standard output for this project.
 
 Output schema:
-```JSON
+```md
 {
 	"className": {
 		"name": "Name of class",
@@ -28,7 +28,7 @@ Output schema:
 				"visibility": "Public/Private",
 				"type": "Type of variable"
 			},
-			... // Next variable
+			/* ...Next variable */
 		},
 
 		"methods": {
@@ -38,7 +38,7 @@ Output schema:
 				"type: "Return type of method",
 				"arguments": {
 					"argument": "Type of argument",
-					... // Next argument
+					/* ...Next argument */
 				},
 
 				"preconditions": [
@@ -47,10 +47,10 @@ Output schema:
 						"comparison": "Comparison name",
 						"arguments": [
 							"Name of variable or method argument or direct value",
-							... // Next argument for method
+							/* ...Next argument */
 						]
 					},
-					... // Next precondition
+					/* ...Next precondition */
 				],
 
 				"postconditions": [
@@ -59,16 +59,17 @@ Output schema:
 						"comparison": "Comparison name",
 						"arguments": [
 							"Name of variable or method argument or direct value",
-							... // Next argument for method
+							/* ...Next argument */
 						]
 					},
-					... // Next postcondition
+					/* ...Next postcondition */
 				]
 			},
-			... // Next method
+			/* ...Next method */
 		}
+
 	},
-	... // Next class
+	/* ...Next class */
 }
 ```
 
