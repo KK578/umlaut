@@ -17,4 +17,4 @@ before_script:
 script:
   - grunt coverage
 after_script:
-  - codecov --disable=gcov -f coverage/coverage.json
+  - codecov --disable=gcov
