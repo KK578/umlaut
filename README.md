@@ -106,6 +106,15 @@ Extends schema of UML-Parser, with an additional `tests` array on each method:
 }
 ```
 
+In order to generate inputs, the design of this section is for submodules to handle specific types for the test.
+Currently, only numerical logic is handled by the Input-Generator, though more is planned.
+
+#### SMT-Solver
+
+The SMT-Solver handles Boolean and Numerical Logic.
+Implementation is handled via the conversion of the annotated constraints on the methods into Satisfiability Modulo Theorem, SMT.
+Then by using Microsoft's [`z3`](https://github.com/Z3Prover/z3), the constraints are solved to generate values that satisfy the constraints.
+
 ### Test-Generator
 
 Tool to take the UML model and inputs and generate the test suite.
