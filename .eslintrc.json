@@ -9,6 +9,9 @@
     "node": true,
     "mocha": true
   },
+  "plugins": [
+    "mocha"
+  ],
   "globals": {
     "Polymer": false,
     "_": false
@@ -76,6 +79,15 @@
     "no-var": "error",
     "prefer-const": "error",
     "prefer-template": "error",
-    "template-curly-spacing": "error"
+    "template-curly-spacing": "error",
+
+    // eslint-plugin-mocha
+    "mocha/no-exclusive-tests": "error",
+    "mocha/no-global-tests": "error",
+    "mocha/no-sibling-hooks": "error",
+    "mocha/no-return-and-callback": "error",
+    "mocha/no-nested-tests": "error",
+    "mocha/valid-test-description": "warn",
+    "mocha/no-identical-title": "warn"
   }
 }
