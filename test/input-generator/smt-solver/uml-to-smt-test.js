@@ -3,7 +3,7 @@ const expect = chai.expect;
 
 const testee = require('../../../input-generator/smt-solver/uml-to-smt/index.js');
 
-describe('UML-To-SMT', () => {
+describe('UML-To-SMT', function () {
 	it('should handle classes with no variables');
 	it('should handle classes with no methods');
 	it('should handle classes with both no variables or methods');
@@ -18,8 +18,8 @@ describe('UML-To-SMT', () => {
 	it('should handle multiple classes');
 	it('should handle multiple classes with multiple methods');
 
-	describe('Assertions', () => {
-		it('should make assertions on Equalities', () => {
+	describe('Assertions', function () {
+		it('should make assertions on Equalities', function () {
 			const fixture = {
 				Test: {
 					name: 'Test',
@@ -60,7 +60,7 @@ describe('UML-To-SMT', () => {
 			expect(commands[5]).to.include('(assert (= a 0))');
 		});
 
-		it('should make assertions on inverted equalities', () => {
+		it('should make assertions on inverted equalities', function () {
 			const fixture = {
 				Test: {
 					name: 'Test',

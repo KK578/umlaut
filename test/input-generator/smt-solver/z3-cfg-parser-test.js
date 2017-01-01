@@ -3,29 +3,29 @@ const expect = chai.expect;
 
 const testee = require('../../../input-generator/smt-solver/z3-runner/value-cfg-parser.js');
 
-describe('CFG Parser for z3 Values', () => {
-	it('should handle a single key value pair', () => {
+describe('CFG Parser for z3 Values', function () {
+	it('should handle a single key value pair', function () {
 		const result = testee('(a 0)');
 
 		expect(result).to.have.key('a');
 		expect(result.a).to.be.a('number').and.equal(0);
 	});
 
-	it('should handle negative integer values', () => {
+	it('should handle negative integer values', function () {
 		const result = testee('((a (- 1)))');
 
 		expect(result).to.have.key('a');
 		expect(result.a).to.be.a('number').and.equal(-1);
 	});
 
-	it('should handle list with a single key value pair', () => {
+	it('should handle list with a single key value pair', function () {
 		const result = testee('((a 0))');
 
 		expect(result).to.have.key('a');
 		expect(result.a).to.be.a('number').and.equal(0);
 	});
 
-	it('should handle list with multiple key value pairs', () => {
+	it('should handle list with multiple key value pairs', function () {
 		const result = testee('((a 0)(b 1))');
 
 		expect(result).to.contain.keys(['a', 'b']);
@@ -34,7 +34,7 @@ describe('CFG Parser for z3 Values', () => {
 		expect(result.b).to.be.a('number').and.equal(1);
 	});
 
-	it('should handle list with multiple key value pairs with line breaks', () => {
+	it('should handle list with multiple key value pairs with line breaks', function () {
 		const result = testee(`((a 0)
 			(b 1)
 			(c 4))`);
@@ -46,7 +46,7 @@ describe('CFG Parser for z3 Values', () => {
 		expect(result.c).to.be.a('number').and.equal(4);
 	});
 
-	it('should handle Valid keyword written just before the list in [[]]', () => {
+	it('should handle Valid keyword written just before the list in [[]]', function () {
 		const result = testee('[[Valid]] sat ((a 0))');
 
 		expect(result).to.contain.key('id');
@@ -57,7 +57,7 @@ describe('CFG Parser for z3 Values', () => {
 		expect(result.arguments.a).to.be.a('number').and.equal(0);
 	});
 
-	it('should handle a UUID written just before the list in [[]]', () => {
+	it('should handle a UUID written just before the list in [[]]', function () {
 		const result = testee('[[12345678-abcd-efab-cdef-123456789012]] sat ((a 0))');
 
 		expect(result).to.contain.keys(['id', 'arguments']);
@@ -67,7 +67,7 @@ describe('CFG Parser for z3 Values', () => {
 		expect(result.arguments.a).to.be.a('number').and.equal(0);
 	});
 
-	it('should handle a UUID written before the list in [[]] after a line break', () => {
+	it('should handle a UUID written before the list in [[]] after a line break', function () {
 		const result = testee(`[[12345678-abcd-efab-cdef-123456789012]]
 			sat
 			((a 0))`);
@@ -79,7 +79,7 @@ describe('CFG Parser for z3 Values', () => {
 		expect(result.arguments.a).to.be.a('number').and.equal(0);
 	});
 
-	it('should correctly handle an unsatisfiable set of assertions', () => {
+	it('should correctly handle an unsatisfiable set of assertions', function () {
 		const result = testee('[[12345678-abcd-efab-cdef-123456789012]] unsat (error "line 1 column 1: model is not available")');
 
 		expect(result).to.contain.keys(['id', 'unsatisfiable']);
@@ -89,7 +89,7 @@ describe('CFG Parser for z3 Values', () => {
 		expect(result.arguments).to.not.exist;
 	});
 
-	it('should handle multiple objects consecutively', () => {
+	it('should handle multiple objects consecutively', function () {
 		const result = testee(`[[12345678-abcd-efab-cdef-123456789012]] sat ((a 0)(b (- 1)))
 			~~[[87654321-abcd-efab-cdef-987654321000]] sat ((a 0)(b 38))`);
 
@@ -108,7 +108,7 @@ describe('CFG Parser for z3 Values', () => {
 		expect(result[1].arguments.b).to.be.a('number').and.equal(38);
 	});
 
-	it('should handle multiple objects consecutively including unsatisfiable', () => {
+	it('should handle multiple objects consecutively including unsatisfiable', function () {
 		const result = testee(`[[Valid]] sat ((a 0)(b (- 1)))
 			~~[[12345678-abcd-efab-cdef-123456789012]] unsat (error "line 5 column 5: model is not available")
 			~~[[87654321-abcd-efab-cdef-987654321000]] sat ((a 0)(b 38))`);
