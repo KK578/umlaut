@@ -10,7 +10,7 @@ module.exports = {
 					'gruntfile.js',
 					'grunt/*.js',
 					'util/*.js',
-					'test/*.js'
+					'test/**/*.js'
 				]
 			}
 		]
@@ -19,10 +19,7 @@ module.exports = {
 		files: [
 			{
 				expand: true,
-				src: [
-					'input-generator/**/*.js',
-					'test/input-generator/*.js'
-				]
+				src: ['input-generator/**/*.js']
 			}
 		]
 	},
@@ -30,10 +27,7 @@ module.exports = {
 		files: [
 			{
 				expand: true,
-				src: [
-					'uml-parser/**/*.js',
-					'test/uml-parser/*.js'
-				]
+				src: ['uml-parser/**/*.js']
 			}
 		]
 	},
@@ -41,10 +35,7 @@ module.exports = {
 		files: [
 			{
 				expand: true,
-				src: [
-					'generators/**/*.js',
-					'test/test-generator/*.js'
-				]
+				src: ['generators/**/*.js']
 			}
 		]
 	}

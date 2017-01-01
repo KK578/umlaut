@@ -6,7 +6,7 @@ const inputGenerator = require('../../input-generator/index.js');
 
 function stringify(data) {
 	return JSON.stringify(data, null, 2);
-};
+}
 
 let parsedData;
 let solvedData;
