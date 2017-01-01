@@ -17,6 +17,63 @@ Tool to annotate Visual Studio UML models.
 
 Tool to convert UML models to a standard output for this project.
 
+Output schema:
+```JSON
+{
+	"className": {
+		"name": "Name of class",
+		"variables": {
+			"variableName": {
+				"name": "Name of variable",
+				"visibility": "Public/Private",
+				"type": "Type of variable"
+			},
+			... // Next variable
+		},
+
+		"methods": {
+			"methodName": {
+				"name": "Name of method",
+				"visibility": "Public/Private",
+				"type: "Return type of method",
+				"arguments": {
+					"argument": "Type of argument",
+					... // Next argument
+				},
+
+				"preconditions": [
+					{
+						"id": "UUID for this precondition",
+						"comparison": "Comparison name",
+						"arguments": [
+							"Name of variable or method argument or direct value",
+							... // Next argument for method
+						]
+					},
+					... // Next precondition
+				],
+
+				"postconditions": [
+					{
+						"id": "UUID for this postcondition",
+						"comparison": "Comparison name",
+						"arguments": [
+							"Name of variable or method argument or direct value",
+							... // Next argument for method
+						]
+					},
+					... // Next postcondition
+				]
+			},
+			... // Next method
+		}
+	},
+	... // Next class
+}
+```
+
+For list of comparison names, see [`comparisons.json`](./util/comparisons.json).
+
 ### Input-Generator
 
 Tool to generate inputs for tests.
