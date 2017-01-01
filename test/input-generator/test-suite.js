@@ -1,6 +1,8 @@
 describe('Input Generator', () => {
-	require('./classes-test.js');
-	require('./z3-cfg-parser-test.js');
-	require('./smt-solver-test.js');
-	require('./uml-to-smt-test.js');
+	describe('SMT-Solver', () => {
+		require('./smt-solver/classes-test.js');
+		require('./smt-solver/uml-to-smt-test.js');
+		require('./smt-solver/z3-cfg-parser-test.js');
+		require('./smt-solver/component-test.js');
+	});
 });

@@ -1,7 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const testee = require('../../input-generator/smt-solver/uml-to-smt/index.js');
+const testee = require('../../../input-generator/smt-solver/uml-to-smt/index.js');
 
 describe('UML-To-SMT', () => {
 	it('should handle classes with no variables');
