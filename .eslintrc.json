@@ -93,6 +93,7 @@
     "mocha/no-sibling-hooks": "error",
     "mocha/no-return-and-callback": "error",
     "mocha/no-nested-tests": "error",
+    "mocha/no-mocha-arrows": "error",
     "mocha/valid-test-description": "warn",
     "mocha/no-identical-title": "warn"
   }
