@@ -14,8 +14,7 @@
     "mocha"
   ],
   "globals": {
-    "Polymer": false,
-    "_": false
+    "expect": false
   },
   "rules": {
     "block-scoped-var": "error",

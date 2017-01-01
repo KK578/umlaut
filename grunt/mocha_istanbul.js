@@ -1,7 +1,8 @@
 module.exports = {
 	options: {
 		reporter: 'spec',
-		reportFormats: ['lcovonly']
+		reportFormats: ['lcovonly'],
+		require: ['./test/config/globals.js']
 	},
 	'all': { src: 'test/test-suite.js' },
 	'html': {
