@@ -79,6 +79,33 @@ For list of comparison names, see [`comparisons.json`](./util/comparisons.json).
 
 Tool to generate inputs for tests.
 
+Extends schema of UML-Parser, with an additional `tests` array on each method:
+```md
+{
+	"className": {
+		...
+		"methods": {
+			"methodName": {
+				...
+				"tests": [
+					{
+						"condition": "Text identifying the meaning of the test",
+						"arguments: {
+							"argument": "Value of argument",
+							/* ...Next argument */
+						}
+					},
+					/* ...Next test */
+				]
+			},
+			/* ...Next method */
+		}
+
+	},
+	/* ...Next class */
+}
+```
+
 ### Test-Generator
 
 Tool to take the UML model and inputs and generate the test suite.
