@@ -1,6 +1,3 @@
-const chai = require('chai');
-const expect = chai.expect;
-
 const testee = require('../../uml-parser/util/classes.js');
 let TestClass;
 

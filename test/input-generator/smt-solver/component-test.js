@@ -1,9 +1,4 @@
 const path = require('path');
-const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
-const expect = chai.expect;
-
-chai.use(chaiAsPromised);
 
 const testee = require('../../../input-generator/smt-solver/index.js');
 

@@ -1,9 +1,4 @@
 const path = require('path');
-const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
-const expect = chai.expect;
-
-chai.use(chaiAsPromised);
 
 const promises = require('../../util/promises.js');
 const REGEX_UUID = /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i;

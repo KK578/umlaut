@@ -1,6 +1,3 @@
-const chai = require('chai');
-const expect = chai.expect;
-
 const testee = require('../../../input-generator/smt-solver/z3-runner/value-cfg-parser.js');
 
 describe('CFG Parser for z3 Values', function () {
