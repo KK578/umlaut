@@ -10,6 +10,7 @@
     "mocha": true
   },
   "plugins": [
+    "chai-expect",
     "mocha"
   ],
   "globals": {
@@ -80,6 +81,11 @@
     "prefer-const": "error",
     "prefer-template": "error",
     "template-curly-spacing": "error",
+
+    // eslint-plugin-chai-expect
+    "chai-expect/no-inner-compare": "error",
+    "chai-expect/missing-assertion": "error",
+    "chai-expect/terminating-properties": "error",
 
     // eslint-plugin-mocha
     "mocha/no-exclusive-tests": "error",
