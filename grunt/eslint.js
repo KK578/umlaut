@@ -10,7 +10,8 @@ module.exports = {
 					'gruntfile.js',
 					'grunt/*.js',
 					'util/*.js',
-					'test/**/*.js'
+					'test/*.js',
+					'test/{uml-parser,input-generator,test-generator}/**/*.js'
 				]
 			}
 		]
