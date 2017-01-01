@@ -15,7 +15,7 @@ Tool to annotate Visual Studio UML models.
 
 Tool to convert UML models to a standard output for this project.
 
-### SMT-Generator
+### Input-Generator
 
 Tool to generate inputs for tests.
 
@@ -24,6 +24,14 @@ Tool to generate inputs for tests.
 Tool to take the UML model and inputs and generate the test suite.
 
 ## Installation
+
+This is a project dependent on C# (For UML-Annotator) and Node.js (For UML-Parser, Input-Generator and Test-Generator).  
+**This project also uses ES6 syntax, which requires `node` version `v6.0.0` at minimum.**
+
+Please ensure that `node` and `npm` are installed and available in your PATH, to correctly run this project.  
+Also check that `node --version` matches at least `v6.0.0`.
+
+Node.js is available [here](https://nodejs.org) for all major OS platforms.
 
 ### Installing Locally
 
