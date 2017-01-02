@@ -11,7 +11,8 @@
   },
   "plugins": [
     "chai-expect",
-    "mocha"
+    "mocha",
+    "no-loops"
   ],
   "globals": {
     "expect": false
@@ -94,6 +95,9 @@
     "mocha/no-nested-tests": "error",
     "mocha/no-mocha-arrows": "error",
     "mocha/valid-test-description": "warn",
-    "mocha/no-identical-title": "warn"
+    "mocha/no-identical-title": "warn",
+
+    // eslint-plugin-no-loops
+    "no-loops/no-loops": "error"
   }
 }
