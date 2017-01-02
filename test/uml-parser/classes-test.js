@@ -94,7 +94,7 @@ describe('UML Parser Classes', function () {
 
 				expect(obj.methods).to.include.keys('foo');
 				expect(obj.methods['foo'].type).equal('Integer');
-				expect(obj.methods['foo'].args).to.include({ a: { type: 'Integer' } });
+				expect(obj.methods['foo'].arguments).to.include({ a: { type: 'Integer' } });
 			});
 
 			it('should error if list of arguments is not an Array', function () {
@@ -132,7 +132,7 @@ describe('UML Parser Classes', function () {
 
 				obj.addInvariant({
 					comparison: 'LessThan',
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
@@ -144,7 +144,7 @@ describe('UML Parser Classes', function () {
 			it('should error if invariant object does not specify the comparison', function () {
 				expect(obj.addInvariant.bind(obj, {
 					comparison: undefined,
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
@@ -154,7 +154,7 @@ describe('UML Parser Classes', function () {
 			it('should error if invariant object does not specify at least 1 item in arguments', function () {
 				expect(obj.addInvariant.bind(obj, {
 					comparison: 'LessThan',
-					args: []
+					arguments: []
 				})).to.throw(Error);
 			});
 
@@ -191,7 +191,7 @@ describe('UML Parser Classes', function () {
 
 			expect(obj.name).to.equal('foo');
 			expect(obj.type).to.equal('Integer');
-			expect(obj.args).to.include({ a: { type: 'Integer' } });
+			expect(obj.arguments).to.include({ a: { type: 'Integer' } });
 		});
 
 		it('should error if list of arguments is not an array', function () {
@@ -244,7 +244,7 @@ describe('UML Parser Classes', function () {
 					type: 'Integer'
 				});
 
-				expect(obj.args).to.include({
+				expect(obj.arguments).to.include({
 					name: 'a',
 					type: 'Integer'
 				});
@@ -265,7 +265,7 @@ describe('UML Parser Classes', function () {
 				});
 
 				// Validate the argument now exists.
-				expect(obj.args).to.include({
+				expect(obj.arguments).to.include({
 					name: 'a',
 					type: 'Integer'
 				});
@@ -297,7 +297,7 @@ describe('UML Parser Classes', function () {
 
 				obj.addPrecondition({
 					comparison: 'LessThan',
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
@@ -309,7 +309,7 @@ describe('UML Parser Classes', function () {
 			it('should generate a unique ID for the condition', function () {
 				obj.addPrecondition({
 					comparison: 'LessThan',
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
@@ -321,7 +321,7 @@ describe('UML Parser Classes', function () {
 			it('should error if precondition object does not specify the comparison', function () {
 				expect(obj.addPrecondition.bind(obj, {
 					comparison: undefined,
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
@@ -331,7 +331,7 @@ describe('UML Parser Classes', function () {
 			it('should error if precondition object does not specify at least 1 item in arguments', function () {
 				expect(obj.addPrecondition.bind(obj, {
 					comparison: 'LessThan',
-					args: []
+					arguments: []
 				})).to.throw(Error);
 			});
 		});
@@ -356,7 +356,7 @@ describe('UML Parser Classes', function () {
 
 				obj.addPostcondition({
 					comparison: 'LessThan',
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
@@ -368,7 +368,7 @@ describe('UML Parser Classes', function () {
 			it('should error if postcondition object does not specify the comparison', function () {
 				expect(obj.addPostcondition.bind(obj, {
 					comparison: undefined,
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
@@ -378,14 +378,14 @@ describe('UML Parser Classes', function () {
 			it('should error if postcondition object does not specify at least 1 item in arguments', function () {
 				expect(obj.addPostcondition.bind(obj, {
 					comparison: 'LessThan',
-					args: []
+					arguments: []
 				})).to.throw(Error);
 			});
 
 			it('should generate a unique ID for the condition', function () {
 				obj.addPostcondition({
 					comparison: 'LessThan',
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
@@ -416,14 +416,14 @@ describe('UML Parser Classes', function () {
 		it('should take a condition object', function () {
 			const obj = new TestClass({
 				comparison: 'LessThan',
-				args: [
+				arguments: [
 					'a',
 					'b'
 				]
 			});
 
 			expect(obj.comparison).to.equal('LessThan');
-			expect(obj.args).to.include('a').and.include('b');
+			expect(obj.arguments).to.include('a').and.include('b');
 			expect(obj.isInverted).to.not.be.ok;
 		});
 
@@ -431,7 +431,7 @@ describe('UML Parser Classes', function () {
 			expect(() => {
 				new TestClass({
 					comparison: undefined,
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
@@ -443,7 +443,7 @@ describe('UML Parser Classes', function () {
 			expect(() => {
 				new TestClass({
 					comparison: 'GreaterThan',
-					args: 'a, b'
+					arguments: 'a, b'
 				});
 			}).to.throw(Error);
 		});
@@ -452,7 +452,7 @@ describe('UML Parser Classes', function () {
 			expect(() => {
 				new TestClass({
 					comparison: 'GreaterThan',
-					args: []
+					arguments: []
 				});
 			}).to.throw(Error);
 		});
@@ -460,7 +460,7 @@ describe('UML Parser Classes', function () {
 		it('should set isInverted value in object', function () {
 			const obj = new TestClass({
 				comparison: 'LessThan',
-				args: [
+				arguments: [
 					'a',
 					'b'
 				],
@@ -468,7 +468,7 @@ describe('UML Parser Classes', function () {
 			});
 
 			expect(obj.comparison).to.equal('LessThan');
-			expect(obj.args).to.include('a').and.include('b');
+			expect(obj.arguments).to.include('a').and.include('b');
 			expect(obj.isInverted).to.be.ok;
 		});
 
@@ -478,7 +478,7 @@ describe('UML Parser Classes', function () {
 			beforeEach(function () {
 				obj = new TestClass({
 					comparison: 'LessThan',
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
@@ -509,7 +509,7 @@ describe('UML Parser Classes', function () {
 			beforeEach(function () {
 				obj = new TestClass({
 					comparison: 'LessThan',
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
