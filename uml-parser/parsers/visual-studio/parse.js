@@ -129,7 +129,7 @@ function parseMethods(umlClass) {
 	if (umlClass.ownedOperationsInternal !== undefined) {
 		const operations = umlClass.ownedOperationsInternal[0].operation;
 
-		operations.map((operation) => {
+		operations.forEach((operation) => {
 			// Generic method properties
 			const v = {
 				id: uuid(),
@@ -171,8 +171,6 @@ function parseClass(umlClass) {
 function parse(data) {
 	return promises.xmlParseString(data).then((uml) => {
 		// Enter root item.
-		const classes = {};
-
 		if (uml.modelStoreModel) {
 			uml = uml.modelStoreModel;
 		}
@@ -180,26 +178,27 @@ function parse(data) {
 			uml = uml.logicalClassDesignerModel;
 		}
 
+		const classes = {};
 		const elements = uml.packagedElements[0];
 
-		if (elements.packageHasNamedElement) {
-			elements.packageHasNamedElement.map((namedElement) => {
-				if (namedElement.class) {
-					const c = parseClass(namedElement.class[0]);
+		function parsePackages(packages) {
+			packages.filter((package) => {
+				return package.class !== undefined;
+			}).map((namedElement) => {
+				return namedElement.class[0];
+			}).forEach((classElement) => {
+				const c = parseClass(classElement);
 
-					classes[c.name] = c;
-				}
+				classes[c.name] = c;
 			});
 		}
 
-		if (elements.logicalClassDesignerModelHasTypes) {
-			elements.logicalClassDesignerModelHasTypes.map((namedElement) => {
-				if (namedElement.class) {
-					const c = parseClass(namedElement.class[0]);
+		if (elements.packageHasNamedElement) {
+			parsePackages(elements.packageHasNamedElement);
+		}
 
-					classes[c.name] = c;
-				}
-			});
+		if (elements.logicalClassDesignerModelHasTypes) {
+			parsePackages(elements.logicalClassDesignerModelHasTypes);
 		}
 
 		return classes;
