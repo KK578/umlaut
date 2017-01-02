@@ -35,7 +35,7 @@ function parseVariables(umlClass) {
 	if (umlClass.ownedAttributesInternal !== undefined) {
 		const properties = umlClass.ownedAttributesInternal[0].property;
 
-		properties.map((property) => {
+		properties.forEach((property) => {
 			const v = {
 				id: uuid(),
 				name: property.$.name
@@ -58,40 +58,42 @@ function parseMethods(umlClass) {
 	function getReturnType(parameters) {
 		// Must iterate through all and find first that is a return property.
 		const parameterList = parameters[0].operationHasOwnedParameters;
+		// Filter to find the first parameter that is the return type.
+		const parameter = parameterList.map((parameterListing) => {
+			// <parameter> node exists under each <operationHasOwnedParameters> node.
+			// Return the value contained within the <parameter> node.
+			return parameterListing.parameter[0];
+		}).filter((parameter) => {
+			return parameter.$.direction === 'Return';
+		})[0];
 
-		for (let i = 0; i < parameterList.length; i++) {
-			const parameter = parameterList[i].parameter[0];
-
-			// Direction 'Return' indicates the function's return type.
+		if (parameter) {
 			// TODO: Will the system support Python's multiple object return?'
-			if (parameter.$.direction === 'Return') {
-				const type = getTypeFromNode(parameter);
-
-				return type;
-			}
+			return getTypeFromNode(parameter);
 		}
-
-		// Did not find a return type, so function has void type.
-		return 'Void';
+		else {
+			// Did not find a return type, so function has void type.
+			return 'Void';
+		}
 	}
 
 	// Helper function to get function arguments to array of { name, type }.
 	function getArguments(parameters) {
 		const args = {};
-
 		const parameterList = parameters[0].operationHasOwnedParameters;
 
-		for (let i = 0; i < parameterList.length; i++) {
-			const parameter = parameterList[i].parameter[0];
+		parameterList.map((parameterListing) => {
+			// <parameter> node exists under each <operationHasOwnedParameters> node.
+			// Return the value contained within the <parameter> node.
+			return parameterListing.parameter[0];
+		}).filter((parameter) => {
+			return parameter.$.direction === 'In';
+		}).forEach((parameter) => {
+			const name = parameter.$.name;
+			const type = getTypeFromNode(parameter);
 
-			// Direction 'In' indicates a function argument.
-			if (parameter.$.direction === 'In') {
-				const name = parameter.$.name;
-				const type = getTypeFromNode(parameter);
-
-				args[name] = type;
-			}
-		}
+			args[name] = type;
+		});
 
 		return args;
 	}
