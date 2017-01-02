@@ -132,7 +132,7 @@ describe('Visual Studio Parser', function () {
 
 					expect(method.preconditions).to.be.instanceOf(Array)
 						.and.to.have.length(expectedConditions.length);
-					expectedConditions.map((condition, index) => {
+					expectedConditions.forEach((condition, index) => {
 						assertCondition(method.preconditions[index], condition);
 					});
 				});
@@ -147,7 +147,7 @@ describe('Visual Studio Parser', function () {
 
 					expect(method.postconditions).to.be.instanceOf(Array)
 						.and.to.have.length(expectedConditions.length);
-					expectedConditions.map((condition, index) => {
+					expectedConditions.forEach((condition, index) => {
 						assertCondition(method.postconditions[index], condition);
 					});
 				});
@@ -192,7 +192,7 @@ describe('Visual Studio Parser', function () {
 
 					expect(method.preconditions).to.be.instanceOf(Array)
 						.and.to.have.length(expectedConditions.length);
-					expectedConditions.map((condition, index) => {
+					expectedConditions.forEach((condition, index) => {
 						assertCondition(method.preconditions[index], condition);
 					});
 				});
@@ -207,7 +207,7 @@ describe('Visual Studio Parser', function () {
 
 					expect(method.postconditions).to.be.instanceOf(Array)
 						.and.to.have.length(expectedConditions.length);
-					expectedConditions.map((condition, index) => {
+					expectedConditions.forEach((condition, index) => {
 						assertCondition(method.postconditions[index], condition);
 					});
 				});
@@ -248,7 +248,7 @@ describe('Visual Studio Parser', function () {
 
 					expect(method.preconditions).to.be.instanceOf(Array)
 						.and.to.have.length(expectedConditions.length);
-					expectedConditions.map((condition, index) => {
+					expectedConditions.forEach((condition, index) => {
 						assertCondition(method.preconditions[index], condition);
 					});
 				});
@@ -263,7 +263,7 @@ describe('Visual Studio Parser', function () {
 
 					expect(method.postconditions).to.be.instanceOf(Array)
 						.and.to.have.length(expectedConditions.length);
-					expectedConditions.map((condition, index) => {
+					expectedConditions.forEach((condition, index) => {
 						assertCondition(method.postconditions[index], condition);
 					});
 				});
@@ -299,7 +299,7 @@ describe('Visual Studio Parser', function () {
 
 					expect(method.preconditions).to.be.instanceOf(Array)
 						.and.to.have.length(expectedConditions.length);
-					expectedConditions.map((condition, index) => {
+					expectedConditions.forEach((condition, index) => {
 						assertCondition(method.preconditions[index], condition);
 					});
 				});
@@ -314,7 +314,7 @@ describe('Visual Studio Parser', function () {
 
 					expect(method.postconditions).to.be.instanceOf(Array)
 						.and.to.have.length(expectedConditions.length);
-					expectedConditions.map((condition, index) => {
+					expectedConditions.forEach((condition, index) => {
 						assertCondition(method.postconditions[index], condition);
 					});
 				});
