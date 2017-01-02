@@ -18,8 +18,8 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 		expect(result.exception).to.equal('FooException');
 	});
 
-	it.skip('should handle multiple conditions split by "~~"', function () {
-		const result = testee('(Equal a b)~~(GreaterThan b c)');
+	it('should handle multiple conditions split by "-----"', function () {
+		const result = testee('(Equal a b)-----(GreaterThan b c)');
 
 		expect(result).to.be.instanceOf(Array).and.have.length(2);
 

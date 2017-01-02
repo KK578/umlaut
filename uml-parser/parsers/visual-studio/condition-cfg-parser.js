@@ -17,6 +17,7 @@ const comparisons = require('../../../util/comparisons.js');
  *
  * exception	::= 'Exception' ':' argument
  */
+const conditionList = new Sym('conditionList');
 const condition = new Sym('condition');
 const comparison = new Sym('comparison');
 const argumentList = new Sym('argumentList');
@@ -24,6 +25,13 @@ const argument = new Sym('argument');
 const exception = new Sym('exception');
 
 const grammar = [
+	new Rule(conditionList, [conditionList, '-----', condition], (next, _, c) => {
+		return next.concat(c);
+	}),
+	new Rule(conditionList, [condition], (c) => {
+		return [c];
+	}),
+
 	new Rule(condition, ['(', comparison, argumentList, exception, ')'], (_, c, a, e) => {
 		return {
 			comparison: c,
