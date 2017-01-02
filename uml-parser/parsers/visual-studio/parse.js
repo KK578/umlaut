@@ -1,5 +1,5 @@
 const uuid = require('uuid/v4');
-const promises = require('../../util/promises.js');
+const promises = require('../../../util/promises.js');
 const cfgParser = require('./condition-cfg-parser.js');
 
 function getTypeFromNode(parameter) {
