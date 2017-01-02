@@ -22,12 +22,12 @@ describe('UML Parser Classes', function () {
 			expect(obj.name).to.equal('foo');
 		});
 
-		it('should define hashmaps after initialisation', function () {
+		it('should define data structures after initialisation', function () {
 			const obj = new TestClass('foo');
 
 			expect(obj.variables).to.be.an('object');
 			expect(obj.methods).to.be.an('object');
-			expect(obj.invariants).to.be.an('object');
+			expect(obj.invariants).to.be.instanceOf(Array);
 		});
 
 		describe('#addVariable', function () {
@@ -128,7 +128,7 @@ describe('UML Parser Classes', function () {
 			});
 
 			it('should add a new invariant', function () {
-				const invariantLength = Object.keys(obj.invariants).length;
+				const invariantLength = obj.invariants.length;
 
 				obj.addInvariant({
 					comparison: 'LessThan',
@@ -138,7 +138,7 @@ describe('UML Parser Classes', function () {
 					]
 				});
 
-				expect(Object.keys(obj.invariants).length).to.equal(invariantLength + 1);
+				expect(obj.invariants.length).to.equal(invariantLength + 1);
 			});
 
 			it('should error if invariant object does not specify the comparison', function () {

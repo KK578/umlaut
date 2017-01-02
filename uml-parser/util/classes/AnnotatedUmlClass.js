@@ -1,3 +1,5 @@
+const uuid = require('uuid/v4');
+
 const AnnotatedUmlMethod = require('./AnnotatedUmlMethod.js');
 const OclCondition = require('./OclCondition.js');
 
@@ -8,11 +10,12 @@ module.exports = class AnnotatedUmlClass {
 		}
 
 		this.name = name;
+		this.id = uuid();
 
 		this.variables = {};
 		this.methods = {};
 
-		this.invariants = {};
+		this.invariants = [];
 	}
 
 	addVariable(name, type) {
@@ -54,7 +57,7 @@ module.exports = class AnnotatedUmlClass {
 	addInvariant(arg) {
 		const condition = new OclCondition(arg);
 
-		this.invariants[arg.name] = condition;
+		this.invariants.push(condition);
 	}
 
 	getMethod(name) {

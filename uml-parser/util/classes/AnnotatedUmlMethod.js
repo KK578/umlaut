@@ -1,3 +1,4 @@
+const uuid = require('uuid/v4');
 const OclCondition = require('./OclCondition.js');
 
 module.exports = class AnnotatedUmlMethod {
@@ -15,6 +16,7 @@ module.exports = class AnnotatedUmlMethod {
 		}
 
 		this.name = name;
+		this.id = uuid();
 		this.type = type;
 		this.args = args ? args : [];
 
