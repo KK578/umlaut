@@ -56,4 +56,8 @@ module.exports = class AnnotatedUmlClass {
 
 		this.invariants[arg.name] = condition;
 	}
+
+	getMethod(name) {
+		return this.methods[name];
+	}
 };

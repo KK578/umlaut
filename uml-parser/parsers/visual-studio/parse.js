@@ -2,6 +2,9 @@ const uuid = require('uuid/v4');
 const promises = require('../../../util/promises.js');
 const cfgParser = require('./condition-cfg-parser.js');
 
+const classes = require('../../util/classes.js');
+const AnnotatedUmlClass = classes.AnnotatedUmlClass;
+
 function getTypeFromNode(parameter) {
 	let type = '';
 
@@ -29,7 +32,7 @@ function getTypeFromNode(parameter) {
 }
 
 function parseVariables(umlClass) {
-	const variables = {};
+	const variables = [];
 
 	// Iterate through list of attributes.
 	if (umlClass.ownedAttributesInternal !== undefined) {
@@ -44,7 +47,7 @@ function parseVariables(umlClass) {
 			v.visibility = property.$.visibility ? property.$.visibility : 'Public';
 			v.type = getTypeFromNode(property);
 
-			variables[v.name] = v;
+			variables.push(v);
 		});
 	}
 
@@ -52,7 +55,7 @@ function parseVariables(umlClass) {
 }
 
 function parseMethods(umlClass) {
-	const methods = {};
+	const methods = [];
 
 	// Helper function to get function return type.
 	function getReturnType(parameters) {
@@ -77,7 +80,7 @@ function parseMethods(umlClass) {
 
 	// Helper function to get function arguments to array of { name, type }.
 	function getArguments(parameters) {
-		const args = {};
+		const args = [];
 
 		const parameterList = parameters[0].operationHasOwnedParameters;
 
@@ -86,10 +89,10 @@ function parseMethods(umlClass) {
 
 			// Direction 'In' indicates a function argument.
 			if (parameter.$.direction === 'In') {
-				const name = parameter.$.name;
-				const type = getTypeFromNode(parameter);
-
-				args[name] = type;
+				args.push({
+					name: parameter.$.name,
+					type: getTypeFromNode(parameter)
+				});
 			}
 		}
 
@@ -142,7 +145,7 @@ function parseMethods(umlClass) {
 			v.postconditions = getConditions(operation.postconditionsInternal);
 
 			// TODO: Keep method list as a hashmap of method name?
-			methods[v.name] = v;
+			methods.push(v);
 		});
 	}
 
@@ -150,15 +153,27 @@ function parseMethods(umlClass) {
 }
 
 function parseClass(umlClass) {
-	const c = {};
+	const c = new AnnotatedUmlClass(umlClass.$.name);
 
 	// Locate generic class properties.
 	c.id = uuid();
 	c.name = umlClass.$.name;
 
 	// Parse information for class variables and methods.
-	c.variables = parseVariables(umlClass);
-	c.methods = parseMethods(umlClass);
+	parseVariables(umlClass).forEach((variable) => {
+		c.addVariable(variable.name, variable.type);
+	});
+	parseMethods(umlClass).forEach((method) => {
+		c.addMethod(method.name, method.type, method.arguments);
+
+		method.preconditions.forEach((condition) => {
+			c.methods[method.name].addPrecondition(condition);
+		});
+
+		method.postconditions.forEach((condition) => {
+			c.methods[method.name].addPostcondition(condition);
+		});
+	});
 
 	return c;
 }
