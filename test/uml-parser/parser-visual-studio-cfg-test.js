@@ -5,17 +5,19 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 	it('should handle a single condition', function () {
 		const result = testee('(Equal a b)');
 
-		expect(result.comparison).to.equal('Equal');
-		expect(result.arguments).to.include('a', 'b');
-		expect(result.exception).to.be.undefined;
+		expect(result).to.be.instanceOf(Array).and.have.length(1);
+		expect(result[0].comparison).to.equal('Equal');
+		expect(result[0].arguments).to.include('a', 'b');
+		expect(result[0].exception).to.be.undefined;
 	});
 
 	it('should handle a single condition with an exception', function () {
 		const result = testee('(Equal a b Exception:FooException)');
 
-		expect(result.comparison).to.equal('Equal');
-		expect(result.arguments).to.include('a', 'b');
-		expect(result.exception).to.equal('FooException');
+		expect(result).to.be.instanceOf(Array).and.have.length(1);
+		expect(result[0].comparison).to.equal('Equal');
+		expect(result[0].arguments).to.include('a', 'b');
+		expect(result[0].exception).to.equal('FooException');
 	});
 
 	it('should handle multiple conditions split by "-----"', function () {
@@ -34,8 +36,9 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 			it(`should handle comparison named "${comparison.name}"`, function () {
 				const result = testee(`(${comparison.name} a b)`);
 
-				expect(result.comparison).to.equal(comparison.name);
-				expect(result.arguments).to.include('a', 'b');
+				expect(result).to.be.instanceOf(Array).and.have.length(1);
+				expect(result[0].comparison).to.equal(comparison.name);
+				expect(result[0].arguments).to.include('a', 'b');
 			});
 		});
 	});
@@ -44,9 +47,10 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 		it('should parse integer values to numbers', function () {
 			const result = testee('(GreaterThan a 0)');
 
-			expect(result.comparison).to.equal('GreaterThan');
-			expect(result.arguments).to.include('a', 0);
-			expect(result.arguments).to.not.include('0');
+			expect(result).to.be.instanceOf(Array).and.have.length(1);
+			expect(result[0].comparison).to.equal('GreaterThan');
+			expect(result[0].arguments).to.include('a', 0);
+			expect(result[0].arguments).to.not.include('0');
 		});
 	});
 });

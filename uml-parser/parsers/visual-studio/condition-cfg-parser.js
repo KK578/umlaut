@@ -29,21 +29,21 @@ const grammar = [
 		return next.concat(c);
 	}),
 	new Rule(conditionList, [condition], (c) => {
-		return [c];
+		return c;
 	}),
 
 	new Rule(condition, ['(', comparison, argumentList, exception, ')'], (_, c, a, e) => {
-		return {
+		return [{
 			comparison: c,
 			arguments: a,
 			exception: e
-		};
+		}];
 	}),
 	new Rule(condition, ['(', comparison, argumentList, ')'], (_, c, a) => {
-		return {
+		return [{
 			comparison: c,
 			arguments: a
-		};
+		}];
 	}),
 
 	new Rule(comparison, [/[a-zA-Z]+/], (c) => {

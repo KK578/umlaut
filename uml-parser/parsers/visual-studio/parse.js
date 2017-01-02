@@ -101,13 +101,10 @@ function parseMethods(umlClass) {
 		let c = [];
 
 		function parseConditions(conditions) {
-			const split = conditions.split('-----');
-			const parsed = split.map((condition) => {
-				const result = cfgParser(condition);
+			const parsed = cfgParser(conditions);
 
-				result.id = uuid();
-
-				return result;
+			parsed.forEach((condition) => {
+				condition.id = uuid();
 			});
 
 			return parsed;
