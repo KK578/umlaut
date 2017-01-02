@@ -15,7 +15,7 @@ module.exports = class OclCondition {
 		this.comparison = condition.comparison;
 
 		this.args = [];
-		condition.args.map((arg) => {
+		condition.args.forEach((arg) => {
 			this.args.push(arg);
 		});
 
