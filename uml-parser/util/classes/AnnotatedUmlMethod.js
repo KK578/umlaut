@@ -18,10 +18,10 @@ module.exports = class AnnotatedUmlMethod {
 		this.name = name;
 		this.id = uuid();
 		this.type = type;
-		this.args = args ? args : [];
+		this.arguments = args ? args : [];
 
-		this.preconditions = {};
-		this.postconditions = {};
+		this.preconditions = [];
+		this.postconditions = [];
 	}
 
 	setType(type) {
@@ -41,24 +41,24 @@ module.exports = class AnnotatedUmlMethod {
 			throw new Error('Argument "type" is required.');
 		}
 
-		for (let i = 0; i < this.args.length; i++) {
-			if (this.args[i].name === arg.name) {
+		for (let i = 0; i < this.arguments.length; i++) {
+			if (this.arguments[i].name === arg.name) {
 				throw new Error(`Argument "${name}" is already defined.`);
 			}
 		}
 
-		this.args.push(arg);
+		this.arguments.push(arg);
 	}
 
 	addPrecondition(arg) {
 		const condition = new OclCondition(arg);
 
-		this.preconditions[arg.name] = condition;
+		this.preconditions.push(condition);
 	}
 
 	addPostcondition(arg) {
 		const condition = new OclCondition(arg);
 
-		this.postconditions[arg.name] = condition;
+		this.postconditions.push(condition);
 	}
 };

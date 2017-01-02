@@ -32,6 +32,7 @@ module.exports = class AnnotatedUmlClass {
 		}
 
 		this.variables[name] = { type };
+		this.variables[name].id = uuid();
 	}
 
 	addMethod(name, type, args) {
@@ -52,6 +53,7 @@ module.exports = class AnnotatedUmlClass {
 		}
 
 		this.methods[name] = new AnnotatedUmlMethod(name, type, args);
+		this.methods[name].id = uuid();
 	}
 
 	addInvariant(arg) {
