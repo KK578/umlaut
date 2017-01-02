@@ -2,23 +2,24 @@ const uuid = require('uuid/v4');
 const OclCondition = require('./OclCondition.js');
 
 module.exports = class AnnotatedUmlMethod {
-	constructor(name, type, args) {
-		if (!name) {
-			throw new Error('Argument "name" is required.');
+	constructor(methodObject) {
+		if (!methodObject.name) {
+			throw new Error('Property "name" is required.');
 		}
 
-		if (!type) {
-			throw new Error('Argument "type" is required.');
+		if (!methodObject.type) {
+			throw new Error('Property "type" is required.');
 		}
 
-		if (args !== undefined && !Array.isArray(args)) {
-			throw new Error('Expected argument "args" to be Array.');
+		if (methodObject.arguments !== undefined && !Array.isArray(methodObject.arguments)) {
+			throw new Error('Expected property "args" to be Array.');
 		}
 
-		this.name = name;
+		this.name = methodObject.name;
 		this.id = uuid();
-		this.type = type;
-		this.arguments = args ? args : [];
+		this.visibility = methodObject.visibility ? methodObject.visibility : 'Public';
+		this.type = methodObject.type;
+		this.arguments = methodObject.arguments ? methodObject.arguments : [];
 
 		this.preconditions = [];
 		this.postconditions = [];

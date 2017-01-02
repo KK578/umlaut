@@ -34,7 +34,7 @@ describe('UML Parser Classes', function () {
 			let obj;
 
 			beforeEach(function () {
-				obj = new TestClass('foo');
+				obj = new TestClass({ name: 'foo' });
 			});
 
 			it('should error on empty input', function () {
@@ -101,7 +101,7 @@ describe('UML Parser Classes', function () {
 			let obj;
 
 			beforeEach(function () {
-				obj = new TestClass('foo');
+				obj = new TestClass({ name: 'foo' });
 			});
 
 			it('should error on empty input', function () {
@@ -186,7 +186,7 @@ describe('UML Parser Classes', function () {
 			let obj;
 
 			beforeEach(function () {
-				obj = new TestClass('foo');
+				obj = new TestClass({ name: 'foo' });
 			});
 
 			it('should error on empty', function () {
@@ -327,7 +327,10 @@ describe('UML Parser Classes', function () {
 			let obj;
 
 			beforeEach(function () {
-				obj = new TestClass('foo', 'Integer');
+				obj = new TestClass({
+					name: 'foo',
+					type: 'Integer'
+				});
 			});
 
 			it('should error on empty', function () {
@@ -347,7 +350,10 @@ describe('UML Parser Classes', function () {
 			let obj;
 
 			beforeEach(function () {
-				obj = new TestClass('foo', 'Integer');
+				obj = new TestClass({
+					name: 'foo',
+					type: 'Integer'
+				});
 			});
 
 			it('should error on empty', function () {
@@ -391,7 +397,10 @@ describe('UML Parser Classes', function () {
 			let obj;
 
 			beforeEach(function () {
-				obj = new TestClass('foo', 'Integer');
+				obj = new TestClass({
+					name: 'foo',
+					type: 'Integer'
+				});
 			});
 
 			it('should error on empty', function () {
@@ -450,7 +459,10 @@ describe('UML Parser Classes', function () {
 			let obj;
 
 			beforeEach(function () {
-				obj = new TestClass('foo', 'Integer');
+				obj = new TestClass({
+					name: 'foo',
+					type: 'Integer'
+				});
 			});
 
 			it('should error on empty', function () {
