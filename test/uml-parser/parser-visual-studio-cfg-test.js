@@ -41,6 +41,10 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 				expect(result[0].arguments).to.include('a', 'b');
 			});
 		});
+
+		it('should not allow a comparison named "VeryFake"', function () {
+			expect(testee.bind(testee, '(VeryFake a b)')).to.throw(Error);
+		});
 	});
 
 	describe('Numeric', function () {
