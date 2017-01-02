@@ -1,3 +1,5 @@
+const REGEX_UUID = /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i;
+
 const testee = require('../../uml-parser/util/classes.js');
 let TestClass;
 
@@ -291,7 +293,7 @@ describe('UML Parser Classes', function () {
 			});
 
 			it('should add a new precondition', function () {
-				const preconditionsLength = Object.keys(obj.preconditions).length;
+				const preconditionsLength = obj.preconditions.length;
 
 				obj.addPrecondition({
 					comparison: 'LessThan',
@@ -301,7 +303,19 @@ describe('UML Parser Classes', function () {
 					]
 				});
 
-				expect(Object.keys(obj.preconditions).length).to.equal(preconditionsLength + 1);
+				expect(obj.preconditions.length).to.equal(preconditionsLength + 1);
+			});
+
+			it('should generate a unique ID for the condition', function () {
+				obj.addPrecondition({
+					comparison: 'LessThan',
+					args: [
+						'a',
+						'b'
+					]
+				});
+
+				expect(obj.preconditions[0].id).to.be.a('string').and.match(REGEX_UUID);
 			});
 
 			it('should error if precondition object does not specify the comparison', function () {
@@ -320,8 +334,6 @@ describe('UML Parser Classes', function () {
 					args: []
 				})).to.throw(Error);
 			});
-
-			it('should generate a unique ID for the condition');
 		});
 
 		describe('#addPostcondition', function () {
@@ -370,7 +382,17 @@ describe('UML Parser Classes', function () {
 				})).to.throw(Error);
 			});
 
-			it('should generate a unique ID for the condition');
+			it('should generate a unique ID for the condition', function () {
+				obj.addPostcondition({
+					comparison: 'LessThan',
+					args: [
+						'a',
+						'b'
+					]
+				});
+
+				expect(obj.postconditions[0].id).to.be.a('string').and.match(REGEX_UUID);
+			});
 		});
 	});
 
