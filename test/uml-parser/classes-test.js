@@ -45,7 +45,8 @@ describe('UML Parser Classes', function () {
 				obj.addVariable('a');
 
 				expect(obj.variables).to.include.keys('a');
-				expect(obj.variables['a']).to.have.keys('id', 'type', 'visibility');
+				expect(obj.variables['a']).to.have.keys('name', 'id', 'type', 'visibility');
+				expect(obj.variables['a'].name).to.equal('a');
 				expect(obj.variables['a'].id).to.be.a('string').and.match(REGEX_UUID);
 				expect(obj.variables['a'].type).to.equal('Object');
 				expect(obj.variables['a'].visibility).to.equal('Public');
@@ -55,7 +56,8 @@ describe('UML Parser Classes', function () {
 				obj.addVariable({ name: 'a' });
 
 				expect(obj.variables).to.include.keys('a');
-				expect(obj.variables['a']).to.have.keys('id', 'type', 'visibility');
+				expect(obj.variables['a']).to.have.keys('name', 'id', 'type', 'visibility');
+				expect(obj.variables['a'].name).to.equal('a');
 				expect(obj.variables['a'].id).to.be.a('string').and.match(REGEX_UUID);
 				expect(obj.variables['a'].type).to.equal('Object');
 				expect(obj.variables['a'].visibility).to.equal('Public');
@@ -68,7 +70,8 @@ describe('UML Parser Classes', function () {
 				});
 
 				expect(obj.variables).to.include.keys('a');
-				expect(obj.variables['a']).to.have.keys('id', 'type', 'visibility');
+				expect(obj.variables['a']).to.have.keys('name', 'id', 'type', 'visibility');
+				expect(obj.variables['a'].name).to.equal('a');
 				expect(obj.variables['a'].id).to.be.a('string').and.match(REGEX_UUID);
 				expect(obj.variables['a'].type).to.equal('Integer');
 				expect(obj.variables['a'].visibility).to.equal('Public');
@@ -82,7 +85,8 @@ describe('UML Parser Classes', function () {
 				});
 
 				expect(obj.variables).to.include.keys('a');
-				expect(obj.variables['a']).to.have.keys('id', 'type', 'visibility');
+				expect(obj.variables['a']).to.have.keys('name', 'id', 'type', 'visibility');
+				expect(obj.variables['a'].name).to.equal('a');
 				expect(obj.variables['a'].id).to.be.a('string').and.match(REGEX_UUID);
 				expect(obj.variables['a'].type).to.equal('Integer');
 				expect(obj.variables['a'].visibility).to.equal('Private');

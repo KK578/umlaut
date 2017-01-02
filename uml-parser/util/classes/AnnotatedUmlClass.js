@@ -21,21 +21,25 @@ module.exports = class AnnotatedUmlClass {
 		this.invariants = [];
 	}
 
-	addVariable(name, type) {
-		if (!name) {
-			throw new Error('Argument "name" is required.');
+	addVariable(variableObject) {
+		if (typeof variableObject !== 'string' && !variableObject.name) {
+			throw new Error('Property "name" is required.');
 		}
 
-		if (!type) {
-			type = 'object';
-		}
+		const name = variableObject.name ? variableObject.name : variableObject;
 
 		if (this.variables[name] !== undefined) {
 			throw new Error(`Variable "${name}" is already defined.`);
 		}
 
-		this.variables[name] = { type };
-		this.variables[name].id = uuid();
+		const v = {
+			name: name,
+			id: uuid(),
+			type: variableObject.type ? variableObject.type : 'Object',
+			visibility: variableObject.visibility ? variableObject.visibility : 'Public'
+		};
+
+		this.variables[name] = v;
 	}
 
 	addMethod(methodObject) {
@@ -47,16 +51,15 @@ module.exports = class AnnotatedUmlClass {
 			throw new Error('Property "type" is required.');
 		}
 
-		if (methodObject.arguments !== undefined && !Array.isArray(methodObject.arguments)) {
-			throw new Error('Expected property "arguments" to be Array.');
+		if (methodObject.arguments !== undefined && !(typeof methodObject.arguments === 'object')) {
+			throw new Error('Expected property "arguments" to be Object.');
 		}
 
-		if (this.methods[name] !== undefined) {
-			throw new Error(`Method "${name}" is already defined.`);
+		if (this.methods[methodObject.name] !== undefined) {
+			throw new Error(`Method "${methodObject.name}" is already defined.`);
 		}
 
-		this.methods[name] = new AnnotatedUmlMethod(methodObject);
-		this.methods[name].id = uuid();
+		this.methods[methodObject.name] = new AnnotatedUmlMethod(methodObject);
 	}
 
 	addInvariant(arg) {
