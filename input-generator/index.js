@@ -2,11 +2,11 @@ const smtSolve = require('./smt-solver/index.js');
 
 function generateInputs(uml) {
 	return smtSolve(uml).then((smtInputs) => {
-		Object.keys(smtInputs).map((className) => {
+		Object.keys(smtInputs).forEach((className) => {
 			const umlClass = uml[className];
 			const smtClass = smtInputs[className];
 
-			Object.keys(smtClass).map((methodName) => {
+			Object.keys(smtClass).forEach((methodName) => {
 				const umlMethod = umlClass.methods[methodName];
 				const smtMethod = smtClass[methodName];
 

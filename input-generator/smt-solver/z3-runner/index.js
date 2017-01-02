@@ -48,7 +48,7 @@ function promiseHandleSmtClass(smt) {
 	return Promise.all(promises).then((resolved) => {
 		const result = {};
 
-		resolved.map((resolvedMethod) => {
+		resolved.forEach((resolvedMethod) => {
 			if (result[resolvedMethod.name] !== undefined) {
 				throw new Error(`Method ${resolvedMethod.name} already exists.`);
 			}
@@ -76,7 +76,7 @@ function promiseHandleSmt(smt) {
 	return Promise.all(promises).then((resolved) => {
 		const result = {};
 
-		resolved.map((resolvedClass) => {
+		resolved.forEach((resolvedClass) => {
 			if (result[resolvedClass.name] !== undefined) {
 				throw new Error(`Class ${resolvedClass.name} already exists.`);
 			}

@@ -130,16 +130,14 @@ const grammar = [
 
 // Note: From parsey/examples/calc.
 function interpret(parseTree) {
-	if (typeof parseTree === 'string' || (parseTree === null || parseTree === undefined)) {
+	if (typeof parseTree === 'string' || parseTree === null || parseTree === undefined) {
 		return parseTree;
 	}
 
 	const values = parseTree.children
 		.map(interpret)
 		.filter((value) => {
-			const result = !(value === null || value === undefined);
-
-			return result;
+			return !(value === null || value === undefined);
 		});
 
 	return parseTree.item.evaluate(values);
