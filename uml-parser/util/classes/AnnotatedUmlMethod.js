@@ -39,11 +39,11 @@ module.exports = class AnnotatedUmlMethod {
 			throw new Error('Argument "type" is required.');
 		}
 
-		for (let i = 0; i < this.args.length; i++) {
-			if (this.args[i].name === arg.name) {
-				throw new Error(`Argument "${name}" is already defined.`);
+		this.args.forEach((a) => {
+			if (a.name === arg.name) {
+				throw new Error(`Argument "${arg.name}" is already defined.`);
 			}
-		}
+		});
 
 		this.args.push(arg);
 	}
