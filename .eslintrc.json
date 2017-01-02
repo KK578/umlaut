@@ -9,9 +9,12 @@
     "node": true,
     "mocha": true
   },
+  "plugins": [
+    "chai-expect",
+    "mocha"
+  ],
   "globals": {
-    "Polymer": false,
-    "_": false
+    "expect": false
   },
   "rules": {
     "block-scoped-var": "error",
@@ -76,6 +79,21 @@
     "no-var": "error",
     "prefer-const": "error",
     "prefer-template": "error",
-    "template-curly-spacing": "error"
+    "template-curly-spacing": "error",
+
+    // eslint-plugin-chai-expect
+    "chai-expect/no-inner-compare": "error",
+    "chai-expect/missing-assertion": "error",
+    "chai-expect/terminating-properties": "error",
+
+    // eslint-plugin-mocha
+    "mocha/no-exclusive-tests": "error",
+    "mocha/no-global-tests": "error",
+    "mocha/no-sibling-hooks": "error",
+    "mocha/no-return-and-callback": "error",
+    "mocha/no-nested-tests": "error",
+    "mocha/no-mocha-arrows": "error",
+    "mocha/valid-test-description": "warn",
+    "mocha/no-identical-title": "warn"
   }
 }

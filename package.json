@@ -1,6 +1,6 @@
 {
   "name": "generator-model-driven-testing",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "author": {
     "name": "Kevin Kwan",
@@ -32,7 +32,10 @@
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
     "eslint-formatter-pretty": "^0.2.2",
+    "eslint-plugin-chai-expect": "^1.1.1",
+    "eslint-plugin-mocha": "^4.8.0",
     "grunt": "^1.0.1",
+    "grunt-contrib-clean": "^1.0.0",
     "grunt-eslint": "KK578/grunt-eslint",
     "grunt-mocha-istanbul": "^5.0.2",
     "grunt-mocha-test": "^0.13.2",
