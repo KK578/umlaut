@@ -200,11 +200,11 @@ describe('UML Parser Classes', function () {
 			}).to.throw(Error);
 		});
 
-		it('should define hashmaps after initialisation', function () {
+		it('should define data structures after initialisation', function () {
 			const obj = new TestClass('foo', 'Integer');
 
-			expect(obj.preconditions).to.be.an('object');
-			expect(obj.postconditions).to.be.an('object');
+			expect(obj.preconditions).to.be.instanceOf(Array);
+			expect(obj.postconditions).to.be.instanceOf(Array);
 		});
 
 		describe('#setType', function () {
@@ -352,7 +352,7 @@ describe('UML Parser Classes', function () {
 			});
 
 			it('should add a new postcondition', function () {
-				const postconditionsLength = Object.keys(obj.postconditions).length;
+				const postconditionsLength = obj.postconditions.length;
 
 				obj.addPostcondition({
 					comparison: 'LessThan',
@@ -362,7 +362,7 @@ describe('UML Parser Classes', function () {
 					]
 				});
 
-				expect(Object.keys(obj.postconditions).length).to.equal(postconditionsLength + 1);
+				expect(obj.postconditions.length).to.equal(postconditionsLength + 1);
 			});
 
 			it('should generate a unique ID for the condition', function () {
