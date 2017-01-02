@@ -1,4 +1,4 @@
-describe('UML Parser', () => {
+describe('UML Parser', function () {
 	require('./classes-test.js');
 	require('./parser-visual-studio-test.js');
 });

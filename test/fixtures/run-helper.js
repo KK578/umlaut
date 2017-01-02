@@ -1,4 +1,3 @@
-const path = require('path');
 const yeoman = require('yeoman-environment');
 const env = yeoman.createEnv();
 

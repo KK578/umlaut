@@ -1,17 +1,12 @@
 const path = require('path');
-const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
-const expect = chai.expect;
-
-chai.use(chaiAsPromised);
 
 const promises = require('../../util/promises.js');
 const REGEX_UUID = /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i;
 
 const testee = require('../../uml-parser/parsers/visual-studio/index.js');
 
-describe('Visual Studio Parser', () => {
-	it('should state it cannot parse a non XML string', () => {
+describe('Visual Studio Parser', function () {
+	it('should state it cannot parse a non XML string', function () {
 		const notXml = 'FooBar';
 		const promise = testee.detect(notXml);
 
@@ -20,7 +15,7 @@ describe('Visual Studio Parser', () => {
 		});
 	});
 
-	it('should state it cannot parse an arbitrary XML string', () => {
+	it('should state it cannot parse an arbitrary XML string', function () {
 		const notModelXml = '<foo><bar id="bar"></bar</foo>';
 		const promise = testee.detect(notModelXml);
 
@@ -29,7 +24,7 @@ describe('Visual Studio Parser', () => {
 		});
 	});
 
-	it('should state it can parse if the XML root contains a "modelStoreModel" node', () => {
+	it('should state it can parse if the XML root contains a "modelStoreModel" node', function () {
 		const modelXml = '<modelStoreModel></modelStoreModel>';
 		const promise = testee.detect(modelXml);
 
@@ -38,7 +33,7 @@ describe('Visual Studio Parser', () => {
 		});
 	});
 
-	it('should state it can parse if the XML root contains a "logicalClassDesignerModel" node', () => {
+	it('should state it can parse if the XML root contains a "logicalClassDesignerModel" node', function () {
 		const modelXml = '<logicalClassDesignerModel></logicalClassDesignerModel>';
 		const promise = testee.detect(modelXml);
 
@@ -55,7 +50,7 @@ describe('Visual Studio Parser', () => {
 	function simpleMathTestSuite(fixture) {
 		let testResult;
 
-		it('should successfully be detected as parsable', () => {
+		it('should successfully be detected as parsable', function () {
 			return promises.fsReadFile(fixture).then((data) => {
 				const promise = testee.detect(data);
 
@@ -65,7 +60,7 @@ describe('Visual Studio Parser', () => {
 			});
 		});
 
-		it('should successfully be parsed', () => {
+		it('should successfully be parsed', function () {
 			return promises.fsReadFile(fixture).then((data) => {
 				const promise = testee.parse(data);
 
@@ -76,8 +71,8 @@ describe('Visual Studio Parser', () => {
 			});
 		});
 
-		describe('Variables', () => {
-			it('should contain a single variable "Nop"', () => {
+		describe('Variables', function () {
+			it('should contain a single variable "Nop"', function () {
 				const variable = testResult.variables.Nop;
 
 				expect(variable).to.be.an('object');
@@ -87,8 +82,8 @@ describe('Visual Studio Parser', () => {
 			});
 		});
 
-		describe('Methods', () => {
-			it('should contain 4 methods', () => {
+		describe('Methods', function () {
+			it('should contain 4 methods', function () {
 				const methods = testResult.methods;
 				const keys = Object.keys(methods);
 
@@ -102,28 +97,28 @@ describe('Visual Studio Parser', () => {
 				expect(condition.exception).to.equal(expected.exception);
 			}
 
-			describe('SimpleMath#Add', () => {
+			describe('SimpleMath#Add', function () {
 				let method;
 
-				before(() => {
+				before(function () {
 					method = testResult.methods.Add;
 				});
 
-				it('should exist with method properties', () => {
+				it('should exist with method properties', function () {
 					expect(method).to.be.an('object');
 					expect(method.id).to.be.a('string').and.match(REGEX_UUID);
 					expect(method.visibility).to.equal('Public');
 					expect(method.type).to.equal('Integer');
 				});
 
-				it('should describe arguments', () => {
+				it('should describe arguments', function () {
 					expect(method.arguments).to.be.an('Object')
 						.and.have.all.keys(['a', 'b']);
 					expect(method.arguments.a).to.equal('Integer');
 					expect(method.arguments.b).to.equal('Integer');
 				});
 
-				it('should describe preconditions', () => {
+				it('should describe preconditions', function () {
 					const expectedConditions = [
 						{
 							comparison: 'GreaterThanOrEqual',
@@ -142,7 +137,7 @@ describe('Visual Studio Parser', () => {
 					});
 				});
 
-				it('should describe postconditions', () => {
+				it('should describe postconditions', function () {
 					const expectedConditions = [
 						{
 							comparison: 'GreaterThanOrEqual',
@@ -158,28 +153,28 @@ describe('Visual Studio Parser', () => {
 				});
 			});
 
-			describe('SimpleMath#Subtract', () => {
+			describe('SimpleMath#Subtract', function () {
 				let method;
 
-				before(() => {
+				before(function () {
 					method = testResult.methods.Subtract;
 				});
 
-				it('should exist with method properties', () => {
+				it('should exist with method properties', function () {
 					expect(method).to.be.an('object');
 					expect(method.id).to.be.a('string').and.match(REGEX_UUID);
 					expect(method.visibility).to.equal('Public');
 					expect(method.type).to.equal('Integer');
 				});
 
-				it('should describe arguments', () => {
+				it('should describe arguments', function () {
 					expect(method.arguments).to.be.an('Object')
 						.and.have.all.keys(['a', 'b']);
 					expect(method.arguments.a).to.equal('Integer');
 					expect(method.arguments.b).to.equal('Integer');
 				});
 
-				it('should describe preconditions', () => {
+				it('should describe preconditions', function () {
 					const expectedConditions = [
 						{
 							comparison: 'GreaterThanOrEqual',
@@ -202,7 +197,7 @@ describe('Visual Studio Parser', () => {
 					});
 				});
 
-				it('should describe postconditions', () => {
+				it('should describe postconditions', function () {
 					const expectedConditions = [
 						{
 							comparison: 'LessThanOrEqual',
@@ -218,28 +213,28 @@ describe('Visual Studio Parser', () => {
 				});
 			});
 
-			describe('SimpleMath#Divide', () => {
+			describe('SimpleMath#Divide', function () {
 				let method;
 
-				before(() => {
+				before(function () {
 					method = testResult.methods.Divide;
 				});
 
-				it('should exist with method properties', () => {
+				it('should exist with method properties', function () {
 					expect(method).to.be.an('object');
 					expect(method.id).to.be.a('string').and.match(REGEX_UUID);
 					expect(method.visibility).to.equal('Public');
 					expect(method.type).to.equal('Integer');
 				});
 
-				it('should describe arguments', () => {
+				it('should describe arguments', function () {
 					expect(method.arguments).to.be.an('Object')
 						.and.have.all.keys(['a', 'b']);
 					expect(method.arguments.a).to.equal('Integer');
 					expect(method.arguments.b).to.equal('Integer');
 				});
 
-				it('should describe preconditions', () => {
+				it('should describe preconditions', function () {
 					const expectedConditions = [
 						{
 							comparison: 'GreaterThanOrEqual',
@@ -258,7 +253,7 @@ describe('Visual Studio Parser', () => {
 					});
 				});
 
-				it.skip('should describe postconditions', () => {
+				it.skip('should describe postconditions', function () {
 					const expectedConditions = [
 						{
 							comparison: 'Equal',
@@ -274,27 +269,27 @@ describe('Visual Studio Parser', () => {
 				});
 			});
 
-			describe('SimpleMath#SquareRoot', () => {
+			describe('SimpleMath#SquareRoot', function () {
 				let method;
 
-				before(() => {
+				before(function () {
 					method = testResult.methods.SquareRoot;
 				});
 
-				it('should exist with method properties', () => {
+				it('should exist with method properties', function () {
 					expect(method).to.be.an('object');
 					expect(method.id).to.be.a('string').and.match(REGEX_UUID);
 					expect(method.visibility).to.equal('Public');
 					expect(method.type).to.equal('Integer');
 				});
 
-				it('should describe arguments', () => {
+				it('should describe arguments', function () {
 					expect(method.arguments).to.be.an('Object')
 						.and.have.all.keys(['a']);
 					expect(method.arguments.a).to.equal('Integer');
 				});
 
-				it('should describe preconditions', () => {
+				it('should describe preconditions', function () {
 					const expectedConditions = [
 						{
 							comparison: 'GreaterThanOrEqual',
@@ -309,7 +304,7 @@ describe('Visual Studio Parser', () => {
 					});
 				});
 
-				it.skip('should describe postconditions', () => {
+				it.skip('should describe postconditions', function () {
 					const expectedConditions = [
 						{
 							comparison: 'Equal',
@@ -327,13 +322,13 @@ describe('Visual Studio Parser', () => {
 		});
 	}
 
-	describe('SimpleMath.uml', () => {
+	describe('SimpleMath.uml', function () {
 		const fixture = path.join(__dirname, '../fixtures/SimpleMath/ModelDefinition/SimpleMath.uml');
 
 		simpleMathTestSuite(fixture);
 	});
 
-	describe('SimpleMath.classdiagram', () => {
+	describe('SimpleMath.classdiagram', function () {
 		const fixture = path.join(__dirname, '../fixtures/SimpleMath/SimpleMath.classdiagram');
 
 		simpleMathTestSuite(fixture);
