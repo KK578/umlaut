@@ -365,6 +365,18 @@ describe('UML Parser Classes', function () {
 				expect(Object.keys(obj.postconditions).length).to.equal(postconditionsLength + 1);
 			});
 
+			it('should generate a unique ID for the condition', function () {
+				obj.addPostcondition({
+					comparison: 'LessThan',
+					arguments: [
+						'a',
+						'b'
+					]
+				});
+
+				expect(obj.postconditions[0].id).to.be.a('string').and.match(REGEX_UUID);
+			});
+
 			it('should error if postcondition object does not specify the comparison', function () {
 				expect(obj.addPostcondition.bind(obj, {
 					comparison: undefined,
@@ -380,18 +392,6 @@ describe('UML Parser Classes', function () {
 					comparison: 'LessThan',
 					arguments: []
 				})).to.throw(Error);
-			});
-
-			it('should generate a unique ID for the condition', function () {
-				obj.addPostcondition({
-					comparison: 'LessThan',
-					arguments: [
-						'a',
-						'b'
-					]
-				});
-
-				expect(obj.postconditions[0].id).to.be.a('string').and.match(REGEX_UUID);
 			});
 		});
 	});
