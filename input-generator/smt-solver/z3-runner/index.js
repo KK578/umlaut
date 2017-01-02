@@ -23,7 +23,10 @@ function promiseSpawnZ3(smtData) {
 		z3.on('error', reject);
 
 		// Write SMT-LIB2 commands into z3.
-		z3.stdin.write(smtData);
+		smtData.forEach((data) => {
+			z3.stdin.write(data);
+		});
+
 		z3.stdin.end();
 	});
 }
