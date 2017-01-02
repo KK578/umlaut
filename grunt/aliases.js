@@ -11,6 +11,10 @@ module.exports = {
 			'eslint'
 		]
 	},
-	test: ['mochaTest:all'],
-	coverage: ['mocha_istanbul:all']
+	test: ['mochaTest'],
+	coverage: [
+		'mocha_istanbul:uml-parser',
+		'mocha_istanbul:input-generator',
+		'mocha_istanbul:test-generator'
+	]
 };
