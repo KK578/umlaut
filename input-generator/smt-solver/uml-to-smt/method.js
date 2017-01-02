@@ -56,7 +56,7 @@ module.exports = class SmtMethod {
 		// For each precondition, add it to the stack.
 		method.preconditions.map((c) => {
 			const comparison = comparisons.toSmtSymbol(c.comparison);
-			const conditionCommand = new Smt.BooleanExpression(comparison, c.arguments);
+			const conditionCommand = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
 
 			this.commands.push(new Smt.Assertion(conditionCommand));
 		});
@@ -79,7 +79,7 @@ module.exports = class SmtMethod {
 		// Add postconditions so that the inputs may be more interesting.
 		method.postconditions.map((c) => {
 			const comparison = comparisons.toSmtSymbol(c.comparison);
-			const conditionCommand = new Smt.BooleanExpression(comparison, c.arguments);
+			const conditionCommand = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
 
 			this.commands.push(new Smt.Assertion(conditionCommand));
 		});
@@ -97,7 +97,7 @@ module.exports = class SmtMethod {
 
 			method.preconditions.map((c, j) => {
 				const comparison = comparisons.toSmtSymbol(c.comparison);
-				const expression = new Smt.BooleanExpression(comparison, c.arguments);
+				const expression = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
 
 				// If it is the one that we are testing,
 				//  invert the result and get the values to use as inputs.
