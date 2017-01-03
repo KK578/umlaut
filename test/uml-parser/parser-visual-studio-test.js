@@ -323,13 +323,13 @@ describe('Visual Studio Parser', function () {
 	}
 
 	describe('SimpleMath.uml', function () {
-		const fixture = path.join(__dirname, '../fixtures/SimpleMath/ModelDefinition/SimpleMath.uml');
+		const fixture = global.fixtures.models.SimpleMath.uml;
 
 		simpleMathTestSuite(fixture);
 	});
 
 	describe('SimpleMath.classdiagram', function () {
-		const fixture = path.join(__dirname, '../fixtures/SimpleMath/SimpleMath.classdiagram');
+		const fixture = global.fixtures.models.SimpleMath.classdiagram;
 
 		simpleMathTestSuite(fixture);
 	});
