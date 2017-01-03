@@ -6,6 +6,11 @@
 build/
 coverage/
 
+# Test Fixtures
+*.layout
+*.modelproj
+*.sln
+
 ## Dependencies
 node_modules/
 bower[-_]components/
