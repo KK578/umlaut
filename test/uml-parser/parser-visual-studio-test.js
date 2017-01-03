@@ -16,7 +16,7 @@ describe('Visual Studio Parser', function () {
 	});
 
 	it('should state it cannot parse an arbitrary XML string', function () {
-		const notModelXml = '<foo><bar id="bar"></bar</foo>';
+		const notModelXml = '<foo><bar id="bar"></bar></foo>';
 		const promise = testee.detect(notModelXml);
 
 		return expect(promise).to.be.fulfilled.then((result) => {

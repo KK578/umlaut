@@ -1,3 +1,5 @@
+const uuid = require('uuid/v4');
+
 module.exports = class OclCondition {
 	constructor(condition) {
 		if (!condition && typeof condition !== 'object') {
@@ -8,15 +10,16 @@ module.exports = class OclCondition {
 			throw new Error('"condition" must specify the comparison.');
 		}
 
-		if (!Array.isArray(condition.args) || condition.args.length <= 0) {
-			throw new Error('Expected "condition.args" to be Array, with at least 1 item.');
+		if (!Array.isArray(condition.arguments) || condition.arguments.length <= 0) {
+			throw new Error('Expected "condition.arguments" to be Array, with at least 1 item.');
 		}
 
+		this.id = uuid();
 		this.comparison = condition.comparison;
 
-		this.args = [];
-		condition.args.map((arg) => {
-			this.args.push(arg);
+		this.arguments = [];
+		condition.arguments.map((arg) => {
+			this.arguments.push(arg);
 		});
 
 		if (condition.isInverted !== undefined) {

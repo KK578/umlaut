@@ -1,4 +1,4 @@
-const promises = require('../../util/promises.js');
+const promises = require('../../../util/promises.js');
 
 module.exports = (data) => {
 	return promises.xmlParseString(data).then((xml) => {

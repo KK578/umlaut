@@ -1,3 +1,5 @@
+const REGEX_UUID = /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i;
+
 const testee = require('../../uml-parser/util/classes.js');
 let TestClass;
 
@@ -13,53 +15,99 @@ describe('UML Parser Classes', function () {
 			}).to.throw(Error);
 		});
 
+		it('should error on empty object', function () {
+			expect(() => {
+				new TestClass({});
+			}).to.throw(Error);
+		});
+
 		it('should take a name', function () {
 			const obj = new TestClass('foo');
 
-			// expect(obj.id).to.be.a('string').and.not.equal('');
+			expect(obj.id).to.be.a('string').and.match(REGEX_UUID);
 			expect(obj.name).to.equal('foo');
 		});
 
-		it('should define hashmaps after initialisation', function () {
+		it('should define data structures after initialisation', function () {
 			const obj = new TestClass('foo');
 
 			expect(obj.variables).to.be.an('object');
 			expect(obj.methods).to.be.an('object');
-			expect(obj.invariants).to.be.an('object');
+			expect(obj.invariants).to.be.instanceOf(Array);
 		});
 
 		describe('#addVariable', function () {
 			let obj;
 
 			beforeEach(function () {
-				obj = new TestClass('foo');
+				obj = new TestClass({ name: 'foo' });
 			});
 
 			it('should error on empty input', function () {
 				expect(obj.addVariable).to.throw(Error);
 			});
 
-			it('should take a name', function () {
+			it('should error on empty object', function () {
+				expect(obj.addVariable.bind(obj, {})).to.throw(Error);
+			});
+
+			it('should take a name, as a string', function () {
 				obj.addVariable('a');
 
 				expect(obj.variables).to.include.keys('a');
-				expect(obj.variables['a']).to.include({ type: 'object' });
+				expect(obj.variables['a']).to.have.keys('name', 'id', 'type', 'visibility');
+				expect(obj.variables['a'].name).to.equal('a');
+				expect(obj.variables['a'].id).to.be.a('string').and.match(REGEX_UUID);
+				expect(obj.variables['a'].type).to.equal('Object');
+				expect(obj.variables['a'].visibility).to.equal('Public');
 			});
 
-			it('should take a name and type', function () {
-				obj.addVariable('a', 'Integer');
+			it('should take a name, as an object', function () {
+				obj.addVariable({ name: 'a' });
 
 				expect(obj.variables).to.include.keys('a');
-				expect(obj.variables['a']).to.include({ type: 'Integer' });
+				expect(obj.variables['a']).to.have.all.keys('name', 'id', 'type', 'visibility');
+				expect(obj.variables['a'].name).to.equal('a');
+				expect(obj.variables['a'].id).to.be.a('string').and.match(REGEX_UUID);
+				expect(obj.variables['a'].type).to.equal('Object');
+				expect(obj.variables['a'].visibility).to.equal('Public');
+			});
+
+			it('should take a name and type, as an object', function () {
+				obj.addVariable({
+					name: 'a',
+					type: 'Integer'
+				});
+
+				expect(obj.variables).to.include.keys('a');
+				expect(obj.variables['a']).to.have.keys('name', 'id', 'type', 'visibility');
+				expect(obj.variables['a'].name).to.equal('a');
+				expect(obj.variables['a'].id).to.be.a('string').and.match(REGEX_UUID);
+				expect(obj.variables['a'].type).to.equal('Integer');
+				expect(obj.variables['a'].visibility).to.equal('Public');
+			});
+
+			it('should take a name, type and visibility, as an object', function () {
+				obj.addVariable({
+					name: 'a',
+					type: 'Integer',
+					visibility: 'Private'
+				});
+
+				expect(obj.variables).to.include.keys('a');
+				expect(obj.variables['a']).to.have.keys('name', 'id', 'type', 'visibility');
+				expect(obj.variables['a'].name).to.equal('a');
+				expect(obj.variables['a'].id).to.be.a('string').and.match(REGEX_UUID);
+				expect(obj.variables['a'].type).to.equal('Integer');
+				expect(obj.variables['a'].visibility).to.equal('Private');
 			});
 
 			it('should error if variable name already exists', function () {
-				obj.addVariable('a', 'Integer');
+				obj.addVariable('a');
 
 				expect(obj.variables).to.include.keys('a');
-				expect(obj.variables['a']).to.include({ type: 'Integer' });
 
-				expect(obj.addVariable.bind(obj, 'a', 'Integer')).to.throw(Error);
+				expect(obj.addVariable.bind(obj, 'a')).to.throw(Error);
 			});
 		});
 
@@ -67,46 +115,90 @@ describe('UML Parser Classes', function () {
 			let obj;
 
 			beforeEach(function () {
-				obj = new TestClass('foo');
+				obj = new TestClass({ name: 'foo' });
 			});
 
 			it('should error on empty input', function () {
 				expect(obj.addMethod).to.throw(Error);
 			});
 
-			it('should error with just name', function () {
+			it('should error on empty object', function () {
+				expect(obj.addMethod.bind(obj, {})).to.throw(Error);
+			});
+
+			it('should error on string input', function () {
 				expect(obj.addMethod.bind(obj, 'foo')).to.throw(Error);
 			});
 
-			it('should take a name and type', function () {
-				const methodsLength = Object.keys(obj.methods).length;
-
-				obj.addMethod('foo', 'Integer');
-
-				expect(Object.keys(obj.methods).length).to.equal(methodsLength + 1);
-				expect(obj.methods).to.include.keys('foo');
+			it('should error on just a name, as an object', function () {
+				expect(obj.addMethod.bind(obj, { name: 'foo' })).to.throw(Error);
 			});
 
-			it('should take a name and type and list of arguments', function () {
-				obj.addMethod('foo', 'Integer', [{ a: { type: 'Integer' } }]);
+			it('should take a name and type, as an object', function () {
+				expect(obj.methods).to.not.include.key('foo');
 
-				expect(obj.methods).to.include.keys('foo');
-				expect(obj.methods['foo'].type).equal('Integer');
-				expect(obj.methods['foo'].args).to.include({ a: { type: 'Integer' } });
+				obj.addMethod({
+					name: 'foo',
+					type: 'Integer'
+				});
+
+				expect(obj.methods).to.include.key('foo');
+			});
+
+			it('should take a name, type and visibility, as an object', function () {
+				expect(obj.methods).to.not.include.key('foo');
+
+				obj.addMethod({
+					name: 'foo',
+					type: 'Integer',
+					visibility: 'Private'
+				});
+
+				expect(obj.methods).to.include.key('foo');
+			});
+
+			it('should take a name, type and array of arguments, as an object', function () {
+				expect(obj.methods).to.not.include.key('foo');
+
+				obj.addMethod({
+					name: 'foo',
+					type: 'Integer',
+					arguments: [
+						{
+							name: 'a',
+							type: 'Integer'
+						}
+					]
+				});
+
+				expect(obj.methods).to.include.key('foo');
 			});
 
 			it('should error if list of arguments is not an Array', function () {
-				expect(obj.addMethod.bind(obj, 'foo', 'Integer', 'a')).to.throw(Error);
+				expect(obj.addMethod.bind(obj, {
+					name: 'foo',
+					type: 'Integer',
+					arguments: {
+						name: 'a',
+						type: 'Integer'
+					}
+				})).to.throw(Error);
 			});
 
 			it('should error if method name already exists', function () {
-				obj.addMethod('foo', 'Integer');
+				obj.addMethod({
+					name: 'foo',
+					type: 'Integer'
+				});
 
 				// Validate method is added.
 				expect(obj.methods).to.include.keys('foo');
 
 				// Test adding method again.
-				expect(obj.addMethod.bind(obj, 'foo', 'Integer')).to.throw(Error);
+				expect(obj.addMethod.bind(obj, {
+					name: 'foo',
+					type: 'Integer'
+				})).to.throw(Error);
 			});
 		});
 
@@ -114,7 +206,7 @@ describe('UML Parser Classes', function () {
 			let obj;
 
 			beforeEach(function () {
-				obj = new TestClass('foo');
+				obj = new TestClass({ name: 'foo' });
 			});
 
 			it('should error on empty', function () {
@@ -126,23 +218,23 @@ describe('UML Parser Classes', function () {
 			});
 
 			it('should add a new invariant', function () {
-				const invariantLength = Object.keys(obj.invariants).length;
+				const invariantLength = obj.invariants.length;
 
 				obj.addInvariant({
 					comparison: 'LessThan',
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
 				});
 
-				expect(Object.keys(obj.invariants).length).to.equal(invariantLength + 1);
+				expect(obj.invariants.length).to.equal(invariantLength + 1);
 			});
 
 			it('should error if invariant object does not specify the comparison', function () {
 				expect(obj.addInvariant.bind(obj, {
 					comparison: undefined,
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
@@ -152,7 +244,7 @@ describe('UML Parser Classes', function () {
 			it('should error if invariant object does not specify at least 1 item in arguments', function () {
 				expect(obj.addInvariant.bind(obj, {
 					comparison: 'LessThan',
-					args: []
+					arguments: []
 				})).to.throw(Error);
 			});
 
@@ -171,45 +263,104 @@ describe('UML Parser Classes', function () {
 			}).to.throw(Error);
 		});
 
-		it('should error with just name', function () {
+		it('should error on empty object', function () {
+			expect(() => {
+				new TestClass({});
+			}).to.throw(Error);
+		});
+
+		it('should error on a string input', function () {
 			expect(() => {
 				new TestClass('foo');
 			}).to.throw(Error);
 		});
 
-		it('should take a name and type', function () {
-			const obj = new TestClass('foo', 'Integer');
-
-			expect(obj.name).to.equal('foo');
-			expect(obj.type).to.equal('Integer');
+		it('should error with just a name, as an object', function () {
+			expect(() => {
+				new TestClass({ name: 'foo' });
+			}).to.throw(Error);
 		});
 
-		it('should take a name and type and list of arguments', function () {
-			const obj = new TestClass('foo', 'Integer', [{ a: { type: 'Integer' } }]);
+		it('should take a name and type', function () {
+			const obj = new TestClass({
+				name: 'foo',
+				type: 'Integer'
+			});
 
+			expect(obj).to.include.keys('id', 'type', 'visibility', 'arguments');
+			expect(obj.id).to.be.a('string').and.match(REGEX_UUID);
 			expect(obj.name).to.equal('foo');
 			expect(obj.type).to.equal('Integer');
-			expect(obj.args).to.include({ a: { type: 'Integer' } });
+			expect(obj.visibility).to.equal('Public');
+			expect(obj.arguments).to.be.an('object');
+		});
+
+		it('should take a name, type and visibility, as an object', function () {
+			const obj = new TestClass({
+				name: 'foo',
+				type: 'Integer',
+				visibility: 'Private'
+			});
+
+			expect(obj).to.include.keys('id', 'type', 'visibility', 'arguments');
+			expect(obj.id).to.be.a('string').and.match(REGEX_UUID);
+			expect(obj.name).to.equal('foo');
+			expect(obj.type).to.equal('Integer');
+			expect(obj.visibility).to.equal('Private');
+			expect(obj.arguments).to.be.an('object');
+		});
+
+		it('should take a name, type and array of arguments, as an object', function () {
+			const obj = new TestClass({
+				name: 'foo',
+				type: 'Integer',
+				arguments: [
+					{
+						name: 'a',
+						type: 'Integer'
+					}
+				]
+			});
+
+			expect(obj).to.include.keys('id', 'type', 'visibility', 'arguments');
+			expect(obj.id).to.be.a('string').and.match(REGEX_UUID);
+			expect(obj.name).to.equal('foo');
+			expect(obj.type).to.equal('Integer');
+			expect(obj.visibility).to.equal('Public');
+			expect(obj.arguments).to.be.an('object').and.include({ a: 'Integer' });
 		});
 
 		it('should error if list of arguments is not an array', function () {
 			expect(() => {
-				new TestClass('foo', 'Integer', 'a');
+				new TestClass({
+					name: 'foo',
+					type: 'Integer',
+					arguments: {
+						name: 'a',
+						type: 'Integer'
+					}
+				});
 			}).to.throw(Error);
 		});
 
-		it('should define hashmaps after initialisation', function () {
-			const obj = new TestClass('foo', 'Integer');
+		it('should define data structures after initialisation', function () {
+			const obj = new TestClass({
+				name: 'foo',
+				type: 'Integer'
+			});
 
-			expect(obj.preconditions).to.be.an('object');
-			expect(obj.postconditions).to.be.an('object');
+			expect(obj.preconditions).to.be.instanceOf(Array);
+			expect(obj.postconditions).to.be.instanceOf(Array);
 		});
 
 		describe('#setType', function () {
 			let obj;
 
 			beforeEach(function () {
-				obj = new TestClass('foo', 'Integer');
+				obj = new TestClass({
+					name: 'foo',
+					type: 'Integer'
+				});
 			});
 
 			it('should error on empty', function () {
@@ -229,11 +380,18 @@ describe('UML Parser Classes', function () {
 			let obj;
 
 			beforeEach(function () {
-				obj = new TestClass('foo', 'Integer');
+				obj = new TestClass({
+					name: 'foo',
+					type: 'Integer'
+				});
 			});
 
 			it('should error on empty', function () {
 				expect(obj.addArgument).to.throw(Error);
+			});
+
+			it('should error on empty object', function () {
+				expect(obj.addArgument.bind(obj, {})).to.throw(Error);
 			});
 
 			it('should add a new argument, as an object', function () {
@@ -242,10 +400,7 @@ describe('UML Parser Classes', function () {
 					type: 'Integer'
 				});
 
-				expect(obj.args).to.include({
-					name: 'a',
-					type: 'Integer'
-				});
+				expect(obj.arguments).to.include({ a: 'Integer' });
 			});
 
 			it('should error if argument object does not have a name', function () {
@@ -263,10 +418,7 @@ describe('UML Parser Classes', function () {
 				});
 
 				// Validate the argument now exists.
-				expect(obj.args).to.include({
-					name: 'a',
-					type: 'Integer'
-				});
+				expect(obj.arguments).to.include({ a: 'Integer' });
 
 				expect(obj.addArgument.bind(obj, {
 					name: 'a',
@@ -279,11 +431,18 @@ describe('UML Parser Classes', function () {
 			let obj;
 
 			beforeEach(function () {
-				obj = new TestClass('foo', 'Integer');
+				obj = new TestClass({
+					name: 'foo',
+					type: 'Integer'
+				});
 			});
 
 			it('should error on empty', function () {
 				expect(obj.addPrecondition).to.throw(Error);
+			});
+
+			it('should error on empty object', function () {
+				expect(obj.addPrecondition.bind(obj, {})).to.throw(Error);
 			});
 
 			it('should error if argument is not an object', function () {
@@ -291,23 +450,35 @@ describe('UML Parser Classes', function () {
 			});
 
 			it('should add a new precondition', function () {
-				const preconditionsLength = Object.keys(obj.preconditions).length;
+				const preconditionsLength = obj.preconditions.length;
 
 				obj.addPrecondition({
 					comparison: 'LessThan',
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
 				});
 
-				expect(Object.keys(obj.preconditions).length).to.equal(preconditionsLength + 1);
+				expect(obj.preconditions.length).to.equal(preconditionsLength + 1);
+			});
+
+			it('should generate a unique ID for the condition', function () {
+				obj.addPrecondition({
+					comparison: 'LessThan',
+					arguments: [
+						'a',
+						'b'
+					]
+				});
+
+				expect(obj.preconditions[0].id).to.be.a('string').and.match(REGEX_UUID);
 			});
 
 			it('should error if precondition object does not specify the comparison', function () {
 				expect(obj.addPrecondition.bind(obj, {
 					comparison: undefined,
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
@@ -317,22 +488,27 @@ describe('UML Parser Classes', function () {
 			it('should error if precondition object does not specify at least 1 item in arguments', function () {
 				expect(obj.addPrecondition.bind(obj, {
 					comparison: 'LessThan',
-					args: []
+					arguments: []
 				})).to.throw(Error);
 			});
-
-			it('should generate a unique ID for the condition');
 		});
 
 		describe('#addPostcondition', function () {
 			let obj;
 
 			beforeEach(function () {
-				obj = new TestClass('foo', 'Integer');
+				obj = new TestClass({
+					name: 'foo',
+					type: 'Integer'
+				});
 			});
 
 			it('should error on empty', function () {
 				expect(obj.addPostcondition).to.throw(Error);
+			});
+
+			it('should error on empty object', function () {
+				expect(obj.addPostcondition.bind(obj, {})).to.throw(Error);
 			});
 
 			it('should error if argument is not an object', function () {
@@ -340,23 +516,35 @@ describe('UML Parser Classes', function () {
 			});
 
 			it('should add a new postcondition', function () {
-				const postconditionsLength = Object.keys(obj.postconditions).length;
+				const postconditionsLength = obj.postconditions.length;
 
 				obj.addPostcondition({
 					comparison: 'LessThan',
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
 				});
 
-				expect(Object.keys(obj.postconditions).length).to.equal(postconditionsLength + 1);
+				expect(obj.postconditions.length).to.equal(postconditionsLength + 1);
+			});
+
+			it('should generate a unique ID for the condition', function () {
+				obj.addPostcondition({
+					comparison: 'LessThan',
+					arguments: [
+						'a',
+						'b'
+					]
+				});
+
+				expect(obj.postconditions[0].id).to.be.a('string').and.match(REGEX_UUID);
 			});
 
 			it('should error if postcondition object does not specify the comparison', function () {
 				expect(obj.addPostcondition.bind(obj, {
 					comparison: undefined,
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
@@ -366,11 +554,9 @@ describe('UML Parser Classes', function () {
 			it('should error if postcondition object does not specify at least 1 item in arguments', function () {
 				expect(obj.addPostcondition.bind(obj, {
 					comparison: 'LessThan',
-					args: []
+					arguments: []
 				})).to.throw(Error);
 			});
-
-			it('should generate a unique ID for the condition');
 		});
 	});
 
@@ -385,6 +571,12 @@ describe('UML Parser Classes', function () {
 			}).to.throw(Error);
 		});
 
+		it('should error on empty object', function () {
+			expect(() => {
+				new TestClass({});
+			}).to.throw(Error);
+		});
+
 		it('should error if condition is not an object', function () {
 			expect(() => {
 				new TestClass('(> a b)');
@@ -394,14 +586,14 @@ describe('UML Parser Classes', function () {
 		it('should take a condition object', function () {
 			const obj = new TestClass({
 				comparison: 'LessThan',
-				args: [
+				arguments: [
 					'a',
 					'b'
 				]
 			});
 
 			expect(obj.comparison).to.equal('LessThan');
-			expect(obj.args).to.include('a').and.include('b');
+			expect(obj.arguments).to.include('a').and.include('b');
 			expect(obj.isInverted).to.not.be.ok;
 		});
 
@@ -409,7 +601,7 @@ describe('UML Parser Classes', function () {
 			expect(() => {
 				new TestClass({
 					comparison: undefined,
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
@@ -421,7 +613,7 @@ describe('UML Parser Classes', function () {
 			expect(() => {
 				new TestClass({
 					comparison: 'GreaterThan',
-					args: 'a, b'
+					arguments: 'a, b'
 				});
 			}).to.throw(Error);
 		});
@@ -430,7 +622,7 @@ describe('UML Parser Classes', function () {
 			expect(() => {
 				new TestClass({
 					comparison: 'GreaterThan',
-					args: []
+					arguments: []
 				});
 			}).to.throw(Error);
 		});
@@ -438,7 +630,7 @@ describe('UML Parser Classes', function () {
 		it('should set isInverted value in object', function () {
 			const obj = new TestClass({
 				comparison: 'LessThan',
-				args: [
+				arguments: [
 					'a',
 					'b'
 				],
@@ -446,7 +638,7 @@ describe('UML Parser Classes', function () {
 			});
 
 			expect(obj.comparison).to.equal('LessThan');
-			expect(obj.args).to.include('a').and.include('b');
+			expect(obj.arguments).to.include('a').and.include('b');
 			expect(obj.isInverted).to.be.ok;
 		});
 
@@ -456,7 +648,7 @@ describe('UML Parser Classes', function () {
 			beforeEach(function () {
 				obj = new TestClass({
 					comparison: 'LessThan',
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
@@ -487,7 +679,7 @@ describe('UML Parser Classes', function () {
 			beforeEach(function () {
 				obj = new TestClass({
 					comparison: 'LessThan',
-					args: [
+					arguments: [
 						'a',
 						'b'
 					]
