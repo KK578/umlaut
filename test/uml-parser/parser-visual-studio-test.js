@@ -333,4 +333,360 @@ describe('Visual Studio Parser', function () {
 
 		simpleMathTestSuite(fixture);
 	});
+
+	function decimalMathTestSuite(fixture) {
+		let testResult;
+
+		it('should successfully be detected as parsable', function () {
+			return promises.fsReadFile(fixture).then((data) => {
+				const promise = testee.detect(data);
+
+				return expect(promise).to.be.fulfilled;
+			}).then((result) => {
+				expect(result).to.be.ok;
+			});
+		});
+
+		it('should successfully be parsed', function () {
+			return promises.fsReadFile(fixture).then((data) => {
+				const promise = testee.parse(data);
+
+				return expect(promise).to.be.fulfilled;
+			}).then((result) => {
+				expect(result.FloatMath).to.be.an('object');
+				expect(result.DoubleMath).to.be.an('object');
+				testResult = result;
+			});
+		});
+
+		describe('FloatMath', function () {
+			let floatMath;
+
+			before(function () {
+				floatMath = testResult.FloatMath;
+			});
+
+			it('should contain no variables', function () {
+				expect(floatMath.variables).to.be.empty;
+			});
+
+			it('should contain 2 methods', function () {
+				expect(floatMath.methods).to.have.keys('Add', 'Subtract');
+			});
+
+			function assertCondition(condition, expected) {
+				expect(condition.id).to.be.a('string').and.match(REGEX_UUID);
+				expect(condition.comparison).to.equal(expected.comparison);
+				expect(condition.arguments).to.include.members(expected.arguments);
+				expect(condition.exception).to.equal(expected.exception);
+			}
+
+			describe('FloatMath#Add', function () {
+				let method;
+
+				before(function () {
+					method = floatMath.methods.Add;
+				});
+
+				it('should exist with method properties', function () {
+					expect(method).to.be.an('object');
+					expect(method.id).to.be.a('string').and.match(REGEX_UUID);
+					expect(method.visibility).to.equal('Public');
+					expect(method.type).to.equal('Float');
+				});
+
+				it('should describe arguments', function () {
+					expect(method.arguments).to.be.an('Object')
+						.and.have.all.keys(['a', 'b']);
+					expect(method.arguments.a).to.equal('Float');
+					expect(method.arguments.b).to.equal('Float');
+				});
+
+				it('should describe preconditions', function () {
+					const expectedConditions = [
+						{
+							comparison: 'LessThanOrEqual',
+							arguments: ['a', 500.0]
+						},
+						{
+							comparison: 'GreaterThanOrEqual',
+							arguments: ['a', -500.0]
+						},
+						{
+							comparison: 'LessThanOrEqual',
+							arguments: ['b', 500.0]
+						},
+						{
+							comparison: 'GreaterThanOrEqual',
+							arguments: ['b', -500.0]
+						}
+					];
+
+					expect(method.preconditions).to.be.instanceOf(Array)
+						.and.to.have.length(expectedConditions.length);
+					expectedConditions.map((condition, index) => {
+						assertCondition(method.preconditions[index], condition);
+					});
+				});
+
+				it('should describe postconditions', function () {
+					const expectedConditions = [
+						{
+							comparison: 'LessThanOrEqual',
+							arguments: ['result', 1000.0]
+						},
+						{
+							comparison: 'GreaterThanOrEqual',
+							arguments: ['result', -1000.0]
+						}
+					];
+
+					expect(method.postconditions).to.be.instanceOf(Array)
+						.and.to.have.length(expectedConditions.length);
+					expectedConditions.map((condition, index) => {
+						assertCondition(method.postconditions[index], condition);
+					});
+				});
+			});
+
+			describe('FloatMath#Subtract', function () {
+				let method;
+
+				before(function () {
+					method = floatMath.methods.Subtract;
+				});
+
+				it('should exist with method properties', function () {
+					expect(method).to.be.an('object');
+					expect(method.id).to.be.a('string').and.match(REGEX_UUID);
+					expect(method.visibility).to.equal('Public');
+					expect(method.type).to.equal('Float');
+				});
+
+				it('should describe arguments', function () {
+					expect(method.arguments).to.be.an('Object')
+						.and.have.all.keys(['a', 'b']);
+					expect(method.arguments.a).to.equal('Float');
+					expect(method.arguments.b).to.equal('Float');
+				});
+
+				it('should describe preconditions', function () {
+					const expectedConditions = [
+						{
+							comparison: 'LessThanOrEqual',
+							arguments: ['a', 500.0]
+						},
+						{
+							comparison: 'GreaterThanOrEqual',
+							arguments: ['a', -500.0]
+						},
+						{
+							comparison: 'LessThanOrEqual',
+							arguments: ['b', 500.0]
+						},
+						{
+							comparison: 'GreaterThanOrEqual',
+							arguments: ['b', -500.0]
+						}
+					];
+
+					expect(method.preconditions).to.be.instanceOf(Array)
+						.and.to.have.length(expectedConditions.length);
+					expectedConditions.map((condition, index) => {
+						assertCondition(method.preconditions[index], condition);
+					});
+				});
+
+				it('should describe postconditions', function () {
+					const expectedConditions = [
+						{
+							comparison: 'LessThanOrEqual',
+							arguments: ['result', 1000.0]
+						},
+						{
+							comparison: 'GreaterThanOrEqual',
+							arguments: ['result', -1000.0]
+						}
+					];
+
+					expect(method.postconditions).to.be.instanceOf(Array)
+						.and.to.have.length(expectedConditions.length);
+					expectedConditions.map((condition, index) => {
+						assertCondition(method.postconditions[index], condition);
+					});
+				});
+			});
+		});
+
+		describe('DoubleMath', function () {
+			let doubleMath;
+
+			before(function () {
+				doubleMath = testResult.DoubleMath;
+			});
+
+			it('should contain no variables', function () {
+				expect(doubleMath.variables).to.be.empty;
+			});
+
+			it('should contain 2 methods', function () {
+				expect(doubleMath.methods).to.have.keys('Add', 'Subtract');
+			});
+
+			function assertCondition(condition, expected) {
+				expect(condition.id).to.be.a('string').and.match(REGEX_UUID);
+				expect(condition.comparison).to.equal(expected.comparison);
+				expect(condition.arguments).to.include.members(expected.arguments);
+				expect(condition.exception).to.equal(expected.exception);
+			}
+
+			describe('DoubleMath#Add', function () {
+				let method;
+
+				before(function () {
+					method = doubleMath.methods.Add;
+				});
+
+				it('should exist with method properties', function () {
+					expect(method).to.be.an('object');
+					expect(method.id).to.be.a('string').and.match(REGEX_UUID);
+					expect(method.visibility).to.equal('Public');
+					expect(method.type).to.equal('Double');
+				});
+
+				it('should describe arguments', function () {
+					expect(method.arguments).to.be.an('Object')
+						.and.have.all.keys(['a', 'b']);
+					expect(method.arguments.a).to.equal('Double');
+					expect(method.arguments.b).to.equal('Double');
+				});
+
+				it('should describe preconditions', function () {
+					const expectedConditions = [
+						{
+							comparison: 'LessThanOrEqual',
+							arguments: ['a', 500.0]
+						},
+						{
+							comparison: 'GreaterThanOrEqual',
+							arguments: ['a', -500.0]
+						},
+						{
+							comparison: 'LessThanOrEqual',
+							arguments: ['b', 500.0]
+						},
+						{
+							comparison: 'GreaterThanOrEqual',
+							arguments: ['b', -500.0]
+						}
+					];
+
+					expect(method.preconditions).to.be.instanceOf(Array)
+						.and.to.have.length(expectedConditions.length);
+					expectedConditions.map((condition, index) => {
+						assertCondition(method.preconditions[index], condition);
+					});
+				});
+
+				it('should describe postconditions', function () {
+					const expectedConditions = [
+						{
+							comparison: 'LessThanOrEqual',
+							arguments: ['result', 1000.0]
+						},
+						{
+							comparison: 'GreaterThanOrEqual',
+							arguments: ['result', -1000.0]
+						}
+					];
+
+					expect(method.postconditions).to.be.instanceOf(Array)
+						.and.to.have.length(expectedConditions.length);
+					expectedConditions.map((condition, index) => {
+						assertCondition(method.postconditions[index], condition);
+					});
+				});
+			});
+
+			describe('DoubleMath#Subtract', function () {
+				let method;
+
+				before(function () {
+					method = doubleMath.methods.Subtract;
+				});
+
+				it('should exist with method properties', function () {
+					expect(method).to.be.an('object');
+					expect(method.id).to.be.a('string').and.match(REGEX_UUID);
+					expect(method.visibility).to.equal('Public');
+					expect(method.type).to.equal('Double');
+				});
+
+				it('should describe arguments', function () {
+					expect(method.arguments).to.be.an('Object')
+						.and.have.all.keys(['a', 'b']);
+					expect(method.arguments.a).to.equal('Double');
+					expect(method.arguments.b).to.equal('Double');
+				});
+
+				it('should describe preconditions', function () {
+					const expectedConditions = [
+						{
+							comparison: 'LessThanOrEqual',
+							arguments: ['a', 500.0]
+						},
+						{
+							comparison: 'GreaterThanOrEqual',
+							arguments: ['a', -500.0]
+						},
+						{
+							comparison: 'LessThanOrEqual',
+							arguments: ['b', 500.0]
+						},
+						{
+							comparison: 'GreaterThanOrEqual',
+							arguments: ['b', -500.0]
+						}
+					];
+
+					expect(method.preconditions).to.be.instanceOf(Array)
+						.and.to.have.length(expectedConditions.length);
+					expectedConditions.map((condition, index) => {
+						assertCondition(method.preconditions[index], condition);
+					});
+				});
+
+				it('should describe postconditions', function () {
+					const expectedConditions = [
+						{
+							comparison: 'LessThanOrEqual',
+							arguments: ['result', 1000.0]
+						},
+						{
+							comparison: 'GreaterThanOrEqual',
+							arguments: ['result', -1000.0]
+						}
+					];
+
+					expect(method.postconditions).to.be.instanceOf(Array)
+						.and.to.have.length(expectedConditions.length);
+					expectedConditions.map((condition, index) => {
+						assertCondition(method.postconditions[index], condition);
+					});
+				});
+			});
+		});
+	}
+
+	describe('DecimalMath.uml', function () {
+		const fixture = global.fixtures.FullModels.DecimalMath.uml;
+
+		decimalMathTestSuite(fixture);
+	});
+
+	describe('DecimalMath.classdiagram', function () {
+		const fixture = global.fixtures.FullModels.DecimalMath.classdiagram;
+
+		decimalMathTestSuite(fixture);
+	});
 });
