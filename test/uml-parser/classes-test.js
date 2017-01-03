@@ -15,6 +15,13 @@ describe('UML Parser Classes', function () {
 			}).to.throw(Error);
 		});
 
+		it('should error on empty object', function () {
+			expect(() => {
+				new TestClass({});
+			}).to.throw(Error);
+		});
+
+
 		it('should take a name', function () {
 			const obj = new TestClass('foo');
 
@@ -39,6 +46,10 @@ describe('UML Parser Classes', function () {
 
 			it('should error on empty input', function () {
 				expect(obj.addVariable).to.throw(Error);
+			});
+
+			it('should error on empty object', function () {
+				expect(obj.addVariable.bind(obj, {})).to.throw(Error);
 			});
 
 			it('should take a name, as a string', function () {
@@ -110,6 +121,10 @@ describe('UML Parser Classes', function () {
 
 			it('should error on empty input', function () {
 				expect(obj.addMethod).to.throw(Error);
+			});
+
+			it('should error on empty object', function () {
+				expect(obj.addMethod.bind(obj, {})).to.throw(Error);
 			});
 
 			it('should error on string input', function () {
@@ -247,6 +262,12 @@ describe('UML Parser Classes', function () {
 			}).to.throw(Error);
 		});
 
+		it('should error on empty object', function () {
+			expect(() => {
+				new TestClass({});
+			}).to.throw(Error);
+		});
+
 		it('should error on a string input', function () {
 			expect(() => {
 				new TestClass('foo');
@@ -368,6 +389,10 @@ describe('UML Parser Classes', function () {
 				expect(obj.addArgument).to.throw(Error);
 			});
 
+			it('should error on empty object', function () {
+				expect(obj.addArgument.bind(obj, {})).to.throw(Error);
+			});
+
 			it('should add a new argument, as an object', function () {
 				obj.addArgument({
 					name: 'a',
@@ -413,6 +438,10 @@ describe('UML Parser Classes', function () {
 
 			it('should error on empty', function () {
 				expect(obj.addPrecondition).to.throw(Error);
+			});
+
+			it('should error on empty object', function () {
+				expect(obj.addPrecondition.bind(obj, {})).to.throw(Error);
 			});
 
 			it('should error if argument is not an object', function () {
@@ -477,6 +506,10 @@ describe('UML Parser Classes', function () {
 				expect(obj.addPostcondition).to.throw(Error);
 			});
 
+			it('should error on empty object', function () {
+				expect(obj.addPostcondition.bind(obj, {})).to.throw(Error);
+			});
+
 			it('should error if argument is not an object', function () {
 				expect(obj.addPostcondition.bind(obj, '(> a b)')).to.throw(Error);
 			});
@@ -534,6 +567,12 @@ describe('UML Parser Classes', function () {
 		it('should error on empty', function () {
 			expect(() => {
 				new TestClass();
+			}).to.throw(Error);
+		});
+
+		it('should error on empty object', function () {
+			expect(() => {
+				new TestClass({});
 			}).to.throw(Error);
 		});
 

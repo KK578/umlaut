@@ -51,8 +51,8 @@ module.exports = class AnnotatedUmlClass {
 			throw new Error('Property "type" is required.');
 		}
 
-		if (methodObject.arguments !== undefined && !(typeof methodObject.arguments === 'object')) {
-			throw new Error('Expected property "arguments" to be Object.');
+		if (methodObject.arguments !== undefined && !Array.isArray(methodObject.arguments)) {
+			throw new Error('Expected property "arguments" to be an Array.');
 		}
 
 		if (this.methods[methodObject.name] !== undefined) {
@@ -66,9 +66,5 @@ module.exports = class AnnotatedUmlClass {
 		const condition = new OclCondition(arg);
 
 		this.invariants.push(condition);
-	}
-
-	getMethod(name) {
-		return this.methods[name];
 	}
 };
