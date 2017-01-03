@@ -161,10 +161,10 @@ function parseClass(umlClass) {
 
 	// Parse information for class variables and methods.
 	parseVariables(umlClass).forEach((variable) => {
-		c.addVariable(variable.name, variable.type);
+		c.addVariable(variable);
 	});
 	parseMethods(umlClass).forEach((method) => {
-		c.addMethod(method.name, method.type, method.arguments);
+		c.addMethod(method);
 
 		method.preconditions.forEach((condition) => {
 			c.methods[method.name].addPrecondition(condition);
