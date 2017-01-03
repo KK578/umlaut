@@ -1,9 +1,88 @@
 const testee = require('../../../input-generator/smt-solver/uml-to-smt/index.js');
 
 describe('UML-To-SMT', function () {
-	it('should handle classes with no variables');
-	it('should handle classes with no methods');
-	it('should handle classes with both no variables or methods');
+	it('should handle classes with both no variables or methods', function () {
+		const fixture = {
+			Test: {
+				name: 'Test',
+				variables: {},
+				methods: {}
+			}
+		};
+		const result = testee(fixture);
+
+		expect(result).to.have.key('Test');
+		expect(result.Test).to.include.keys('name', 'smtCommands');
+		expect(result.Test.smtCommands).to.be.instanceOf(Array).and.have.length(0);
+	});
+
+	it('should handle classes with no variables', function () {
+		const fixture = {
+			Test: {
+				name: 'Test',
+				methods: {
+					Foo: {
+						name: 'Foo',
+						visibility: 'Public',
+						type: 'Integer',
+						arguments: {
+							a: 'Integer',
+							b: 'Integer'
+						},
+						preconditions: [
+							{
+								comparison: 'Equal',
+								arguments: [
+									'a',
+									0
+								],
+								id: '00000000-0000-0000-0000-000000000000'
+							}
+						],
+						postconditions: [
+							{
+								comparison: 'GreaterThan',
+								arguments: [
+									'result',
+									'a'
+								],
+								id: '00000000-0000-0000-0000-000000000001'
+							}
+						]
+					}
+				}
+			}
+		};
+		const result = testee(fixture);
+
+		expect(result).to.have.key('Test');
+		expect(result.Test).to.include.keys('name', 'smtCommands');
+		expect(result.Test.smtCommands).to.be.instanceOf(Array).and.have.length(1);
+		expect(result.Test.smtCommands[0]).to.have.keys('name', 'commands');
+		expect(result.Test.smtCommands[0].name).to.equal('Foo');
+		expect(result.Test.smtCommands[0].commands).to.be.instanceOf(Array);
+	});
+
+	it('should handle classes with no methods', function () {
+		const fixture = {
+			Test: {
+				name: 'Test',
+				variables: {
+					'Foo': {
+						name: 'Foo',
+						visibility: 'Public',
+						type: 'Integer'
+					}
+				},
+				methods: {}
+			}
+		};
+		const result = testee(fixture);
+
+		expect(result).to.have.key('Test');
+		expect(result.Test).to.include.keys('name', 'smtCommands');
+		expect(result.Test.smtCommands).to.be.instanceOf(Array).and.have.length(0);
+	});
 
 	it('should handle methods with no arguments');
 	it('should handle methods with no preconditions');
@@ -101,7 +180,115 @@ describe('UML-To-SMT', function () {
 		});
 
 		it('should error on making inverted assertions that are not allowed to be inverted');
-		it('should make assertions on standard Numerical logic');
-		it('should make assertions on simple Boolean logic');
+	});
+
+	describe('Types', function () {
+		it('should convert type "Integer" to "Int"', function () {
+			const fixture = {
+				Test: {
+					name: 'Test',
+					methods: {
+						Foo: {
+							name: 'Foo',
+							visibility: 'Public',
+							type: 'Integer',
+							arguments: {
+								a: 'Integer',
+								b: 'Integer'
+							},
+							preconditions: [
+								{
+									comparison: 'Equal',
+									arguments: [
+										'a',
+										0
+									],
+									inverted: true,
+									id: '00000000-0000-0000-0000-000000000000'
+								}
+							],
+							postconditions: []
+						}
+					}
+				}
+			};
+			const result = testee(fixture);
+			const commands = result.Test.smtCommands[0].commands.join('\n');
+
+			expect(commands).to.not.contain('Integer');
+			expect(commands).to.contain('Int');
+		});
+
+		it('should convert type "Float" to "Real"', function () {
+			const fixture = {
+				Test: {
+					name: 'Test',
+					methods: {
+						Foo: {
+							name: 'Foo',
+							visibility: 'Public',
+							type: 'Float',
+							arguments: {
+								a: 'Float',
+								b: 'Float'
+							},
+							preconditions: [
+								{
+									comparison: 'Equal',
+									arguments: [
+										'a',
+										0
+									],
+									inverted: true,
+									id: '00000000-0000-0000-0000-000000000000'
+								}
+							],
+							postconditions: []
+						}
+					}
+				}
+			};
+			const result = testee(fixture);
+			const commands = result.Test.smtCommands[0].commands.join('\n');
+
+			expect(commands).to.not.contain('Float');
+			expect(commands).to.contain('Real');
+		});
+
+		it('should convert type "Double" to "Real"', function () {
+			const fixture = {
+				Test: {
+					name: 'Test',
+					methods: {
+						Foo: {
+							name: 'Foo',
+							visibility: 'Public',
+							type: 'Double',
+							arguments: {
+								a: 'Double',
+								b: 'Double'
+							},
+							preconditions: [
+								{
+									comparison: 'Equal',
+									arguments: [
+										'a',
+										0
+									],
+									inverted: true,
+									id: '00000000-0000-0000-0000-000000000000'
+								}
+							],
+							postconditions: []
+						}
+					}
+				}
+			};
+			const result = testee(fixture);
+			const commands = result.Test.smtCommands[0].commands.join('\n');
+
+			expect(commands).to.not.contain('Double');
+			expect(commands).to.contain('Real');
+		});
 	});
 });

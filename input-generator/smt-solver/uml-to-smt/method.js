@@ -6,6 +6,10 @@ function convertType(type) {
 		case 'Integer':
 			return 'Int';
 
+		case 'Float':
+		case 'Double':
+			return 'Real';
+
 		default:
 			return type;
 	}
