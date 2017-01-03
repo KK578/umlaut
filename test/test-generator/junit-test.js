@@ -7,7 +7,7 @@ describe('JUnit', function () {
 	let generatedTestSuite;
 
 	before(function () {
-		const fixture = require(global.fixtures['input-generator'].SimpleMath);
+		const fixture = require(global.fixtures.FullModels.SimpleMath['input-generator']);
 
 		return yeomanHelpers.run(path.join(__dirname, '../../generators/app'))
 			.inDir('test/tmp/junit/')

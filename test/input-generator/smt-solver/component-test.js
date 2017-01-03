@@ -6,7 +6,7 @@ describe('SimpleMath Test Fixture', function () {
 	let testResult;
 
 	before(function () {
-		const fixture = require(global.fixtures['uml-parser'].SimpleMath);
+		const fixture = require(global.fixtures.FullModels.SimpleMath['uml-parser']);
 		const promise = testee(fixture);
 
 		return expect(promise).to.be.fulfilled.then((result) => {

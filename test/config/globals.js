@@ -7,17 +7,19 @@ chai.use(chaiAsPromised);
 global.expect = chai.expect;
 
 global.fixtures = {
-	models: {
+	FullModels: {
 		SimpleMath: {
-			uml: path.join(__dirname, '../fixtures/models/SimpleMath/SimpleMath.uml'),
-			classdiagram: path.join(__dirname, '../fixtures/models/SimpleMath/SimpleMath.classdiagram'),
+			uml: path.join(__dirname, '../fixtures/full-models/SimpleMath/model.uml'),
+			classdiagram: path.join(__dirname, '../fixtures/full-models/SimpleMath/model.classdiagram'),
+			'uml-parser': path.join(__dirname, '../fixtures/full-models/SimpleMath/uml-parser.json'),
+			'input-generator': path.join(__dirname, '../fixtures/full-models/SimpleMath/input-generator.json')
+		},
+		DecimalMath: {
+			uml: path.join(__dirname, '../fixtures/full-models/DecimalMath/model.uml'),
+			classdiagram: path.join(__dirname, '../fixtures/full-models/DecimalMath/model.classdiagram'),
+			'uml-parser': path.join(__dirname, '../fixtures/full-models/DecimalMath/uml-parser.json'),
+			'input-generator': path.join(__dirname, '../fixtures/full-models/DecimalMath/input-generator.json')
 		}
-	},
-	'uml-parser': {
-		SimpleMath: path.join(__dirname, '../fixtures/uml-parser/SimpleMath.json')
-	},
-	'input-generator': {
-		SimpleMath: path.join(__dirname, '../fixtures/input-generator/SimpleMath.json')
 	}
 }
 
