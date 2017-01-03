@@ -13,7 +13,6 @@ module.exports = class AnnotatedUmlClass {
 		this.id = uuid();
 
 		this.visibility = classObject.visibility ? classObject.visibility : 'Public';
-		this.type = classObject.type ? classObject.type : 'Object';
 
 		this.variables = {};
 		this.methods = {};

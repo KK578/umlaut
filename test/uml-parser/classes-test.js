@@ -21,7 +21,6 @@ describe('UML Parser Classes', function () {
 			}).to.throw(Error);
 		});
 
-
 		it('should take a name', function () {
 			const obj = new TestClass('foo');
 
@@ -175,13 +174,15 @@ describe('UML Parser Classes', function () {
 				expect(obj.methods).to.include.key('foo');
 			});
 
-			it('should error if list of arguments is not an Object', function () {
-				expect(obj.addMethod.bind(obj, 'foo', 'Integer', [
-					{
+			it('should error if list of arguments is not an Array', function () {
+				expect(obj.addMethod.bind(obj, {
+					name: 'foo',
+					type: 'Integer',
+					arguments: {
 						name: 'a',
 						type: 'Integer'
 					}
-				])).to.throw(Error);
+				})).to.throw(Error);
 			});
 
 			it('should error if method name already exists', function () {

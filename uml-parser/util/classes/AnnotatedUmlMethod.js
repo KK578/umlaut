@@ -12,7 +12,7 @@ module.exports = class AnnotatedUmlMethod {
 		}
 
 		if (methodObject.arguments !== undefined && !Array.isArray(methodObject.arguments)) {
-			throw new Error('Expected property "arguments" to be Object.');
+			throw new Error('Expected property "arguments" to be an Array.');
 		}
 
 		this.name = methodObject.name;
