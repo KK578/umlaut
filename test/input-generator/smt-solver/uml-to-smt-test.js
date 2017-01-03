@@ -1,6 +1,6 @@
 const testee = require('../../../input-generator/smt-solver/uml-to-smt/index.js');
 
-describe('UML-To-SMT', () => {
+describe('UML-To-SMT', function () {
 	it('should handle classes with both no variables or methods', function () {
 		const fixture = {
 			Test: {
@@ -180,5 +180,115 @@ describe('UML-To-SMT', () => {
 		});
 
 		it('should error on making inverted assertions that are not allowed to be inverted');
+	});
+
+	describe('Types', function () {
+		it('should convert type "Integer" to "Int"', function () {
+			const fixture = {
+				Test: {
+					name: 'Test',
+					methods: {
+						Foo: {
+							name: 'Foo',
+							visibility: 'Public',
+							type: 'Integer',
+							arguments: {
+								a: 'Integer',
+								b: 'Integer'
+							},
+							preconditions: [
+								{
+									comparison: 'Equal',
+									arguments: [
+										'a',
+										0
+									],
+									inverted: true,
+									id: '00000000-0000-0000-0000-000000000000'
+								}
+							],
+							postconditions: []
+						}
+					}
+				}
+			};
+			const result = testee(fixture);
+			const commands = result.Test.smtCommands[0].commands.join('\n');
+
+			expect(commands).to.not.contain('Integer');
+			expect(commands).to.contain('Int');
+		});
+
+		it('should convert type "Float" to "Real"', function () {
+			const fixture = {
+				Test: {
+					name: 'Test',
+					methods: {
+						Foo: {
+							name: 'Foo',
+							visibility: 'Public',
+							type: 'Float',
+							arguments: {
+								a: 'Float',
+								b: 'Float'
+							},
+							preconditions: [
+								{
+									comparison: 'Equal',
+									arguments: [
+										'a',
+										0
+									],
+									inverted: true,
+									id: '00000000-0000-0000-0000-000000000000'
+								}
+							],
+							postconditions: []
+						}
+					}
+				}
+			};
+			const result = testee(fixture);
+			const commands = result.Test.smtCommands[0].commands.join('\n');
+
+			expect(commands).to.not.contain('Float');
+			expect(commands).to.contain('Real');
+		});
+
+		it('should convert type "Double" to "Real"', function () {
+			const fixture = {
+				Test: {
+					name: 'Test',
+					methods: {
+						Foo: {
+							name: 'Foo',
+							visibility: 'Public',
+							type: 'Double',
+							arguments: {
+								a: 'Double',
+								b: 'Double'
+							},
+							preconditions: [
+								{
+									comparison: 'Equal',
+									arguments: [
+										'a',
+										0
+									],
+									inverted: true,
+									id: '00000000-0000-0000-0000-000000000000'
+								}
+							],
+							postconditions: []
+						}
+					}
+				}
+			};
+			const result = testee(fixture);
+			const commands = result.Test.smtCommands[0].commands.join('\n');
+
+			expect(commands).to.not.contain('Double');
+			expect(commands).to.contain('Real');
+		});
 	});
 });
