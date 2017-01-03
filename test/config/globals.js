@@ -21,6 +21,6 @@ global.fixtures = {
 			'input-generator': path.join(__dirname, '../fixtures/full-models/DecimalMath/input-generator.json')
 		}
 	}
-}
+};
 
 console.log('Test globals loaded.');
