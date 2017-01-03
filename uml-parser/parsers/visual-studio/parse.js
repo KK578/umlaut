@@ -1,6 +1,8 @@
-const uuid = require('uuid/v4');
-const promises = require('../../util/promises.js');
+const promises = require('../../../util/promises.js');
 const cfgParser = require('./condition-cfg-parser.js');
+
+const classes = require('../../util/classes.js');
+const AnnotatedUmlClass = classes.AnnotatedUmlClass;
 
 function getTypeFromNode(parameter) {
 	let type = '';
@@ -29,22 +31,21 @@ function getTypeFromNode(parameter) {
 }
 
 function parseVariables(umlClass) {
-	const variables = {};
+	const variables = [];
 
 	// Iterate through list of attributes.
 	if (umlClass.ownedAttributesInternal !== undefined) {
 		const properties = umlClass.ownedAttributesInternal[0].property;
 
-		properties.map((property) => {
+		properties.forEach((property) => {
 			const v = {
-				id: uuid(),
 				name: property.$.name
 			};
 
 			v.visibility = property.$.visibility ? property.$.visibility : 'Public';
 			v.type = getTypeFromNode(property);
 
-			variables[v.name] = v;
+			variables.push(v);
 		});
 	}
 
@@ -52,46 +53,48 @@ function parseVariables(umlClass) {
 }
 
 function parseMethods(umlClass) {
-	const methods = {};
+	const methods = [];
 
 	// Helper function to get function return type.
 	function getReturnType(parameters) {
 		// Must iterate through all and find first that is a return property.
 		const parameterList = parameters[0].operationHasOwnedParameters;
+		// Filter to find the first parameter that is the return type.
+		const parameter = parameterList.map((parameterListing) => {
+			// <parameter> node exists under each <operationHasOwnedParameters> node.
+			// Return the value contained within the <parameter> node.
+			return parameterListing.parameter[0];
+		}).filter((parameter) => {
+			return parameter.$.direction === 'Return';
+		})[0];
 
-		for (let i = 0; i < parameterList.length; i++) {
-			const parameter = parameterList[i].parameter[0];
-
-			// Direction 'Return' indicates the function's return type.
+		if (parameter) {
 			// TODO: Will the system support Python's multiple object return?'
-			if (parameter.$.direction === 'Return') {
-				const type = getTypeFromNode(parameter);
-
-				return type;
-			}
+			return getTypeFromNode(parameter);
 		}
-
-		// Did not find a return type, so function has void type.
-		return 'Void';
+		else {
+			// Did not find a return type, so function has void type.
+			return 'Void';
+		}
 	}
 
 	// Helper function to get function arguments to array of { name, type }.
 	function getArguments(parameters) {
-		const args = {};
-
+		const args = [];
 		const parameterList = parameters[0].operationHasOwnedParameters;
 
-		for (let i = 0; i < parameterList.length; i++) {
-			const parameter = parameterList[i].parameter[0];
-
-			// Direction 'In' indicates a function argument.
-			if (parameter.$.direction === 'In') {
-				const name = parameter.$.name;
-				const type = getTypeFromNode(parameter);
-
-				args[name] = type;
-			}
-		}
+		parameterList.map((parameterListing) => {
+			// <parameter> node exists under each <operationHasOwnedParameters> node.
+			// Return the value contained within the <parameter> node.
+			return parameterListing.parameter[0];
+		}).filter((parameter) => {
+			return parameter.$.direction === 'In';
+		}).forEach((parameter) => {
+			args.push({
+				name: parameter.$.name,
+				type: getTypeFromNode(parameter)
+			});
+		});
 
 		return args;
 	}
@@ -100,24 +103,11 @@ function parseMethods(umlClass) {
 	function getConditions(conditions) {
 		let c = [];
 
-		function parseConditions(conditions) {
-			const split = conditions.split('-----');
-			const parsed = split.map((condition) => {
-				const result = cfgParser(condition);
-
-				result.id = uuid();
-
-				return result;
-			});
-
-			return parsed;
-		}
-
 		if (conditions) {
 			const constraint = conditions[0].constraint[0];
 			const conditionString = constraint.specification[0].literalString[0].$.value;
 
-			c = parseConditions(conditionString);
+			c = cfgParser(conditionString);
 		}
 
 		return c;
@@ -127,10 +117,9 @@ function parseMethods(umlClass) {
 	if (umlClass.ownedOperationsInternal !== undefined) {
 		const operations = umlClass.ownedOperationsInternal[0].operation;
 
-		operations.map((operation) => {
+		operations.forEach((operation) => {
 			// Generic method properties
 			const v = {
-				id: uuid(),
 				name: operation.$.name
 			};
 
@@ -145,7 +134,7 @@ function parseMethods(umlClass) {
 			v.postconditions = getConditions(operation.postconditionsInternal);
 
 			// TODO: Keep method list as a hashmap of method name?
-			methods[v.name] = v;
+			methods.push(v);
 		});
 	}
 
@@ -153,15 +142,23 @@ function parseMethods(umlClass) {
 }
 
 function parseClass(umlClass) {
-	const c = {};
-
-	// Locate generic class properties.
-	c.id = uuid();
-	c.name = umlClass.$.name;
+	const c = new AnnotatedUmlClass(umlClass.$.name);
 
 	// Parse information for class variables and methods.
-	c.variables = parseVariables(umlClass);
-	c.methods = parseMethods(umlClass);
+	parseVariables(umlClass).forEach((variable) => {
+		c.addVariable(variable);
+	});
+	parseMethods(umlClass).forEach((method) => {
+		c.addMethod(method);
+
+		method.preconditions.forEach((condition) => {
+			c.methods[method.name].addPrecondition(condition);
+		});
+
+		method.postconditions.forEach((condition) => {
+			c.methods[method.name].addPostcondition(condition);
+		});
+	});
 
 	return c;
 }
@@ -169,8 +166,6 @@ function parseClass(umlClass) {
 function parse(data) {
 	return promises.xmlParseString(data).then((uml) => {
 		// Enter root item.
-		const classes = {};
-
 		if (uml.modelStoreModel) {
 			uml = uml.modelStoreModel;
 		}
@@ -178,26 +173,27 @@ function parse(data) {
 			uml = uml.logicalClassDesignerModel;
 		}
 
+		const classes = {};
 		const elements = uml.packagedElements[0];
 
-		if (elements.packageHasNamedElement) {
-			elements.packageHasNamedElement.map((namedElement) => {
-				if (namedElement.class) {
-					const c = parseClass(namedElement.class[0]);
+		function parsePackages(packages) {
+			packages.filter((package) => {
+				return package.class !== undefined;
+			}).map((namedElement) => {
+				return namedElement.class[0];
+			}).forEach((classElement) => {
+				const c = parseClass(classElement);
 
-					classes[c.name] = c;
-				}
+				classes[c.name] = c;
 			});
 		}
 
-		if (elements.logicalClassDesignerModelHasTypes) {
-			elements.logicalClassDesignerModelHasTypes.map((namedElement) => {
-				if (namedElement.class) {
-					const c = parseClass(namedElement.class[0]);
+		if (elements.packageHasNamedElement) {
+			parsePackages(elements.packageHasNamedElement);
+		}
 
-					classes[c.name] = c;
-				}
-			});
+		if (elements.logicalClassDesignerModelHasTypes) {
+			parsePackages(elements.logicalClassDesignerModelHasTypes);
 		}
 
 		return classes;

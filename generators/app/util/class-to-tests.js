@@ -18,17 +18,19 @@ function findCondition(preconditions, condition) {
 		return condition;
 	}
 
+	// Split by space as condition id will be "Complement [[UUID]]".
+	// TODO: This should change to match latest schema, in which "Complement" is not written.
 	const id = condition.split(' ')[1];
+	const search = preconditions.filter((c) => {
+		return c.id === id;
+	});
 
-	for (let i = 0; i < preconditions.length; i++) {
-		const c = preconditions[i];
-
-		if (c.id === id) {
-			return c;
-		}
+	if (search.length > 0) {
+		return search[0];
 	}
-
-	throw new Error('No valid precondition found.');
+	else {
+		throw new Error('No valid precondition found.');
+	}
 }
 
 function readTest(method, test) {

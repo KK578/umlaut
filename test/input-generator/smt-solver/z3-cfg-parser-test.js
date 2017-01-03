@@ -8,13 +8,6 @@ describe('CFG Parser for z3 Values', function () {
 		expect(result.a).to.be.a('number').and.equal(0);
 	});
 
-	it('should handle negative integer values', function () {
-		const result = testee('((a (- 1)))');
-
-		expect(result).to.have.key('a');
-		expect(result.a).to.be.a('number').and.equal(-1);
-	});
-
 	it('should handle list with a single key value pair', function () {
 		const result = testee('((a 0))');
 
@@ -127,5 +120,74 @@ describe('CFG Parser for z3 Values', function () {
 		expect(result[2].arguments).to.contain.keys(['a', 'b']);
 		expect(result[2].arguments.a).to.be.a('number').and.equal(0);
 		expect(result[2].arguments.b).to.be.a('number').and.equal(38);
+	});
+
+	describe('Numbers', function () {
+		describe('Integer', function () {
+			it('should handle simple integer values', function () {
+				const result = testee('(a 5)');
+
+				expect(result).to.have.key('a');
+				expect(result.a).to.be.a('number').and.equal(5);
+			});
+
+			it('should handle larger integer values', function () {
+				const result = testee('(a 12345)');
+
+				expect(result).to.have.key('a');
+				expect(result.a).to.be.a('number').and.equal(12345);
+			});
+
+			it('should handle simple negative integer values', function () {
+				const result = testee('(a (- 1))');
+
+				expect(result).to.have.key('a');
+				expect(result.a).to.be.a('number').and.equal(-1);
+			});
+
+			it('should handle larger negative integer values', function () {
+				const result = testee('(a (- 12345))');
+
+				expect(result).to.have.key('a');
+				expect(result.a).to.be.a('number').and.equal(-12345);
+			});
+		});
+
+		describe('Float/Double', function () {
+			it('should handle 0', function () {
+				const result = testee('(a 0.0)');
+
+				expect(result).to.have.key('a');
+				expect(result.a).to.be.a('number').and.equal(0);
+			});
+
+			it('should handle simple decimal values', function () {
+				const result = testee('(a 1.1)');
+
+				expect(result).to.have.key('a');
+				expect(result.a).to.be.a('number').and.equal(1.1);
+			});
+
+			it('should handle larger decimal values', function () {
+				const result = testee('(a 1234.5678)');
+
+				expect(result).to.have.key('a');
+				expect(result.a).to.be.a('number').and.equal(1234.5678);
+			});
+
+			it('should handle simple negative decimal values', function () {
+				const result = testee('(a (- 1.2))');
+
+				expect(result).to.have.key('a');
+				expect(result.a).to.be.a('number').and.equal(-1.2);
+			});
+
+			it('should handle larger negative decimal values', function () {
+				const result = testee('(a (- 1234.5678))');
+
+				expect(result).to.have.key('a');
+				expect(result.a).to.be.a('number').and.equal(-1234.5678);
+			});
+		});
 	});
 });

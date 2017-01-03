@@ -123,6 +123,9 @@ const grammar = [
 	}),
 
 	// numericValue2
+	new Rule(numericValue2, [/[0-9]+/, /\./, /[0-9]+/], (v, _, vv) => {
+		return parseFloat(`${v}.${vv}`);
+	}),
 	new Rule(numericValue2, [/[0-9]+/], (v) => {
 		return parseInt(v);
 	})
@@ -130,16 +133,14 @@ const grammar = [
 
 // Note: From parsey/examples/calc.
 function interpret(parseTree) {
-	if (typeof parseTree === 'string' || (parseTree === null || parseTree === undefined)) {
+	if (typeof parseTree === 'string' || parseTree === null || parseTree === undefined) {
 		return parseTree;
 	}
 
 	const values = parseTree.children
 		.map(interpret)
 		.filter((value) => {
-			const result = !(value === null || value === undefined);
-
-			return result;
+			return !(value === null || value === undefined);
 		});
 
 	return parseTree.item.evaluate(values);

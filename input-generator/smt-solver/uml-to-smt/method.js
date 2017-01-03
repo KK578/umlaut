@@ -6,6 +6,10 @@ function convertType(type) {
 		case 'Integer':
 			return 'Int';
 
+		case 'Float':
+		case 'Double':
+			return 'Real';
+
 		default:
 			return type;
 	}
@@ -24,7 +28,7 @@ module.exports = class SmtMethod {
 
 	declareArguments(args) {
 		// For every argument to the function, add a declaration to SMT.
-		Object.keys(args).map((name) => {
+		Object.keys(args).forEach((name) => {
 			const type = convertType(args[name]);
 			const command = new Smt.DeclareConst(name, type);
 
@@ -54,7 +58,7 @@ module.exports = class SmtMethod {
 		this.commands.push(new Smt.StackModifier('push'));
 
 		// For each precondition, add it to the stack.
-		method.preconditions.map((c) => {
+		method.preconditions.forEach((c) => {
 			const comparison = comparisons.toSmtSymbol(c.comparison);
 			const conditionCommand = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
 
@@ -77,7 +81,7 @@ module.exports = class SmtMethod {
 		}
 
 		// Add postconditions so that the inputs may be more interesting.
-		method.postconditions.map((c) => {
+		method.postconditions.forEach((c) => {
 			const comparison = comparisons.toSmtSymbol(c.comparison);
 			const conditionCommand = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
 
@@ -90,7 +94,7 @@ module.exports = class SmtMethod {
 	}
 
 	singularInvalidConditions(method) {
-		method.preconditions.map((a, i) => {
+		method.preconditions.forEach((a, i) => {
 			// For each precondition, add it to the stack.
 			this.commands.push(new Smt.Echo(`~~[[${a.id}]]`));
 			this.commands.push(new Smt.StackModifier('push'));

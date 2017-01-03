@@ -9,6 +9,11 @@ namespace UmlAnnotator
 	public class OclComparison
 	{
 		string name;
+		public string Name
+		{
+			get { return name; }
+		}
+
 		string symbol;
 		string smtSymbol;
 		bool invertable;

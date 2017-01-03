@@ -1,11 +1,11 @@
 const SmtClass = require('./class.js');
 
 module.exports = (uml) => {
-	return Object.keys(uml).reduce((previous, current) => {
-		const smtClass = new SmtClass(uml[current]);
+	const classes = {};
 
-		previous[current] = smtClass;
+	Object.keys(uml).forEach((className) => {
+		classes[className] = new SmtClass(uml[className]);
+	});
 
-		return previous;
-	}, {});
+	return classes;
 };

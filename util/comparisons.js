@@ -1,47 +1,57 @@
 const comparisons = require('./comparisons.json');
 
-function toSmtSymbol(comparison) {
-	for (let i = 0; i < comparisons.length; i++) {
-		const c = comparisons[i];
+function searchComparisons(filterFunction) {
+	const search = comparisons.filter(filterFunction);
 
-		if (c.name === comparison) {
-			const symbol = c.smtSymbol ? c.smtSymbol : c.symbol;
-
-			return symbol;
-		}
+	if (search.length > 0) {
+		return search[0];
 	}
+	else {
+		return undefined;
+	}
+}
 
-	throw new Error(`Comparison with name "${comparison}" does not exist.`);
+function toSmtSymbol(comparison) {
+	const search = searchComparisons((c) => {
+		return c.name === comparison;
+	});
+
+	if (search) {
+		return search.smtSymbol ? search.smtSymbol : search.symbol;
+	}
+	else {
+		throw new Error(`Comparison with name "${comparison}" does not exist.`);
+	}
 }
 
 function toSymbol(comparison) {
-	for (let i = 0; i < comparisons.length; i++) {
-		const c = comparisons[i];
+	const search = searchComparisons((c) => {
+		return c.name === comparison;
+	});
 
-		if (c.name === comparison) {
-			return c.symbol;
-		}
+	if (search) {
+		return search.symbol;
 	}
-
-	throw new Error(`Comparison with name "${comparison}" does not exist.`);
+	else {
+		throw new Error(`Comparison with name "${comparison}" does not exist.`);
+	}
 }
 
 function toName(comparison) {
-	for (let i = 0; i < comparisons.length; i++) {
-		const c = comparisons[i];
+	const search = searchComparisons((c) => {
+		return c.symbol === comparison || c.name === comparison;
+	});
 
-		if (c.symbol === comparison || c.name === comparison) {
-			return c.name;
-		}
+	if (search) {
+		return search.name;
 	}
-
-	throw new Error(`Comparison with symbol "${comparison}" does not exist.`);
+	else {
+		throw new Error(`Comparison with symbol "${comparison}" does not exist.`);
+	}
 }
 
 function verifySmtSymbol(comparison) {
-	for (let i = 0; i < comparisons.length; i++) {
-		const c = comparisons[i];
-
+	const search = searchComparisons((c) => {
 		if (c.smtSymbol !== undefined) {
 			if (c.smtSymbol === comparison) {
 				return true;
@@ -50,9 +60,14 @@ function verifySmtSymbol(comparison) {
 		else if (c.symbol === comparison) {
 			return true;
 		}
-	}
+	});
 
-	return false;
+	if (search) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 module.exports = {

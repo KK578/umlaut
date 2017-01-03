@@ -20,10 +20,10 @@ function convertTypes(method) {
 		item.type = getLanguageType(item.type);
 	}
 
-	method.tests.map((test) => {
+	method.tests.forEach((test) => {
 		if (test) {
-			test.initialise.map(convert);
-			test.run.map(convert);
+			test.initialise.forEach(convert);
+			test.run.forEach(convert);
 		}
 	});
 }
@@ -41,13 +41,13 @@ module.exports = class extends Generator {
 	configuring() {
 		this.classes = JSON.parse(this.options.classes);
 
-		this.classes.map((c) => {
-			c.methods.map(convertTypes);
+		this.classes.forEach((c) => {
+			c.methods.forEach(convertTypes);
 		});
 	}
 
 	writing() {
-		this.classes.map((c) => {
+		this.classes.forEach((c) => {
 			const copyTpl = (source, destination, options) => {
 				this.fs.copyTpl(this.templatePath(source),
 					this.destinationPath(destination),
