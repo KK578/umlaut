@@ -7,7 +7,7 @@ describe('NUnit', function () {
 	let generatedTestSuite;
 
 	before(function () {
-		const fixture = require(path.join(__dirname, '../fixtures/inputs/SimpleMath.json'));
+		const fixture = require(global.fixtures['input-generator'].SimpleMath);
 
 		return yeomanHelpers.run(path.join(__dirname, '../../generators/app'))
 			.inDir('test/tmp/nunit/')

@@ -12,6 +12,12 @@ global.fixtures = {
 			uml: path.join(__dirname, '../fixtures/models/SimpleMath/SimpleMath.uml'),
 			classdiagram: path.join(__dirname, '../fixtures/models/SimpleMath/SimpleMath.classdiagram'),
 		}
+	},
+	'uml-parser': {
+		SimpleMath: path.join(__dirname, '../fixtures/uml-parser/SimpleMath.json')
+	},
+	'input-generator': {
+		SimpleMath: path.join(__dirname, '../fixtures/input-generator/SimpleMath.json')
 	}
 }
 
