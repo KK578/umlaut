@@ -48,7 +48,7 @@ describe('Visual Studio Parser', function () {
 	it('should parse Visual Studio model with multiple classes');
 
 	function simpleMathTestSuite(fixture) {
-		let testResult;
+		let simpleMath;
 
 		it('should successfully be detected as parsable', function () {
 			return promises.fsReadFile(fixture).then((data) => {
@@ -67,12 +67,12 @@ describe('Visual Studio Parser', function () {
 				return expect(promise).to.be.fulfilled;
 			}).then((result) => {
 				expect(result.SimpleMath).to.be.an('object');
-				testResult = result.SimpleMath;
+				simpleMath = result.SimpleMath;
 			});
 		});
 
 		it('should contain a single variable "Nop"', function () {
-			const variable = testResult.variables.Nop;
+			const variable = simpleMath.variables.Nop;
 
 			expect(variable).to.be.an('object');
 			expect(variable.id).to.be.a('string').and.match(REGEX_UUID);
@@ -81,10 +81,7 @@ describe('Visual Studio Parser', function () {
 		});
 
 		it('should contain 4 methods', function () {
-			const methods = testResult.methods;
-			const keys = Object.keys(methods);
-
-			expect(keys).to.have.length(4);
+			expect(simpleMath.methods).to.have.keys('Add', 'Subtract', 'Divide', 'SquareRoot');
 		});
 
 		function assertCondition(condition, expected) {
@@ -98,7 +95,7 @@ describe('Visual Studio Parser', function () {
 			let method;
 
 			before(function () {
-				method = testResult.methods.Add;
+				method = simpleMath.methods.Add;
 			});
 
 			it('should exist with method properties', function () {
@@ -154,7 +151,7 @@ describe('Visual Studio Parser', function () {
 			let method;
 
 			before(function () {
-				method = testResult.methods.Subtract;
+				method = simpleMath.methods.Subtract;
 			});
 
 			it('should exist with method properties', function () {
@@ -214,7 +211,7 @@ describe('Visual Studio Parser', function () {
 			let method;
 
 			before(function () {
-				method = testResult.methods.Divide;
+				method = simpleMath.methods.Divide;
 			});
 
 			it('should exist with method properties', function () {
@@ -270,7 +267,7 @@ describe('Visual Studio Parser', function () {
 			let method;
 
 			before(function () {
-				method = testResult.methods.SquareRoot;
+				method = simpleMath.methods.SquareRoot;
 			});
 
 			it('should exist with method properties', function () {
