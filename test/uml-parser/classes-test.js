@@ -56,7 +56,7 @@ describe('UML Parser Classes', function () {
 				obj.addVariable({ name: 'a' });
 
 				expect(obj.variables).to.include.keys('a');
-				expect(obj.variables['a']).to.have.keys('name', 'id', 'type', 'visibility');
+				expect(obj.variables['a']).to.have.all.keys('name', 'id', 'type', 'visibility');
 				expect(obj.variables['a'].name).to.equal('a');
 				expect(obj.variables['a'].id).to.be.a('string').and.match(REGEX_UUID);
 				expect(obj.variables['a'].type).to.equal('Object');
@@ -143,21 +143,21 @@ describe('UML Parser Classes', function () {
 				expect(obj.methods).to.include.key('foo');
 			});
 
-			it('should take a name, type and object of arguments, as an object', function () {
+			it('should take a name, type and array of arguments, as an object', function () {
+				expect(obj.methods).to.not.include.key('foo');
+
 				obj.addMethod({
 					name: 'foo',
 					type: 'Integer',
-					arguments: {
-						a: 'Integer'
-					}
+					arguments: [
+						{
+							name: 'a',
+							type: 'Integer'
+						}
+					]
 				});
 
-				expect(obj.methods).to.include.keys('foo');
-				expect(obj.methods['foo']).to.have.keys('id', 'type', 'visibility', 'arguments');
-				expect(obj.methods['foo'].id).to.be.a('string').and.match(REGEX_UUID);
-				expect(obj.methods['foo'].type).to.equal('Integer');
-				expect(obj.methods['foo'].visibility).to.equal('Public');
-				expect(obj.methods['foo'].arguments).to.include({ a: 'Integer' });
+				expect(obj.methods).to.include.key('foo');
 			});
 
 			it('should error if list of arguments is not an Object', function () {
@@ -265,7 +265,7 @@ describe('UML Parser Classes', function () {
 				type: 'Integer'
 			});
 
-			expect(obj).to.have.keys('id', 'type', 'visibility', 'arguments');
+			expect(obj).to.include.keys('id', 'type', 'visibility', 'arguments');
 			expect(obj.id).to.be.a('string').and.match(REGEX_UUID);
 			expect(obj.name).to.equal('foo');
 			expect(obj.type).to.equal('Integer');
@@ -280,7 +280,7 @@ describe('UML Parser Classes', function () {
 				visibility: 'Private'
 			});
 
-			expect(obj).to.have.keys('id', 'type', 'visibility', 'arguments');
+			expect(obj).to.include.keys('id', 'type', 'visibility', 'arguments');
 			expect(obj.id).to.be.a('string').and.match(REGEX_UUID);
 			expect(obj.name).to.equal('foo');
 			expect(obj.type).to.equal('Integer');
@@ -288,16 +288,19 @@ describe('UML Parser Classes', function () {
 			expect(obj.arguments).to.be.an('object');
 		});
 
-		it('should take a name, type and object of arguments, as an object', function () {
+		it('should take a name, type and array of arguments, as an object', function () {
 			const obj = new TestClass({
 				name: 'foo',
 				type: 'Integer',
-				arguments: {
-					a: 'Integer'
-				}
+				arguments: [
+					{
+						name: 'a',
+						type: 'Integer'
+					}
+				]
 			});
 
-			expect(obj).to.have.keys('id', 'type', 'visibility', 'arguments');
+			expect(obj).to.include.keys('id', 'type', 'visibility', 'arguments');
 			expect(obj.id).to.be.a('string').and.match(REGEX_UUID);
 			expect(obj.name).to.equal('foo');
 			expect(obj.type).to.equal('Integer');
@@ -310,18 +313,19 @@ describe('UML Parser Classes', function () {
 				new TestClass({
 					name: 'foo',
 					type: 'Integer',
-					arguments: [
-						{
-							name: 'a',
-							type: 'Integer'
-						}
-					]
+					arguments: {
+						name: 'a',
+						type: 'Integer'
+					}
 				});
 			}).to.throw(Error);
 		});
 
 		it('should define data structures after initialisation', function () {
-			const obj = new TestClass('foo', 'Integer');
+			const obj = new TestClass({
+				name: 'foo',
+				type: 'Integer'
+			});
 
 			expect(obj.preconditions).to.be.instanceOf(Array);
 			expect(obj.postconditions).to.be.instanceOf(Array);

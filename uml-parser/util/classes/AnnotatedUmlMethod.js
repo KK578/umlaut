@@ -12,14 +12,18 @@ module.exports = class AnnotatedUmlMethod {
 		}
 
 		if (methodObject.arguments !== undefined && !Array.isArray(methodObject.arguments)) {
-			throw new Error('Expected property "args" to be Array.');
+			throw new Error('Expected property "arguments" to be Object.');
 		}
 
 		this.name = methodObject.name;
 		this.id = uuid();
 		this.visibility = methodObject.visibility ? methodObject.visibility : 'Public';
 		this.type = methodObject.type;
-		this.arguments = methodObject.arguments ? methodObject.arguments : [];
+		this.arguments = {};
+
+		if (methodObject.arguments) {
+			methodObject.arguments.forEach(this.addArgument, this);
+		}
 
 		this.preconditions = [];
 		this.postconditions = [];
@@ -42,13 +46,11 @@ module.exports = class AnnotatedUmlMethod {
 			throw new Error('Argument "type" is required.');
 		}
 
-		for (let i = 0; i < this.arguments.length; i++) {
-			if (this.arguments[i].name === arg.name) {
-				throw new Error(`Argument "${name}" is already defined.`);
-			}
+		if (this.arguments[arg.name]) {
+			throw new Error(`Argument "${arg.name}" is already defined.`);
 		}
 
-		this.arguments.push(arg);
+		this.arguments[arg.name] = arg.type;
 	}
 
 	addPrecondition(arg) {
