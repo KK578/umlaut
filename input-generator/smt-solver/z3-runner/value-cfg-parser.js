@@ -123,6 +123,9 @@ const grammar = [
 	}),
 
 	// numericValue2
+	new Rule(numericValue2, [/[0-9]+/, /\./, /[0-9]+/], (v, _, vv) => {
+		return parseFloat(`${v}.${vv}`);
+	}),
 	new Rule(numericValue2, [/[0-9]+/], (v) => {
 		return parseInt(v);
 	})
