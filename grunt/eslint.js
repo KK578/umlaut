@@ -11,7 +11,7 @@ module.exports = {
 					'grunt/*.js',
 					'util/*.js',
 					'test/*.js',
-					'test/{uml-parser,input-generator,test-generator}/**/*.js'
+					'test/{config,uml-parser,input-generator,test-generator}/**/*.js'
 				]
 			}
 		]

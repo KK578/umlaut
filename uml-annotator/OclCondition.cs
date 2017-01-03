@@ -65,7 +65,7 @@ namespace UmlAnnotator
 
 			foreach (OclComparison c in comparisons)
 			{
-				if (comparison == c.SymbolString())
+				if (comparison == c.Name)
 				{
 					return c;
 				}
@@ -80,7 +80,7 @@ namespace UmlAnnotator
 
 			if (Comparator != null)
 			{
-				comparison = Comparator.SymbolString();
+				comparison = Comparator.Name;
 			}
 
 			string main = String.Format("{0} {1}", comparison, String.Join(" ", arguments));
