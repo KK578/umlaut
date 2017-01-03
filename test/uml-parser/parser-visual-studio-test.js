@@ -71,252 +71,248 @@ describe('Visual Studio Parser', function () {
 			});
 		});
 
-		describe('Variables', function () {
-			it('should contain a single variable "Nop"', function () {
-				const variable = testResult.variables.Nop;
+		it('should contain a single variable "Nop"', function () {
+			const variable = testResult.variables.Nop;
 
-				expect(variable).to.be.an('object');
-				expect(variable.id).to.be.a('string').and.match(REGEX_UUID);
-				expect(variable.visibility).to.equal('Private');
-				expect(variable.type).to.equal('Integer');
+			expect(variable).to.be.an('object');
+			expect(variable.id).to.be.a('string').and.match(REGEX_UUID);
+			expect(variable.visibility).to.equal('Private');
+			expect(variable.type).to.equal('Integer');
+		});
+
+		it('should contain 4 methods', function () {
+			const methods = testResult.methods;
+			const keys = Object.keys(methods);
+
+			expect(keys).to.have.length(4);
+		});
+
+		function assertCondition(condition, expected) {
+			expect(condition.id).to.be.a('string').and.match(REGEX_UUID);
+			expect(condition.comparison).to.equal(expected.comparison);
+			expect(condition.arguments).to.include.members(expected.arguments);
+			expect(condition.exception).to.equal(expected.exception);
+		}
+
+		describe('SimpleMath#Add', function () {
+			let method;
+
+			before(function () {
+				method = testResult.methods.Add;
+			});
+
+			it('should exist with method properties', function () {
+				expect(method).to.be.an('object');
+				expect(method.id).to.be.a('string').and.match(REGEX_UUID);
+				expect(method.visibility).to.equal('Public');
+				expect(method.type).to.equal('Integer');
+			});
+
+			it('should describe arguments', function () {
+				expect(method.arguments).to.be.an('Object')
+					.and.have.all.keys(['a', 'b']);
+				expect(method.arguments.a).to.equal('Integer');
+				expect(method.arguments.b).to.equal('Integer');
+			});
+
+			it('should describe preconditions', function () {
+				const expectedConditions = [
+					{
+						comparison: 'GreaterThanOrEqual',
+						arguments: ['a', 0]
+					},
+					{
+						comparison: 'GreaterThanOrEqual',
+						arguments: ['b', 0]
+					}
+				];
+
+				expect(method.preconditions).to.be.instanceOf(Array)
+					.and.to.have.length(expectedConditions.length);
+				expectedConditions.map((condition, index) => {
+					assertCondition(method.preconditions[index], condition);
+				});
+			});
+
+			it('should describe postconditions', function () {
+				const expectedConditions = [
+					{
+						comparison: 'GreaterThanOrEqual',
+						arguments: ['result', 'a']
+					}
+				];
+
+				expect(method.postconditions).to.be.instanceOf(Array)
+					.and.to.have.length(expectedConditions.length);
+				expectedConditions.map((condition, index) => {
+					assertCondition(method.postconditions[index], condition);
+				});
 			});
 		});
 
-		describe('Methods', function () {
-			it('should contain 4 methods', function () {
-				const methods = testResult.methods;
-				const keys = Object.keys(methods);
+		describe('SimpleMath#Subtract', function () {
+			let method;
 
-				expect(keys).to.have.length(4);
+			before(function () {
+				method = testResult.methods.Subtract;
 			});
 
-			function assertCondition(condition, expected) {
-				expect(condition.id).to.be.a('string').and.match(REGEX_UUID);
-				expect(condition.comparison).to.equal(expected.comparison);
-				expect(condition.arguments).to.include.members(expected.arguments);
-				expect(condition.exception).to.equal(expected.exception);
-			}
+			it('should exist with method properties', function () {
+				expect(method).to.be.an('object');
+				expect(method.id).to.be.a('string').and.match(REGEX_UUID);
+				expect(method.visibility).to.equal('Public');
+				expect(method.type).to.equal('Integer');
+			});
 
-			describe('SimpleMath#Add', function () {
-				let method;
+			it('should describe arguments', function () {
+				expect(method.arguments).to.be.an('Object')
+					.and.have.all.keys(['a', 'b']);
+				expect(method.arguments.a).to.equal('Integer');
+				expect(method.arguments.b).to.equal('Integer');
+			});
 
-				before(function () {
-					method = testResult.methods.Add;
-				});
+			it('should describe preconditions', function () {
+				const expectedConditions = [
+					{
+						comparison: 'GreaterThanOrEqual',
+						arguments: ['a', 0]
+					},
+					{
+						comparison: 'GreaterThanOrEqual',
+						arguments: ['b', 0]
+					},
+					{
+						comparison: 'GreaterThanOrEqual',
+						arguments: ['a', 'b']
+					}
+				];
 
-				it('should exist with method properties', function () {
-					expect(method).to.be.an('object');
-					expect(method.id).to.be.a('string').and.match(REGEX_UUID);
-					expect(method.visibility).to.equal('Public');
-					expect(method.type).to.equal('Integer');
-				});
-
-				it('should describe arguments', function () {
-					expect(method.arguments).to.be.an('Object')
-						.and.have.all.keys(['a', 'b']);
-					expect(method.arguments.a).to.equal('Integer');
-					expect(method.arguments.b).to.equal('Integer');
-				});
-
-				it('should describe preconditions', function () {
-					const expectedConditions = [
-						{
-							comparison: 'GreaterThanOrEqual',
-							arguments: ['a', 0]
-						},
-						{
-							comparison: 'GreaterThanOrEqual',
-							arguments: ['b', 0]
-						}
-					];
-
-					expect(method.preconditions).to.be.instanceOf(Array)
-						.and.to.have.length(expectedConditions.length);
-					expectedConditions.map((condition, index) => {
-						assertCondition(method.preconditions[index], condition);
-					});
-				});
-
-				it('should describe postconditions', function () {
-					const expectedConditions = [
-						{
-							comparison: 'GreaterThanOrEqual',
-							arguments: ['result', 'a']
-						}
-					];
-
-					expect(method.postconditions).to.be.instanceOf(Array)
-						.and.to.have.length(expectedConditions.length);
-					expectedConditions.map((condition, index) => {
-						assertCondition(method.postconditions[index], condition);
-					});
+				expect(method.preconditions).to.be.instanceOf(Array)
+					.and.to.have.length(expectedConditions.length);
+				expectedConditions.map((condition, index) => {
+					assertCondition(method.preconditions[index], condition);
 				});
 			});
 
-			describe('SimpleMath#Subtract', function () {
-				let method;
+			it('should describe postconditions', function () {
+				const expectedConditions = [
+					{
+						comparison: 'LessThanOrEqual',
+						arguments: ['result', 'a']
+					}
+				];
 
-				before(function () {
-					method = testResult.methods.Subtract;
+				expect(method.postconditions).to.be.instanceOf(Array)
+					.and.to.have.length(expectedConditions.length);
+				expectedConditions.map((condition, index) => {
+					assertCondition(method.postconditions[index], condition);
 				});
+			});
+		});
 
-				it('should exist with method properties', function () {
-					expect(method).to.be.an('object');
-					expect(method.id).to.be.a('string').and.match(REGEX_UUID);
-					expect(method.visibility).to.equal('Public');
-					expect(method.type).to.equal('Integer');
-				});
+		describe('SimpleMath#Divide', function () {
+			let method;
 
-				it('should describe arguments', function () {
-					expect(method.arguments).to.be.an('Object')
-						.and.have.all.keys(['a', 'b']);
-					expect(method.arguments.a).to.equal('Integer');
-					expect(method.arguments.b).to.equal('Integer');
-				});
+			before(function () {
+				method = testResult.methods.Divide;
+			});
 
-				it('should describe preconditions', function () {
-					const expectedConditions = [
-						{
-							comparison: 'GreaterThanOrEqual',
-							arguments: ['a', 0]
-						},
-						{
-							comparison: 'GreaterThanOrEqual',
-							arguments: ['b', 0]
-						},
-						{
-							comparison: 'GreaterThanOrEqual',
-							arguments: ['a', 'b']
-						}
-					];
+			it('should exist with method properties', function () {
+				expect(method).to.be.an('object');
+				expect(method.id).to.be.a('string').and.match(REGEX_UUID);
+				expect(method.visibility).to.equal('Public');
+				expect(method.type).to.equal('Integer');
+			});
 
-					expect(method.preconditions).to.be.instanceOf(Array)
-						.and.to.have.length(expectedConditions.length);
-					expectedConditions.map((condition, index) => {
-						assertCondition(method.preconditions[index], condition);
-					});
-				});
+			it('should describe arguments', function () {
+				expect(method.arguments).to.be.an('Object')
+					.and.have.all.keys(['a', 'b']);
+				expect(method.arguments.a).to.equal('Integer');
+				expect(method.arguments.b).to.equal('Integer');
+			});
 
-				it('should describe postconditions', function () {
-					const expectedConditions = [
-						{
-							comparison: 'LessThanOrEqual',
-							arguments: ['result', 'a']
-						}
-					];
+			it('should describe preconditions', function () {
+				const expectedConditions = [
+					{
+						comparison: 'GreaterThanOrEqual',
+						arguments: ['a', 0]
+					},
+					{
+						comparison: 'GreaterThan',
+						arguments: ['b', 0]
+					}
+				];
 
-					expect(method.postconditions).to.be.instanceOf(Array)
-						.and.to.have.length(expectedConditions.length);
-					expectedConditions.map((condition, index) => {
-						assertCondition(method.postconditions[index], condition);
-					});
+				expect(method.preconditions).to.be.instanceOf(Array)
+					.and.to.have.length(expectedConditions.length);
+				expectedConditions.map((condition, index) => {
+					assertCondition(method.preconditions[index], condition);
 				});
 			});
 
-			describe('SimpleMath#Divide', function () {
-				let method;
+			it.skip('should describe postconditions', function () {
+				const expectedConditions = [
+					{
+						comparison: 'Equal',
+						arguments: ['result', 'result']
+					}
+				];
 
-				before(function () {
-					method = testResult.methods.Divide;
+				expect(method.postconditions).to.be.instanceOf(Array)
+					.and.to.have.length(expectedConditions.length);
+				expectedConditions.map((condition, index) => {
+					assertCondition(method.postconditions[index], condition);
 				});
+			});
+		});
 
-				it('should exist with method properties', function () {
-					expect(method).to.be.an('object');
-					expect(method.id).to.be.a('string').and.match(REGEX_UUID);
-					expect(method.visibility).to.equal('Public');
-					expect(method.type).to.equal('Integer');
-				});
+		describe('SimpleMath#SquareRoot', function () {
+			let method;
 
-				it('should describe arguments', function () {
-					expect(method.arguments).to.be.an('Object')
-						.and.have.all.keys(['a', 'b']);
-					expect(method.arguments.a).to.equal('Integer');
-					expect(method.arguments.b).to.equal('Integer');
-				});
+			before(function () {
+				method = testResult.methods.SquareRoot;
+			});
 
-				it('should describe preconditions', function () {
-					const expectedConditions = [
-						{
-							comparison: 'GreaterThanOrEqual',
-							arguments: ['a', 0]
-						},
-						{
-							comparison: 'GreaterThan',
-							arguments: ['b', 0]
-						}
-					];
+			it('should exist with method properties', function () {
+				expect(method).to.be.an('object');
+				expect(method.id).to.be.a('string').and.match(REGEX_UUID);
+				expect(method.visibility).to.equal('Public');
+				expect(method.type).to.equal('Integer');
+			});
 
-					expect(method.preconditions).to.be.instanceOf(Array)
-						.and.to.have.length(expectedConditions.length);
-					expectedConditions.map((condition, index) => {
-						assertCondition(method.preconditions[index], condition);
-					});
-				});
+			it('should describe arguments', function () {
+				expect(method.arguments).to.be.an('Object')
+					.and.have.all.keys(['a']);
+				expect(method.arguments.a).to.equal('Integer');
+			});
 
-				it.skip('should describe postconditions', function () {
-					const expectedConditions = [
-						{
-							comparison: 'Equal',
-							arguments: ['result', 'result']
-						}
-					];
+			it('should describe preconditions', function () {
+				const expectedConditions = [
+					{
+						comparison: 'GreaterThanOrEqual',
+						arguments: ['a', 0]
+					}
+				];
 
-					expect(method.postconditions).to.be.instanceOf(Array)
-						.and.to.have.length(expectedConditions.length);
-					expectedConditions.map((condition, index) => {
-						assertCondition(method.postconditions[index], condition);
-					});
+				expect(method.preconditions).to.be.instanceOf(Array)
+					.and.to.have.length(expectedConditions.length);
+				expectedConditions.map((condition, index) => {
+					assertCondition(method.preconditions[index], condition);
 				});
 			});
 
-			describe('SimpleMath#SquareRoot', function () {
-				let method;
+			it.skip('should describe postconditions', function () {
+				const expectedConditions = [
+					{
+						comparison: 'Equal',
+						arguments: ['result', 'result']
+					}
+				];
 
-				before(function () {
-					method = testResult.methods.SquareRoot;
-				});
-
-				it('should exist with method properties', function () {
-					expect(method).to.be.an('object');
-					expect(method.id).to.be.a('string').and.match(REGEX_UUID);
-					expect(method.visibility).to.equal('Public');
-					expect(method.type).to.equal('Integer');
-				});
-
-				it('should describe arguments', function () {
-					expect(method.arguments).to.be.an('Object')
-						.and.have.all.keys(['a']);
-					expect(method.arguments.a).to.equal('Integer');
-				});
-
-				it('should describe preconditions', function () {
-					const expectedConditions = [
-						{
-							comparison: 'GreaterThanOrEqual',
-							arguments: ['a', 0]
-						}
-					];
-
-					expect(method.preconditions).to.be.instanceOf(Array)
-						.and.to.have.length(expectedConditions.length);
-					expectedConditions.map((condition, index) => {
-						assertCondition(method.preconditions[index], condition);
-					});
-				});
-
-				it.skip('should describe postconditions', function () {
-					const expectedConditions = [
-						{
-							comparison: 'Equal',
-							arguments: ['result', 'result']
-						}
-					];
-
-					expect(method.postconditions).to.be.instanceOf(Array)
-						.and.to.have.length(expectedConditions.length);
-					expectedConditions.map((condition, index) => {
-						assertCondition(method.postconditions[index], condition);
-					});
+				expect(method.postconditions).to.be.instanceOf(Array)
+					.and.to.have.length(expectedConditions.length);
+				expectedConditions.map((condition, index) => {
+					assertCondition(method.postconditions[index], condition);
 				});
 			});
 		});
