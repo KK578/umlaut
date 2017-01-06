@@ -22,4 +22,26 @@ describe('Promises', function () {
 			return expect(promise).to.be.rejected;
 		});
 	});
+
+	describe('xml2js.parseString', function () {
+		let method;
+
+		before(function () {
+			method = testee.xmlParseString;
+		});
+
+		it('should resolve for a simple XML string', function () {
+			const fixture = '<xml></xml>';
+			const promise = testee.xmlParseString(fixture);
+
+			return expect(promise).to.be.fulfilled;
+		});
+
+		it('should reject for a non XML string', function () {
+			const fixture = 'FooBar';
+			const promise = testee.xmlParseString(fixture);
+
+			return expect(promise).to.be.rejected;
+		});
+	});
 });
