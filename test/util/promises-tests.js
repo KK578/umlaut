@@ -1,13 +1,7 @@
 const testee = require('../../util/promises.js');
 
 describe('Promises', function () {
-	describe('fs.readFile', function () {
-		let method;
-
-		before(function () {
-			method = testee.fsReadFile;
-		});
-
+	describe('#fs.readFile', function () {
 		it('should resolve for an existing file', function () {
 			const fixture = fixtures.FullModels.SimpleMath.uml;
 			const promise = testee.fsReadFile(fixture);
@@ -23,13 +17,7 @@ describe('Promises', function () {
 		});
 	});
 
-	describe('xml2js.parseString', function () {
-		let method;
-
-		before(function () {
-			method = testee.xmlParseString;
-		});
-
+	describe('#xml2js.parseString', function () {
 		it('should resolve for a simple XML string', function () {
 			const fixture = '<xml></xml>';
 			const promise = testee.xmlParseString(fixture);
