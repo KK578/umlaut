@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const testee = require('../../util/promises.js');
 
 describe('Promises', function () {
@@ -7,6 +9,14 @@ describe('Promises', function () {
 			const promise = testee.fsReadFile(fixture);
 
 			return expect(promise).to.be.fulfilled;
+		});
+
+		it('should resolve with contents of file', function () {
+			const fixture = fixtures.FullModels.SimpleMath.uml;
+			const fixtureData = fs.readFileSync(fixture, 'utf-8');
+			const promise = testee.fsReadFile(fixture);
+
+			return expect(promise).to.eventually.equal(fixtureData);
 		});
 
 		it('should reject for a non-existing file', function () {
