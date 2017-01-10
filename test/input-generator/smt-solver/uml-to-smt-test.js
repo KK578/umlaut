@@ -90,6 +90,46 @@ describe('UML-To-SMT', function () {
 	it('should handle methods with no arguments but preconditions on variables');
 	it('should handle methods with no arguments but postconditions on variables');
 
+	it('should handle methods that refer to public class variables', function () {
+		const fixture = {
+			Test: {
+				name: 'Test',
+				variables: {
+					'Volume': {
+						name: 'Volume',
+						visibility: 'Public',
+						type: 'Integer'
+					}
+				},
+				methods: {
+					'GetVolume': {
+						name: 'GetVolume',
+						visibility: 'Public',
+						type: 'Integer',
+						arguments: { },
+						preconditions: [],
+						postconditions: [
+							{
+								comparison: 'Equal',
+								arguments: [
+									'result',
+									'Volume'
+								]
+							}
+						]
+					}
+				}
+			}
+		};
+		const result = testee(fixture);
+
+		expect(result).to.have.key('Test');
+		expect(result.Test).to.include.keys('name', 'smtCommands');
+		expect(result.Test.smtCommands).to.be.instanceOf(Array).and.have.length(1);
+		expect(result.Test.smtCommands[0].commands).to.contain('(declare-const Volume Int)');
+		expect(result.Test.smtCommands[0].commands).to.contain('(assert (= result Volume))');
+	});
+
 	it('should handle multiple methods in a single class');
 	it('should handle multiple classes');
 	it('should handle multiple classes with multiple methods');
