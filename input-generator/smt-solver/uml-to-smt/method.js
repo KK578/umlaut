@@ -16,14 +16,32 @@ function convertType(type) {
 }
 
 module.exports = class SmtMethod {
-	constructor(method) {
+	constructor(method, classVariables) {
 		this.commands = [];
 		this.constants = [];
+
+		if (classVariables) {
+			this.declareVariables(classVariables);
+		}
 
 		this.declareArguments(method.arguments);
 		this.declareFunction(method);
 		this.allValidConditions(method);
 		this.singularInvalidConditions(method);
+	}
+
+	declareVariables(variables) {
+		Object.keys(variables).forEach((name) => {
+			const variable = variables[name];
+			const type = convertType(variable.type);
+			const command = new Smt.DeclareConst(name, type);
+
+			if (!this.constants[name]) {
+				this.constants[name] = true;
+			}
+
+			this.commands.push(command);
+		});
 	}
 
 	declareArguments(args) {
