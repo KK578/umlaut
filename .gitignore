@@ -33,6 +33,7 @@ packages/
 
 ## Visual Studio Code
 typings/
+.vscode/
 
 ## Vim
 # Swap Files
