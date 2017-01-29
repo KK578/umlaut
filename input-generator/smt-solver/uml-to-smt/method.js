@@ -48,7 +48,7 @@ function declareFunction(method) {
 	return commands;
 }
 
-function assertAllConditions(conditions) {
+function assertConditions(conditions) {
 	const commands = [];
 
 	conditions.forEach((condition) => {
@@ -83,14 +83,14 @@ function assertConditionsWithInverts(conditions, complementSet) {
 }
 
 // Add a layer to the stack so we can pop later and keep the declarations.
-function allValidConditions(method) {
+function assertMethodConditions(method) {
 	const commands = [];
 
 	commands.push(new Smt.Echo('[[Valid]]'));
 	commands.push(new Smt.StackModifier('push'));
 
 	// For each precondition, add it to the stack.
-	commands.push(...assertAllConditions(method.preconditions));
+	commands.push(...assertConditions(method.preconditions));
 
 	// Declare a variable for the result
 	if (method.type !== 'void') {
@@ -108,10 +108,45 @@ function allValidConditions(method) {
 	}
 
 	// Add postconditions so that the inputs may be more interesting.
-	commands.push(...assertAllConditions(method.postconditions));
+	commands.push(...assertConditions(method.postconditions));
 
 	// Check satisfiability and get values of arguments.
 	commands.push(new Smt.GetValue(this.getConstants()));
+	commands.push(new Smt.StackModifier('pop'));
+
+	// Add assertions where a subset of conditions is inverted.
+	const complementAssertionCommands = complementConditions.call(this, method.preconditions);
+
+	commands.push(...complementAssertionCommands);
+
+	return commands;
+}
+
+function assertMethodOptionalConditions(method) {
+	if (!Array.isArray(method.optionalPreconditions) ||
+		method.optionalPreconditions.length === 0) {
+		return [];
+	}
+
+	const commands = [];
+
+	// Add a layer to the stack so we can pop later and keep the declarations.
+	commands.push(new Smt.StackModifier('push'));
+
+	// Optional preconditions are bound under the main preconditions, so they must also be
+	//  fulfilled.
+	// For each precondition, add it to the stack.
+	commands.push(...assertConditions(method.preconditions));
+
+	// Generate input when all optional preconditions are fulfilled.
+	commands.push(new Smt.Echo('[[ValidOptional]]'));
+	commands.push(new Smt.StackModifier('push'));
+	commands.push(...assertConditions(method.optionalPreconditions));
+	commands.push(new Smt.GetValue(this.getConstants()));
+	commands.push(new Smt.StackModifier('pop'));
+
+	// Generate inputs when optional preconditions are complemented.
+	commands.push(...complementConditions.call(this, method.optionalPreconditions));
 	commands.push(new Smt.StackModifier('pop'));
 
 	return commands;
@@ -133,50 +168,7 @@ function assertComplementedConditions(conditions, complementSet) {
 	return commands;
 }
 
-function singularInvalidConditions(method) {
-	const complementSet = [];
-
-	// HACK: Currently places each object into the complement set on its own.
-	method.preconditions.forEach((c) => {
-		complementSet.push([c]);
-	});
-
-	const commands = assertComplementedConditions.call(this, method.preconditions, complementSet);
-
-	return commands;
-}
-
-function optionalConditions(method) {
-	if (!Array.isArray(method.optionalPreconditions) ||
-		method.optionalPreconditions.length === 0) {
-		return [];
-	}
-
-	const commands = [];
-
-	// Add a layer to the stack so we can pop later and keep the declarations.
-	commands.push(new Smt.StackModifier('push'));
-
-	// Optional preconditions are bound under the main preconditions, so they must also be
-	//  fulfilled.
-	// For each precondition, add it to the stack.
-	commands.push(...assertAllConditions(method.preconditions));
-
-	// Generate input when all optional preconditions are fulfilled.
-	commands.push(new Smt.Echo('[[ValidOptional]]'));
-	commands.push(new Smt.StackModifier('push'));
-	commands.push(...assertAllConditions(method.optionalPreconditions));
-	commands.push(new Smt.GetValue(this.getConstants()));
-	commands.push(new Smt.StackModifier('pop'));
-
-	// Generate inputs when one optional precondition is complemented.
-	commands.push(...complementOptionalConditions.call(this, method.optionalPreconditions));
-	commands.push(new Smt.StackModifier('pop'));
-
-	return commands;
-}
-
-function complementOptionalConditions(conditions) {
+function complementConditions(conditions) {
 	const complementSet = [];
 
 	// HACK: Currently places each object into the complement set on its own.
@@ -197,9 +189,8 @@ module.exports = class SmtMethod {
 		this.commands = this.commands.concat(
 			declareArguments.call(this, method.arguments),
 			declareFunction.call(this, method),
-			allValidConditions.call(this, method),
-			singularInvalidConditions.call(this, method),
-			optionalConditions.call(this, method)
+			assertMethodConditions.call(this, method),
+			assertMethodOptionalConditions.call(this, method)
 		);
 	}
 
