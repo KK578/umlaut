@@ -82,6 +82,18 @@ function assertConditionsWithInverts(conditions, complementSet) {
 	return commands;
 }
 
+function addStackMessage(commands, message, constants) {
+	const newCommands = [];
+
+	newCommands.push(new Smt.Echo(`[[${message}]]`));
+	newCommands.push(new Smt.StackModifier('push'));
+	newCommands.push(...commands);
+	newCommands.push(new Smt.GetValue(constants));
+	newCommands.push(new Smt.StackModifier('pop'));
+
+	return newCommands;
+}
+
 // Add a layer to the stack so we can pop later and keep the declarations.
 function allValidConditions(method) {
 	const commands = [];
