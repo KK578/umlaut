@@ -24,6 +24,7 @@ module.exports = class SmtMethod {
 		this.declareFunction(method);
 		this.allValidConditions(method);
 		this.singularInvalidConditions(method);
+		this.optionalConditions(method);
 	}
 
 	declareArguments(args) {
@@ -115,6 +116,66 @@ module.exports = class SmtMethod {
 			this.commands.push(new Smt.GetValue(this.getConstants()));
 			this.commands.push(new Smt.StackModifier('pop'));
 		});
+	}
+
+	optionalConditions(method) {
+		if (!Array.isArray(method.optionalPreconditions) ||
+			method.optionalPreconditions.length === 0) {
+			return;
+		}
+
+		// Add a layer to the stack so we can pop later and keep the declarations.
+		this.commands.push(new Smt.Echo('[[ValidOptional]]'));
+		this.commands.push(new Smt.StackModifier('push'));
+
+		// Optional preconditions are bound under the main preconditions, so they must also be
+		//  fulfilled.
+		// For each precondition, add it to the stack.
+		method.preconditions.forEach((c) => {
+			const comparison = comparisons.toSmtSymbol(c.comparison);
+			const conditionCommand = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
+
+			this.commands.push(new Smt.Assertion(conditionCommand));
+		});
+
+		// Generate input when all optional preconditions are fulfilled.
+		this.commands.push(new Smt.StackModifier('push'));
+
+		method.optionalPreconditions.forEach((c) => {
+			const comparison = comparisons.toSmtSymbol(c.comparison);
+			const expression = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
+
+			this.commands.push(new Smt.Assertion(expression));
+			this.commands.push(new Smt.GetValue(this.getConstants()));
+			this.commands.push(new Smt.StackModifier('pop'));
+		});
+
+		this.commands.push(new Smt.StackModifier('pop'));
+
+		// Generate inputs when one optional precondition is complemented.
+		method.optionalPreconditions.forEach((a, i) => {
+			// For each optional precondition, add it to the stack.
+			this.commands.push(new Smt.Echo(`~~[[${a.id}]]`));
+			this.commands.push(new Smt.StackModifier('push'));
+
+			method.optionalPreconditions.map((c, j) => {
+				const comparison = comparisons.toSmtSymbol(c.comparison);
+				const expression = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
+
+				// If it is the one that we are testing,
+				//  invert the result and get the values to use as inputs.
+				if (i === j) {
+					expression.setInverted(!expression.isInverted);
+				}
+
+				this.commands.push(new Smt.Assertion(expression));
+			});
+
+			this.commands.push(new Smt.GetValue(this.getConstants()));
+			this.commands.push(new Smt.StackModifier('pop'));
+		});
+
+		this.commands.push(new Smt.StackModifier('pop'));
 	}
 
 	getConstants() {
