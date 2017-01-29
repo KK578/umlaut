@@ -16,6 +16,8 @@ function convertType(type) {
 }
 
 function declareArguments(args) {
+	const commands = [];
+
 	// For every argument to the function, add a declaration to SMT.
 	Object.keys(args).forEach((name) => {
 		const type = convertType(args[name]);
@@ -26,32 +28,39 @@ function declareArguments(args) {
 			this.constants[name] = true;
 		}
 
-		this.commands.push(command);
+		commands.push(command);
 	});
+
+	return commands;
 }
 
+// Declare the function to SMT.
 function declareFunction(method) {
-	// Declare the function to SMT.
+	const commands = [];
 	const type = convertType(method.type);
 	const args = Object.keys(method.arguments).map((t) => {
 		return convertType(method.arguments[t]);
 	});
 	const command = new Smt.DeclareFunction(method.name, type, args);
 
-	this.commands.push(command);
+	commands.push(command);
+
+	return commands;
 }
 
+// Add a layer to the stack so we can pop later and keep the declarations.
 function allValidConditions(method) {
-	// Add a layer to the stack so we can pop later and keep the declarations.
-	this.commands.push(new Smt.Echo('[[Valid]]'));
-	this.commands.push(new Smt.StackModifier('push'));
+	const commands = [];
+
+	commands.push(new Smt.Echo('[[Valid]]'));
+	commands.push(new Smt.StackModifier('push'));
 
 	// For each precondition, add it to the stack.
 	method.preconditions.forEach((c) => {
 		const comparison = comparisons.toSmtSymbol(c.comparison);
 		const conditionCommand = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
 
-		this.commands.push(new Smt.Assertion(conditionCommand));
+		commands.push(new Smt.Assertion(conditionCommand));
 	});
 
 	// Declare a variable for the result
@@ -65,8 +74,8 @@ function allValidConditions(method) {
 			new Smt.BooleanExpression('=', ['result', functionCall])
 		);
 
-		this.commands.push(resultDeclare);
-		this.commands.push(resultAssert);
+		commands.push(resultDeclare);
+		commands.push(resultAssert);
 	}
 
 	// Add postconditions so that the inputs may be more interesting.
@@ -74,19 +83,23 @@ function allValidConditions(method) {
 		const comparison = comparisons.toSmtSymbol(c.comparison);
 		const conditionCommand = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
 
-		this.commands.push(new Smt.Assertion(conditionCommand));
+		commands.push(new Smt.Assertion(conditionCommand));
 	});
 
 	// Check satisfiability and get values of arguments.
-	this.commands.push(new Smt.GetValue(this.getConstants()));
-	this.commands.push(new Smt.StackModifier('pop'));
+	commands.push(new Smt.GetValue(this.getConstants()));
+	commands.push(new Smt.StackModifier('pop'));
+
+	return commands;
 }
 
 function singularInvalidConditions(method) {
+	const commands = [];
+
 	method.preconditions.forEach((a, i) => {
 		// For each precondition, add it to the stack.
-		this.commands.push(new Smt.Echo(`~~[[${a.id}]]`));
-		this.commands.push(new Smt.StackModifier('push'));
+		commands.push(new Smt.Echo(`~~[[${a.id}]]`));
+		commands.push(new Smt.StackModifier('push'));
 
 		method.preconditions.map((c, j) => {
 			const comparison = comparisons.toSmtSymbol(c.comparison);
@@ -98,23 +111,27 @@ function singularInvalidConditions(method) {
 				expression.setInverted(!expression.isInverted);
 			}
 
-			this.commands.push(new Smt.Assertion(expression));
+			commands.push(new Smt.Assertion(expression));
 		});
 
-		this.commands.push(new Smt.GetValue(this.getConstants()));
-		this.commands.push(new Smt.StackModifier('pop'));
+		commands.push(new Smt.GetValue(this.getConstants()));
+		commands.push(new Smt.StackModifier('pop'));
 	});
+
+	return commands;
 }
 
 function optionalConditions(method) {
 	if (!Array.isArray(method.optionalPreconditions) ||
 		method.optionalPreconditions.length === 0) {
-		return;
+		return [];
 	}
 
+	const commands = [];
+
 	// Add a layer to the stack so we can pop later and keep the declarations.
-	this.commands.push(new Smt.Echo('[[ValidOptional]]'));
-	this.commands.push(new Smt.StackModifier('push'));
+	commands.push(new Smt.Echo('[[ValidOptional]]'));
+	commands.push(new Smt.StackModifier('push'));
 
 	// Optional preconditions are bound under the main preconditions, so they must also be
 	//  fulfilled.
@@ -123,28 +140,28 @@ function optionalConditions(method) {
 		const comparison = comparisons.toSmtSymbol(c.comparison);
 		const conditionCommand = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
 
-		this.commands.push(new Smt.Assertion(conditionCommand));
+		commands.push(new Smt.Assertion(conditionCommand));
 	});
 
 	// Generate input when all optional preconditions are fulfilled.
-	this.commands.push(new Smt.StackModifier('push'));
+	commands.push(new Smt.StackModifier('push'));
 
 	method.optionalPreconditions.forEach((c) => {
 		const comparison = comparisons.toSmtSymbol(c.comparison);
 		const expression = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
 
-		this.commands.push(new Smt.Assertion(expression));
-		this.commands.push(new Smt.GetValue(this.getConstants()));
-		this.commands.push(new Smt.StackModifier('pop'));
+		commands.push(new Smt.Assertion(expression));
+		commands.push(new Smt.GetValue(this.getConstants()));
+		commands.push(new Smt.StackModifier('pop'));
 	});
 
-	this.commands.push(new Smt.StackModifier('pop'));
+	commands.push(new Smt.StackModifier('pop'));
 
 	// Generate inputs when one optional precondition is complemented.
 	method.optionalPreconditions.forEach((a, i) => {
 		// For each optional precondition, add it to the stack.
-		this.commands.push(new Smt.Echo(`~~[[${a.id}]]`));
-		this.commands.push(new Smt.StackModifier('push'));
+		commands.push(new Smt.Echo(`~~[[${a.id}]]`));
+		commands.push(new Smt.StackModifier('push'));
 
 		method.optionalPreconditions.map((c, j) => {
 			const comparison = comparisons.toSmtSymbol(c.comparison);
@@ -156,14 +173,16 @@ function optionalConditions(method) {
 				expression.setInverted(!expression.isInverted);
 			}
 
-			this.commands.push(new Smt.Assertion(expression));
+			commands.push(new Smt.Assertion(expression));
 		});
 
-		this.commands.push(new Smt.GetValue(this.getConstants()));
-		this.commands.push(new Smt.StackModifier('pop'));
+		commands.push(new Smt.GetValue(this.getConstants()));
+		commands.push(new Smt.StackModifier('pop'));
 	});
 
-	this.commands.push(new Smt.StackModifier('pop'));
+	commands.push(new Smt.StackModifier('pop'));
+
+	return commands;
 }
 
 module.exports = class SmtMethod {
@@ -171,11 +190,13 @@ module.exports = class SmtMethod {
 		this.commands = [];
 		this.constants = {};
 
-		declareArguments.call(this, method.arguments);
-		declareFunction.call(this, method);
-		allValidConditions.call(this, method);
-		singularInvalidConditions.call(this, method);
-		optionalConditions.call(this, method);
+		this.commands = this.commands.concat(
+			declareArguments.call(this, method.arguments),
+			declareFunction.call(this, method),
+			allValidConditions.call(this, method),
+			singularInvalidConditions.call(this, method),
+			optionalConditions.call(this, method)
+		);
 	}
 
 	getConstants() {
