@@ -155,7 +155,6 @@ function optionalConditions(method) {
 	const commands = [];
 
 	// Add a layer to the stack so we can pop later and keep the declarations.
-	commands.push(new Smt.Echo('[[ValidOptional]]'));
 	commands.push(new Smt.StackModifier('push'));
 
 	// Optional preconditions are bound under the main preconditions, so they must also be
@@ -164,22 +163,28 @@ function optionalConditions(method) {
 	commands.push(...assertAllConditions(method.preconditions));
 
 	// Generate input when all optional preconditions are fulfilled.
+	commands.push(new Smt.Echo('[[ValidOptional]]'));
 	commands.push(new Smt.StackModifier('push'));
 	commands.push(...assertAllConditions(method.optionalPreconditions));
 	commands.push(new Smt.GetValue(this.getConstants()));
 	commands.push(new Smt.StackModifier('pop'));
 
 	// Generate inputs when one optional precondition is complemented.
+	commands.push(...complementOptionalConditions.call(this, method.optionalPreconditions));
+	commands.push(new Smt.StackModifier('pop'));
+
+	return commands;
+}
+
+function complementOptionalConditions(conditions) {
 	const complementSet = [];
 
 	// HACK: Currently places each object into the complement set on its own.
-	method.optionalPreconditions.forEach((c) => {
+	conditions.forEach((c) => {
 		complementSet.push([c]);
 	});
-	commands.push(...assertComplementedConditions.call(this,
-		method.optionalPreconditions, complementSet));
 
-	commands.push(new Smt.StackModifier('pop'));
+	const commands = assertComplementedConditions.call(this, conditions, complementSet);
 
 	return commands;
 }
