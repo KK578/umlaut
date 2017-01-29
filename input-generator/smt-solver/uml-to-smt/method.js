@@ -48,6 +48,20 @@ function declareFunction(method) {
 	return commands;
 }
 
+function assertAllConditions(conditions) {
+	const commands = [];
+
+	conditions.forEach((condition) => {
+		const comparison = comparisons.toSmtSymbol(condition.comparison);
+		const command = new Smt.BooleanExpression(comparison,
+			condition.arguments, condition.inverted);
+
+		commands.push(new Smt.Assertion(command));
+	});
+
+	return commands;
+}
+
 // Add a layer to the stack so we can pop later and keep the declarations.
 function allValidConditions(method) {
 	const commands = [];
@@ -56,12 +70,7 @@ function allValidConditions(method) {
 	commands.push(new Smt.StackModifier('push'));
 
 	// For each precondition, add it to the stack.
-	method.preconditions.forEach((c) => {
-		const comparison = comparisons.toSmtSymbol(c.comparison);
-		const conditionCommand = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
-
-		commands.push(new Smt.Assertion(conditionCommand));
-	});
+	commands.push(...assertAllConditions(method.preconditions));
 
 	// Declare a variable for the result
 	if (method.type !== 'void') {
@@ -79,12 +88,7 @@ function allValidConditions(method) {
 	}
 
 	// Add postconditions so that the inputs may be more interesting.
-	method.postconditions.forEach((c) => {
-		const comparison = comparisons.toSmtSymbol(c.comparison);
-		const conditionCommand = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
-
-		commands.push(new Smt.Assertion(conditionCommand));
-	});
+	commands.push(...assertAllConditions(method.postconditions));
 
 	// Check satisfiability and get values of arguments.
 	commands.push(new Smt.GetValue(this.getConstants()));
@@ -136,25 +140,12 @@ function optionalConditions(method) {
 	// Optional preconditions are bound under the main preconditions, so they must also be
 	//  fulfilled.
 	// For each precondition, add it to the stack.
-	method.preconditions.forEach((c) => {
-		const comparison = comparisons.toSmtSymbol(c.comparison);
-		const conditionCommand = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
-
-		commands.push(new Smt.Assertion(conditionCommand));
-	});
+	commands.push(...assertAllConditions(method.preconditions));
 
 	// Generate input when all optional preconditions are fulfilled.
 	commands.push(new Smt.StackModifier('push'));
-
-	method.optionalPreconditions.forEach((c) => {
-		const comparison = comparisons.toSmtSymbol(c.comparison);
-		const expression = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
-
-		commands.push(new Smt.Assertion(expression));
-		commands.push(new Smt.GetValue(this.getConstants()));
-		commands.push(new Smt.StackModifier('pop'));
-	});
-
+	commands.push(...assertAllConditions(method.optionalPreconditions));
+	commands.push(new Smt.GetValue(this.getConstants()));
 	commands.push(new Smt.StackModifier('pop'));
 
 	// Generate inputs when one optional precondition is complemented.
