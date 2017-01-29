@@ -62,6 +62,26 @@ function assertAllConditions(conditions) {
 	return commands;
 }
 
+function assertConditionsWithInverts(conditions, complementSet) {
+	const commands = [];
+
+	conditions.forEach((condition) => {
+		const comparison = comparisons.toSmtSymbol(condition.comparison);
+		const command = new Smt.BooleanExpression(comparison,
+			condition.arguments, condition.inverted);
+
+		complementSet.forEach((complement) => {
+			if (condition === complement) {
+				command.setInverted(!command.isInverted);
+			}
+		});
+
+		commands.push(new Smt.Assertion(command));
+	});
+
+	return commands;
+}
+
 // Add a layer to the stack so we can pop later and keep the declarations.
 function allValidConditions(method) {
 	const commands = [];
@@ -97,30 +117,31 @@ function allValidConditions(method) {
 	return commands;
 }
 
-function singularInvalidConditions(method) {
+function assertComplementedConditions(conditions, complementSet) {
 	const commands = [];
 
-	method.preconditions.forEach((a, i) => {
-		// For each precondition, add it to the stack.
-		commands.push(new Smt.Echo(`~~[[${a.id}]]`));
+	complementSet.forEach((c, i) => {
+		const complementString = c[0].id;
+
+		commands.push(new Smt.Echo(`~~[[${complementString}]]`));
 		commands.push(new Smt.StackModifier('push'));
-
-		method.preconditions.map((c, j) => {
-			const comparison = comparisons.toSmtSymbol(c.comparison);
-			const expression = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
-
-			// If it is the one that we are testing,
-			//  invert the result and get the values to use as inputs.
-			if (i === j) {
-				expression.setInverted(!expression.isInverted);
-			}
-
-			commands.push(new Smt.Assertion(expression));
-		});
-
+		commands.push(...assertConditionsWithInverts(conditions, c));
 		commands.push(new Smt.GetValue(this.getConstants()));
 		commands.push(new Smt.StackModifier('pop'));
 	});
+
+	return commands;
+}
+
+function singularInvalidConditions(method) {
+	const complementSet = [];
+
+	// HACK: Currently places each object into the complement set on its own.
+	method.preconditions.forEach((c) => {
+		complementSet.push([c]);
+	});
+
+	const commands = assertComplementedConditions.call(this, method.preconditions, complementSet);
 
 	return commands;
 }
