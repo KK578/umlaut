@@ -86,7 +86,7 @@ function addStackMessage(commands, message, constants) {
 	const newCommands = [];
 
 	// Start a new stack frame and echo a message for what conditions are occuring within it.
-	newCommands.push(new Smt.Echo(`[[${message}]]`));
+	newCommands.push(new Smt.Echo(message));
 	newCommands.push(new Smt.StackModifier('push'));
 	// Maintain the current set of commands.
 	newCommands.push(...commands);
@@ -125,7 +125,7 @@ function assertMethodConditions(method) {
 	// Wrap the above commands into the 'Valid' stack frame in z3.
 	// This indicates to z3-runner that this set of commands will output the inputs which
 	//  correspond to all preconditions being successfully fulfilled.
-	commands = addStackMessage(commands, 'Valid', this.getConstants());
+	commands = addStackMessage(commands, '[[Valid]]', this.getConstants());
 
 	// Add assertions where a subset of conditions is inverted.
 	const complementAssertionCommands = complementConditions.call(this, method.preconditions);
@@ -156,7 +156,7 @@ function assertMethodOptionalConditions(method) {
 	// This indicates to z3-runner that this set of commands will output the inputs which
 	//  correspond to all *optional* preconditions being successfully fulfilled as well.
 	const optionalConditionAssertionCommands = assertConditions(method.optionalPreconditions);
-	const stackedCommands = addStackMessage(optionalConditionAssertionCommands, 'ValidOptional', this.getConstants());
+	const stackedCommands = addStackMessage(optionalConditionAssertionCommands, '~~[[ValidOptional]]', this.getConstants());
 
 	commands.push(...stackedCommands);
 
@@ -176,7 +176,7 @@ function assertComplementedConditions(conditions, complementSet) {
 	complementSet.forEach((c, i) => {
 		const assertionCommands = assertConditionsWithInverts(conditions, c);
 		// HACK: Should concat all strings together?
-		const complementString = c[0].id;
+		const complementString = `~~[[${c[0].id}]]`;
 		const stackedCommands = addStackMessage(assertionCommands, complementString, constants);
 
 		commands.push(...stackedCommands);
