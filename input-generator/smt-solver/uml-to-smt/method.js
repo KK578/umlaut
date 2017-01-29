@@ -1,8 +1,6 @@
 const Smt = require('../util/classes.js');
 const comparisons = require('../../../util/comparisons.js');
 
-const constants = [];
-
 function convertType(type) {
 	switch (type) {
 		case 'Integer':
@@ -17,10 +15,6 @@ function convertType(type) {
 	}
 }
 
-function getConstants() {
-	return Object.keys(constants);
-}
-
 function declareArguments(args) {
 	// For every argument to the function, add a declaration to SMT.
 	Object.keys(args).forEach((name) => {
@@ -28,8 +22,8 @@ function declareArguments(args) {
 		const command = new Smt.DeclareConst(name, type);
 
 		// Note the existence of the argument to the class for get-value calls later.
-		if (!constants[name]) {
-			constants[name] = true;
+		if (!this.constants[name]) {
+			this.constants[name] = true;
 		}
 
 		this.commands.push(command);
@@ -84,7 +78,7 @@ function allValidConditions(method) {
 	});
 
 	// Check satisfiability and get values of arguments.
-	this.commands.push(new Smt.GetValue(getConstants()));
+	this.commands.push(new Smt.GetValue(this.getConstants()));
 	this.commands.push(new Smt.StackModifier('pop'));
 }
 
@@ -107,7 +101,7 @@ function singularInvalidConditions(method) {
 			this.commands.push(new Smt.Assertion(expression));
 		});
 
-		this.commands.push(new Smt.GetValue(getConstants()));
+		this.commands.push(new Smt.GetValue(this.getConstants()));
 		this.commands.push(new Smt.StackModifier('pop'));
 	});
 }
@@ -140,7 +134,7 @@ function optionalConditions(method) {
 		const expression = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
 
 		this.commands.push(new Smt.Assertion(expression));
-		this.commands.push(new Smt.GetValue(getConstants()));
+		this.commands.push(new Smt.GetValue(this.getConstants()));
 		this.commands.push(new Smt.StackModifier('pop'));
 	});
 
@@ -165,7 +159,7 @@ function optionalConditions(method) {
 			this.commands.push(new Smt.Assertion(expression));
 		});
 
-		this.commands.push(new Smt.GetValue(getConstants()));
+		this.commands.push(new Smt.GetValue(this.getConstants()));
 		this.commands.push(new Smt.StackModifier('pop'));
 	});
 
@@ -175,12 +169,17 @@ function optionalConditions(method) {
 module.exports = class SmtMethod {
 	constructor(method) {
 		this.commands = [];
+		this.constants = {};
 
 		declareArguments.call(this, method.arguments);
 		declareFunction.call(this, method);
 		allValidConditions.call(this, method);
 		singularInvalidConditions.call(this, method);
 		optionalConditions.call(this, method);
+	}
+
+	getConstants() {
+		return Object.keys(this.constants);
 	}
 
 	getCommands() {
