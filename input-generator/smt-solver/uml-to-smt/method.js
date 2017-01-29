@@ -170,27 +170,14 @@ function optionalConditions(method) {
 	commands.push(new Smt.StackModifier('pop'));
 
 	// Generate inputs when one optional precondition is complemented.
-	method.optionalPreconditions.forEach((a, i) => {
-		// For each optional precondition, add it to the stack.
-		commands.push(new Smt.Echo(`~~[[${a.id}]]`));
-		commands.push(new Smt.StackModifier('push'));
+	const complementSet = [];
 
-		method.optionalPreconditions.map((c, j) => {
-			const comparison = comparisons.toSmtSymbol(c.comparison);
-			const expression = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
-
-			// If it is the one that we are testing,
-			//  invert the result and get the values to use as inputs.
-			if (i === j) {
-				expression.setInverted(!expression.isInverted);
-			}
-
-			commands.push(new Smt.Assertion(expression));
-		});
-
-		commands.push(new Smt.GetValue(this.getConstants()));
-		commands.push(new Smt.StackModifier('pop'));
+	// HACK: Currently places each object into the complement set on its own.
+	method.optionalPreconditions.forEach((c) => {
+		complementSet.push([c]);
 	});
+	commands.push(...assertComplementedConditions.call(this,
+		method.optionalPreconditions, complementSet));
 
 	commands.push(new Smt.StackModifier('pop'));
 
