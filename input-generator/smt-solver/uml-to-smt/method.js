@@ -97,29 +97,29 @@ function allValidConditions(method) {
 	return commands;
 }
 
+/**
+ * Adapted from solution for finding power set:
+ * https://codereview.stackexchange.com/questions/7001/generating-all-combinations-of-an-array
+ */
+function getAllCombinations(list) {
+	const result = [];
+
+	function f(a, list) {
+		list.forEach((c, i) => {
+			const next = a.concat([c]);
+
+			result.push(next);
+			f(next, list.slice(i + 1));
+		});
+	}
+
+	f([], list);
+
+	return result;
+}
+
 function singularInvalidConditions(method) {
 	const commands = [];
-
-	/**
-	 * Adapted from solution for finding power set:
-	 * https://codereview.stackexchange.com/questions/7001/generating-all-combinations-of-an-array
-	 */
-	function getCombinations(list) {
-		const result = [];
-
-		function f(a, list) {
-			list.forEach((c, i) => {
-				const next = a.concat([c]);
-
-				result.push(next);
-				f(next, list.slice(i + 1));
-			});
-		}
-
-		f([], list);
-
-		return result;
-	}
 
 	method.preconditions.forEach((a, i) => {
 		// For each precondition, add it to the stack.
