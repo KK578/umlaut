@@ -177,6 +177,7 @@ function assertComplementedConditions(conditions, complementSet) {
 	const commands = [];
 
 	complementSet.forEach((c, i) => {
+		// TODO: Correct this to represent all IDs.
 		const complementString = c[0].id;
 
 		commands.push(new Smt.Echo(`~~[[${complementString}]]`));
@@ -190,13 +191,7 @@ function assertComplementedConditions(conditions, complementSet) {
 }
 
 function complementConditions(conditions) {
-	const complementSet = [];
-
-	// HACK: Currently places each object into the complement set on its own.
-	conditions.forEach((c) => {
-		complementSet.push([c]);
-	});
-
+	const complementSet = getAllCombinations(conditions);
 	const commands = assertComplementedConditions.call(this, conditions, complementSet);
 
 	return commands;
