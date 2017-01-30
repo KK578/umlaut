@@ -82,17 +82,29 @@ function assertConditionsWithInverts(conditions, complementSet) {
 	return commands;
 }
 
+function addStackMessage(commands, message, constants) {
+	const newCommands = [];
+
+	// Start a new stack frame and echo a message for what conditions are occuring within it.
+	newCommands.push(new Smt.Echo(message));
+	newCommands.push(new Smt.StackModifier('push'));
+	// Maintain the current set of commands.
+	newCommands.push(...commands);
+	// Check satisfiability and get values of arguments.
+	newCommands.push(new Smt.GetValue(constants));
+	newCommands.push(new Smt.StackModifier('pop'));
+
+	return newCommands;
+}
+
 // Add a layer to the stack so we can pop later and keep the declarations.
 function assertMethodConditions(method) {
-	const commands = [];
+	let commands = [];
 
-	commands.push(new Smt.Echo('[[Valid]]'));
-	commands.push(new Smt.StackModifier('push'));
-
-	// For each precondition, add it to the stack.
+	// For each precondition, add it to the assertion stack.
 	commands.push(...assertConditions(method.preconditions));
 
-	// Declare a variable for the result
+	// Declare a variable for the result.
 	if (method.type !== 'void') {
 		const resultType = convertType(method.type);
 		const resultDeclare = new Smt.DeclareConst('result', resultType);
@@ -107,12 +119,13 @@ function assertMethodConditions(method) {
 		commands.push(resultAssert);
 	}
 
-	// Add postconditions so that the inputs may be more interesting.
+	// For each postcondition, add it to the assertion stack to make inputs more informative.
 	commands.push(...assertConditions(method.postconditions));
 
-	// Check satisfiability and get values of arguments.
-	commands.push(new Smt.GetValue(this.getConstants()));
-	commands.push(new Smt.StackModifier('pop'));
+	// Wrap the above commands into the 'Valid' stack frame in z3.
+	// This indicates to z3-runner that this set of commands will output the inputs which
+	//  correspond to all preconditions being successfully fulfilled.
+	commands = addStackMessage(commands, '[[Valid]]', this.getConstants());
 
 	// Add assertions where a subset of conditions is inverted.
 	const complementAssertionCommands = complementConditions.call(this, method.preconditions);
@@ -151,23 +164,27 @@ function assertMethodOptionalConditions(method) {
 
 	const commands = [];
 
-	// Add a layer to the stack so we can pop later and keep the declarations.
+	// Add a layer to the stack to contain everything related to the optional conditions in its
+	//  own frame.
 	commands.push(new Smt.StackModifier('push'));
 
 	// Optional preconditions are bound under the main preconditions, so they must also be
 	//  fulfilled.
-	// For each precondition, add it to the stack.
 	commands.push(...assertConditions(method.preconditions));
 
-	// Generate input when all optional preconditions are fulfilled.
-	commands.push(new Smt.Echo('[[ValidOptional]]'));
-	commands.push(new Smt.StackModifier('push'));
-	commands.push(...assertConditions(method.optionalPreconditions));
-	commands.push(new Smt.GetValue(this.getConstants()));
-	commands.push(new Smt.StackModifier('pop'));
+	// Next assert all optional preconditions being fulfilled.
+	// Wrap this set of commands into the 'ValidOptional' stack frame in z3.
+	// This indicates to z3-runner that this set of commands will output the inputs which
+	//  correspond to all *optional* preconditions being successfully fulfilled as well.
+	const optionalConditionAssertionCommands = assertConditions(method.optionalPreconditions);
+	const stackedCommands = addStackMessage(optionalConditionAssertionCommands, '~~[[ValidOptional]]', this.getConstants());
 
-	// Generate inputs when optional preconditions are complemented.
+	commands.push(...stackedCommands);
+
+	// Generate inputs when subsets of optional preconditions are complemented.
 	commands.push(...complementConditions.call(this, method.optionalPreconditions));
+
+	// Remove stack layer for optional conditions.
 	commands.push(new Smt.StackModifier('pop'));
 
 	return commands;
@@ -175,16 +192,16 @@ function assertMethodOptionalConditions(method) {
 
 function assertComplementedConditions(conditions, complementSet) {
 	const commands = [];
+	const constants = this.getConstants();
 
 	complementSet.forEach((c, i) => {
+		const assertionCommands = assertConditionsWithInverts(conditions, c);
+		// HACK: Should concat all strings together?
 		// TODO: Correct this to represent all IDs.
-		const complementString = c[0].id;
+		const complementString = `~~[[${c[0].id}]]`;
+		const stackedCommands = addStackMessage(assertionCommands, complementString, constants);
 
-		commands.push(new Smt.Echo(`~~[[${complementString}]]`));
-		commands.push(new Smt.StackModifier('push'));
-		commands.push(...assertConditionsWithInverts(conditions, c));
-		commands.push(new Smt.GetValue(this.getConstants()));
-		commands.push(new Smt.StackModifier('pop'));
+		commands.push(...stackedCommands);
 	});
 
 	return commands;
