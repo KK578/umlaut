@@ -48,7 +48,7 @@ function declareFunction(method) {
 	return commands;
 }
 
-function assertAllConditions(conditions) {
+function assertConditions(conditions) {
 	const commands = [];
 
 	conditions.forEach((condition) => {
@@ -62,15 +62,35 @@ function assertAllConditions(conditions) {
 	return commands;
 }
 
+function assertConditionsWithInverts(conditions, complementSet) {
+	const commands = [];
+
+	conditions.forEach((condition) => {
+		const comparison = comparisons.toSmtSymbol(condition.comparison);
+		const command = new Smt.BooleanExpression(comparison,
+			condition.arguments, condition.inverted);
+
+		complementSet.forEach((complement) => {
+			if (condition === complement) {
+				command.setInverted(!command.isInverted);
+			}
+		});
+
+		commands.push(new Smt.Assertion(command));
+	});
+
+	return commands;
+}
+
 // Add a layer to the stack so we can pop later and keep the declarations.
-function allValidConditions(method) {
+function assertMethodConditions(method) {
 	const commands = [];
 
 	commands.push(new Smt.Echo('[[Valid]]'));
 	commands.push(new Smt.StackModifier('push'));
 
 	// For each precondition, add it to the stack.
-	commands.push(...assertAllConditions(method.preconditions));
+	commands.push(...assertConditions(method.preconditions));
 
 	// Declare a variable for the result
 	if (method.type !== 'void') {
@@ -88,11 +108,16 @@ function allValidConditions(method) {
 	}
 
 	// Add postconditions so that the inputs may be more interesting.
-	commands.push(...assertAllConditions(method.postconditions));
+	commands.push(...assertConditions(method.postconditions));
 
 	// Check satisfiability and get values of arguments.
 	commands.push(new Smt.GetValue(this.getConstants()));
 	commands.push(new Smt.StackModifier('pop'));
+
+	// Add assertions where a subset of conditions is inverted.
+	const complementAssertionCommands = complementConditions.call(this, method.preconditions);
+
+	commands.push(...complementAssertionCommands);
 
 	return commands;
 }
@@ -118,35 +143,7 @@ function getAllCombinations(list) {
 	return result;
 }
 
-function singularInvalidConditions(method) {
-	const commands = [];
-
-	method.preconditions.forEach((a, i) => {
-		// For each precondition, add it to the stack.
-		commands.push(new Smt.Echo(`~~[[${a.id}]]`));
-		commands.push(new Smt.StackModifier('push'));
-
-		method.preconditions.map((c, j) => {
-			const comparison = comparisons.toSmtSymbol(c.comparison);
-			const expression = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
-
-			// If it is the one that we are testing,
-			//  invert the result and get the values to use as inputs.
-			if (i === j) {
-				expression.setInverted(!expression.isInverted);
-			}
-
-			commands.push(new Smt.Assertion(expression));
-		});
-
-		commands.push(new Smt.GetValue(this.getConstants()));
-		commands.push(new Smt.StackModifier('pop'));
-	});
-
-	return commands;
-}
-
-function optionalConditions(method) {
+function assertMethodOptionalConditions(method) {
 	if (!Array.isArray(method.optionalPreconditions) ||
 		method.optionalPreconditions.length === 0) {
 		return [];
@@ -155,44 +152,52 @@ function optionalConditions(method) {
 	const commands = [];
 
 	// Add a layer to the stack so we can pop later and keep the declarations.
-	commands.push(new Smt.Echo('[[ValidOptional]]'));
 	commands.push(new Smt.StackModifier('push'));
 
 	// Optional preconditions are bound under the main preconditions, so they must also be
 	//  fulfilled.
 	// For each precondition, add it to the stack.
-	commands.push(...assertAllConditions(method.preconditions));
+	commands.push(...assertConditions(method.preconditions));
 
 	// Generate input when all optional preconditions are fulfilled.
+	commands.push(new Smt.Echo('[[ValidOptional]]'));
 	commands.push(new Smt.StackModifier('push'));
-	commands.push(...assertAllConditions(method.optionalPreconditions));
+	commands.push(...assertConditions(method.optionalPreconditions));
 	commands.push(new Smt.GetValue(this.getConstants()));
 	commands.push(new Smt.StackModifier('pop'));
 
-	// Generate inputs when one optional precondition is complemented.
-	method.optionalPreconditions.forEach((a, i) => {
-		// For each optional precondition, add it to the stack.
-		commands.push(new Smt.Echo(`~~[[${a.id}]]`));
+	// Generate inputs when optional preconditions are complemented.
+	commands.push(...complementConditions.call(this, method.optionalPreconditions));
+	commands.push(new Smt.StackModifier('pop'));
+
+	return commands;
+}
+
+function assertComplementedConditions(conditions, complementSet) {
+	const commands = [];
+
+	complementSet.forEach((c, i) => {
+		const complementString = c[0].id;
+
+		commands.push(new Smt.Echo(`~~[[${complementString}]]`));
 		commands.push(new Smt.StackModifier('push'));
-
-		method.optionalPreconditions.map((c, j) => {
-			const comparison = comparisons.toSmtSymbol(c.comparison);
-			const expression = new Smt.BooleanExpression(comparison, c.arguments, c.inverted);
-
-			// If it is the one that we are testing,
-			//  invert the result and get the values to use as inputs.
-			if (i === j) {
-				expression.setInverted(!expression.isInverted);
-			}
-
-			commands.push(new Smt.Assertion(expression));
-		});
-
+		commands.push(...assertConditionsWithInverts(conditions, c));
 		commands.push(new Smt.GetValue(this.getConstants()));
 		commands.push(new Smt.StackModifier('pop'));
 	});
 
-	commands.push(new Smt.StackModifier('pop'));
+	return commands;
+}
+
+function complementConditions(conditions) {
+	const complementSet = [];
+
+	// HACK: Currently places each object into the complement set on its own.
+	conditions.forEach((c) => {
+		complementSet.push([c]);
+	});
+
+	const commands = assertComplementedConditions.call(this, conditions, complementSet);
 
 	return commands;
 }
@@ -205,9 +210,8 @@ module.exports = class SmtMethod {
 		this.commands = this.commands.concat(
 			declareArguments.call(this, method.arguments),
 			declareFunction.call(this, method),
-			allValidConditions.call(this, method),
-			singularInvalidConditions.call(this, method),
-			optionalConditions.call(this, method)
+			assertMethodConditions.call(this, method),
+			assertMethodOptionalConditions.call(this, method)
 		);
 	}
 
