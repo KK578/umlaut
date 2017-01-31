@@ -190,15 +190,17 @@ function assertMethodOptionalConditions(method) {
 	return commands;
 }
 
-function assertComplementedConditions(conditions, complementSet) {
+function assertComplementedConditions(conditions, complementSets) {
 	const commands = [];
 	const constants = this.getConstants();
 
-	complementSet.forEach((c, i) => {
-		const assertionCommands = assertConditionsWithInverts(conditions, c);
-		// HACK: Should concat all strings together?
-		// TODO: Correct this to represent all IDs.
-		const complementString = `~~[[${c[0].id}]]`;
+	complementSets.forEach((complementSet) => {
+		const assertionCommands = assertConditionsWithInverts(conditions, complementSet);
+		// Concatenate all IDs in the current complement set together.
+		const complementedIds = complementSet.map((o) => {
+			return o.id;
+		}).join(',');
+		const complementString = `~~[[${complementedIds}]]`;
 		const stackedCommands = addStackMessage(assertionCommands, complementString, constants);
 
 		commands.push(...stackedCommands);
@@ -208,8 +210,8 @@ function assertComplementedConditions(conditions, complementSet) {
 }
 
 function complementConditions(conditions) {
-	const complementSet = getAllCombinations(conditions);
-	const commands = assertComplementedConditions.call(this, conditions, complementSet);
+	const complementSets = getAllCombinations(conditions);
+	const commands = assertComplementedConditions.call(this, conditions, complementSets);
 
 	return commands;
 }
