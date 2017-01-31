@@ -99,7 +99,7 @@ function addStackMessage(commands, message, constants) {
 }
 
 // Add a layer to the stack so we can pop later and keep the declarations.
-function assertMethodConditions(method) {
+function assertMethodConditions(method, constants) {
 	let commands = [];
 
 	// For each precondition, add it to the assertion stack.
@@ -126,10 +126,10 @@ function assertMethodConditions(method) {
 	// Wrap the above commands into the 'Valid' stack frame in z3.
 	// This indicates to z3-runner that this set of commands will output the inputs which
 	//  correspond to all preconditions being successfully fulfilled.
-	commands = addStackMessage(commands, '[[Valid]]', this.getConstants());
+	commands = addStackMessage(commands, '[[Valid]]', constants);
 
 	// Add assertions where a subset of conditions is inverted.
-	const complementAssertionCommands = complementConditions.call(this, method.preconditions);
+	const complementAssertionCommands = complementConditions(method.preconditions, constants);
 
 	commands.push(...complementAssertionCommands);
 
@@ -157,7 +157,7 @@ function getAllCombinations(list) {
 	return result;
 }
 
-function assertMethodOptionalConditions(method) {
+function assertMethodOptionalConditions(method, constants) {
 	if (!Array.isArray(method.optionalPreconditions) ||
 		method.optionalPreconditions.length === 0) {
 		return [];
@@ -178,12 +178,12 @@ function assertMethodOptionalConditions(method) {
 	// This indicates to z3-runner that this set of commands will output the inputs which
 	//  correspond to all *optional* preconditions being successfully fulfilled as well.
 	const optionalConditionAssertionCommands = assertConditions(method.optionalPreconditions);
-	const stackedCommands = addStackMessage(optionalConditionAssertionCommands, '~~[[ValidOptional]]', this.getConstants());
+	const stackedCommands = addStackMessage(optionalConditionAssertionCommands, '~~[[ValidOptional]]', constants);
 
 	commands.push(...stackedCommands);
 
 	// Generate inputs when subsets of optional preconditions are complemented.
-	commands.push(...complementConditions.call(this, method.optionalPreconditions));
+	commands.push(...complementConditions(method.optionalPreconditions, constants));
 
 	// Remove stack layer for optional conditions.
 	commands.push(new Smt.StackModifier('pop'));
@@ -191,9 +191,8 @@ function assertMethodOptionalConditions(method) {
 	return commands;
 }
 
-function assertComplementedConditions(conditions, complementSet) {
+function assertComplementedConditions(conditions, complementSet, constants) {
 	const commands = [];
-	const constants = this.getConstants();
 
 	complementSet.forEach((c, i) => {
 		const assertionCommands = assertConditionsWithInverts(conditions, c);
@@ -208,9 +207,9 @@ function assertComplementedConditions(conditions, complementSet) {
 	return commands;
 }
 
-function complementConditions(conditions) {
+function complementConditions(conditions, constants) {
 	const complementSet = getAllCombinations(conditions);
-	const commands = assertComplementedConditions.call(this, conditions, complementSet);
+	const commands = assertComplementedConditions(conditions, complementSet, constants);
 
 	return commands;
 }
@@ -219,11 +218,11 @@ module.exports = class SmtMethod {
 	constructor(method) {
 		const declareArgCommands = declareArguments(method.arguments);
 
-		this.constants = declareArgCommands.constants;
+		this.constants = Object.keys(declareArgCommands.constants);
 		this.commands = declareArgCommands.commands.concat(
-			declareFunction.call(this, method),
-			assertMethodConditions.call(this, method),
-			assertMethodOptionalConditions.call(this, method)
+			declareFunction(method),
+			assertMethodConditions(method, this.constants),
+			assertMethodOptionalConditions(method, this.constants)
 		);
 	}
 
