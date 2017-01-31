@@ -291,4 +291,108 @@ describe('UML-To-SMT', function () {
 			expect(commands).to.contain('Real');
 		});
 	});
+
+	describe('Optional Preconditions', function () {
+		it('should work with no optional preconditions', function () {
+			const fixture = {
+				Test: {
+					name: 'Test',
+					methods: {
+						Foo: {
+							name: 'Foo',
+							visibility: 'Public',
+							type: 'Integer',
+							arguments: {
+								a: 'Integer'
+							},
+							preconditions: [
+								{
+									comparison: 'GreaterThanOrEqual',
+									arguments: [
+										'a',
+										0
+									],
+									id: '00000000-0000-0000-0000-000000000000'
+								},
+								{
+									comparison: 'LessThanOrEqual',
+									arguments: [
+										'a',
+										10
+									],
+									id: '00000000-0000-0000-0000-000000000000'
+								}
+							],
+							postconditions: []
+						}
+					}
+				}
+			};
+			const result = testee(fixture);
+
+			const commands = result.Test.smtCommands[0].commands;
+			expect(result).to.have.key('Test');
+			expect(result.Test).to.have.keys('name', 'smtCommands');
+			expect(result.Test.smtCommands).to.be.instanceOf(Array).and.have.length(1);
+			expect(result.Test.smtCommands[0]).to.have.keys('name', 'commands');
+
+			expect(commands).to.be.instanceOf(Array);
+			expect(commands).to.contain('(assert (>= a 0))');
+			expect(commands).to.contain('(assert (<= a 10))');
+			expect(commands).to.contain('(assert (not (>= a 0)))');
+			expect(commands).to.contain('(assert (not (<= a 10)))');
+		});
+
+		it('should make assertions on additional preconditions', function () {
+			const fixture = {
+				Test: {
+					name: 'Test',
+					methods: {
+						Foo: {
+							name: 'Foo',
+							visibility: 'Public',
+							type: 'Integer',
+							arguments: {
+								a: 'Integer'
+							},
+							preconditions: [
+								{
+									comparison: 'GreaterThanOrEqual',
+									arguments: [
+										'a',
+										0
+									],
+									id: '00000000-0000-0000-0000-000000000000'
+								},
+								{
+									comparison: 'LessThanOrEqual',
+									arguments: [
+										'a',
+										10
+									],
+									id: '00000000-0000-0000-0000-000000000001'
+								}
+							],
+							optionalPreconditions: [
+								{
+									comparison: 'GreaterThanOrEqual',
+									arguments: [
+										'a',
+										6
+									],
+									id: '00000000-0000-0000-0000-000000000002'
+								}
+							],
+							postconditions: []
+						}
+					}
+				}
+			};
+			const result = testee(fixture);
+			const commands = result.Test.smtCommands[0].commands;
+
+			expect(commands).to.contain('(assert (>= a 6))');
+			expect(commands).to.contain('(assert (not (>= a 6)))');
+		});
+	});
 });

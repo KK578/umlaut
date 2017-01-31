@@ -350,6 +350,7 @@ describe('UML Parser Classes', function () {
 			});
 
 			expect(obj.preconditions).to.be.instanceOf(Array);
+			expect(obj.optionalPreconditions).to.be.instanceOf(Array);
 			expect(obj.postconditions).to.be.instanceOf(Array);
 		});
 
@@ -487,6 +488,72 @@ describe('UML Parser Classes', function () {
 
 			it('should error if precondition object does not specify at least 1 item in arguments', function () {
 				expect(obj.addPrecondition.bind(obj, {
+					comparison: 'LessThan',
+					arguments: []
+				})).to.throw(Error);
+			});
+		});
+
+		describe('#addOptionalPrecondition', function () {
+			let obj;
+
+			beforeEach(function () {
+				obj = new TestClass({
+					name: 'foo',
+					type: 'Integer'
+				});
+			});
+
+			it('should error on empty', function () {
+				expect(obj.addOptionalPrecondition).to.throw(Error);
+			});
+
+			it('should error on empty object', function () {
+				expect(obj.addOptionalPrecondition.bind(obj, {})).to.throw(Error);
+			});
+
+			it('should error if argument is not an object', function () {
+				expect(obj.addOptionalPrecondition.bind(obj, '(> a b)')).to.throw(Error);
+			});
+
+			it('should add a new precondition', function () {
+				const optionalPreconditionsLength = obj.optionalPreconditions.length;
+
+				obj.addOptionalPrecondition({
+					comparison: 'LessThan',
+					arguments: [
+						'a',
+						'b'
+					]
+				});
+
+				expect(obj.optionalPreconditions.length).to.equal(optionalPreconditionsLength + 1);
+			});
+
+			it('should generate a unique ID for the condition', function () {
+				obj.addOptionalPrecondition({
+					comparison: 'LessThan',
+					arguments: [
+						'a',
+						'b'
+					]
+				});
+
+				expect(obj.optionalPreconditions[0].id).to.be.a('string').and.match(REGEX_UUID);
+			});
+
+			it('should error if precondition object does not specify the comparison', function () {
+				expect(obj.addOptionalPrecondition.bind(obj, {
+					comparison: undefined,
+					arguments: [
+						'a',
+						'b'
+					]
+				})).to.throw(Error);
+			});
+
+			it('should error if precondition object does not specify at least 1 item in arguments', function () {
+				expect(obj.addOptionalPrecondition.bind(obj, {
 					comparison: 'LessThan',
 					arguments: []
 				})).to.throw(Error);
