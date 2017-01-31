@@ -17,6 +17,7 @@ function convertType(type) {
 
 function declareArguments(args) {
 	const commands = [];
+	const constants = {};
 
 	// For every argument to the function, add a declaration to SMT.
 	Object.keys(args).forEach((name) => {
@@ -24,14 +25,14 @@ function declareArguments(args) {
 		const command = new Smt.DeclareConst(name, type);
 
 		// Note the existence of the argument to the class for get-value calls later.
-		if (!this.constants[name]) {
-			this.constants[name] = true;
+		if (!constants[name]) {
+			constants[name] = true;
 		}
 
 		commands.push(command);
 	});
 
-	return commands;
+	return { commands, constants };
 }
 
 // Declare the function to SMT.
@@ -98,7 +99,7 @@ function addStackMessage(commands, message, constants) {
 }
 
 // Add a layer to the stack so we can pop later and keep the declarations.
-function assertMethodConditions(method) {
+function assertMethodConditions(method, constants) {
 	let commands = [];
 
 	// For each precondition, add it to the assertion stack.
@@ -125,10 +126,10 @@ function assertMethodConditions(method) {
 	// Wrap the above commands into the 'Valid' stack frame in z3.
 	// This indicates to z3-runner that this set of commands will output the inputs which
 	//  correspond to all preconditions being successfully fulfilled.
-	commands = addStackMessage(commands, '[[Valid]]', this.getConstants());
+	commands = addStackMessage(commands, '[[Valid]]', constants);
 
 	// Add assertions where a subset of conditions is inverted.
-	const complementAssertionCommands = complementConditions.call(this, method.preconditions);
+	const complementAssertionCommands = complementConditions(method.preconditions, constants);
 
 	commands.push(...complementAssertionCommands);
 
@@ -156,7 +157,7 @@ function getAllCombinations(list) {
 	return result;
 }
 
-function assertMethodOptionalConditions(method) {
+function assertMethodOptionalConditions(method, constants) {
 	if (!Array.isArray(method.optionalPreconditions) ||
 		method.optionalPreconditions.length === 0) {
 		return [];
@@ -177,12 +178,12 @@ function assertMethodOptionalConditions(method) {
 	// This indicates to z3-runner that this set of commands will output the inputs which
 	//  correspond to all *optional* preconditions being successfully fulfilled as well.
 	const optionalConditionAssertionCommands = assertConditions(method.optionalPreconditions);
-	const stackedCommands = addStackMessage(optionalConditionAssertionCommands, '~~[[ValidOptional]]', this.getConstants());
+	const stackedCommands = addStackMessage(optionalConditionAssertionCommands, '~~[[ValidOptional]]', constants);
 
 	commands.push(...stackedCommands);
 
 	// Generate inputs when subsets of optional preconditions are complemented.
-	commands.push(...complementConditions.call(this, method.optionalPreconditions));
+	commands.push(...complementConditions(method.optionalPreconditions, constants));
 
 	// Remove stack layer for optional conditions.
 	commands.push(new Smt.StackModifier('pop'));
@@ -190,9 +191,8 @@ function assertMethodOptionalConditions(method) {
 	return commands;
 }
 
-function assertComplementedConditions(conditions, complementSets) {
+function assertComplementedConditions(conditions, complementSets, constants) {
 	const commands = [];
-	const constants = this.getConstants();
 
 	complementSets.forEach((complementSet) => {
 		const assertionCommands = assertConditionsWithInverts(conditions, complementSet);
@@ -209,28 +209,23 @@ function assertComplementedConditions(conditions, complementSets) {
 	return commands;
 }
 
-function complementConditions(conditions) {
+function complementConditions(conditions, constants) {
 	const complementSets = getAllCombinations(conditions);
-	const commands = assertComplementedConditions.call(this, conditions, complementSets);
+	const commands = assertComplementedConditions(conditions, complementSets, constants);
 
 	return commands;
 }
 
 module.exports = class SmtMethod {
 	constructor(method) {
-		this.commands = [];
-		this.constants = {};
+		const declareArgCommands = declareArguments(method.arguments);
+		const constants = Object.keys(declareArgCommands.constants);
 
-		this.commands = this.commands.concat(
-			declareArguments.call(this, method.arguments),
-			declareFunction.call(this, method),
-			assertMethodConditions.call(this, method),
-			assertMethodOptionalConditions.call(this, method)
+		this.commands = declareArgCommands.commands.concat(
+			declareFunction(method),
+			assertMethodConditions(method, constants),
+			assertMethodOptionalConditions(method, constants)
 		);
-	}
-
-	getConstants() {
-		return Object.keys(this.constants);
 	}
 
 	getCommands() {
