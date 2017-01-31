@@ -217,17 +217,13 @@ function complementConditions(conditions, constants) {
 module.exports = class SmtMethod {
 	constructor(method) {
 		const declareArgCommands = declareArguments(method.arguments);
+		const constants = Object.keys(declareArgCommands.constants);
 
-		this.constants = Object.keys(declareArgCommands.constants);
 		this.commands = declareArgCommands.commands.concat(
 			declareFunction(method),
-			assertMethodConditions(method, this.constants),
-			assertMethodOptionalConditions(method, this.constants)
+			assertMethodConditions(method, constants),
+			assertMethodOptionalConditions(method, constants)
 		);
-	}
-
-	getConstants() {
-		return Object.keys(this.constants);
 	}
 
 	getCommands() {
