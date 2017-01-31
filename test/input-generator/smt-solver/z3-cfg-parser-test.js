@@ -79,6 +79,27 @@ describe('CFG Parser for z3 Values', function () {
 		expect(result.arguments).to.not.exist;
 	});
 
+	const uuidList = [
+		'12345678-abcd-efab-cdef-123456789012',
+		'87654321-abcd-efab-cdef-987654321000',
+		'aaaaaaaa-bbbb-cccc-dddd-eeeeffffffff',
+		'abcdefab-cdef-abcd-efab-cdefabcdefab'
+	];
+
+	uuidList.forEach((_, i, list) => {
+		it(`should handle ${i + 1} UUID strings within [[..]]]`, function () {
+			// Take the first (i + 1) uuids from the list and join with commas.
+			const uuidString = list.slice(0, i + 1).join(',');
+			const result = testee(`[[${uuidString}]] sat ((a 0))`);
+
+			expect(result).to.contain.keys(['id', 'arguments']);
+
+			expect(result.id).to.be.a('string').and.equal(uuidString);
+			expect(result.arguments).to.have.key('a');
+			expect(result.arguments.a).to.be.a('number').and.equal(0);
+		});
+	});
+
 	it('should handle multiple objects consecutively', function () {
 		const result = testee(`[[12345678-abcd-efab-cdef-123456789012]] sat ((a 0)(b (- 1)))
 			~~[[87654321-abcd-efab-cdef-987654321000]] sat ((a 0)(b 38))`);
