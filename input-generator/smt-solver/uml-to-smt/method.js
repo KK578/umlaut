@@ -17,6 +17,7 @@ function convertType(type) {
 
 function declareArguments(args) {
 	const commands = [];
+	const constants = {};
 
 	// For every argument to the function, add a declaration to SMT.
 	Object.keys(args).forEach((name) => {
@@ -24,14 +25,14 @@ function declareArguments(args) {
 		const command = new Smt.DeclareConst(name, type);
 
 		// Note the existence of the argument to the class for get-value calls later.
-		if (!this.constants[name]) {
-			this.constants[name] = true;
+		if (!constants[name]) {
+			constants[name] = true;
 		}
 
 		commands.push(command);
 	});
 
-	return commands;
+	return { commands, constants };
 }
 
 // Declare the function to SMT.
@@ -216,11 +217,10 @@ function complementConditions(conditions) {
 
 module.exports = class SmtMethod {
 	constructor(method) {
-		this.commands = [];
-		this.constants = {};
+		const declareArgCommands = declareArguments(method.arguments);
 
-		this.commands = this.commands.concat(
-			declareArguments.call(this, method.arguments),
+		this.constants = declareArgCommands.constants;
+		this.commands = declareArgCommands.commands.concat(
 			declareFunction.call(this, method),
 			assertMethodConditions.call(this, method),
 			assertMethodOptionalConditions.call(this, method)
