@@ -21,18 +21,27 @@ function promiseRunTestGenerator(options) {
 }
 
 describe('Integration Test', function () {
-	it('should successfully build SimpleMath test fixture', function () {
+	describe('SimpleMath', function () {
+		const frameworks = [
+			'nunit',
+			'junit',
+			'mocha'
+		];
 		const fixture = global.fixtures.FullModels.SimpleMath.uml;
 
-		return umlParser(fixture).then((parsedModelData) => {
-			return inputGenerator(parsedModelData);
-		}).then((modelDataWithInputs) => {
-			const options = {
-				model: JSON.stringify(modelDataWithInputs),
-				framework: 'nunit'
-			};
+		frameworks.forEach((framework) => {
+			it(`should build SimpleMath test fixture for ${framework}`, function () {
+				return umlParser(fixture).then((parsedModelData) => {
+					return inputGenerator(parsedModelData);
+				}).then((modelDataWithInputs) => {
+					const options = {
+						model: JSON.stringify(modelDataWithInputs),
+						framework: framework
+					};
 
-			return promiseRunTestGenerator(options);
+					return promiseRunTestGenerator(options);
+				});
+			});
 		});
 	});
 });
