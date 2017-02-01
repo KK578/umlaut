@@ -1,39 +1,39 @@
 const comparisons = require('../../../util/comparisons.js');
 
-function generateTestMethodName(methodName, condition) {
-	let clean;
+function generateTestMethodName(methodName, conditions) {
+	const output = conditions.map((condition) => {
+		if (condition === 'Valid') {
+			return 'Valid';
+		}
+		else {
+			return `Not${comparisons.toName(condition.comparison)}_${condition.arguments.join('_')}`;
+		}
+	}).join('_');
 
-	if (condition === 'Valid') {
-		clean = 'Valid';
-	}
-	else {
-		clean = `Not${comparisons.toName(condition.comparison)}_${condition.arguments.join('_')}`;
-	}
-
-	return `test_${methodName}_${clean}`;
+	return `test_${methodName}_${output}`;
 }
 
 function findCondition(preconditions, condition) {
 	if (condition === 'Valid') {
-		return condition;
+		return [condition];
 	}
 
-	let id = '';
+	let idList = '';
 
 	// Split by space as condition id will be "Complement [[UUID]]".
 	// TODO: Delete this check, as it is currently held for legacy.
 	if (condition.indexOf(' ') > 0) {
-		id = condition.split(' ')[1];
+		idList = condition.split(' ')[1].split(',');
 	}
 	else {
-		id = condition.split(',')[0];
+		idList = condition.split(',');
 	}
 	const search = preconditions.filter((c) => {
-		return c.id === id;
+		return idList.indexOf(c.id) >= 0;
 	});
 
 	if (search.length > 0) {
-		return search[0];
+		return search;
 	}
 	else {
 		throw new Error('No valid precondition found.');
@@ -42,10 +42,11 @@ function findCondition(preconditions, condition) {
 
 function readTest(method, test) {
 	const id = test.id || test.condition;
-	const condition = findCondition(method.preconditions, id);
+	const conditions = findCondition(method.preconditions, id);
 
-	const name = generateTestMethodName(method.name, condition);
-	const exception = condition.exception;
+	const name = generateTestMethodName(method.name, conditions);
+	// TODO: Solve issue of which exception to expect when multiple may error.
+	const exception = conditions[0].exception;
 
 	const initialise = Object.keys(test.arguments).map((name) => {
 		return {
