@@ -18,9 +18,16 @@ function findCondition(preconditions, condition) {
 		return condition;
 	}
 
+	let id = '';
+
 	// Split by space as condition id will be "Complement [[UUID]]".
-	// TODO: This should change to match latest schema, in which "Complement" is not written.
-	const id = condition.split(' ')[1];
+	// TODO: Delete this check, as it is currently held for legacy.
+	if (condition.indexOf(' ') > 0) {
+		id = condition.split(' ')[1];
+	}
+	else {
+		id = condition.split(',')[0];
+	}
 	const search = preconditions.filter((c) => {
 		return c.id === id;
 	});
@@ -34,7 +41,8 @@ function findCondition(preconditions, condition) {
 }
 
 function readTest(method, test) {
-	const condition = findCondition(method.preconditions, test.condition);
+	const id = test.id || test.condition;
+	const condition = findCondition(method.preconditions, id);
 
 	const name = generateTestMethodName(method.name, condition);
 	const exception = condition.exception;
@@ -72,7 +80,8 @@ function readTest(method, test) {
 
 function readMethod(m) {
 	const tests = m.tests.map((t) => {
-		if (t.arguments === 'Unsatisfiable') {
+		if (t.arguments === 'Unsatisfiable' ||
+			t.unsatisfiable === true) {
 			return null;
 		}
 
