@@ -7,17 +7,32 @@ const yeoman = require('yeoman-environment');
 const yeomanEnv = yeoman.createEnv();
 yeomanEnv.register(path.join(__dirname, '../generators/app'), 'mdt:app');
 
+function promiseRunTestGenerator(options) {
+	return new Promise((resolve, reject) => {
+		yeomanEnv.run('mdt:app', options, (err) => {
+			if (err) {
+				reject();
+			}
+			else {
+				resolve();
+			}
+		});
+	});
+}
+
 describe('Integration Test', function () {
-	it('should successfully build SimpleMath test fixture', function (done) {
+	it('should successfully build SimpleMath test fixture', function () {
 		const fixture = global.fixtures.FullModels.SimpleMath.uml;
 
-		umlParser(fixture).then((data) => {
-			return inputGenerator(data);
-		}).then((data) => {
-			const model = JSON.stringify(data);
-			console.log(model);
+		return umlParser(fixture).then((parsedModelData) => {
+			return inputGenerator(parsedModelData);
+		}).then((modelDataWithInputs) => {
+			const options = {
+				model: JSON.stringify(modelDataWithInputs),
+				framework: 'nunit'
+			};
 
-			yeomanEnv.run('mdt:app', { model, framework: 'nunit' }, done);
+			return promiseRunTestGenerator(options);
 		});
 	});
 });
