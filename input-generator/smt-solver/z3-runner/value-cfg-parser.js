@@ -67,6 +67,9 @@ const grammar = [
 	new Rule(conditionIdentifier, [/Valid/], (id) => {
 		return id;
 	}),
+	new Rule(conditionIdentifier, [UUID_REGEX, ',', conditionIdentifier], (id, _, id2) => {
+		return `${id},${id2}`;
+	}),
 	new Rule(conditionIdentifier, [UUID_REGEX], (id) => {
 		return id;
 	}),

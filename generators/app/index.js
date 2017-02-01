@@ -39,7 +39,8 @@ module.exports = class extends Generator {
 				// TODO: Build this list dynamically.
 				choices: [
 					'junit',
-					'nunit'
+					'nunit',
+					'mocha'
 				]
 			}]).then((answers) => {
 				this.options.framework = answers.framework;

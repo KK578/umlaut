@@ -26,6 +26,7 @@ module.exports = class AnnotatedUmlMethod {
 		}
 
 		this.preconditions = [];
+		this.optionalPreconditions = [];
 		this.postconditions = [];
 	}
 
@@ -57,6 +58,12 @@ module.exports = class AnnotatedUmlMethod {
 		const condition = new OclCondition(arg);
 
 		this.preconditions.push(condition);
+	}
+
+	addOptionalPrecondition(arg) {
+		const condition = new OclCondition(arg);
+
+		this.optionalPreconditions.push(condition);
 	}
 
 	addPostcondition(arg) {

@@ -4,6 +4,7 @@ module.exports = {
 		reportFormats: ['lcovonly'],
 		require: ['./test/config/globals.js']
 	},
+	all: { src: 'test/test-suite.js' },
 	html: {
 		options: {
 			reportFormats: ['lcov']

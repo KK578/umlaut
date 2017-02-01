@@ -36,7 +36,10 @@ module.exports = {
 		files: [
 			{
 				expand: true,
-				src: ['generators/**/*.js']
+				src: [
+					'generators/**/*.js',
+					'!generators/*/templates/*.js'
+				]
 			}
 		]
 	}
