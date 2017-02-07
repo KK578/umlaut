@@ -16,7 +16,18 @@ namespace UmlAnnotator
 
 		string symbol;
 		string smtSymbol;
-		bool invertable;
+		bool isInvertable;
+		bool isInverted;
+		public bool IsInverted
+		{
+			get { return isInverted; }
+			set {
+				if (this.isInvertable)
+				{
+					isInverted = value;
+				}
+			}
+		}
 
 		public OclComparison(string name, string symbol, string smtSymbol, bool? invertable)
 		{
@@ -32,7 +43,8 @@ namespace UmlAnnotator
 				this.smtSymbol = symbol;
 			}
 
-			this.invertable = invertable == true;
+			this.isInvertable = invertable == true;
+			this.isInverted = false;
 		}
 
 		public string SymbolString()

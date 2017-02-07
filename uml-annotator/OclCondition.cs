@@ -83,7 +83,7 @@ namespace UmlAnnotator
 				comparison = Comparator.SymbolString();
 			}
 
-			string main = String.Format("{0} {1} {2}", arguments[0], comparison, arguments[1]);
+			string main = String.Format("{0} {1} {2}", arguments[0], Comparator.IsInverted ? "not " + comparison : comparison, arguments[1]);
 			string result;
 
 			if (!String.IsNullOrWhiteSpace(exception))
