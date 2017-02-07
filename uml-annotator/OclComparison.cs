@@ -42,7 +42,7 @@ namespace UmlAnnotator
 
 		public override string ToString()
 		{
-			return String.Format("{0} ({1})", name, symbol);
+			return String.Format("{0} ({1})", symbol, name);
 		}
 	}
 }
