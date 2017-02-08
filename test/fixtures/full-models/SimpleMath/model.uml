@@ -1,169 +1,311 @@
 <?xml version="1.0" encoding="utf-8"?>
-<modelStoreModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner" dslVersion="1.0.0.0" Id="552be105-034a-423f-b185-bcd7d3d99247" name="SimpleMath" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+<modelStoreModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="552be105-034a-423f-b185-bcd7d3d99247"
+  name="SimpleMath" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
   <profileInstances>
-    <packageHasProfileInstances Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b">
-      <profileInstance Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" name="StandardProfileL2" />
+    <packageHasProfileInstances
+      Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b">
+      <profileInstance
+        Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791"
+        name="StandardProfileL2" />
     </packageHasProfileInstances>
-    <packageHasProfileInstances Id="29349502-908c-4fda-9054-c48619c59ed0">
-      <profileInstance Id="532ea607-fb19-44b8-8502-3351b05452be" name="StandardProfileL3" />
+    <packageHasProfileInstances
+      Id="29349502-908c-4fda-9054-c48619c59ed0">
+      <profileInstance
+        Id="532ea607-fb19-44b8-8502-3351b05452be"
+        name="StandardProfileL3" />
     </packageHasProfileInstances>
   </profileInstances>
   <packagedElements>
     <packageHasNamedElement>
-      <class Id="46e607e7-41e5-418d-90cd-fb194d15320e" name="SimpleMath" isAbstract="false" isLeaf="false" isActiveClass="false">
+      <class
+        Id="46e607e7-41e5-418d-90cd-fb194d15320e"
+        name="SimpleMath"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
         <ownedAttributesInternal>
-          <property Id="3fe7d607-bdcf-4fe6-b33d-957eae44978a" name="Nop" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+          <property
+            Id="3fe7d607-bdcf-4fe6-b33d-957eae44978a"
+            name="Nop"
+            visibility="Private"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false">
             <type_NamedElement>
-              <primitiveTypeMoniker Id="220a3521-e091-4221-bae9-3ef9018e845c" LastKnownName="Integer" LastKnownLocation="SimpleMath.uml" />
+              <primitiveTypeMoniker
+                Id="220a3521-e091-4221-bae9-3ef9018e845c"
+                LastKnownName="Integer"
+                LastKnownLocation="SimpleMath.uml" />
             </type_NamedElement>
           </property>
         </ownedAttributesInternal>
         <ownedOperationsInternal>
-          <operation Id="a4cdb724-1cbc-4e46-a8ae-9b06b2710d3f" name="Add" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+          <operation
+            Id="a4cdb724-1cbc-4e46-a8ae-9b06b2710d3f"
+            name="Add"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
             <ownedParameters>
               <operationHasOwnedParameters>
-                <parameter Id="77d9e1d7-ac55-4cbf-be83-cac60537eee2" name="a" direction="In">
+                <parameter
+                  Id="77d9e1d7-ac55-4cbf-be83-cac60537eee2"
+                  name="a"
+                  direction="In">
                   <type_NamedElement>
-                    <primitiveTypeMoniker Id="220a3521-e091-4221-bae9-3ef9018e845c" LastKnownName="Integer" LastKnownLocation="SimpleMath.uml" />
+                    <primitiveTypeMoniker
+                      Id="220a3521-e091-4221-bae9-3ef9018e845c"
+                      LastKnownName="Integer"
+                      LastKnownLocation="SimpleMath.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
               <operationHasOwnedParameters>
-                <parameter Id="80b7e4d6-bb9d-4384-9830-11ffefe24a9a" name="b" direction="In">
+                <parameter
+                  Id="80b7e4d6-bb9d-4384-9830-11ffefe24a9a"
+                  name="b"
+                  direction="In">
                   <type_NamedElement>
-                    <primitiveTypeMoniker Id="220a3521-e091-4221-bae9-3ef9018e845c" LastKnownName="Integer" LastKnownLocation="SimpleMath.uml" />
+                    <primitiveTypeMoniker
+                      Id="220a3521-e091-4221-bae9-3ef9018e845c"
+                      LastKnownName="Integer"
+                      LastKnownLocation="SimpleMath.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
               <operationHasOwnedParameters>
-                <parameter Id="ccee8d2b-38e8-43e9-9f49-9529aff9a73c" direction="Return">
+                <parameter
+                  Id="ccee8d2b-38e8-43e9-9f49-9529aff9a73c"
+                  direction="Return">
                   <type_NamedElement>
-                    <primitiveTypeMoniker Id="220a3521-e091-4221-bae9-3ef9018e845c" LastKnownName="Integer" LastKnownLocation="SimpleMath.uml" />
+                    <primitiveTypeMoniker
+                      Id="220a3521-e091-4221-bae9-3ef9018e845c"
+                      LastKnownName="Integer"
+                      LastKnownLocation="SimpleMath.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
             </ownedParameters>
             <preconditionsInternal>
-              <constraint Id="db238a05-09a1-486a-be59-e0195ae25e78">
+              <constraint
+                Id="db238a05-09a1-486a-be59-e0195ae25e78">
                 <specification>
-                  <literalString Id="54878f33-c014-40e2-aae1-0a5019d72556" value="(a &gt;= 0),(b &gt;= 0)" />
+                  <literalString
+                    Id="54878f33-c014-40e2-aae1-0a5019d72556"
+                    value="(GreaterThanOrEqual a 0)-----(GreaterThanOrEqual b 0)" />
                 </specification>
               </constraint>
             </preconditionsInternal>
             <postconditionsInternal>
-              <constraint Id="4774798f-d24c-47b5-b1b7-8c4000643dfe">
+              <constraint
+                Id="4774798f-d24c-47b5-b1b7-8c4000643dfe">
                 <specification>
-                  <literalString Id="559cf724-825b-4cce-9245-8e33edc46b26" value="(result &gt;= a)" />
+                  <literalString
+                    Id="559cf724-825b-4cce-9245-8e33edc46b26"
+                    value="(GreaterThanOrEqual result a)" />
                 </specification>
               </constraint>
             </postconditionsInternal>
           </operation>
-          <operation Id="948a0b1f-5dfc-4e12-8b60-6fb95ad0fe99" name="Subtract" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+          <operation
+            Id="948a0b1f-5dfc-4e12-8b60-6fb95ad0fe99"
+            name="Subtract"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
             <ownedParameters>
               <operationHasOwnedParameters>
-                <parameter Id="f3bf0b34-283a-4d7a-b252-c49432f73ff0" name="a" direction="In">
+                <parameter
+                  Id="f3bf0b34-283a-4d7a-b252-c49432f73ff0"
+                  name="a"
+                  direction="In">
                   <type_NamedElement>
-                    <primitiveTypeMoniker Id="220a3521-e091-4221-bae9-3ef9018e845c" LastKnownName="Integer" LastKnownLocation="SimpleMath.uml" />
+                    <primitiveTypeMoniker
+                      Id="220a3521-e091-4221-bae9-3ef9018e845c"
+                      LastKnownName="Integer"
+                      LastKnownLocation="SimpleMath.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
               <operationHasOwnedParameters>
-                <parameter Id="e875a0a5-1e80-4970-a852-96c94e7224a9" name="b" direction="In">
+                <parameter
+                  Id="e875a0a5-1e80-4970-a852-96c94e7224a9"
+                  name="b"
+                  direction="In">
                   <type_NamedElement>
-                    <primitiveTypeMoniker Id="220a3521-e091-4221-bae9-3ef9018e845c" LastKnownName="Integer" LastKnownLocation="SimpleMath.uml" />
+                    <primitiveTypeMoniker
+                      Id="220a3521-e091-4221-bae9-3ef9018e845c"
+                      LastKnownName="Integer"
+                      LastKnownLocation="SimpleMath.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
               <operationHasOwnedParameters>
-                <parameter Id="2e91799e-f573-47f7-a683-387f9bfdc113" direction="Return">
+                <parameter
+                  Id="2e91799e-f573-47f7-a683-387f9bfdc113"
+                  direction="Return">
                   <type_NamedElement>
-                    <primitiveTypeMoniker Id="220a3521-e091-4221-bae9-3ef9018e845c" LastKnownName="Integer" LastKnownLocation="SimpleMath.uml" />
+                    <primitiveTypeMoniker
+                      Id="220a3521-e091-4221-bae9-3ef9018e845c"
+                      LastKnownName="Integer"
+                      LastKnownLocation="SimpleMath.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
             </ownedParameters>
             <preconditionsInternal>
-              <constraint Id="7e395e15-84d9-4397-9eb9-0d5459e92e03">
+              <constraint
+                Id="7e395e15-84d9-4397-9eb9-0d5459e92e03">
                 <specification>
-                  <literalString Id="749ecbe0-c44e-4d65-ae6a-af5f9232059c" value="(a &gt;= 0),(b &gt;= 0),(a &gt;= b)" />
+                  <literalString
+                    Id="749ecbe0-c44e-4d65-ae6a-af5f9232059c"
+                    value="(GreaterThanOrEqual a 0)-----(GreaterThanOrEqual b 0)-----(GreaterThanOrEqual a b)" />
                 </specification>
               </constraint>
             </preconditionsInternal>
             <postconditionsInternal>
-              <constraint Id="86d048ee-3c97-48bf-8630-d07cf8671c9c">
+              <constraint
+                Id="86d048ee-3c97-48bf-8630-d07cf8671c9c">
                 <specification>
-                  <literalString Id="1412b40d-6841-4265-9198-a2e80ace7c3b" value="(result &lt;= a)" />
+                  <literalString
+                    Id="1412b40d-6841-4265-9198-a2e80ace7c3b"
+                    value="(LessThanOrEqual result a)" />
                 </specification>
               </constraint>
             </postconditionsInternal>
           </operation>
-          <operation Id="20ff6c40-4f9d-4573-826a-64eaf826aab1" name="Divide" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+          <operation
+            Id="20ff6c40-4f9d-4573-826a-64eaf826aab1"
+            name="Divide"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
             <ownedParameters>
               <operationHasOwnedParameters>
-                <parameter Id="473b5151-99f5-4fb2-80a8-d3a7faf80788" name="a" direction="In">
+                <parameter
+                  Id="473b5151-99f5-4fb2-80a8-d3a7faf80788"
+                  name="a"
+                  direction="In">
                   <type_NamedElement>
-                    <primitiveTypeMoniker Id="220a3521-e091-4221-bae9-3ef9018e845c" LastKnownName="Integer" LastKnownLocation="SimpleMath.uml" />
+                    <primitiveTypeMoniker
+                      Id="220a3521-e091-4221-bae9-3ef9018e845c"
+                      LastKnownName="Integer"
+                      LastKnownLocation="SimpleMath.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
               <operationHasOwnedParameters>
-                <parameter Id="3e1a575b-77cf-4b75-bc37-103f57bbf0fb" name="b" direction="In">
+                <parameter
+                  Id="3e1a575b-77cf-4b75-bc37-103f57bbf0fb"
+                  name="b"
+                  direction="In">
                   <type_NamedElement>
-                    <primitiveTypeMoniker Id="220a3521-e091-4221-bae9-3ef9018e845c" LastKnownName="Integer" LastKnownLocation="SimpleMath.uml" />
+                    <primitiveTypeMoniker
+                      Id="220a3521-e091-4221-bae9-3ef9018e845c"
+                      LastKnownName="Integer"
+                      LastKnownLocation="SimpleMath.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
               <operationHasOwnedParameters>
-                <parameter Id="9c5bd804-760d-412d-87a8-5ff89156ac09" direction="Return">
+                <parameter
+                  Id="9c5bd804-760d-412d-87a8-5ff89156ac09"
+                  direction="Return">
                   <type_NamedElement>
-                    <primitiveTypeMoniker Id="220a3521-e091-4221-bae9-3ef9018e845c" LastKnownName="Integer" LastKnownLocation="SimpleMath.uml" />
+                    <primitiveTypeMoniker
+                      Id="220a3521-e091-4221-bae9-3ef9018e845c"
+                      LastKnownName="Integer"
+                      LastKnownLocation="SimpleMath.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
             </ownedParameters>
             <preconditionsInternal>
-              <constraint Id="9bba92de-4d78-4c4b-a0b4-9192e79d76fc">
+              <constraint
+                Id="9bba92de-4d78-4c4b-a0b4-9192e79d76fc">
                 <specification>
-                  <literalString Id="95dc3dff-306b-46b6-84e0-92cae7a2bf19" value="(a &gt;= 0),(b &gt; 0)" />
+                  <literalString
+                    Id="95dc3dff-306b-46b6-84e0-92cae7a2bf19"
+                    value="(GreaterThanOrEqual a 0)-----(GreaterThan b 0)" />
                 </specification>
               </constraint>
             </preconditionsInternal>
             <postconditionsInternal>
-              <constraint Id="523718d3-418b-42aa-8500-bda7333002d9">
+              <constraint
+                Id="523718d3-418b-42aa-8500-bda7333002d9">
                 <specification>
-                  <literalString Id="ffac6c7b-3eba-4d1b-b8fc-6c07d8c3d823" value="(result = result)" />
+                  <literalString
+                    Id="ffac6c7b-3eba-4d1b-b8fc-6c07d8c3d823"
+                    value="(Equal result result)" />
                 </specification>
               </constraint>
             </postconditionsInternal>
           </operation>
-          <operation Id="91f7b180-e15f-4243-9dad-c5a6013b3384" name="SquareRoot" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+          <operation
+            Id="91f7b180-e15f-4243-9dad-c5a6013b3384"
+            name="SquareRoot"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
             <ownedParameters>
               <operationHasOwnedParameters>
-                <parameter Id="0f9bc812-d785-4265-b42b-592dcbec800c" name="a" direction="In">
+                <parameter
+                  Id="0f9bc812-d785-4265-b42b-592dcbec800c"
+                  name="a"
+                  direction="In">
                   <type_NamedElement>
-                    <primitiveTypeMoniker Id="220a3521-e091-4221-bae9-3ef9018e845c" LastKnownName="Integer" LastKnownLocation="SimpleMath.uml" />
+                    <primitiveTypeMoniker
+                      Id="220a3521-e091-4221-bae9-3ef9018e845c"
+                      LastKnownName="Integer"
+                      LastKnownLocation="SimpleMath.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
               <operationHasOwnedParameters>
-                <parameter Id="e84949bb-8e8a-4bb9-8290-fdd756b8c4c1" direction="Return">
+                <parameter
+                  Id="e84949bb-8e8a-4bb9-8290-fdd756b8c4c1"
+                  direction="Return">
                   <type_NamedElement>
-                    <primitiveTypeMoniker Id="220a3521-e091-4221-bae9-3ef9018e845c" LastKnownName="Integer" LastKnownLocation="SimpleMath.uml" />
+                    <primitiveTypeMoniker
+                      Id="220a3521-e091-4221-bae9-3ef9018e845c"
+                      LastKnownName="Integer"
+                      LastKnownLocation="SimpleMath.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
             </ownedParameters>
             <preconditionsInternal>
-              <constraint Id="d406f284-fabe-4f4e-9b21-293526a4b7de">
+              <constraint
+                Id="d406f284-fabe-4f4e-9b21-293526a4b7de">
                 <specification>
-                  <literalString Id="1a38891c-730b-463c-9181-52e67b7c2757" value="(a &gt;= 0)" />
+                  <literalString
+                    Id="1a38891c-730b-463c-9181-52e67b7c2757"
+                    value="(GreaterThanOrEqual a 0)" />
                 </specification>
               </constraint>
             </preconditionsInternal>
             <postconditionsInternal>
-              <constraint Id="3213a608-60c6-4e26-a9d9-3cceda35c7d4">
+              <constraint
+                Id="3213a608-60c6-4e26-a9d9-3cceda35c7d4">
                 <specification>
-                  <literalString Id="4084ffdf-aba0-44df-a2f7-fa7def0ea47d" value="(result = result)" />
+                  <literalString
+                    Id="4084ffdf-aba0-44df-a2f7-fa7def0ea47d"
+                    value="(Equal result result)" />
                 </specification>
               </constraint>
             </postconditionsInternal>
@@ -172,8 +314,24 @@
       </class>
     </packageHasNamedElement>
   </packagedElements>
-  <primitiveType Id="220a3521-e091-4221-bae9-3ef9018e845c" name="Integer" isAbstract="false" isLeaf="false" />
-  <primitiveType Id="8943dc84-709e-4f62-b15a-a3273aa6f165" name="Boolean" isAbstract="false" isLeaf="false" />
-  <primitiveType Id="59259974-6d55-42c6-b7bd-763d77ac8ef9" name="String" isAbstract="false" isLeaf="false" />
-  <primitiveType Id="3ab42e7d-4969-445a-b209-471f5cb8209c" name="UnlimitedNatural" isAbstract="false" isLeaf="false" />
+  <primitiveType
+    Id="220a3521-e091-4221-bae9-3ef9018e845c"
+    name="Integer"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="8943dc84-709e-4f62-b15a-a3273aa6f165"
+    name="Boolean"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="59259974-6d55-42c6-b7bd-763d77ac8ef9"
+    name="String"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="3ab42e7d-4969-445a-b209-471f5cb8209c"
+    name="UnlimitedNatural"
+    isAbstract="false"
+    isLeaf="false" />
 </modelStoreModel>
