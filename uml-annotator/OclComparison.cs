@@ -49,7 +49,7 @@ namespace UmlAnnotator
 
 		public string SymbolString()
 		{
-			return smtSymbol;
+			return symbol;
 		}
 
 		public override string ToString()
