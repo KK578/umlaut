@@ -1,5 +1,3 @@
-const path = require('path');
-
 const promises = require('../../util/promises.js');
 const REGEX_UUID = /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i;
 
