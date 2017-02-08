@@ -131,7 +131,7 @@
             <postconditionsInternal>
               <constraint Id="523718d3-418b-42aa-8500-bda7333002d9">
                 <specification>
-                  <literalString Id="ffac6c7b-3eba-4d1b-b8fc-6c07d8c3d823" value="(result = result)" />
+                  <literalString Id="ffac6c7b-3eba-4d1b-b8fc-6c07d8c3d823" value="(result == result)" />
                 </specification>
               </constraint>
             </postconditionsInternal>
@@ -163,7 +163,7 @@
             <postconditionsInternal>
               <constraint Id="3213a608-60c6-4e26-a9d9-3cceda35c7d4">
                 <specification>
-                  <literalString Id="4084ffdf-aba0-44df-a2f7-fa7def0ea47d" value="(result = result)" />
+                  <literalString Id="4084ffdf-aba0-44df-a2f7-fa7def0ea47d" value="(result == result)" />
                 </specification>
               </constraint>
             </postconditionsInternal>

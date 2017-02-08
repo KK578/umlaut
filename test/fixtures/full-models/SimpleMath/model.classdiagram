@@ -153,7 +153,7 @@
               <constraint Id="98cd554b-12ee-43d0-a102-2478d695e006">
                 <elementDefinition Id="523718d3-418b-42aa-8500-bda7333002d9" />
                 <specification>
-                  <literalString Id="4010f5bf-c34e-4260-b1f5-03b5248f35f8" value="(result = result)">
+                  <literalString Id="4010f5bf-c34e-4260-b1f5-03b5248f35f8" value="(result == result)">
                     <elementDefinition Id="ffac6c7b-3eba-4d1b-b8fc-6c07d8c3d823" />
                   </literalString>
                 </specification>
@@ -194,7 +194,7 @@
               <constraint Id="e178cee3-129e-42e4-9058-38471a853e5a">
                 <elementDefinition Id="3213a608-60c6-4e26-a9d9-3cceda35c7d4" />
                 <specification>
-                  <literalString Id="e4340c62-cffa-41e1-a66c-c25347626b5c" value="(result = result)">
+                  <literalString Id="e4340c62-cffa-41e1-a66c-c25347626b5c" value="(result == result)">
                     <elementDefinition Id="4084ffdf-aba0-44df-a2f7-fa7def0ea47d" />
                   </literalString>
                 </specification>
