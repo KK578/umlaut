@@ -24,6 +24,12 @@ const argumentList = new Sym('argumentList');
 const argument = new Sym('argument');
 const exception = new Sym('exception');
 
+const comparisonGrammars = comparisons.map((c) => {
+	return new Rule(comparison, [c.symbol], () => {
+		return c.name;
+	});
+});
+
 const grammar = [
 	new Rule(conditionList, [conditionList, ',', condition], (next, _, c) => {
 		return next.concat(c);
@@ -46,16 +52,8 @@ const grammar = [
 		}];
 	}),
 
-	new Rule(comparison, [/[<>=]+/], (c) => {
-		const foundComparison = comparisons.toName(c);
-
-		if (foundComparison !== false) {
-			return foundComparison;
-		}
-		else {
-			throw new Error(`Comparison ${c} does not exist.`);
-		}
-	}),
+	// All comparisons are listed here
+	...comparisonGrammars,
 
 	new Rule(argumentList, [argumentList, argument], (next, a) => {
 		return next.concat(a);
