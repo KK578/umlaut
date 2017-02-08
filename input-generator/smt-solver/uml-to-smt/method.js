@@ -178,7 +178,7 @@ function assertMethodOptionalConditions(method, constants) {
 	// This indicates to z3-runner that this set of commands will output the inputs which
 	//  correspond to all *optional* preconditions being successfully fulfilled as well.
 	const optionalConditionAssertionCommands = assertConditions(method.optionalPreconditions);
-	const stackedCommands = addStackMessage(optionalConditionAssertionCommands, '~~[[ValidOptional]]', constants);
+	const stackedCommands = addStackMessage(optionalConditionAssertionCommands, ',[[ValidOptional]]', constants);
 
 	commands.push(...stackedCommands);
 
@@ -200,7 +200,7 @@ function assertComplementedConditions(conditions, complementSets, constants) {
 		const complementedIds = complementSet.map((o) => {
 			return o.id;
 		}).join(',');
-		const complementString = `~~[[${complementedIds}]]`;
+		const complementString = `,[[${complementedIds}]]`;
 		const stackedCommands = addStackMessage(assertionCommands, complementString, constants);
 
 		commands.push(...stackedCommands);
