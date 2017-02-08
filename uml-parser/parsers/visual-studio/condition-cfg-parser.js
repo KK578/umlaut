@@ -25,28 +25,28 @@ const argument = new Sym('argument');
 const exception = new Sym('exception');
 
 const grammar = [
-	new Rule(conditionList, [conditionList, '-----', condition], (next, _, c) => {
+	new Rule(conditionList, [conditionList, ',', condition], (next, _, c) => {
 		return next.concat(c);
 	}),
 	new Rule(conditionList, [condition], (c) => {
 		return c;
 	}),
 
-	new Rule(condition, ['(', comparison, argumentList, exception, ')'], (_, c, a, e) => {
+	new Rule(condition, ['(', argument, comparison, argument, exception, ')'], (_, a1, c, a2, e) => {
 		return [{
 			comparison: c,
-			arguments: a,
+			arguments: [a1, a2],
 			exception: e
 		}];
 	}),
-	new Rule(condition, ['(', comparison, argumentList, ')'], (_, c, a) => {
+	new Rule(condition, ['(', argument, comparison, argument, ')'], (_, a1, c, a2) => {
 		return [{
 			comparison: c,
-			arguments: a
+			arguments: [a1, a2]
 		}];
 	}),
 
-	new Rule(comparison, [/[a-zA-Z]+/], (c) => {
+	new Rule(comparison, [/[<>=]+/], (c) => {
 		const foundComparison = comparisons.toName(c);
 
 		if (foundComparison !== false) {
