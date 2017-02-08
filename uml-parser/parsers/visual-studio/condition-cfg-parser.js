@@ -24,38 +24,36 @@ const argumentList = new Sym('argumentList');
 const argument = new Sym('argument');
 const exception = new Sym('exception');
 
+const comparisonGrammars = comparisons.map((c) => {
+	return new Rule(comparison, [c.symbol], () => {
+		return c.name;
+	});
+});
+
 const grammar = [
-	new Rule(conditionList, [conditionList, '-----', condition], (next, _, c) => {
+	new Rule(conditionList, [conditionList, ',', condition], (next, _, c) => {
 		return next.concat(c);
 	}),
 	new Rule(conditionList, [condition], (c) => {
 		return c;
 	}),
 
-	new Rule(condition, ['(', comparison, argumentList, exception, ')'], (_, c, a, e) => {
+	new Rule(condition, ['(', argument, comparison, argument, exception, ')'], (_, a1, c, a2, e) => {
 		return [{
 			comparison: c,
-			arguments: a,
+			arguments: [a1, a2],
 			exception: e
 		}];
 	}),
-	new Rule(condition, ['(', comparison, argumentList, ')'], (_, c, a) => {
+	new Rule(condition, ['(', argument, comparison, argument, ')'], (_, a1, c, a2) => {
 		return [{
 			comparison: c,
-			arguments: a
+			arguments: [a1, a2]
 		}];
 	}),
 
-	new Rule(comparison, [/[a-zA-Z]+/], (c) => {
-		const foundComparison = comparisons.toName(c);
-
-		if (foundComparison !== false) {
-			return foundComparison;
-		}
-		else {
-			throw new Error(`Comparison ${c} does not exist.`);
-		}
-	}),
+	// All comparisons are listed here
+	...comparisonGrammars,
 
 	new Rule(argumentList, [argumentList, argument], (next, a) => {
 		return next.concat(a);

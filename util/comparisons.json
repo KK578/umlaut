@@ -6,20 +6,20 @@
     "invertable": true
   },
   {
-    "name": "LessThan",
-    "symbol": "<"
-  },
-  {
     "name": "LessThanOrEqual",
     "symbol": "<="
   },
   {
-    "name": "GreaterThan",
-    "symbol": ">"
+    "name": "LessThan",
+    "symbol": "<"
   },
   {
     "name": "GreaterThanOrEqual",
     "symbol": ">="
+  },
+  {
+    "name": "GreaterThan",
+    "symbol": ">"
   },
   {
     "name": "And",
