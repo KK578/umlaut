@@ -20,6 +20,7 @@ const comparisons = require('../../../util/comparisons.js');
 const conditionList = new Sym('conditionList');
 const condition = new Sym('condition');
 const comparison = new Sym('comparison');
+const comparisonItem = new Sym('comparisonItem');
 const argumentList = new Sym('argumentList');
 const argument = new Sym('argument');
 const exception = new Sym('exception');
@@ -38,18 +39,33 @@ const grammar = [
 		return c;
 	}),
 
-	new Rule(condition, ['(', argument, comparison, argument, exception, ')'], (_, a1, c, a2, e) => {
+	new Rule(condition, ['(', argument, comparisonItem, argument, exception, ')'], (_, a1, c, a2, e) => {
 		return [{
-			comparison: c,
+			comparison: c.comparison,
+			inverted: c.inverted,
 			arguments: [a1, a2],
 			exception: e
 		}];
 	}),
-	new Rule(condition, ['(', argument, comparison, argument, ')'], (_, a1, c, a2) => {
+	new Rule(condition, ['(', argument, comparisonItem, argument, ')'], (_, a1, c, a2) => {
 		return [{
-			comparison: c,
+			comparison: c.comparison,
+			inverted: c.inverted,
 			arguments: [a1, a2]
 		}];
+	}),
+
+	new Rule(comparisonItem, ['not', comparison], (_, c) => {
+		return {
+			comparison: c,
+			inverted: true
+		};
+	}),
+
+	new Rule(comparisonItem, [comparison], (c) => {
+		return {
+			comparison: c
+		};
 	}),
 
 	// All comparisons are listed here
