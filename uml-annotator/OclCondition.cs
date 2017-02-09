@@ -27,13 +27,14 @@ namespace UmlAnnotator
 			}
 
 			string[] items = innerCondition.Split(' ');
-			Comparator = FindComparison(items[0]);
+			// Ternary ensures inversion syntax is handled correctly here.
+			Comparator = FindComparison(items[1] == "not" ? items[2] : items[1]);
 
 			arguments = new List<string>();
-			for (int i = 1; i < items.Length; i++)
-			{
-				arguments.Add(items[i]);
-			}
+			// Left hand argument is the first.
+			arguments.Add(items[0]);
+			// Right hand argument is the last.
+			arguments.Add(items[items.Length - 1]);
 		}
 
 		public void SetArguments(string argument)
@@ -65,7 +66,7 @@ namespace UmlAnnotator
 
 			foreach (OclComparison c in comparisons)
 			{
-				if (comparison == c.Name)
+				if (comparison == c.Symbol)
 				{
 					return c;
 				}
@@ -80,7 +81,7 @@ namespace UmlAnnotator
 
 			if (Comparator != null)
 			{
-				comparison = Comparator.SymbolString();
+				comparison = Comparator.Symbol;
 			}
 
 			string main = String.Format("{0} {1} {2}", arguments[0], Comparator.IsInverted ? "not " + comparison : comparison, arguments[1]);

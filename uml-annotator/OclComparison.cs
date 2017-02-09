@@ -15,6 +15,11 @@ namespace UmlAnnotator
 		}
 
 		string symbol;
+		public string Symbol
+		{
+			get { return symbol; }
+		}
+
 		string smtSymbol;
 		bool isInvertable;
 		bool isInverted;
@@ -45,11 +50,6 @@ namespace UmlAnnotator
 
 			this.isInvertable = invertable == true;
 			this.isInverted = false;
-		}
-
-		public string SymbolString()
-		{
-			return symbol;
 		}
 
 		public override string ToString()
