@@ -56,6 +56,11 @@ const grammar = [
 	}),
 
 	new Rule(comparisonItem, ['not', comparison], (_, c) => {
+		// TODO: Error or silently log?
+		if (!comparisons.isInvertable(c)) {
+			throw new Error('Comparison is not invertable.');
+		}
+
 		return {
 			comparison: c,
 			inverted: true
