@@ -14,7 +14,17 @@ namespace UmlAnnotator
 		private string exception;
 		public string Exception
 		{
-			get { return exception; }
+			get
+			{
+				if (!String.IsNullOrWhiteSpace(exception))
+				{
+					return String.Format("Exception:{0}", exception);
+				}
+				else
+				{
+					return "";
+				}
+			}
 		}
 		private bool isInverted;
 		public bool IsInverted
@@ -25,6 +35,9 @@ namespace UmlAnnotator
 		public OclCondition()
 		{
 			arguments = new List<string>();
+			// Add two blank arguments to correspond to left and right arguments.
+			arguments.Add("");
+			arguments.Add("");
 		}
 
 		public OclCondition(string condition)
@@ -58,14 +71,7 @@ namespace UmlAnnotator
 
 		public void SetException(string ex)
 		{
-			if (!String.IsNullOrWhiteSpace(ex))
-			{
-				exception = String.Format("Exception:{0}", ex);
-			}
-			else
-			{
-				exception = "";
-			}
+			exception = ex;
 		}
 
 		private OclComparison FindComparison(string comparison)
@@ -94,19 +100,20 @@ namespace UmlAnnotator
 
 		public override string ToString()
 		{
-			string comparison = "";
-
-			if (Comparator != null)
+			if (String.IsNullOrWhiteSpace(arguments[0]) || String.IsNullOrWhiteSpace(arguments[1]) || Comparator == null)
 			{
-				comparison = Comparator.Symbol;
+				return "()";
 			}
 
-			string main = String.Format("{0} {1} {2}", arguments[0], isInverted ? "not " + comparison : comparison, arguments[1]);
+			string symbol = Comparator.Symbol;
+			string comparison = isInverted ? "not " + symbol : symbol;
+			string main = String.Format("{0} {1} {2}", arguments[0], comparison, arguments[1]);
 			string result;
 
 			if (!String.IsNullOrWhiteSpace(exception))
 			{
-				result = String.Format("({0} {1})", main, exception);
+				// Use Exception here to ensure it is formatted correctly.
+				result = String.Format("({0} {1})", main, Exception);
 			}
 			else
 			{
