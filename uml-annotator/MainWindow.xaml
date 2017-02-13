@@ -9,24 +9,27 @@
 	<Grid>
 		<Button x:Name="buttonLoad" Content="Load" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="40" Click="buttonLoad_Click"/>
 		<Button x:Name="buttonSave" Content="Save" HorizontalAlignment="Left" Margin="55,10,0,0" VerticalAlignment="Top" Width="40" Click="buttonSave_Click"/>
+		<Label x:Name="labelClass" Content="Class:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="60"/>
 		<ComboBox x:Name="comboBoxClass" Margin="70,40,10,0" VerticalAlignment="Top" SelectionChanged="comboBoxClass_SelectionChanged"/>
+		<Label x:Name="labelMethod" Content="Method:" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="60"/>
 		<ComboBox x:Name="comboBoxMethod" Margin="70,70,10,0" VerticalAlignment="Top" SelectionChanged="comboBoxMethod_SelectionChanged"/>
-		<Label x:Name="label" Content="Class:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="60"/>
-		<Label x:Name="label_Copy" Content="Method:" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="60"/>
-		<ListBox x:Name="listBoxPreconditions" Margin="10,132,0,193" Padding="0" Width="150" HorizontalAlignment="Left" SelectionChanged="listBoxPreconditions_SelectionChanged"/>
-		<Label x:Name="label1" Content="Comparator:" HorizontalAlignment="Left" Margin="165,101,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Right"/>
-		<ComboBox x:Name="comboBoxComparator" HorizontalAlignment="Left" Margin="246,101,0,0" VerticalAlignment="Top" Width="206" SelectionChanged="comboBoxComparator_SelectionChanged" Height="26"/>
-		<Label x:Name="label2" Content="Arguments:" HorizontalAlignment="Left" Margin="165,130,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Right"/>
-		<TextBox x:Name="textBoxArguments" HorizontalAlignment="Left" Height="146" Margin="246,132,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="261" AcceptsReturn="True" TextChanged="textBoxArguments_TextChanged"/>
+		
 		<Button x:Name="buttonAddPrecondition" Content="+" HorizontalAlignment="Left" Margin="140,104,0,0" VerticalAlignment="Top" Width="20" RenderTransformOrigin="1,0.609" Click="buttonAddPrecondition_Click"/>
 		<Button x:Name="buttonRemovePrecondition" Content="-" HorizontalAlignment="Left" Margin="115,104,0,0" VerticalAlignment="Top" Width="20" RenderTransformOrigin="1,0.609" Click="buttonRemovePrecondition_Click"/>
-		<Label x:Name="label2_Copy" Content="Exception:" HorizontalAlignment="Left" Margin="165,283,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Right"/>
-		<TextBox x:Name="textBoxExceptionCondition" HorizontalAlignment="Left" Height="26" Margin="246,283,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="261" TextChanged="textBoxExceptionCondition_TextChanged"/>
-		<CheckBox x:Name="checkBoxInvertCondition" Content="Invert" HorizontalAlignment="Left" Margin="457,107,0,0" VerticalAlignment="Top" Click="checkBoxInvertCondition_CheckedChanged"/>
-		<Label x:Name="label3" Content="Preconditions" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top"/>
-		<ListBox x:Name="listBoxPostconditions" Margin="10,314,0,10" Padding="0" Width="150" HorizontalAlignment="Left" SelectionChanged="listBoxPostconditions_SelectionChanged"/>
+		<Label x:Name="labelPreconditions" Content="Preconditions" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top"/>
+		<ListBox x:Name="listBoxPreconditions" Margin="10,132,0,193" Padding="0" Width="150" HorizontalAlignment="Left" SelectionChanged="listBoxPreconditions_SelectionChanged"/>
 		<Button x:Name="buttonAddPostcondition" Content="+" HorizontalAlignment="Left" Margin="140,285,0,0" VerticalAlignment="Top" Width="20" RenderTransformOrigin="1,0.609" Click="buttonAddPostcondition_Click"/>
 		<Button x:Name="buttonRemovePostcondition" Content="-" HorizontalAlignment="Left" Margin="115,285,0,0" VerticalAlignment="Top" Width="20" RenderTransformOrigin="1,0.609" Click="buttonRemovePostcondition_Click"/>
-		<Label x:Name="label3_Copy" Content="Postconditions" HorizontalAlignment="Left" Margin="10,283,0,0" VerticalAlignment="Top"/>
+		<Label x:Name="labelPostconditions" Content="Postconditions" HorizontalAlignment="Left" Margin="10,283,0,0" VerticalAlignment="Top"/>
+		<ListBox x:Name="listBoxPostconditions" Margin="10,314,0,10" Padding="0" Width="150" HorizontalAlignment="Left" SelectionChanged="listBoxPostconditions_SelectionChanged"/>
+
+		<Label x:Name="labelComparator" Content="Comparator:" HorizontalAlignment="Left" Margin="165,101,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Right"/>
+		<ComboBox x:Name="comboBoxComparator" HorizontalAlignment="Left" Margin="246,101,0,0" VerticalAlignment="Top" Width="206" SelectionChanged="comboBoxComparator_SelectionChanged" Height="26"/>
+		<Label x:Name="labelArguments" Content="Arguments:" HorizontalAlignment="Left" Margin="165,130,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Right"/>
+		<TextBox x:Name="textBoxArguments" HorizontalAlignment="Left" Height="146" Margin="246,132,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="261" AcceptsReturn="True" TextChanged="textBoxArguments_TextChanged"/>
+		<Label x:Name="labelException" Content="Exception:" HorizontalAlignment="Left" Margin="165,283,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Right"/>
+		<TextBox x:Name="textBoxExceptionCondition" HorizontalAlignment="Left" Height="26" Margin="246,283,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="261" TextChanged="textBoxExceptionCondition_TextChanged"/>
+		<CheckBox x:Name="checkBoxInvertCondition" Content="Invert" HorizontalAlignment="Left" Margin="457,107,0,0" VerticalAlignment="Top" Click="checkBoxInvertCondition_CheckedChanged"/>
+
 	</Grid>
 </Window>
