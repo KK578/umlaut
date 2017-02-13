@@ -215,25 +215,16 @@ namespace UmlAnnotator
 			if (listBoxPreconditions.SelectedIndex >= 0)
 			{
 				selectedPrecondition = listBoxPreconditions.SelectedItem as OclCondition;
-				selectedCondition = listBoxPreconditions.SelectedItem as OclCondition;
-
-				if (selectedCondition.Comparator != null)
-				{
-					comboBoxComparator.SelectedItem = selectedCondition.Comparator;
-				}
-				else
-				{
-					comboBoxComparator.SelectedIndex = -1;
-				}
-
-				textBoxArgumentLeft.Text = selectedCondition.GetArgument(0);
-				textBoxArgumentRight.Text = selectedCondition.GetArgument(1);
+				selectedCondition = selectedPrecondition;
+				UpdateConditionControls();
 			}
 			else
 			{
 				comboBoxComparator.SelectedIndex = -1;
 				textBoxArgumentLeft.Text = "";
 				textBoxArgumentRight.Text = "";
+				checkBoxInvertCondition.IsChecked = false;
+				textBoxExceptionCondition.Text = "";
 			}
 		}
 
@@ -252,26 +243,40 @@ namespace UmlAnnotator
 			if (listBoxPostconditions.SelectedIndex >= 0)
 			{
 				selectedPostcondition = listBoxPostconditions.SelectedItem as OclCondition;
-				selectedCondition = listBoxPostconditions.SelectedItem as OclCondition;
-
-				if (selectedCondition.Comparator != null)
-				{
-					comboBoxComparator.SelectedItem = selectedCondition.Comparator;
-				}
-				else
-				{
-					comboBoxComparator.SelectedIndex = -1;
-				}
-
-				textBoxArgumentLeft.Text = selectedCondition.GetArgument(0);
-				textBoxArgumentRight.Text = selectedCondition.GetArgument(1);
+				selectedCondition = selectedPostcondition;
+				UpdateConditionControls();
 			}
 			else
 			{
 				comboBoxComparator.SelectedIndex = -1;
 				textBoxArgumentLeft.Text = "";
 				textBoxArgumentRight.Text = "";
+				checkBoxInvertCondition.IsChecked = false;
+				textBoxExceptionCondition.Text = "";
 			}
+		}
+
+		private void UpdateConditionControls()
+		{
+			// Comparator combo box
+			if (selectedCondition.Comparator != null)
+			{
+				comboBoxComparator.SelectedItem = selectedCondition.Comparator;
+			}
+			else
+			{
+				comboBoxComparator.SelectedIndex = -1;
+			}
+
+			// Argument text boxes
+			textBoxArgumentLeft.Text = selectedCondition.GetArgument(0);
+			textBoxArgumentRight.Text = selectedCondition.GetArgument(1);
+
+			// Inverted checkbox
+			checkBoxInvertCondition.IsChecked = selectedCondition.IsInverted;
+
+			// Exception text box
+			textBoxExceptionCondition.Text = selectedCondition.Exception;
 		}
 
 		private void comboBoxComparator_SelectionChanged(object sender, SelectionChangedEventArgs e)

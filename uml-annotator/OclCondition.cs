@@ -12,7 +12,15 @@ namespace UmlAnnotator
 		public OclComparison Comparator { get; set; }
 		private List<string> arguments;
 		private string exception;
+		public string Exception
+		{
+			get { return exception; }
+		}
 		private bool isInverted;
+		public bool IsInverted
+		{
+			get { return isInverted; }
+		}
 
 		public OclCondition()
 		{
