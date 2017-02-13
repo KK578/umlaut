@@ -292,22 +292,16 @@ namespace UmlAnnotator
 
 		private void textBoxArgumentLeft_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			if (!String.IsNullOrWhiteSpace(textBoxArgumentLeft.Text))
-			{
-				selectedCondition.SetArgument(0, textBoxArgumentLeft.Text);
-				this.listBoxPreconditions.Items.Refresh();
-				this.listBoxPostconditions.Items.Refresh();
-			}
+			selectedCondition.SetArgument(0, textBoxArgumentLeft.Text);
+			this.listBoxPreconditions.Items.Refresh();
+			this.listBoxPostconditions.Items.Refresh();
 		}
 
 		private void textBoxArgumentRight_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			if (!String.IsNullOrWhiteSpace(textBoxArgumentRight.Text))
-			{
-				selectedCondition.SetArgument(1, textBoxArgumentRight.Text);
-				this.listBoxPreconditions.Items.Refresh();
-				this.listBoxPostconditions.Items.Refresh();
-			}
+			selectedCondition.SetArgument(1, textBoxArgumentRight.Text);
+			this.listBoxPreconditions.Items.Refresh();
+			this.listBoxPostconditions.Items.Refresh();
 		}
 
 		private void textBoxExceptionCondition_TextChanged(object sender, TextChangedEventArgs e)
