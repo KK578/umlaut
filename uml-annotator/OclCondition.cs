@@ -12,6 +12,7 @@ namespace UmlAnnotator
 		public OclComparison Comparator { get; set; }
 		private List<string> arguments;
 		private string exception;
+		private bool isInverted;
 
 		public OclCondition()
 		{
@@ -75,6 +76,14 @@ namespace UmlAnnotator
 			return null;
 		}
 
+		public void SetInverted(bool value)
+		{
+			if (Comparator.IsInvertable)
+			{
+				isInverted = value;
+			}
+		}
+
 		public override string ToString()
 		{
 			string comparison = "";
@@ -84,7 +93,7 @@ namespace UmlAnnotator
 				comparison = Comparator.Symbol;
 			}
 
-			string main = String.Format("{0} {1} {2}", arguments[0], Comparator.IsInverted ? "not " + comparison : comparison, arguments[1]);
+			string main = String.Format("{0} {1} {2}", arguments[0], isInverted ? "not " + comparison : comparison, arguments[1]);
 			string result;
 
 			if (!String.IsNullOrWhiteSpace(exception))

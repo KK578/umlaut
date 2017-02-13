@@ -38,6 +38,7 @@ namespace UmlAnnotator
 		UmlMethodNode selectedMethod;
 		OclCondition selectedCondition;
 		OclCondition selectedPrecondition;
+		OclCondition selectedPostcondition;
 
 		public MainWindow()
 		{
@@ -159,14 +160,14 @@ namespace UmlAnnotator
 
 				this.listBoxPreconditions.ItemsSource = this.selectedMethod.Preconditions;
 				this.listBoxPreconditions.Items.Refresh();
-				//this.listBoxConditions.ItemsSource = this.selectedMethod.Postconditions;
+				this.listBoxPostconditions.ItemsSource = this.selectedMethod.Postconditions;
+				this.listBoxPostconditions.Items.Refresh();
 			}
 		}
 
 		private void buttonAddPrecondition_Click(object sender, RoutedEventArgs e)
 		{
 			selectedMethod.AddCondition("pre");
-			//selectedMethod.AddCondition("post");
 			this.listBoxPreconditions.Items.Refresh();
 		}
 
@@ -177,7 +178,23 @@ namespace UmlAnnotator
 			if (index >= 0)
 			{
 				selectedMethod.RemoveCondition("pre", index);
-				//selectedMethod.RemoveCondition("post", index);
+				this.listBoxPreconditions.Items.Refresh();
+			}
+		}
+
+		private void buttonAddPostcondition_Click(object sender, RoutedEventArgs e)
+		{
+			selectedMethod.AddCondition("post");
+			this.listBoxPreconditions.Items.Refresh();
+		}
+
+		private void buttonRemovePostcondition_Click(object sender, RoutedEventArgs e)
+		{
+			int index = listBoxPostconditions.SelectedIndex;
+
+			if (index >= 0)
+			{
+				selectedMethod.RemoveCondition("post", index);
 				this.listBoxPreconditions.Items.Refresh();
 			}
 		}
@@ -187,7 +204,32 @@ namespace UmlAnnotator
 			if (listBoxPreconditions.SelectedIndex >= 0)
 			{
 				selectedPrecondition = listBoxPreconditions.SelectedItem as OclCondition;
-				selectedCondition = selectedPrecondition;
+				selectedCondition = listBoxPreconditions.SelectedItem as OclCondition;
+
+				if (selectedCondition.Comparator != null)
+				{
+					comboBoxComparator.SelectedItem = selectedCondition.Comparator;
+				}
+				else
+				{
+					comboBoxComparator.SelectedIndex = -1;
+				}
+
+				textBoxArguments.Text = selectedCondition.GetArgumentsString();
+			}
+			else
+			{
+				comboBoxComparator.SelectedIndex = -1;
+				textBoxArguments.Text = "";
+			}
+		}
+
+		private void listBoxPostconditions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (listBoxPostconditions.SelectedIndex >= 0)
+			{
+				selectedPostcondition = listBoxPostconditions.SelectedItem as OclCondition;
+				selectedCondition = listBoxPostconditions.SelectedItem as OclCondition;
 
 				if (selectedCondition.Comparator != null)
 				{
@@ -214,6 +256,7 @@ namespace UmlAnnotator
 				OclComparison item = comboBoxComparator.SelectedItem as OclComparison;
 				selectedCondition.Comparator = item;
 				this.listBoxPreconditions.Items.Refresh();
+				this.listBoxPostconditions.Items.Refresh();
 			}
 		}
 
@@ -223,6 +266,7 @@ namespace UmlAnnotator
 			{
 				selectedCondition.SetArguments(textBoxArguments.Text);
 				this.listBoxPreconditions.Items.Refresh();
+				this.listBoxPostconditions.Items.Refresh();
 			}
 		}
 
@@ -230,6 +274,7 @@ namespace UmlAnnotator
 		{
 			selectedCondition.SetException(textBoxExceptionCondition.Text);
 			this.listBoxPreconditions.Items.Refresh();
+			this.listBoxPostconditions.Items.Refresh();
 		}
 
 		private void checkBoxInvertCondition_CheckedChanged(object sender, RoutedEventArgs e)
@@ -237,9 +282,10 @@ namespace UmlAnnotator
 			if (selectedCondition.Comparator != null)
 			{
 				bool isChecked = checkBoxInvertCondition.IsChecked == true;
-				selectedCondition.Comparator.IsInverted = isChecked;
+				selectedCondition.SetInverted(isChecked);
 
 				this.listBoxPreconditions.Items.Refresh();
+				this.listBoxPostconditions.Items.Refresh();
 			}
 		}
 	}
