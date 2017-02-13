@@ -199,7 +199,17 @@ namespace UmlAnnotator
 			}
 		}
 
+		private void listBoxPreconditions_GotFocus(object sender, RoutedEventArgs e)
+		{
+			UpdateSelectedPrecondition();
+		}
+
 		private void listBoxPreconditions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			UpdateSelectedPrecondition();
+		}
+
+		private void UpdateSelectedPrecondition()
 		{
 			if (listBoxPreconditions.SelectedIndex >= 0)
 			{
@@ -224,7 +234,17 @@ namespace UmlAnnotator
 			}
 		}
 
+		private void listBoxPostconditions_GotFocus(object sender, RoutedEventArgs e)
+		{
+			UpdateSelectedPostcondition();
+		}
+
 		private void listBoxPostconditions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			UpdateSelectedPostcondition();
+		}
+
+		private void UpdateSelectedPostcondition()
 		{
 			if (listBoxPostconditions.SelectedIndex >= 0)
 			{

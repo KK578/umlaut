@@ -17,11 +17,11 @@
 		<Button x:Name="buttonAddPrecondition" Content="+" HorizontalAlignment="Left" Margin="140,104,0,0" VerticalAlignment="Top" Width="20" RenderTransformOrigin="1,0.609" Click="buttonAddPrecondition_Click"/>
 		<Button x:Name="buttonRemovePrecondition" Content="-" HorizontalAlignment="Left" Margin="115,104,0,0" VerticalAlignment="Top" Width="20" RenderTransformOrigin="1,0.609" Click="buttonRemovePrecondition_Click"/>
 		<Label x:Name="labelPreconditions" Content="Preconditions" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top"/>
-		<ListBox x:Name="listBoxPreconditions" Margin="10,132,0,193" Padding="0" Width="150" HorizontalAlignment="Left" SelectionChanged="listBoxPreconditions_SelectionChanged"/>
+		<ListBox x:Name="listBoxPreconditions" Margin="10,132,0,193" Padding="0" Width="150" HorizontalAlignment="Left" SelectionChanged="listBoxPreconditions_SelectionChanged" GotFocus="listBoxPreconditions_GotFocus"/>
 		<Button x:Name="buttonAddPostcondition" Content="+" HorizontalAlignment="Left" Margin="140,285,0,0" VerticalAlignment="Top" Width="20" RenderTransformOrigin="1,0.609" Click="buttonAddPostcondition_Click"/>
 		<Button x:Name="buttonRemovePostcondition" Content="-" HorizontalAlignment="Left" Margin="115,285,0,0" VerticalAlignment="Top" Width="20" RenderTransformOrigin="1,0.609" Click="buttonRemovePostcondition_Click"/>
 		<Label x:Name="labelPostconditions" Content="Postconditions" HorizontalAlignment="Left" Margin="10,283,0,0" VerticalAlignment="Top"/>
-		<ListBox x:Name="listBoxPostconditions" Margin="10,314,0,10" Padding="0" Width="150" HorizontalAlignment="Left" SelectionChanged="listBoxPostconditions_SelectionChanged"/>
+		<ListBox x:Name="listBoxPostconditions" Margin="10,314,0,10" Padding="0" Width="150" HorizontalAlignment="Left" SelectionChanged="listBoxPostconditions_SelectionChanged" GotFocus="listBoxPostconditions_GotFocus"/>
 
 		<Label x:Name="labelComparator" Content="Comparator:" HorizontalAlignment="Left" Margin="165,101,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Right"/>
 		<ComboBox x:Name="comboBoxComparator" HorizontalAlignment="Left" Margin="246,101,0,0" VerticalAlignment="Top" Width="206" SelectionChanged="comboBoxComparator_SelectionChanged" Height="26"/>
