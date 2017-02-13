@@ -144,7 +144,8 @@ namespace UmlAnnotator
 			this.listBoxPreconditions.Items.Refresh();
 			this.listBoxPreconditions.ItemsSource = null;
 			this.comboBoxComparator.SelectedIndex = -1;
-			this.textBoxArguments.Text = "";
+			this.textBoxArgumentLeft.Text = "";
+			this.textBoxArgumentRight.Text = "";
 		}
 
 		private void comboBoxMethod_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -225,12 +226,14 @@ namespace UmlAnnotator
 					comboBoxComparator.SelectedIndex = -1;
 				}
 
-				textBoxArguments.Text = selectedCondition.GetArgumentsString();
+				textBoxArgumentLeft.Text = selectedCondition.GetArgument(0);
+				textBoxArgumentRight.Text = selectedCondition.GetArgument(1);
 			}
 			else
 			{
 				comboBoxComparator.SelectedIndex = -1;
-				textBoxArguments.Text = "";
+				textBoxArgumentLeft.Text = "";
+				textBoxArgumentRight.Text = "";
 			}
 		}
 
@@ -260,12 +263,14 @@ namespace UmlAnnotator
 					comboBoxComparator.SelectedIndex = -1;
 				}
 
-				textBoxArguments.Text = selectedCondition.GetArgumentsString();
+				textBoxArgumentLeft.Text = selectedCondition.GetArgument(0);
+				textBoxArgumentRight.Text = selectedCondition.GetArgument(1);
 			}
 			else
 			{
 				comboBoxComparator.SelectedIndex = -1;
-				textBoxArguments.Text = "";
+				textBoxArgumentLeft.Text = "";
+				textBoxArgumentRight.Text = "";
 			}
 		}
 
@@ -280,11 +285,21 @@ namespace UmlAnnotator
 			}
 		}
 
-		private void textBoxArguments_TextChanged(object sender, TextChangedEventArgs e)
+		private void textBoxArgumentLeft_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			if (!String.IsNullOrWhiteSpace(textBoxArguments.Text))
+			if (!String.IsNullOrWhiteSpace(textBoxArgumentLeft.Text))
 			{
-				selectedCondition.SetArguments(textBoxArguments.Text);
+				selectedCondition.SetArgument(0, textBoxArgumentLeft.Text);
+				this.listBoxPreconditions.Items.Refresh();
+				this.listBoxPostconditions.Items.Refresh();
+			}
+		}
+
+		private void textBoxArgumentRight_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			if (!String.IsNullOrWhiteSpace(textBoxArgumentRight.Text))
+			{
+				selectedCondition.SetArgument(1, textBoxArgumentRight.Text);
 				this.listBoxPreconditions.Items.Refresh();
 				this.listBoxPostconditions.Items.Refresh();
 			}

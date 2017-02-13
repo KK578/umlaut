@@ -38,9 +38,19 @@ namespace UmlAnnotator
 			arguments.Add(items[items.Length - 1]);
 		}
 
+		public void SetArgument(int index, string argument)
+		{
+			arguments[index] = argument;
+		}
+
 		public void SetArguments(string argument)
 		{
 			arguments = new List<string>(Regex.Split(argument, "\r?\n"));
+		}
+
+		public string GetArgument(int index)
+		{
+			return arguments[index];
 		}
 
 		public string GetArgumentsString()
