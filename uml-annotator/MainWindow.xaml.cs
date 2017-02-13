@@ -163,6 +163,8 @@ namespace UmlAnnotator
 				this.listBoxPreconditions.Items.Refresh();
 				this.listBoxPostconditions.ItemsSource = this.selectedMethod.Postconditions;
 				this.listBoxPostconditions.Items.Refresh();
+				this.listBoxLinkedPreconditions.ItemsSource = this.selectedMethod.Preconditions;
+				this.listBoxLinkedPreconditions.Items.Refresh();
 			}
 		}
 
@@ -202,7 +204,10 @@ namespace UmlAnnotator
 
 		private void listBoxPreconditions_GotFocus(object sender, RoutedEventArgs e)
 		{
-			UpdateSelectedPrecondition();
+			if (listBoxPreconditions.SelectedIndex >= 0)
+			{
+				UpdateSelectedPrecondition();
+			}
 		}
 
 		private void listBoxPreconditions_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -217,6 +222,8 @@ namespace UmlAnnotator
 				selectedPrecondition = listBoxPreconditions.SelectedItem as OclCondition;
 				selectedCondition = selectedPrecondition;
 				UpdateConditionControls();
+				this.listBoxLinkedPreconditions.IsEnabled = false;
+				this.listBoxLinkedPreconditions.UnselectAll();
 			}
 			else
 			{
@@ -230,7 +237,10 @@ namespace UmlAnnotator
 
 		private void listBoxPostconditions_GotFocus(object sender, RoutedEventArgs e)
 		{
-			UpdateSelectedPostcondition();
+			if (listBoxPostconditions.SelectedIndex >= 0)
+			{
+				UpdateSelectedPostcondition();
+			}
 		}
 
 		private void listBoxPostconditions_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -245,6 +255,7 @@ namespace UmlAnnotator
 				selectedPostcondition = listBoxPostconditions.SelectedItem as OclCondition;
 				selectedCondition = selectedPostcondition;
 				UpdateConditionControls();
+				this.listBoxLinkedPreconditions.IsEnabled = true;
 			}
 			else
 			{
