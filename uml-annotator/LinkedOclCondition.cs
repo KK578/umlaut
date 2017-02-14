@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UmlAnnotator
 {
-	class LinkedOclCondition : OclCondition
+	public class LinkedOclCondition : OclCondition
 	{
 		private static string ConvertString(string condition)
 		{
@@ -23,20 +23,53 @@ namespace UmlAnnotator
 		}
 
 		private List<OclCondition> linkedConditions;
+		private List<OclCondition> preconditions;
 
-		public LinkedOclCondition() : base()
+		public LinkedOclCondition(List<OclCondition> preconditions) : base()
 		{
 			linkedConditions = new List<OclCondition>();
+			this.preconditions = preconditions;
 		}
 
-		public LinkedOclCondition(string condition) : base(ConvertString(condition))
+		public LinkedOclCondition(List<OclCondition> preconditions, string condition) : base(ConvertString(condition))
 		{
 			linkedConditions = new List<OclCondition>();
+			this.preconditions = preconditions;
 
 			if (condition[1] == '{')
 			{
 				string storedLink = condition.Substring(1, condition.IndexOf('}'));
 			}
+		}
+
+		public void SetLinkedPreconditions(List<OclCondition> conditions)
+		{
+			linkedConditions = conditions;
+		}
+
+		public override string ToString()
+		{
+			string baseString = base.ToString();
+			string list = "";
+			string linkedString = "";
+			for (int i = 0; i < preconditions.Count; i++)
+			{
+				if (linkedConditions.Contains(preconditions[i]))
+				{
+					list += i + ";";
+				}
+			}
+
+			if (list.Length > 0)
+			{
+				// Remove the last ';'.
+				list = list.Remove(list.Length - 1);
+				linkedString = "{" + list + "} ";
+			}
+
+			string result = baseString.Insert(1, linkedString);
+
+			return result;
 		}
 	}
 }

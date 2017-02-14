@@ -252,7 +252,7 @@ namespace UmlAnnotator
 		{
 			if (listBoxPostconditions.SelectedIndex >= 0)
 			{
-				selectedPostcondition = listBoxPostconditions.SelectedItem as OclCondition;
+				selectedPostcondition = listBoxPostconditions.SelectedItem as LinkedOclCondition;
 				selectedCondition = selectedPostcondition;
 				UpdateConditionControls();
 				this.listBoxLinkedPreconditions.IsEnabled = true;
@@ -332,6 +332,15 @@ namespace UmlAnnotator
 				this.listBoxPreconditions.Items.Refresh();
 				this.listBoxPostconditions.Items.Refresh();
 			}
+		}
+
+		private void listBoxLinkedPreconditions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			List<OclCondition> conditions = listBoxLinkedPreconditions.SelectedItems.Cast<OclCondition>().ToList();
+			LinkedOclCondition condition = selectedCondition as LinkedOclCondition;
+			condition.SetLinkedPreconditions(conditions);
+			this.listBoxPreconditions.Items.Refresh();
+			this.listBoxPostconditions.Items.Refresh();
 		}
 	}
 }
