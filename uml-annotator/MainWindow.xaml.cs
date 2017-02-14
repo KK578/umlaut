@@ -237,7 +237,8 @@ namespace UmlAnnotator
 
 		private void listBoxPostconditions_GotFocus(object sender, RoutedEventArgs e)
 		{
-			if (listBoxPostconditions.SelectedIndex >= 0)
+			if (listBoxPostconditions.SelectedIndex >= 0 &&
+				selectedCondition != selectedPostcondition)
 			{
 				UpdateSelectedPostcondition();
 			}
@@ -253,9 +254,16 @@ namespace UmlAnnotator
 			if (listBoxPostconditions.SelectedIndex >= 0)
 			{
 				selectedPostcondition = listBoxPostconditions.SelectedItem as LinkedOclCondition;
+				selectedCondition = null;
+				this.listBoxLinkedPreconditions.UnselectAll();
 				selectedCondition = selectedPostcondition;
 				UpdateConditionControls();
 				this.listBoxLinkedPreconditions.IsEnabled = true;
+				List<OclCondition> linkedConditions = (selectedCondition as LinkedOclCondition).LinkedConditions;
+				foreach (OclCondition c in linkedConditions)
+				{
+					this.listBoxLinkedPreconditions.SelectedItems.Add(c);
+				}
 			}
 			else
 			{
@@ -336,11 +344,14 @@ namespace UmlAnnotator
 
 		private void listBoxLinkedPreconditions_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			List<OclCondition> conditions = listBoxLinkedPreconditions.SelectedItems.Cast<OclCondition>().ToList();
-			LinkedOclCondition condition = selectedCondition as LinkedOclCondition;
-			condition.SetLinkedPreconditions(conditions);
-			this.listBoxPreconditions.Items.Refresh();
-			this.listBoxPostconditions.Items.Refresh();
+			if (selectedCondition == selectedPostcondition)
+			{
+				List<OclCondition> conditions = listBoxLinkedPreconditions.SelectedItems.Cast<OclCondition>().ToList();
+				LinkedOclCondition condition = selectedPostcondition as LinkedOclCondition;
+				condition.LinkedConditions = conditions;
+				this.listBoxPreconditions.Items.Refresh();
+				this.listBoxPostconditions.Items.Refresh();
+			}
 		}
 	}
 }

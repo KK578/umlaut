@@ -22,29 +22,24 @@ namespace UmlAnnotator
 			return result;
 		}
 
-		private List<OclCondition> linkedConditions;
+		public List<OclCondition> LinkedConditions;
 		private List<OclCondition> preconditions;
 
 		public LinkedOclCondition(List<OclCondition> preconditions) : base()
 		{
-			linkedConditions = new List<OclCondition>();
+			LinkedConditions = new List<OclCondition>();
 			this.preconditions = preconditions;
 		}
 
 		public LinkedOclCondition(List<OclCondition> preconditions, string condition) : base(ConvertString(condition))
 		{
-			linkedConditions = new List<OclCondition>();
+			LinkedConditions = new List<OclCondition>();
 			this.preconditions = preconditions;
 
 			if (condition[1] == '{')
 			{
 				string storedLink = condition.Substring(1, condition.IndexOf('}'));
 			}
-		}
-
-		public void SetLinkedPreconditions(List<OclCondition> conditions)
-		{
-			linkedConditions = conditions;
 		}
 
 		public override string ToString()
@@ -54,7 +49,7 @@ namespace UmlAnnotator
 			string linkedString = "";
 			for (int i = 0; i < preconditions.Count; i++)
 			{
-				if (linkedConditions.Contains(preconditions[i]))
+				if (LinkedConditions.Contains(preconditions[i]))
 				{
 					list += i + ";";
 				}
