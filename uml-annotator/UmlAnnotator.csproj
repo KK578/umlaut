@@ -59,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="LinkedOclCondition.cs" />
     <Compile Include="OclComparison.cs" />
     <Compile Include="OclCondition.cs" />
     <Compile Include="UmlClassNode.cs" />
