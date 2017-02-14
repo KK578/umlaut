@@ -13,7 +13,7 @@ namespace UmlAnnotator
 			string result = condition;
 
 			// Linked conditions will be present at the start of the condition string, after the '('.
-			// Contained within a { } pair of curly braces.
+			// Contained within a { } pair of braces.
 			if (result[1] == '{')
 			{
 				result = result.Remove(1, result.IndexOf('}') + 1);
@@ -38,7 +38,14 @@ namespace UmlAnnotator
 
 			if (condition[1] == '{')
 			{
-				string storedLink = condition.Substring(1, condition.IndexOf('}'));
+				// Take inner contents of { } braces.
+				string storedLink = condition.Substring(2, condition.IndexOf('}') - 2);
+				string[] indexes = storedLink.Split(';');
+
+				foreach (string i in indexes)
+				{
+					LinkedConditions.Add(preconditions[int.Parse(i)]);
+				}
 			}
 		}
 
