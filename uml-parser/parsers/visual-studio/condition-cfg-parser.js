@@ -20,6 +20,7 @@ const comparisons = require('../../../util/comparisons.js');
 const conditionList = new Sym('conditionList');
 const condition = new Sym('condition');
 const comparison = new Sym('comparison');
+const comparisonSymbol = new Sym('comparisonSymbol');
 const argumentList = new Sym('argumentList');
 const argument = new Sym('argument');
 const linked = new Sym('linked');
@@ -27,7 +28,7 @@ const linkedConditionList = new Sym('linkedConditionList');
 const exception = new Sym('exception');
 
 const comparisonGrammars = comparisons.map((c) => {
-	return new Rule(comparison, [c.symbol], () => {
+	return new Rule(comparisonSymbol, [c.symbol], () => {
 		return c.name;
 	});
 });
@@ -40,33 +41,31 @@ const grammar = [
 		return c;
 	}),
 
-	new Rule(condition, ['(', linked, argument, comparison, argument, exception, ')'], (_, l, a1, c, a2, e) => {
-		return [{
-			comparison: c,
-			arguments: [a1, a2],
-			exception: e,
-			linkedPreconditions: l
-		}];
+	new Rule(condition, ['(', linked, comparison, exception, ')'], (_, l, c, e) => {
+		c.linkedPreconditions = l;
+		c.exception = e;
+
+		return [c];
 	}),
-	new Rule(condition, ['(', argument, comparison, argument, exception, ')'], (_, a1, c, a2, e) => {
-		return [{
-			comparison: c,
-			arguments: [a1, a2],
-			exception: e
-		}];
+	new Rule(condition, ['(', comparison, exception, ')'], (_, c, e) => {
+		c.exception = e;
+
+		return [c];
 	}),
-	new Rule(condition, ['(', linked, argument, comparison, argument, ')'], (_, l, a1, c, a2) => {
-		return [{
-			comparison: c,
-			arguments: [a1, a2],
-			linkedPreconditions: l
-		}];
+	new Rule(condition, ['(', linked, comparison, ')'], (_, l, c) => {
+		c.linkedPreconditions = l;
+
+		return [c];
 	}),
-	new Rule(condition, ['(', argument, comparison, argument, ')'], (_, a1, c, a2) => {
-		return [{
+	new Rule(condition, ['(', comparison, ')'], (_, c) => {
+		return [c];
+	}),
+
+	new Rule(comparison, [argument, comparisonSymbol, argument], (a1, c, a2) => {
+		return {
 			comparison: c,
 			arguments: [a1, a2]
-		}];
+		};
 	}),
 
 	new Rule(linked, ['{', linkedConditionList, '}'], (_, l) => {
@@ -78,6 +77,7 @@ const grammar = [
 	new Rule(linkedConditionList, [/[0-9]+/], (n) => {
 		return [n];
 	}),
+
 	// All comparisons are listed here
 	...comparisonGrammars,
 
