@@ -72,10 +72,10 @@ const grammar = [
 		return l;
 	}),
 	new Rule(linkedConditionList, [/[0-9]+/, ',', linkedConditionList], (n, _, n2) => {
-		return [n, ...n2];
+		return [parseInt(n), ...n2];
 	}),
 	new Rule(linkedConditionList, [/[0-9]+/], (n) => {
-		return [n];
+		return [parseInt(n)];
 	}),
 
 	// All comparisons are listed here
