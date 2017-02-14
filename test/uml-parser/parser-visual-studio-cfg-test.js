@@ -20,6 +20,33 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 		expect(result[0].exception).to.equal('FooException');
 	});
 
+	it('should handle conditions with a list with 1 item for linked preconditions at the start', function () {
+		const result = testee('({0} a == b)');
+
+		expect(result).to.be.instanceOf(Array).and.have.length(1);
+		expect(result[0].comparison).to.equal('Equal');
+		expect(result[0].arguments).to.include('a', 'b');
+		expect(result[0].linkedPreconditions).to.be.instanceOf(Array).and.have.length(1);
+	});
+
+	it('should handle conditions with a list with 2 items for linked preconditions at the start', function () {
+		const result = testee('({0,1} a == b)');
+
+		expect(result).to.be.instanceOf(Array).and.have.length(1);
+		expect(result[0].comparison).to.equal('Equal');
+		expect(result[0].arguments).to.include('a', 'b');
+		expect(result[0].linkedPreconditions).to.be.instanceOf(Array).and.have.length(2);
+	});
+
+	it('should handle conditions with a list with 3 items for linked preconditions at the start', function () {
+		const result = testee('({0,1,2} a == b)');
+
+		expect(result).to.be.instanceOf(Array).and.have.length(1);
+		expect(result[0].comparison).to.equal('Equal');
+		expect(result[0].arguments).to.include('a', 'b');
+		expect(result[0].linkedPreconditions).to.be.instanceOf(Array).and.have.length(3);
+	});
+
 	it('should handle multiple conditions split by ","', function () {
 		const result = testee('(a == b),(b > c)');
 
