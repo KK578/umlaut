@@ -290,6 +290,42 @@ describe('UML-To-SMT', function () {
 			expect(commands).to.not.contain('Double');
 			expect(commands).to.contain('Real');
 		});
+
+		it('should convert type "Boolean" to "Bool"', function () {
+			const fixture = {
+				Test: {
+					name: 'Test',
+					methods: {
+						Foo: {
+							name: 'Foo',
+							visibility: 'Public',
+							type: 'Boolean',
+							arguments: {
+								a: 'Boolean',
+								b: 'Boolean'
+							},
+							preconditions: [
+								{
+									comparison: 'Equal',
+									arguments: [
+										'a',
+										true
+									],
+									inverted: true,
+									id: '00000000-0000-0000-0000-000000000000'
+								}
+							],
+							postconditions: []
+						}
+					}
+				}
+			};
+			const result = testee(fixture);
+			const commands = result.Test.smtCommands[0].commands.join('\n');
+
+			expect(commands).to.not.contain('Boolean');
+			expect(commands).to.contain('Bool');
+		});
 	});
 
 	describe('Optional Preconditions', function () {
