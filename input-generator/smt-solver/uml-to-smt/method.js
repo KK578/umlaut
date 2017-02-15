@@ -10,6 +10,9 @@ function convertType(type) {
 		case 'Double':
 			return 'Real';
 
+		case 'Boolean':
+			return 'Bool';
+
 		default:
 			return type;
 	}
