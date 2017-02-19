@@ -11,6 +11,22 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 		expect(result[0].exception).to.be.undefined;
 	});
 
+	it('should handle a single condition with a not flag', function () {
+		const result = testee('(a not == b)');
+
+		expect(result).to.be.instanceOf(Array).and.have.length(1);
+		expect(result[0].comparison).to.equal('Equal');
+		expect(result[0].arguments).to.include('a', 'b');
+		expect(result[0].inverted).to.be.true;
+		expect(result[0].exception).to.be.undefined;
+	});
+
+	it('should not handle a condition with a not flag if the comparison is not invertable', function () {
+		expect(() => {
+			testee('(a not >= b)');
+		}).to.throw(Error);
+	});
+
 	it('should handle a single condition with an exception', function () {
 		const result = testee('(a == b Exception:FooException)');
 
