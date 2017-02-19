@@ -646,7 +646,7 @@ describe('UML Parser Classes', function () {
 
 		it('should error if condition is not an object', function () {
 			expect(() => {
-				new TestClass('(> a b)');
+				new TestClass('(a > b)');
 			}).to.throw(Error);
 		});
 
@@ -662,6 +662,39 @@ describe('UML Parser Classes', function () {
 			expect(obj.comparison).to.equal('LessThan');
 			expect(obj.arguments).to.include('a').and.include('b');
 			expect(obj.isInverted).to.not.be.ok;
+		});
+
+		it('should take a condition object with linked preconditions', function () {
+			const obj = new TestClass({
+				comparison: 'LessThan',
+				arguments: [
+					'a',
+					'b'
+				],
+				linkedPreconditions: [0]
+			});
+
+			expect(obj.comparison).to.equal('LessThan');
+			expect(obj.arguments).to.include('a').and.include('b');
+			expect(obj.isInverted).to.not.be.true;
+			expect(obj.linkedPreconditions).to.include(0);
+		});
+
+		it('should take a condition object with an exception', function () {
+			const obj = new TestClass({
+				comparison: 'LessThan',
+				arguments: [
+					'a',
+					'b'
+				],
+				exception: 'NullException'
+			});
+
+			expect(obj.comparison).to.equal('LessThan');
+			expect(obj.arguments).to.include('a').and.include('b');
+			expect(obj.isInverted).to.not.be.true;
+			expect(obj.exception).to.be.an('object');
+			expect(obj.exception.type).to.equal('NullException');
 		});
 
 		it('should error if condition does not have a comparison', function () {
