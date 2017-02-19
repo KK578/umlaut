@@ -4,9 +4,16 @@ function getLanguageType(type) {
 	// TODO: Expand this to a config file lookup
 	switch (type) {
 		case 'Integer':
-		case 'Int':
-		case 'int':
 			return 'int';
+
+		case 'Float':
+			return 'float';
+
+		case 'Double':
+			return 'double';
+
+		case 'Boolean':
+			return 'bool';
 
 		default:
 			console.log(`Undefined type "${type}"`);

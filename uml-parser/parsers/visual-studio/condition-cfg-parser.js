@@ -21,12 +21,15 @@ const conditionList = new Sym('conditionList');
 const condition = new Sym('condition');
 const comparison = new Sym('comparison');
 const comparisonItem = new Sym('comparisonItem');
+const comparisonSymbol = new Sym('comparisonSymbol');
 const argumentList = new Sym('argumentList');
 const argument = new Sym('argument');
+const linked = new Sym('linked');
+const linkedConditionList = new Sym('linkedConditionList');
 const exception = new Sym('exception');
 
 const comparisonGrammars = comparisons.map((c) => {
-	return new Rule(comparison, [c.symbol], () => {
+	return new Rule(comparisonSymbol, [c.symbol], () => {
 		return c.name;
 	});
 });
@@ -39,23 +42,33 @@ const grammar = [
 		return c;
 	}),
 
-	new Rule(condition, ['(', argument, comparisonItem, argument, exception, ')'], (_, a1, c, a2, e) => {
-		return [{
-			comparison: c.comparison,
-			inverted: c.inverted,
-			arguments: [a1, a2],
-			exception: e
-		}];
+	new Rule(condition, ['(', linked, comparison, exception, ')'], (_, l, c, e) => {
+		c.linkedPreconditions = l;
+		c.exception = e;
+
+		return [c];
 	}),
-	new Rule(condition, ['(', argument, comparisonItem, argument, ')'], (_, a1, c, a2) => {
-		return [{
-			comparison: c.comparison,
-			inverted: c.inverted,
-			arguments: [a1, a2]
-		}];
+	new Rule(condition, ['(', comparison, exception, ')'], (_, c, e) => {
+		c.exception = e;
+
+		return [c];
+	}),
+	new Rule(condition, ['(', linked, comparison, ')'], (_, l, c) => {
+		c.linkedPreconditions = l;
+
+		return [c];
+	}),
+	new Rule(condition, ['(', comparison, ')'], (_, c) => {
+		return [c];
 	}),
 
-	new Rule(comparisonItem, ['not', comparison], (_, c) => {
+	new Rule(comparison, [argument, comparisonSymbol, argument], (a1, c, a2) => {
+		return {
+			comparison: c,
+			arguments: [a1, a2]
+		};
+	}),
+	new Rule(comparison, [argument, 'not', comparisonSymbol, argument], (a1, _, c, a2) => {
 		// TODO: Error or silently log?
 		if (!comparisons.isInvertable(c)) {
 			throw new Error('Comparison is not invertable.');
@@ -63,14 +76,19 @@ const grammar = [
 
 		return {
 			comparison: c,
+			arguments: [a1, a2],
 			inverted: true
 		};
 	}),
 
-	new Rule(comparisonItem, [comparison], (c) => {
-		return {
-			comparison: c
-		};
+	new Rule(linked, ['{', linkedConditionList, '}'], (_, l) => {
+		return l;
+	}),
+	new Rule(linkedConditionList, [/[0-9]+/, ',', linkedConditionList], (n, _, n2) => {
+		return [parseInt(n), ...n2];
+	}),
+	new Rule(linkedConditionList, [/[0-9]+/], (n) => {
+		return [parseInt(n)];
 	}),
 
 	// All comparisons are listed here

@@ -25,6 +25,14 @@ module.exports = class OclCondition {
 		if (condition.isInverted !== undefined) {
 			this.setInverted(condition.isInverted);
 		}
+
+		if (condition.exception !== undefined) {
+			this.setException(condition.exception);
+		}
+
+		if (condition.linkedPreconditions) {
+			this.linkedPreconditions = condition.linkedPreconditions;
+		}
 	}
 
 	setInverted(value) {

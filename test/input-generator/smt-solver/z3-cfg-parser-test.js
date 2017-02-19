@@ -211,4 +211,20 @@ describe('CFG Parser for z3 Values', function () {
 			});
 		});
 	});
+
+	describe('Booleans', function () {
+		it('should handle true', function () {
+			const result = testee('(a true)');
+
+			expect(result).to.have.key('a');
+			expect(result.a).to.be.a('boolean').and.be.true;
+		});
+
+		it('should handle false', function () {
+			const result = testee('(a false)');
+
+			expect(result).to.have.key('a');
+			expect(result.a).to.be.a('boolean').and.not.be.true;
+		});
+	});
 });
