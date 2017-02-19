@@ -365,8 +365,8 @@ describe('UML-To-SMT', function () {
 				}
 			};
 			const result = testee(fixture);
-
 			const commands = result.Test.smtCommands[0].commands;
+
 			expect(result).to.have.key('Test');
 			expect(result.Test).to.have.keys('name', 'smtCommands');
 			expect(result.Test.smtCommands).to.be.instanceOf(Array).and.have.length(1);
