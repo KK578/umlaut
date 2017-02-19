@@ -80,10 +80,10 @@ namespace UmlAnnotator
 
 			if (Comparator != null)
 			{
-				comparison = Comparator.Name;
+				comparison = Comparator.SymbolString();
 			}
 
-			string main = String.Format("{0} {1}", comparison, String.Join(" ", arguments));
+			string main = String.Format("{0} {1} {2}", arguments[0], Comparator.IsInverted ? "not " + comparison : comparison, arguments[1]);
 			string result;
 
 			if (!String.IsNullOrWhiteSpace(exception))

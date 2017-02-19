@@ -70,9 +70,14 @@ function verifySmtSymbol(comparison) {
 	}
 }
 
+function map(callback) {
+	return comparisons.map(callback);
+}
+
 module.exports = {
 	toName,
 	toSymbol,
 	toSmtSymbol,
-	verifySmtSymbol
+	verifySmtSymbol,
+	map
 };

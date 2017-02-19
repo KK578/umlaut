@@ -202,7 +202,8 @@ namespace UmlAnnotator
 		{
 			int index = listBoxConditions.SelectedIndex;
 
-			if (index >= 0) {
+			if (index >= 0)
+			{
 				if (radioButtonPreconditions.IsChecked == true)
 				{
 					selectedMethod.RemoveCondition("pre", index);
@@ -263,6 +264,22 @@ namespace UmlAnnotator
 		{
 			selectedCondition.SetException(textBoxExceptionCondition.Text);
 			listBoxConditions.Items.Refresh();
+		}
+
+		private void checkBoxInvertCondition_CheckedChanged(object sender, RoutedEventArgs e)
+		{
+			if (listBoxConditions.SelectedIndex >= 0)
+			{
+				selectedCondition = listBoxConditions.SelectedItem as OclCondition;
+
+				if (selectedCondition.Comparator != null)
+				{
+					bool isChecked = checkBoxInvertCondition.IsChecked == true;
+					selectedCondition.Comparator.IsInverted = isChecked;
+
+					listBoxConditions.Items.Refresh();
+				}
+			}
 		}
 	}
 }

@@ -17,13 +17,14 @@
 		<RadioButton x:Name="radioButtonPostconditions" Content="Postconditions" HorizontalAlignment="Left" Margin="10,122,0,0" VerticalAlignment="Top" GroupName="conditionType" Checked="radioButtonPostconditions_Checked"/>
 		<ListBox x:Name="listBoxConditions" Margin="10,143,357,10" Padding="0" Width="150" HorizontalAlignment="Left" SelectionChanged="listBoxConditions_SelectionChanged"/>
 		<Label x:Name="label1" Content="Comparator:" HorizontalAlignment="Left" Margin="165,101,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Right"/>
-		<ComboBox x:Name="comboBoxComparator" HorizontalAlignment="Left" Margin="246,101,0,0" VerticalAlignment="Top" Width="261" SelectionChanged="comboBoxComparator_SelectionChanged" Height="26"/>
+		<ComboBox x:Name="comboBoxComparator" HorizontalAlignment="Left" Margin="246,101,0,0" VerticalAlignment="Top" Width="206" SelectionChanged="comboBoxComparator_SelectionChanged" Height="26"/>
 		<Label x:Name="label2" Content="Arguments:" HorizontalAlignment="Left" Margin="165,130,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Right"/>
 		<TextBox x:Name="textBoxArguments" HorizontalAlignment="Left" Height="146" Margin="246,132,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="261" AcceptsReturn="True" TextChanged="textBoxArguments_TextChanged"/>
 		<Button x:Name="buttonAddCondition" Content="+" HorizontalAlignment="Left" Margin="140,115,0,0" VerticalAlignment="Top" Width="20" RenderTransformOrigin="1,0.609" Click="buttonAddCondition_Click"/>
 		<Button x:Name="buttonRemoveCondition" Content="-" HorizontalAlignment="Left" Margin="115,115,0,0" VerticalAlignment="Top" Width="20" RenderTransformOrigin="1,0.609" Click="buttonRemoveCondition_Click"/>
 		<Label x:Name="label2_Copy" Content="Exception:" HorizontalAlignment="Left" Margin="165,283,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Right"/>
 		<TextBox x:Name="textBoxExceptionCondition" HorizontalAlignment="Left" Height="26" Margin="246,283,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="261" TextChanged="textBoxExceptionCondition_TextChanged"/>
+		<CheckBox x:Name="checkBoxInvertCondition" Content="Invert" HorizontalAlignment="Left" Margin="457,107,0,0" VerticalAlignment="Top" Click="checkBoxInvertCondition_CheckedChanged"/>
 
-	</Grid>
+    </Grid>
 </Window>
