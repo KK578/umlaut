@@ -693,7 +693,8 @@ describe('UML Parser Classes', function () {
 			expect(obj.comparison).to.equal('LessThan');
 			expect(obj.arguments).to.include('a').and.include('b');
 			expect(obj.isInverted).to.not.be.true;
-			expect(obj.exception).to.equal('NullException');
+			expect(obj.exception).to.be.an('object');
+			expect(obj.exception.type).to.equal('NullException');
 		});
 
 		it('should error if condition does not have a comparison', function () {
