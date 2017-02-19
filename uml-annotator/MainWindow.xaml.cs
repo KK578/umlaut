@@ -37,6 +37,8 @@ namespace UmlAnnotator
 
 		UmlMethodNode selectedMethod;
 		OclCondition selectedCondition;
+		OclCondition selectedPrecondition;
+		OclCondition selectedPostcondition;
 
 		public MainWindow()
 		{
@@ -137,15 +139,13 @@ namespace UmlAnnotator
 			string selectedClass = comboBoxClass.SelectedValue.ToString();
 			UmlClassNode node = classes[selectedClass];
 
-			comboBoxMethod.ItemsSource = node.Methods.Keys;
+			this.comboBoxMethod.ItemsSource = node.Methods.Keys;
 
-			radioButtonPreconditions.IsChecked = false;
-			radioButtonPostconditions.IsChecked = false;
-
-			listBoxConditions.ItemsSource = null;
-			listBoxConditions.Items.Refresh();
-			comboBoxComparator.SelectedIndex = -1;
-			textBoxArguments.Text = "";
+			this.listBoxPreconditions.Items.Refresh();
+			this.listBoxPreconditions.ItemsSource = null;
+			this.comboBoxComparator.SelectedIndex = -1;
+			this.textBoxArgumentLeft.Text = "";
+			this.textBoxArgumentRight.Text = "";
 		}
 
 		private void comboBoxMethod_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -159,85 +159,143 @@ namespace UmlAnnotator
 
 				this.selectedMethod = methodNode;
 
-				if (radioButtonPreconditions.IsChecked == true)
-				{
-					this.listBoxConditions.ItemsSource = this.selectedMethod.Preconditions;
-				}
-				else if (radioButtonPostconditions.IsChecked == true)
-				{
-					this.listBoxConditions.ItemsSource = this.selectedMethod.Postconditions;
-				}
-
-				listBoxConditions.Items.Refresh();
+				this.listBoxPreconditions.ItemsSource = this.selectedMethod.Preconditions;
+				this.listBoxPreconditions.Items.Refresh();
+				this.listBoxPostconditions.ItemsSource = this.selectedMethod.Postconditions;
+				this.listBoxPostconditions.Items.Refresh();
+				this.listBoxLinkedPreconditions.ItemsSource = this.selectedMethod.Preconditions;
+				this.listBoxLinkedPreconditions.Items.Refresh();
 			}
 		}
 
-		private void radioButtonPreconditions_Checked(object sender, RoutedEventArgs e)
+		private void buttonAddPrecondition_Click(object sender, RoutedEventArgs e)
 		{
-			this.listBoxConditions.ItemsSource = this.selectedMethod.Preconditions;
-			listBoxConditions.Items.Refresh();
+			selectedMethod.AddCondition("pre");
+			this.listBoxPreconditions.Items.Refresh();
 		}
 
-		private void radioButtonPostconditions_Checked(object sender, RoutedEventArgs e)
+		private void buttonRemovePrecondition_Click(object sender, RoutedEventArgs e)
 		{
-			this.listBoxConditions.ItemsSource = this.selectedMethod.Postconditions;
-			listBoxConditions.Items.Refresh();
-		}
+			int index = listBoxPreconditions.SelectedIndex;
 
-		private void buttonAddCondition_Click(object sender, RoutedEventArgs e)
-		{
-			if (radioButtonPreconditions.IsChecked == true)
+			if (index >= 0)
 			{
-				selectedMethod.AddCondition("pre");
-			}
-			else if (radioButtonPostconditions.IsChecked == true)
-			{
-				selectedMethod.AddCondition("post");
-			}
-
-			listBoxConditions.Items.Refresh();
-		}
-
-		private void buttonRemoveCondition_Click(object sender, RoutedEventArgs e)
-		{
-			int index = listBoxConditions.SelectedIndex;
-
-			if (index >= 0) {
-				if (radioButtonPreconditions.IsChecked == true)
-				{
-					selectedMethod.RemoveCondition("pre", index);
-				}
-				else if (radioButtonPostconditions.IsChecked == true)
-				{
-					selectedMethod.RemoveCondition("post", index);
-				}
-
-				listBoxConditions.Items.Refresh();
+				selectedMethod.RemoveCondition("pre", index);
+				this.listBoxPreconditions.Items.Refresh();
 			}
 		}
 
-		private void listBoxConditions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void buttonAddPostcondition_Click(object sender, RoutedEventArgs e)
 		{
-			if (listBoxConditions.SelectedIndex >= 0)
+			selectedMethod.AddCondition("post");
+			this.listBoxPreconditions.Items.Refresh();
+		}
+
+		private void buttonRemovePostcondition_Click(object sender, RoutedEventArgs e)
+		{
+			int index = listBoxPostconditions.SelectedIndex;
+
+			if (index >= 0)
 			{
-				selectedCondition = listBoxConditions.SelectedItem as OclCondition;
+				selectedMethod.RemoveCondition("post", index);
+				this.listBoxPreconditions.Items.Refresh();
+			}
+		}
 
-				if (selectedCondition.Comparator != null)
-				{
-					comboBoxComparator.SelectedItem = selectedCondition.Comparator;
-				}
-				else
-				{
-					comboBoxComparator.SelectedIndex = -1;
-				}
+		private void listBoxPreconditions_GotFocus(object sender, RoutedEventArgs e)
+		{
+			if (listBoxPreconditions.SelectedIndex >= 0)
+			{
+				UpdateSelectedPrecondition();
+			}
+		}
 
-				textBoxArguments.Text = selectedCondition.GetArgumentsString();
+		private void listBoxPreconditions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			UpdateSelectedPrecondition();
+		}
+
+		private void UpdateSelectedPrecondition()
+		{
+			if (listBoxPreconditions.SelectedIndex >= 0)
+			{
+				selectedPrecondition = listBoxPreconditions.SelectedItem as OclCondition;
+				selectedCondition = selectedPrecondition;
+				UpdateConditionControls();
+				this.listBoxLinkedPreconditions.IsEnabled = false;
+				this.listBoxLinkedPreconditions.UnselectAll();
 			}
 			else
 			{
 				comboBoxComparator.SelectedIndex = -1;
-				textBoxArguments.Text = "";
+				textBoxArgumentLeft.Text = "";
+				textBoxArgumentRight.Text = "";
+				checkBoxInvertCondition.IsChecked = false;
+				textBoxExceptionCondition.Text = "";
 			}
+		}
+
+		private void listBoxPostconditions_GotFocus(object sender, RoutedEventArgs e)
+		{
+			if (listBoxPostconditions.SelectedIndex >= 0 &&
+				selectedCondition != selectedPostcondition)
+			{
+				UpdateSelectedPostcondition();
+			}
+		}
+
+		private void listBoxPostconditions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			UpdateSelectedPostcondition();
+		}
+
+		private void UpdateSelectedPostcondition()
+		{
+			if (listBoxPostconditions.SelectedIndex >= 0)
+			{
+				selectedPostcondition = listBoxPostconditions.SelectedItem as LinkedOclCondition;
+				selectedCondition = null;
+				this.listBoxLinkedPreconditions.UnselectAll();
+				selectedCondition = selectedPostcondition;
+				UpdateConditionControls();
+				this.listBoxLinkedPreconditions.IsEnabled = true;
+				List<OclCondition> linkedConditions = (selectedCondition as LinkedOclCondition).LinkedConditions;
+				foreach (OclCondition c in linkedConditions)
+				{
+					this.listBoxLinkedPreconditions.SelectedItems.Add(c);
+				}
+			}
+			else
+			{
+				comboBoxComparator.SelectedIndex = -1;
+				textBoxArgumentLeft.Text = "";
+				textBoxArgumentRight.Text = "";
+				checkBoxInvertCondition.IsChecked = false;
+				textBoxExceptionCondition.Text = "";
+			}
+		}
+
+		private void UpdateConditionControls()
+		{
+			// Comparator combo box
+			if (selectedCondition.Comparator != null)
+			{
+				comboBoxComparator.SelectedItem = selectedCondition.Comparator;
+			}
+			else
+			{
+				comboBoxComparator.SelectedIndex = -1;
+			}
+
+			// Argument text boxes
+			textBoxArgumentLeft.Text = selectedCondition.GetArgument(0);
+			textBoxArgumentRight.Text = selectedCondition.GetArgument(1);
+
+			// Inverted checkbox
+			checkBoxInvertCondition.IsChecked = selectedCondition.IsInverted;
+
+			// Exception text box
+			textBoxExceptionCondition.Text = selectedCondition.Exception;
 		}
 
 		private void comboBoxComparator_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -246,23 +304,54 @@ namespace UmlAnnotator
 			{
 				OclComparison item = comboBoxComparator.SelectedItem as OclComparison;
 				selectedCondition.Comparator = item;
-				listBoxConditions.Items.Refresh();
+				this.listBoxPreconditions.Items.Refresh();
+				this.listBoxPostconditions.Items.Refresh();
 			}
 		}
 
-		private void textBoxArguments_TextChanged(object sender, TextChangedEventArgs e)
+		private void textBoxArgumentLeft_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			if (!String.IsNullOrWhiteSpace(textBoxArguments.Text))
-			{
-				selectedCondition.SetArguments(textBoxArguments.Text);
-				listBoxConditions.Items.Refresh();
-			}
+			selectedCondition.SetArgument(0, textBoxArgumentLeft.Text);
+			this.listBoxPreconditions.Items.Refresh();
+			this.listBoxPostconditions.Items.Refresh();
+		}
+
+		private void textBoxArgumentRight_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			selectedCondition.SetArgument(1, textBoxArgumentRight.Text);
+			this.listBoxPreconditions.Items.Refresh();
+			this.listBoxPostconditions.Items.Refresh();
 		}
 
 		private void textBoxExceptionCondition_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			selectedCondition.SetException(textBoxExceptionCondition.Text);
-			listBoxConditions.Items.Refresh();
+			this.listBoxPreconditions.Items.Refresh();
+			this.listBoxPostconditions.Items.Refresh();
+		}
+
+		private void checkBoxInvertCondition_CheckedChanged(object sender, RoutedEventArgs e)
+		{
+			if (selectedCondition.Comparator != null)
+			{
+				bool isChecked = checkBoxInvertCondition.IsChecked == true;
+				selectedCondition.SetInverted(isChecked);
+
+				this.listBoxPreconditions.Items.Refresh();
+				this.listBoxPostconditions.Items.Refresh();
+			}
+		}
+
+		private void listBoxLinkedPreconditions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (selectedCondition == selectedPostcondition)
+			{
+				List<OclCondition> conditions = listBoxLinkedPreconditions.SelectedItems.Cast<OclCondition>().ToList();
+				LinkedOclCondition condition = selectedPostcondition as LinkedOclCondition;
+				condition.LinkedConditions = conditions;
+				this.listBoxPreconditions.Items.Refresh();
+				this.listBoxPostconditions.Items.Refresh();
+			}
 		}
 	}
 }

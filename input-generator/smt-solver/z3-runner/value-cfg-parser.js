@@ -37,12 +37,13 @@ const identifier = new Sym('identifier');
 const inputValue = new Sym('inputValue');
 const numericValue = new Sym('numericValue');
 const numericValue2 = new Sym('numericValue2');
+const boolValue = new Sym('boolValue');
 
 const UUID_REGEX = /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i;
 
 const grammar = [
 	// smtIdResultList
-	new Rule(smtInputsList, [smtInputsList, '~~', smtTest], (next, _, values) => {
+	new Rule(smtInputsList, [smtInputsList, ',', smtTest], (next, _, values) => {
 		return next.concat(values);
 	}),
 	new Rule(smtInputsList, [smtTest], (values) => {
@@ -116,6 +117,9 @@ const grammar = [
 	new Rule(inputValue, [numericValue], (v) => {
 		return v;
 	}),
+	new Rule(inputValue, [boolValue], (v) => {
+		return v;
+	}),
 
 	// numericValue
 	new Rule(numericValue, ['(', '-', numericValue2, ')'], (_, __, v) => {
@@ -131,6 +135,14 @@ const grammar = [
 	}),
 	new Rule(numericValue2, [/[0-9]+/], (v) => {
 		return parseInt(v);
+	}),
+
+	// boolValue
+	new Rule(boolValue, ['true'], () => {
+		return true;
+	}),
+	new Rule(boolValue, ['false'], () => {
+		return false;
 	})
 ];
 

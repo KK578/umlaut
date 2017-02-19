@@ -17,7 +17,7 @@ namespace UmlAnnotator
 
 		// Even hackier than before.
 		public List<OclCondition> Preconditions;
-		public List<OclCondition> Postconditions;
+		public List<LinkedOclCondition> Postconditions;
 
 		private XmlNode node;
 		private XmlNode preconditionNode;
@@ -31,7 +31,7 @@ namespace UmlAnnotator
 			this.name = node.Attributes.GetNamedItem("name").Value;
 
 			Preconditions = new List<OclCondition>();
-			Postconditions = new List<OclCondition>();
+			Postconditions = new List<LinkedOclCondition>();
 
 			ParseMethod();
 		}
@@ -76,7 +76,7 @@ namespace UmlAnnotator
 							foreach (string s in split)
 							{
 								Console.WriteLine(s);
-								Postconditions.Add(new OclCondition(s));
+								Postconditions.Add(new LinkedOclCondition(Preconditions, s));
 							}
 							break;
 						}
@@ -186,7 +186,7 @@ namespace UmlAnnotator
 					break;
 
 				case "post":
-					Postconditions.Add(new OclCondition());
+					Postconditions.Add(new LinkedOclCondition(Preconditions));
 					break;
 			}
 		}
@@ -207,8 +207,8 @@ namespace UmlAnnotator
 
 		public void UpdateNodes()
 		{
-			preconditionNode.InnerText = String.Join("-----", Preconditions);
-			postconditionNode.InnerText = String.Join("-----", Postconditions);
+			preconditionNode.InnerText = String.Join(",", Preconditions);
+			postconditionNode.InnerText = String.Join(",", Postconditions);
 		}
 	}
 }

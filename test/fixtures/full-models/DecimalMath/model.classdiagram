@@ -215,7 +215,7 @@
               <constraint Id="f5f0165f-6f50-4578-8507-aef3c562e2b6">
                 <elementDefinition Id="4fee5738-9349-4cf0-9981-7136a713b6e0" />
                 <specification>
-                  <literalString Id="218847fe-1eef-4e3d-a34c-88f3f2db928d" value="(LessThanOrEqual a 500)-----(GreaterThanOrEqual a -500)-----(LessThanOrEqual b 500)-----(GreaterThanOrEqual b -500)">
+                  <literalString Id="218847fe-1eef-4e3d-a34c-88f3f2db928d" value="(a &lt;= 500),(a &gt;= -500),(b &lt;= 500),(b &gt;= -500)">
                     <elementDefinition Id="d3e18106-d723-41b2-a8c7-df8ffec531d9" />
                   </literalString>
                 </specification>
@@ -225,7 +225,7 @@
               <constraint Id="29a74b28-ac6b-43c3-9e4f-d6dc501ba2ef">
                 <elementDefinition Id="b22981b5-0b1d-4308-9a98-98fc20a18238" />
                 <specification>
-                  <literalString Id="fd323eef-0fbc-467c-8807-4c70983799ba" value="(LessThanOrEqual result 1000)-----(GreaterThanOrEqual result -1000)">
+                  <literalString Id="fd323eef-0fbc-467c-8807-4c70983799ba" value="(result &lt;= 1000),(result &gt;= -1000)">
                     <elementDefinition Id="aecf68c2-7011-4241-a393-a8470f5f24c4" />
                   </literalString>
                 </specification>
@@ -307,7 +307,7 @@
               <constraint Id="7d18d4e3-c655-47ac-b40e-b471b132886f">
                 <elementDefinition Id="847ca553-5622-4ebd-89e9-d2a058ac7989" />
                 <specification>
-                  <literalString Id="a0cf5c35-e37a-4d98-886c-a009128b24ff" value="(LessThanOrEqual a 500)-----(GreaterThanOrEqual a -500)-----(LessThanOrEqual b 500)-----(GreaterThanOrEqual b -500)">
+                  <literalString Id="a0cf5c35-e37a-4d98-886c-a009128b24ff" value="(a &lt;= 500),(a &gt;= -500),(b &lt;= 500),(b &gt;= -500)">
                     <elementDefinition Id="b81a39ff-4482-4380-a012-60b3f0158118" />
                   </literalString>
                 </specification>
@@ -317,7 +317,7 @@
               <constraint Id="9edc33a9-1dc7-47f7-9ced-904ea514fc56">
                 <elementDefinition Id="4492de1c-0077-42a7-8785-3a16352b5506" />
                 <specification>
-                  <literalString Id="1263ef78-63ab-4702-aa25-bad8a890ab14" value="(LessThanOrEqual result 1000)-----(GreaterThanOrEqual result -1000)">
+                  <literalString Id="1263ef78-63ab-4702-aa25-bad8a890ab14" value="(result &lt;= 1000),(result &gt;= -1000)">
                     <elementDefinition Id="88f93bf7-246a-4629-9d14-fc8281919ce1" />
                   </literalString>
                 </specification>
@@ -453,7 +453,7 @@
               <constraint Id="32bbb203-134a-47b6-8442-f1f439858ea7">
                 <elementDefinition Id="dfcead56-4a53-4951-98ed-4b0abadef3f7" />
                 <specification>
-                  <literalString Id="35879758-7be2-44b4-9cf6-05ca7c2dad18" value="(LessThanOrEqual a 500)-----(GreaterThanOrEqual a -500)-----(LessThanOrEqual b 500)-----(GreaterThanOrEqual b -500)">
+                  <literalString Id="35879758-7be2-44b4-9cf6-05ca7c2dad18" value="(a &lt;= 500),(a &gt;= -500),(b &lt;= 500),(b &gt;= -500)">
                     <elementDefinition Id="299e748e-b458-4114-8341-fc38a62f5bb5" />
                   </literalString>
                 </specification>
@@ -463,7 +463,7 @@
               <constraint Id="4cac5301-aa44-421e-b4a5-ebb57099e40b">
                 <elementDefinition Id="c661110c-efaa-4b2b-97de-94ea4fa73561" />
                 <specification>
-                  <literalString Id="bcaf3d11-9ad6-46f5-87e5-baac0df0928c" value="(LessThanOrEqual result 1000)-----(GreaterThanOrEqual result -1000)">
+                  <literalString Id="bcaf3d11-9ad6-46f5-87e5-baac0df0928c" value="(result &lt;= 1000),(result &gt;= -1000)">
                     <elementDefinition Id="a040903d-1bc9-4fc0-8951-ea497ceeff37" />
                   </literalString>
                 </specification>
@@ -545,7 +545,7 @@
               <constraint Id="9d74d28d-b10b-4eae-9472-065bc3126973">
                 <elementDefinition Id="952da915-49e2-460a-8919-bb6eabc902f6" />
                 <specification>
-                  <literalString Id="81fdf266-6b8d-43e4-b8d4-d73a5fe9f4ab" value="(LessThanOrEqual a 500)-----(GreaterThanOrEqual a -500)-----(LessThanOrEqual b 500)-----(GreaterThanOrEqual b -500)">
+                  <literalString Id="81fdf266-6b8d-43e4-b8d4-d73a5fe9f4ab" value="(a &lt;= 500),(a &gt;= -500),(b &lt;= 500),(b &gt;= -500)">
                     <elementDefinition Id="bdc18d96-acc7-4ef5-828c-b2e9ee766b2b" />
                   </literalString>
                 </specification>
@@ -555,7 +555,7 @@
               <constraint Id="51ca7ce8-5399-4495-898c-21896be44304">
                 <elementDefinition Id="23ead343-f593-4b51-a615-af67011cf27a" />
                 <specification>
-                  <literalString Id="8fadaa22-8398-4d76-bd39-517ea2c187f7" value="(LessThanOrEqual result 1000)-----(GreaterThanOrEqual result -1000)">
+                  <literalString Id="8fadaa22-8398-4d76-bd39-517ea2c187f7" value="(result &lt;= 1000),(result &gt;= -1000)">
                     <elementDefinition Id="cf6382a4-c050-4db4-8b68-b053b98ddf59" />
                   </literalString>
                 </specification>

@@ -15,8 +15,17 @@ namespace UmlAnnotator
 		}
 
 		string symbol;
+		public string Symbol
+		{
+			get { return symbol; }
+		}
+
 		string smtSymbol;
-		bool invertable;
+		bool isInvertable;
+		public bool IsInvertable
+		{
+			get { return isInvertable; }
+		}
 
 		public OclComparison(string name, string symbol, string smtSymbol, bool? invertable)
 		{
@@ -32,17 +41,12 @@ namespace UmlAnnotator
 				this.smtSymbol = symbol;
 			}
 
-			this.invertable = invertable == true;
-		}
-
-		public string SymbolString()
-		{
-			return smtSymbol;
+			this.isInvertable = invertable == true;
 		}
 
 		public override string ToString()
 		{
-			return String.Format("{0} ({1})", name, symbol);
+			return String.Format("{0} ({1})", symbol, name);
 		}
 	}
 }

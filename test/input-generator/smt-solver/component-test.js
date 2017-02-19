@@ -1,5 +1,3 @@
-const path = require('path');
-
 const testee = require('../../../input-generator/smt-solver/index.js');
 
 describe('SimpleMath Test Fixture', function () {

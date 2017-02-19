@@ -20,49 +20,79 @@ const comparisons = require('../../../util/comparisons.js');
 const conditionList = new Sym('conditionList');
 const condition = new Sym('condition');
 const comparison = new Sym('comparison');
-const argumentList = new Sym('argumentList');
+const comparisonSymbol = new Sym('comparisonSymbol');
 const argument = new Sym('argument');
+const linked = new Sym('linked');
+const linkedConditionList = new Sym('linkedConditionList');
 const exception = new Sym('exception');
 
+const comparisonSymbolGrammars = comparisons.map((c) => {
+	return new Rule(comparisonSymbol, [c.symbol], () => {
+		return c.name;
+	});
+});
+
 const grammar = [
-	new Rule(conditionList, [conditionList, '-----', condition], (next, _, c) => {
+	new Rule(conditionList, [conditionList, ',', condition], (next, _, c) => {
 		return next.concat(c);
 	}),
 	new Rule(conditionList, [condition], (c) => {
 		return c;
 	}),
 
-	new Rule(condition, ['(', comparison, argumentList, exception, ')'], (_, c, a, e) => {
-		return [{
+	// Condition
+	new Rule(condition, ['(', linked, comparison, exception, ')'], (_, l, c, e) => {
+		c.linkedPreconditions = l;
+		c.exception = e;
+
+		return [c];
+	}),
+	new Rule(condition, ['(', comparison, exception, ')'], (_, c, e) => {
+		c.exception = e;
+
+		return [c];
+	}),
+	new Rule(condition, ['(', linked, comparison, ')'], (_, l, c) => {
+		c.linkedPreconditions = l;
+
+		return [c];
+	}),
+	new Rule(condition, ['(', comparison, ')'], (_, c) => {
+		return [c];
+	}),
+
+	// Comparison
+	new Rule(comparison, [argument, comparisonSymbol, argument], (a1, c, a2) => {
+		return {
 			comparison: c,
-			arguments: a,
-			exception: e
-		}];
+			arguments: [a1, a2]
+		};
 	}),
-	new Rule(condition, ['(', comparison, argumentList, ')'], (_, c, a) => {
-		return [{
+	new Rule(comparison, [argument, 'not', comparisonSymbol, argument], (a1, _, c, a2) => {
+		// TODO: Error or silently log?
+		if (!comparisons.isInvertable(c)) {
+			throw new Error('Comparison is not invertable.');
+		}
+
+		return {
 			comparison: c,
-			arguments: a
-		}];
+			arguments: [a1, a2],
+			inverted: true
+		};
 	}),
 
-	new Rule(comparison, [/[a-zA-Z]+/], (c) => {
-		const foundComparison = comparisons.toName(c);
-
-		if (foundComparison !== false) {
-			return foundComparison;
-		}
-		else {
-			throw new Error(`Comparison ${c} does not exist.`);
-		}
+	new Rule(linked, ['{', linkedConditionList, '}'], (_, l) => {
+		return l;
+	}),
+	new Rule(linkedConditionList, [/[0-9]+/, ',', linkedConditionList], (n, _, n2) => {
+		return [parseInt(n), ...n2];
+	}),
+	new Rule(linkedConditionList, [/[0-9]+/], (n) => {
+		return [parseInt(n)];
 	}),
 
-	new Rule(argumentList, [argumentList, argument], (next, a) => {
-		return next.concat(a);
-	}),
-	new Rule(argumentList, [argument], (a) => {
-		return [a];
-	}),
+	// All comparisons are listed here
+	...comparisonSymbolGrammars,
 
 	new Rule(argument, [/[a-zA-Z_][-_a-zA-Z0-9]*/], (a) => {
 		return a;

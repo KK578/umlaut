@@ -1,6 +1,6 @@
 const Generator = require('yeoman-generator');
 
-function getLanguageType(type) {
+function getLanguageType() {
 	// TODO: Expand this to a config file lookup
 	return 'var';
 }

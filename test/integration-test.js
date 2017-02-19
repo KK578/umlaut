@@ -5,6 +5,7 @@ const inputGenerator = require('../input-generator/index.js');
 
 const yeoman = require('yeoman-environment');
 const yeomanEnv = yeoman.createEnv();
+
 yeomanEnv.register(path.join(__dirname, '../generators/app'), 'mdt:app');
 
 function promiseRunTestGenerator(options) {

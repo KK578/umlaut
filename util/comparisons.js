@@ -70,9 +70,25 @@ function verifySmtSymbol(comparison) {
 	}
 }
 
+function map(callback) {
+	return comparisons.map(callback);
+}
+
+function isInvertable(comparison) {
+	const search = searchComparisons((c) => {
+		return c.symbol === comparison || c.name === comparison;
+	});
+
+	if (search) {
+		return search.invertable;
+	}
+}
+
 module.exports = {
 	toName,
 	toSymbol,
 	toSmtSymbol,
-	verifySmtSymbol
+	verifySmtSymbol,
+	map,
+	isInvertable
 };

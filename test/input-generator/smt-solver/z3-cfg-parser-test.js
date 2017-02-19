@@ -101,8 +101,8 @@ describe('CFG Parser for z3 Values', function () {
 	});
 
 	it('should handle multiple objects consecutively', function () {
-		const result = testee(`[[12345678-abcd-efab-cdef-123456789012]] sat ((a 0)(b (- 1)))
-			~~[[87654321-abcd-efab-cdef-987654321000]] sat ((a 0)(b 38))`);
+		const result = testee(`[[12345678-abcd-efab-cdef-123456789012]] sat ((a 0)(b (- 1))),
+			[[87654321-abcd-efab-cdef-987654321000]] sat ((a 0)(b 38))`);
 
 		expect(result).to.be.instanceOf(Array);
 
@@ -120,9 +120,9 @@ describe('CFG Parser for z3 Values', function () {
 	});
 
 	it('should handle multiple objects consecutively including unsatisfiable', function () {
-		const result = testee(`[[Valid]] sat ((a 0)(b (- 1)))
-			~~[[12345678-abcd-efab-cdef-123456789012]] unsat (error "line 5 column 5: model is not available")
-			~~[[87654321-abcd-efab-cdef-987654321000]] sat ((a 0)(b 38))`);
+		const result = testee(`[[Valid]] sat ((a 0)(b (- 1))),
+			[[12345678-abcd-efab-cdef-123456789012]] unsat (error "line 5 column 5: model is not available"),
+			[[87654321-abcd-efab-cdef-987654321000]] sat ((a 0)(b 38))`);
 
 		expect(result).to.be.instanceOf(Array);
 
@@ -209,6 +209,22 @@ describe('CFG Parser for z3 Values', function () {
 				expect(result).to.have.key('a');
 				expect(result.a).to.be.a('number').and.equal(-1234.5678);
 			});
+		});
+	});
+
+	describe('Booleans', function () {
+		it('should handle true', function () {
+			const result = testee('(a true)');
+
+			expect(result).to.have.key('a');
+			expect(result.a).to.be.a('boolean').and.be.true;
+		});
+
+		it('should handle false', function () {
+			const result = testee('(a false)');
+
+			expect(result).to.have.key('a');
+			expect(result.a).to.be.a('boolean').and.not.be.true;
 		});
 	});
 });
