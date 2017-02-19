@@ -20,15 +20,13 @@ const comparisons = require('../../../util/comparisons.js');
 const conditionList = new Sym('conditionList');
 const condition = new Sym('condition');
 const comparison = new Sym('comparison');
-const comparisonItem = new Sym('comparisonItem');
 const comparisonSymbol = new Sym('comparisonSymbol');
-const argumentList = new Sym('argumentList');
 const argument = new Sym('argument');
 const linked = new Sym('linked');
 const linkedConditionList = new Sym('linkedConditionList');
 const exception = new Sym('exception');
 
-const comparisonGrammars = comparisons.map((c) => {
+const comparisonSymbolGrammars = comparisons.map((c) => {
 	return new Rule(comparisonSymbol, [c.symbol], () => {
 		return c.name;
 	});
@@ -42,6 +40,7 @@ const grammar = [
 		return c;
 	}),
 
+	// Condition
 	new Rule(condition, ['(', linked, comparison, exception, ')'], (_, l, c, e) => {
 		c.linkedPreconditions = l;
 		c.exception = e;
@@ -62,6 +61,7 @@ const grammar = [
 		return [c];
 	}),
 
+	// Comparison
 	new Rule(comparison, [argument, comparisonSymbol, argument], (a1, c, a2) => {
 		return {
 			comparison: c,
@@ -92,14 +92,7 @@ const grammar = [
 	}),
 
 	// All comparisons are listed here
-	...comparisonGrammars,
-
-	new Rule(argumentList, [argumentList, argument], (next, a) => {
-		return next.concat(a);
-	}),
-	new Rule(argumentList, [argument], (a) => {
-		return [a];
-	}),
+	...comparisonSymbolGrammars,
 
 	new Rule(argument, [/[a-zA-Z_][-_a-zA-Z0-9]*/], (a) => {
 		return a;
