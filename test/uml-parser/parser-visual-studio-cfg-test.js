@@ -158,5 +158,28 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 			expect(functionCall.arguments[0]).to.equal('a');
 			expect(functionCall.arguments[1]).to.equal('b');
 		});
+
+		it('should parse function calls with no paramaters different spacing styles', function () {
+			const strings = [
+				'(foo () > 0)',
+				'(foo ( ) > 0)'
+			];
+
+			strings.forEach((s) => {
+				const result = testee(s);
+
+				expect(result).to.be.instanceOf(Array).and.have.length(1);
+				expect(result[0].comparison).to.equal('GreaterThan');
+				expect(result[0].arguments[0]).to.be.an('object');
+				expect(result[0].arguments[1]).to.equal(0);
+				expect(result[0].arguments).to.not.include('foo()');
+
+				const functionCall = result[0].arguments[0];
+
+				expect(functionCall.type).to.equal('FunctionCall');
+				expect(functionCall.name).to.equal('foo');
+				expect(functionCall.arguments).to.be.instanceOf(Array).and.have.length(0);
+			});
+		});
 	});
 });
