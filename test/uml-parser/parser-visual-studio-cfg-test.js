@@ -105,5 +105,14 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 			expect(result[0].arguments).to.include('a', 0);
 			expect(result[0].arguments).to.not.include('0');
 		});
+
+		it('should parse float values to numbers', function () {
+			const result = testee('(a > 1.5)');
+
+			expect(result).to.be.instanceOf(Array).and.have.length(1);
+			expect(result[0].comparison).to.equal('GreaterThan');
+			expect(result[0].arguments).to.include('a', 1.5);
+			expect(result[0].arguments).to.not.include('1.0');
+		});
 	});
 });
