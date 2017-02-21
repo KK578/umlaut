@@ -115,4 +115,24 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 			expect(result[0].arguments).to.not.include('1.0');
 		});
 	});
+
+	describe('Boolean', function () {
+		it('should parse true', function () {
+			const result = testee('(a == true)');
+
+			expect(result).to.be.instanceOf(Array).and.have.length(1);
+			expect(result[0].comparison).to.equal('Equal');
+			expect(result[0].arguments).to.include('a', true);
+			expect(result[0].arguments).to.not.include('true');
+		});
+
+		it('should parse false', function () {
+			const result = testee('(a == false)');
+
+			expect(result).to.be.instanceOf(Array).and.have.length(1);
+			expect(result[0].comparison).to.equal('Equal');
+			expect(result[0].arguments).to.include('a', false);
+			expect(result[0].arguments).to.not.include('false');
+		});
+	});
 });
