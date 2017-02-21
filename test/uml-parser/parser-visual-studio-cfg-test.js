@@ -106,4 +106,57 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 			expect(result[0].arguments).to.not.include('0');
 		});
 	});
+
+	describe('Functions', function () {
+		it('should parse function calls with no parameters', function () {
+			const result = testee('(foo() > 0)');
+
+			expect(result).to.be.instanceOf(Array).and.have.length(1);
+			expect(result[0].comparison).to.equal('GreaterThan');
+			expect(result[0].arguments[0]).to.be.an('object');
+			expect(result[0].arguments[1]).to.equal(0);
+			expect(result[0].arguments).to.not.include('foo()');
+
+			const functionCall = result[0].arguments[0];
+
+			expect(functionCall.type).to.equal('FunctionCall');
+			expect(functionCall.name).to.equal('foo');
+			expect(functionCall.arguments).to.be.instanceOf(Array).and.have.length(0);
+		});
+
+		it('should parse function calls with 1 parameter', function () {
+			const result = testee('(foo(a) > 0)');
+
+			expect(result).to.be.instanceOf(Array).and.have.length(1);
+			expect(result[0].comparison).to.equal('GreaterThan');
+			expect(result[0].arguments[0]).to.be.an('object');
+			expect(result[0].arguments[1]).to.equal(0);
+			expect(result[0].arguments).to.not.include('foo()');
+
+			const functionCall = result[0].arguments[0];
+
+			expect(functionCall.type).to.equal('FunctionCall');
+			expect(functionCall.name).to.equal('foo');
+			expect(functionCall.arguments).to.be.instanceOf(Array).and.have.length(1);
+			expect(functionCall.arguments[0]).to.equal('a');
+		});
+
+		it('should parse function calls with 2 parameter', function () {
+			const result = testee('(foo(a, b) > 0)');
+
+			expect(result).to.be.instanceOf(Array).and.have.length(1);
+			expect(result[0].comparison).to.equal('GreaterThan');
+			expect(result[0].arguments[0]).to.be.an('object');
+			expect(result[0].arguments[1]).to.equal(0);
+			expect(result[0].arguments).to.not.include('foo()');
+
+			const functionCall = result[0].arguments[0];
+
+			expect(functionCall.type).to.equal('FunctionCall');
+			expect(functionCall.name).to.equal('foo');
+			expect(functionCall.arguments).to.be.instanceOf(Array).and.have.length(2);
+			expect(functionCall.arguments[0]).to.equal('a');
+			expect(functionCall.arguments[1]).to.equal('b');
+		});
+	});
 });
