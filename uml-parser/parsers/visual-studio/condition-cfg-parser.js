@@ -22,6 +22,7 @@ const condition = new Sym('condition');
 const comparison = new Sym('comparison');
 const comparisonSymbol = new Sym('comparisonSymbol');
 const argument = new Sym('argument');
+const argumentList = new Sym('argumentList');
 const linked = new Sym('linked');
 const linkedConditionList = new Sym('linkedConditionList');
 const exception = new Sym('exception');
@@ -94,11 +95,33 @@ const grammar = [
 	// All comparisons are listed here
 	...comparisonSymbolGrammars,
 
+	new Rule(argument, [/[a-zA-Z_][-_a-zA-Z0-9]*/, '(', ')'], (a) => {
+		return {
+			type: 'FunctionCall',
+			name: a,
+			arguments: []
+		};
+	}),
+	new Rule(argument, [/[a-zA-Z_][-_a-zA-Z0-9]*/, '(', argumentList, ')'], (a, _, args) => {
+		return {
+			type: 'FunctionCall',
+			name: a,
+			arguments: args
+		};
+	}),
 	new Rule(argument, [/[a-zA-Z_][-_a-zA-Z0-9]*/], (a) => {
 		return a;
 	}),
 	new Rule(argument, [/-?[0-9]+/], (a) => {
 		return parseInt(a);
+	}),
+
+	// TODO: Should avoid using argument here as there is a mix up with functions too.
+	new Rule(argumentList, [argument, ',', argumentList], (a, _, a2) => {
+		return [a, ...a2];
+	}),
+	new Rule(argumentList, [argument], (a) => {
+		return [a];
 	}),
 
 	new Rule(exception, ['Exception', ':', /[a-zA-Z_][-_a-zA-Z0-9]*/], (_, __, e) => {
