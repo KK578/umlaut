@@ -131,7 +131,7 @@ function parseMethods(umlClass) {
 
 			// Conditions
 			v.preconditions = getConditions(operation.preconditionsInternal);
-			v.optionalPreconditions = getConditions(operation.bodyConditionsInternal);
+			// v.optionalPreconditions = getConditions(operation.bodyConditionsInternal);
 			v.postconditions = getConditions(operation.postconditionsInternal);
 
 			// TODO: Keep method list as a hashmap of method name?
@@ -156,9 +156,9 @@ function parseClass(umlClass) {
 			c.methods[method.name].addPrecondition(condition);
 		});
 
-		method.optionalPreconditions.forEach((condition) => {
-			c.methods[method.name].addOptionalPrecondition(condition);
-		});
+		// method.optionalPreconditions.forEach((condition) => {
+		// 	c.methods[method.name].addOptionalPrecondition(condition);
+		// });
 
 		method.postconditions.forEach((condition) => {
 			c.methods[method.name].addPostcondition(condition);
