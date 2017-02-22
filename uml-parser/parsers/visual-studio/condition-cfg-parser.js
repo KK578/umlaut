@@ -125,12 +125,10 @@ const grammar = [
 	}),
 
 	new Rule(argumentList, [argument, ':', type, ',', argumentList], (a, _, t, __, a2) => {
-		a2[a] = t;
-
-		return a2;
+		return [{ type: t, value: a }, ...a2];
 	}),
 	new Rule(argumentList, [argument, ':', type], (a, _, t) => {
-		return { [a]: t };
+		return [{ type: t, value: a }];
 	}),
 
 	new Rule(argument, [/[a-zA-Z_][-_a-zA-Z0-9]*/], (a) => {

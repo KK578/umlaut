@@ -140,7 +140,7 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 			expect(functionCall.type).to.equal('Integer');
 			expect(functionCall.name).to.equal('foo');
 			expect(functionCall.arguments).to.be.instanceOf(Array).and.have.length(1);
-			expect(functionCall.arguments[0]).to.equal({ type: 'Integer', value: 5 });
+			expect(functionCall.arguments[0]).to.deep.equal({ type: 'Integer', value: 5 });
 		});
 
 		it('should parse function calls with 2 parameter', function () {
@@ -158,8 +158,8 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 			expect(functionCall.type).to.equal('Integer');
 			expect(functionCall.name).to.equal('foo');
 			expect(functionCall.arguments).to.be.instanceOf(Array).and.have.length(2);
-			expect(functionCall.arguments[0]).to.equal({ type: 'Integer', value: 5 });
-			expect(functionCall.arguments[1]).to.equal({ type: 'Integer', value: 7 });
+			expect(functionCall.arguments[0]).to.deep.equal({ type: 'Integer', value: 5 });
+			expect(functionCall.arguments[1]).to.deep.equal({ type: 'Integer', value: 7 });
 		});
 
 		it('should parse function calls with no paramaters different spacing styles', function () {
