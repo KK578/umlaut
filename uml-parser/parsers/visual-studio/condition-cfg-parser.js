@@ -23,6 +23,7 @@ const comparison = new Sym('comparison');
 const comparisonSymbol = new Sym('comparisonSymbol');
 const functionOrArgument = new Sym('functionOrArgument');
 const functionCall = new Sym('functionCall');
+const type = new Sym('type');
 const argument = new Sym('argument');
 const argumentList = new Sym('argumentList');
 const linked = new Sym('linked');
@@ -106,26 +107,30 @@ const grammar = [
 		return a;
 	}),
 
-	new Rule(functionCall, [/[a-zA-Z_][-_a-zA-Z0-9]*/, '(', ')'], (a) => {
+	new Rule(functionCall, [/[a-zA-Z_][-_a-zA-Z0-9]*/, '(', ')', ':', type], (a, _, __, ___, t) => {
 		return {
-			type: 'FunctionCall',
+			label: 'FunctionCall',
+			type: t,
 			name: a,
-			arguments: []
+			arguments: {}
 		};
 	}),
-	new Rule(functionCall, [/[a-zA-Z_][-_a-zA-Z0-9]*/, '(', argumentList, ')'], (a, _, args) => {
+	new Rule(functionCall, [/[a-zA-Z_][-_a-zA-Z0-9]*/, '(', argumentList, ')', ':', type], (a, _, args, __, ___, t) => {
 		return {
-			type: 'FunctionCall',
+			label: 'FunctionCall',
+			type: t,
 			name: a,
 			arguments: args
 		};
 	}),
 
-	new Rule(argumentList, [argument, ',', argumentList], (a, _, a2) => {
-		return [a, ...a2];
+	new Rule(argumentList, [argument, ':', type, ',', argumentList], (a, _, t, __, a2) => {
+		a2[a] = t;
+
+		return a2;
 	}),
-	new Rule(argumentList, [argument], (a) => {
-		return [a];
+	new Rule(argumentList, [argument, ':', type], (a, _, t) => {
+		return { [a]: t };
 	}),
 
 	new Rule(argument, [/[a-zA-Z_][-_a-zA-Z0-9]*/], (a) => {
@@ -133,6 +138,10 @@ const grammar = [
 	}),
 	new Rule(argument, [/-?[0-9]+/], (a) => {
 		return parseInt(a);
+	}),
+
+	new Rule(type, [/[a-zA-Z]+/], (t) => {
+		return t;
 	}),
 
 	new Rule(exception, ['Exception', ':', /[a-zA-Z_][-_a-zA-Z0-9]*/], (_, __, e) => {

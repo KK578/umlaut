@@ -139,7 +139,7 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 			expect(functionCall.label).to.equal('FunctionCall');
 			expect(functionCall.type).to.equal('Integer');
 			expect(functionCall.name).to.equal('foo');
-			expect(functionCall.arguments).to.be.an('object').and.to.include('a');
+			expect(functionCall.arguments).to.have.keys('a');
 			expect(functionCall.arguments.a).to.equal('Integer');
 		});
 
@@ -157,7 +157,7 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 			expect(functionCall.label).to.equal('FunctionCall');
 			expect(functionCall.type).to.equal('Integer');
 			expect(functionCall.name).to.equal('foo');
-			expect(functionCall.arguments).to.be.an('object').and.to.include(['a', 'b']);
+			expect(functionCall.arguments).to.have.keys('a', 'b');
 			expect(functionCall.arguments.a).to.equal('Integer');
 			expect(functionCall.arguments.b).to.equal('Integer');
 		});
