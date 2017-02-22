@@ -159,7 +159,7 @@ describe('SMT Classes', function () {
 		it('should take just a name', function () {
 			const obj = new TestClass('foo');
 
-			expect(obj.toString()).to.equal('(foo)');
+			expect(obj.toString()).to.equal('foo');
 		});
 
 		it('should take a name and arguments list', function () {
