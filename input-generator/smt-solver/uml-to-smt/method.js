@@ -38,6 +38,35 @@ function declareArguments(args) {
 	return { commands, constants };
 }
 
+function declareArgumentsInConditions(conditions) {
+	const constants = [];
+
+	conditions.forEach((c) => {
+		c.arguments.forEach((a) => {
+			let constant;
+
+			// Handle function call types
+			if (typeof a === 'object') {
+				if (a.label === 'FunctionCall') {
+					const fArgs = a.arguments.map((t) => {
+						return t.value;
+					});
+					const functionCommand = new Smt.FunctionCall(a.name, fArgs);
+
+					constant = functionCommand.toString();
+				}
+			}
+
+			// Ensure that the constant to be added is defined and not already in the list.
+			if (constant !== undefined && constants.indexOf(constant) === -1) {
+				constants.push(constant);
+			}
+		});
+	});
+
+	return constants;
+}
+
 // Declare the function to SMT.
 function declareFunction(method) {
 	const commands = [];
@@ -256,8 +285,9 @@ function complementConditions(conditions, constants) {
 module.exports = class SmtMethod {
 	constructor(method) {
 		const declareArgCommands = declareArguments(method.arguments);
-		const constants = Object.keys(declareArgCommands.constants);
+		let constants = Object.keys(declareArgCommands.constants);
 
+		constants = constants.concat(declareArgumentsInConditions(method.preconditions));
 		this.commands = declareArgCommands.commands.concat(
 			declareFunction(method),
 			assertMethodConditions(method, constants),
