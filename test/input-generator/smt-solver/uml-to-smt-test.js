@@ -328,6 +328,75 @@ describe('UML-To-SMT', function () {
 		});
 	});
 
+	describe('Functions', function () {
+		it('should generate a value for the execution of a function in precondition', function () {
+			const fixture = {
+				Test: {
+					name: 'Test',
+					methods: {
+						Foo: {
+							name: 'Foo',
+							visibility: 'Public',
+							type: 'Integer',
+							arguments: {
+								a: 'Integer',
+								b: 'Integer'
+							},
+							preconditions: [
+								{
+									comparison: 'Equal',
+									arguments: [
+										{
+											label: 'FunctionCall',
+											type: 'Integer',
+											name: 'Bar',
+											arguments: [
+												{
+													type: 'Integer',
+													value: 5
+												}
+											]
+										},
+										0
+									],
+									inverted: true,
+									id: '00000000-0000-0000-0000-000000000000'
+								}
+							],
+							postconditions: []
+						},
+						Bar: {
+							name: 'Bar',
+							visibility: 'Public',
+							type: 'Integer',
+							arguments: {
+								a: 'Integer'
+							}
+						}
+					}
+				}
+			};
+			const result = testee(fixture);
+
+			expect(result).to.have.keys('Test');
+			expect(result.Test).to.have.keys('name', 'smtCommands');
+			expect(result.Test.smtCommands).to.be.instanceOf(Array).and.have.length(2);
+			expect(result.Test.smtCommands[0]).to.have.keys('name', 'commands');
+			expect(result.Test.smtCommands[0].name).to.be.a('string').and.equal('Foo');
+			expect(result.Test.smtCommands[0].commands).to.be.instanceOf(Array);
+
+			const commands = result.Test.smtCommands[0].commands;
+
+			expect(commands).to.include('(define-fun Bar (Int) Int)');
+			expect(commands).to.include('(assert (= (Bar 5) 0))');
+			expect(commands).to.include('(get-value (a b (Bar 5)))');
+
+			expect(result.Test.smtCommands[1]).to.have.keys('name', 'commands');
+			expect(result.Test.smtCommands[1].name).to.be.a('string').and.equal('Bar');
+			expect(result.Test.smtCommands[1].commands).to.be.instanceOf(Array);
+		});
+	});
+
 	describe('Optional Preconditions', function () {
 		it('should work with no optional preconditions', function () {
 			const fixture = {
