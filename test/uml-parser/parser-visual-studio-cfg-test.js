@@ -109,7 +109,7 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 
 	describe('Functions', function () {
 		it('should parse function calls with no parameters', function () {
-			const result = testee('(foo() > 0)');
+			const result = testee('(foo():Integer > 0)');
 
 			expect(result).to.be.instanceOf(Array).and.have.length(1);
 			expect(result[0].comparison).to.equal('GreaterThan');
@@ -119,13 +119,14 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 
 			const functionCall = result[0].arguments[0];
 
-			expect(functionCall.type).to.equal('FunctionCall');
+			expect(functionCall.label).to.equal('FunctionCall');
+			expect(functionCall.type).to.equal('Integer');
 			expect(functionCall.name).to.equal('foo');
-			expect(functionCall.arguments).to.be.instanceOf(Array).and.have.length(0);
+			expect(functionCall.arguments).to.be.an('object').and.be.empty;
 		});
 
 		it('should parse function calls with 1 parameter', function () {
-			const result = testee('(foo(a) > 0)');
+			const result = testee('(foo(a:Integer):Integer > 0)');
 
 			expect(result).to.be.instanceOf(Array).and.have.length(1);
 			expect(result[0].comparison).to.equal('GreaterThan');
@@ -135,14 +136,15 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 
 			const functionCall = result[0].arguments[0];
 
-			expect(functionCall.type).to.equal('FunctionCall');
+			expect(functionCall.label).to.equal('FunctionCall');
+			expect(functionCall.type).to.equal('Integer');
 			expect(functionCall.name).to.equal('foo');
-			expect(functionCall.arguments).to.be.instanceOf(Array).and.have.length(1);
-			expect(functionCall.arguments[0]).to.equal('a');
+			expect(functionCall.arguments).to.be.an('object').and.to.include('a');
+			expect(functionCall.arguments.a).to.equal('Integer');
 		});
 
 		it('should parse function calls with 2 parameter', function () {
-			const result = testee('(foo(a, b) > 0)');
+			const result = testee('(foo(a:Integer, b:Integer):Integer > 0)');
 
 			expect(result).to.be.instanceOf(Array).and.have.length(1);
 			expect(result[0].comparison).to.equal('GreaterThan');
@@ -152,17 +154,18 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 
 			const functionCall = result[0].arguments[0];
 
-			expect(functionCall.type).to.equal('FunctionCall');
+			expect(functionCall.label).to.equal('FunctionCall');
+			expect(functionCall.type).to.equal('Integer');
 			expect(functionCall.name).to.equal('foo');
-			expect(functionCall.arguments).to.be.instanceOf(Array).and.have.length(2);
-			expect(functionCall.arguments[0]).to.equal('a');
-			expect(functionCall.arguments[1]).to.equal('b');
+			expect(functionCall.arguments).to.be.an('object').and.to.include(['a', 'b']);
+			expect(functionCall.arguments.a).to.equal('Integer');
+			expect(functionCall.arguments.b).to.equal('Integer');
 		});
 
 		it('should parse function calls with no paramaters different spacing styles', function () {
 			const strings = [
-				'(foo () > 0)',
-				'(foo ( ) > 0)'
+				'(foo ():Integer > 0)',
+				'(foo ( ):Integer > 0)'
 			];
 
 			strings.forEach((s) => {
@@ -176,9 +179,10 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 
 				const functionCall = result[0].arguments[0];
 
-				expect(functionCall.type).to.equal('FunctionCall');
+				expect(functionCall.label).to.equal('FunctionCall');
+				expect(functionCall.type).to.equal('Integer');
 				expect(functionCall.name).to.equal('foo');
-				expect(functionCall.arguments).to.be.instanceOf(Array).and.have.length(0);
+				expect(functionCall.arguments).to.be.an('object').and.be.empty;
 			});
 		});
 	});
