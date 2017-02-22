@@ -388,7 +388,6 @@ describe('UML-To-SMT', function () {
 
 			const commands = result.Test.smtCommands[0].commands;
 
-			console.log(commands);
 			expect(commands[5]).to.equal('(declare-fun Bar (Int) Int)');
 			expect(commands[6]).to.equal('(assert (= (Bar 5) 0))');
 			expect(commands[9]).to.contain('(get-value (a b (Bar 5)))');
