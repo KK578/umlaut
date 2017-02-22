@@ -1,3 +1,4 @@
+const SmtFunctionCall = require('./FunctionCall');
 const comparisons = require('../../../../util/comparisons.js');
 
 module.exports = class SmtBooleanExpression {
@@ -25,6 +26,17 @@ module.exports = class SmtBooleanExpression {
 
 	toString() {
 		const args = this.args.map((a) => {
+			if (typeof a === 'object') {
+				if (a.label === 'FunctionCall') {
+					const fArgs = a.arguments.map((t) => {
+						return t.value;
+					});
+					const functionCommand = new SmtFunctionCall(a.name, fArgs);
+
+					return functionCommand.toString();
+				}
+			}
+
 			return a.toString();
 		}).join(' ');
 		const command = `(${this.comparison} ${args})`;
