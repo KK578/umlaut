@@ -57,6 +57,23 @@ function assertConditions(conditions) {
 
 	conditions.forEach((condition) => {
 		const comparison = comparisons.toSmtSymbol(condition.comparison);
+
+		// For each argument in the condition, determine if it is a function and generate the
+		//  corresponding SMT function declaration.
+		condition.arguments.forEach((a) => {
+			if (typeof a === 'object') {
+				if (a.label === 'FunctionCall') {
+					const fType = convertType(a.type);
+					const fArgs = a.arguments.map((t) => {
+						return convertType(t.type);
+					});
+					const functionCommand = new Smt.DeclareFunction(a.name, fType, fArgs);
+
+					commands.push(functionCommand);
+				}
+			}
+		});
+
 		const command = new Smt.BooleanExpression(comparison,
 			condition.arguments, condition.inverted);
 

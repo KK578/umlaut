@@ -359,7 +359,6 @@ describe('UML-To-SMT', function () {
 										},
 										0
 									],
-									inverted: true,
 									id: '00000000-0000-0000-0000-000000000000'
 								}
 							],
@@ -371,7 +370,9 @@ describe('UML-To-SMT', function () {
 							type: 'Integer',
 							arguments: {
 								a: 'Integer'
-							}
+							},
+							preconditions: [],
+							postconditions: []
 						}
 					}
 				}
@@ -387,9 +388,10 @@ describe('UML-To-SMT', function () {
 
 			const commands = result.Test.smtCommands[0].commands;
 
-			expect(commands).to.include('(define-fun Bar (Int) Int)');
-			expect(commands).to.include('(assert (= (Bar 5) 0))');
-			expect(commands).to.include('(get-value (a b (Bar 5)))');
+			console.log(commands);
+			expect(commands[5]).to.equal('(declare-fun Bar (Int) Int)');
+			expect(commands[6]).to.equal('(assert (= (Bar 5) 0))');
+			expect(commands[9]).to.match(/get-value \(.*\(Bar 5\).*\)/);
 
 			expect(result.Test.smtCommands[1]).to.have.keys('name', 'commands');
 			expect(result.Test.smtCommands[1].name).to.be.a('string').and.equal('Bar');
