@@ -39,17 +39,22 @@ function declareArguments(args) {
 }
 
 function declareVariables(variables) {
+	const commands = [];
+	const constants = {};
+
 	Object.keys(variables).forEach((name) => {
 		const variable = variables[name];
 		const type = convertType(variable.type);
 		const command = new Smt.DeclareConst(name, type);
 
-		if (!this.constants[name]) {
-			this.constants[name] = true;
+		if (!constants[name]) {
+			constants[name] = true;
 		}
 
-		this.commands.push(command);
+		commands.push(command);
 	});
+
+	return { commands, constants };
 }
 
 function declareArgumentsInConditions(conditions) {
@@ -299,13 +304,17 @@ function complementConditions(conditions, constants) {
 module.exports = class SmtMethod {
 	constructor(method, classVariables) {
 		const declareArgCommands = declareArguments(method.arguments);
+		let declareVariableCommands = { commands: [] };
 		let constants = Object.keys(declareArgCommands.constants);
 
 		if (classVariables) {
-			declareVariables(classVariables);
+			declareVariableCommands = declareVariables(classVariables);
+			constants = constants.concat(Object.keys(declareVariableCommands.constants));
 		}
+
 		constants = constants.concat(declareArgumentsInConditions(method.preconditions));
 		this.commands = declareArgCommands.commands.concat(
+			declareVariableCommands.commands,
 			declareFunction(method),
 			assertMethodConditions(method, constants),
 			assertMethodOptionalConditions(method, constants)
