@@ -328,7 +328,7 @@ describe('UML-To-SMT', function () {
 		});
 	});
 
-	describe('Optional Preconditions', function () {
+	describe.skip('Optional Preconditions', function () {
 		it('should work with no optional preconditions', function () {
 			const fixture = {
 				Test: {

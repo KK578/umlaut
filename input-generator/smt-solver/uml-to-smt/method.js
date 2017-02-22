@@ -160,6 +160,9 @@ function getAllCombinations(list) {
 	return result;
 }
 
+/**
+ * Disabled Optional Conditions
+ *
 function assertMethodOptionalConditions(method, constants) {
 	if (!Array.isArray(method.optionalPreconditions) ||
 		method.optionalPreconditions.length === 0) {
@@ -181,7 +184,8 @@ function assertMethodOptionalConditions(method, constants) {
 	// This indicates to z3-runner that this set of commands will output the inputs which
 	//  correspond to all *optional* preconditions being successfully fulfilled as well.
 	const optionalConditionAssertionCommands = assertConditions(method.optionalPreconditions);
-	const stackedCommands = addStackMessage(optionalConditionAssertionCommands, ',[[ValidOptional]]', constants);
+	const stackedCommands = addStackMessage(optionalConditionAssertionCommands,
+		',[[ValidOptional]]', constants);
 
 	commands.push(...stackedCommands);
 
@@ -193,6 +197,7 @@ function assertMethodOptionalConditions(method, constants) {
 
 	return commands;
 }
+*/
 
 function assertComplementedConditions(conditions, complementSets, constants) {
 	const commands = [];
@@ -226,8 +231,7 @@ module.exports = class SmtMethod {
 
 		this.commands = declareArgCommands.commands.concat(
 			declareFunction(method),
-			assertMethodConditions(method, constants),
-			assertMethodOptionalConditions(method, constants)
+			assertMethodConditions(method, constants)
 		);
 	}
 
