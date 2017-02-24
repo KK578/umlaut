@@ -38,6 +38,54 @@ function declareArguments(args) {
 	return { commands, constants };
 }
 
+function declareVariables(variables) {
+	const commands = [];
+	const constants = {};
+
+	Object.keys(variables).forEach((name) => {
+		const variable = variables[name];
+		const type = convertType(variable.type);
+		const command = new Smt.DeclareConst(name, type);
+
+		if (!constants[name]) {
+			constants[name] = true;
+		}
+
+		commands.push(command);
+	});
+
+	return { commands, constants };
+}
+
+function declareArgumentsInConditions(conditions) {
+	const constants = [];
+
+	conditions.forEach((c) => {
+		c.arguments.forEach((a) => {
+			let constant;
+
+			// Handle function call types
+			if (typeof a === 'object') {
+				if (a.label === 'FunctionCall') {
+					const fArgs = a.arguments.map((t) => {
+						return t.value;
+					});
+					const functionCommand = new Smt.FunctionCall(a.name, fArgs);
+
+					constant = functionCommand.toString();
+				}
+			}
+
+			// Ensure that the constant to be added is defined and not already in the list.
+			if (constant !== undefined && constants.indexOf(constant) === -1) {
+				constants.push(constant);
+			}
+		});
+	});
+
+	return constants;
+}
+
 // Declare the function to SMT.
 function declareFunction(method) {
 	const commands = [];
@@ -57,6 +105,23 @@ function assertConditions(conditions) {
 
 	conditions.forEach((condition) => {
 		const comparison = comparisons.toSmtSymbol(condition.comparison);
+
+		// For each argument in the condition, determine if it is a function and generate the
+		//  corresponding SMT function declaration.
+		condition.arguments.forEach((a) => {
+			if (typeof a === 'object') {
+				if (a.label === 'FunctionCall') {
+					const fType = convertType(a.type);
+					const fArgs = a.arguments.map((t) => {
+						return convertType(t.type);
+					});
+					const functionCommand = new Smt.DeclareFunction(a.name, fType, fArgs);
+
+					commands.push(functionCommand);
+				}
+			}
+		});
+
 		const command = new Smt.BooleanExpression(comparison,
 			condition.arguments, condition.inverted);
 
@@ -71,6 +136,23 @@ function assertConditionsWithInverts(conditions, complementSet) {
 
 	conditions.forEach((condition) => {
 		const comparison = comparisons.toSmtSymbol(condition.comparison);
+
+		// For each argument in the condition, determine if it is a function and generate the
+		//  corresponding SMT function declaration.
+		condition.arguments.forEach((a) => {
+			if (typeof a === 'object') {
+				if (a.label === 'FunctionCall') {
+					const fType = convertType(a.type);
+					const fArgs = a.arguments.map((t) => {
+						return convertType(t.type);
+					});
+					const functionCommand = new Smt.DeclareFunction(a.name, fType, fArgs);
+
+					commands.push(functionCommand);
+				}
+			}
+		});
+
 		const command = new Smt.BooleanExpression(comparison,
 			condition.arguments, condition.inverted);
 
@@ -220,11 +302,19 @@ function complementConditions(conditions, constants) {
 }
 
 module.exports = class SmtMethod {
-	constructor(method) {
+	constructor(method, classVariables) {
 		const declareArgCommands = declareArguments(method.arguments);
-		const constants = Object.keys(declareArgCommands.constants);
+		let declareVariableCommands = { commands: [] };
+		let constants = Object.keys(declareArgCommands.constants);
 
+		if (classVariables) {
+			declareVariableCommands = declareVariables(classVariables);
+			constants = constants.concat(Object.keys(declareVariableCommands.constants));
+		}
+
+		constants = constants.concat(declareArgumentsInConditions(method.preconditions));
 		this.commands = declareArgCommands.commands.concat(
+			declareVariableCommands.commands,
 			declareFunction(method),
 			assertMethodConditions(method, constants),
 			assertMethodOptionalConditions(method, constants)

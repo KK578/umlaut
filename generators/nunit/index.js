@@ -15,6 +15,10 @@ function getLanguageType(type) {
 		case 'Boolean':
 			return 'bool';
 
+		case '#SelfReference':
+			// Do not overwrite special types used in the tool.
+			return type;
+
 		default:
 			console.log(`Undefined type "${type}"`);
 

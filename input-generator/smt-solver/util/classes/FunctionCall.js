@@ -19,7 +19,7 @@ module.exports = class SmtFunctionCall {
 			return `(${this.name} ${args})`;
 		}
 		else {
-			return `(${this.name})`;
+			return this.name;
 		}
 	}
 };
