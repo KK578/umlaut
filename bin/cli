@@ -1,5 +1,7 @@
 #!/usr/bin/env node
+
 const path = require('path');
+const program = require('commander');
 
 const umlParser = require('../uml-parser/index.js');
 const inputGenerator = require('../input-generator/index.js');
@@ -38,3 +40,11 @@ function run(filename) {
 		return promiseRunTestGenerator(options);
 	});
 }
+
+// CLI
+const packageData = require('../package.json');
+
+program.version(packageData.version)
+	.usage('[options] <file>')
+	.option('-f, --framework <framework>', 'Testing Language+Framework to generate tests for')
+	.parse(process.argv);
