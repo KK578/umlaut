@@ -1,0 +1,40 @@
+#!/usr/bin/env node
+const path = require('path');
+
+const umlParser = require('../uml-parser/index.js');
+const inputGenerator = require('../input-generator/index.js');
+const promises = require('../util/promises.js');
+
+const yeoman = require('yeoman-environment');
+const yeomanEnv = yeoman.createEnv();
+
+yeomanEnv.register(path.join(__dirname, '../generators/app'), 'mdt:app');
+
+function promiseRunTestGenerator(options) {
+	return new Promise((resolve, reject) => {
+		yeomanEnv.run('mdt:app', options, (err) => {
+			if (err) {
+				reject();
+			}
+			else {
+				resolve();
+			}
+		});
+	});
+}
+
+function run(filename) {
+	const resolved = path.resolve(filename);
+
+	return promises.fsReadFile(resolved).then((modelData) => {
+		return umlParser(modelData);
+	}).then((parsedModelData) => {
+		return inputGenerator(parsedModelData);
+	}).then((modelDataWithInputs) => {
+		const options = {
+			model: JSON.stringify(modelDataWithInputs)
+		};
+
+		return promiseRunTestGenerator(options);
+	});
+}
