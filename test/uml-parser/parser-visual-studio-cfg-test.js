@@ -47,7 +47,7 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 	});
 
 	it('should handle conditions with a list with 2 items for linked preconditions at the start', function () {
-		const result = testee('({0,1} a == b)');
+		const result = testee('({0;1} a == b)');
 
 		expect(result).to.be.instanceOf(Array).and.have.length(1);
 		expect(result[0].comparison).to.equal('Equal');
@@ -58,7 +58,7 @@ describe('CFG Parser for Visual Studio Condition Strings', function () {
 	});
 
 	it('should handle conditions with a list with 3 items for linked preconditions at the start', function () {
-		const result = testee('({0,1,2} a == b)');
+		const result = testee('({0;1;2} a == b)');
 
 		expect(result).to.be.instanceOf(Array).and.have.length(1);
 		expect(result[0].comparison).to.equal('Equal');
