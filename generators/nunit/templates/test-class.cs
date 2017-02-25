@@ -41,7 +41,7 @@ namespace AutomatedTestSuite
 			<%_ }) _%>
 
 			<%_ test.assertions.forEach((a) => { _%>
-			Assert.isTrue(<%= a.arguments[0] %> <%- a.comparison %> <%= a.arguments[1] %>);
+			Assert.IsTrue(<%= a.arguments[0] %> <%- a.comparison %> <%= a.arguments[1] %>);
 			<%_ }) _%>
 		}
 		<%_			} _%>
