@@ -57,44 +57,49 @@ function parseMethods(umlClass) {
 
 	// Helper function to get function return type.
 	function getReturnType(parameters) {
-		// Must iterate through all and find first that is a return property.
-		const parameterList = parameters[0].operationHasOwnedParameters;
-		// Filter to find the first parameter that is the return type.
-		const parameter = parameterList.map((parameterListing) => {
-			// <parameter> node exists under each <operationHasOwnedParameters> node.
-			// Return the value contained within the <parameter> node.
-			return parameterListing.parameter[0];
-		}).filter((parameter) => {
-			return parameter.$.direction === 'Return';
-		})[0];
+		let type = 'Void';
 
-		if (parameter) {
-			// TODO: Will the system support Python's multiple object return?'
-			return getTypeFromNode(parameter);
+		if (parameters) {
+			// Must iterate through all and find first that is a return property.
+			const parameterList = parameters[0].operationHasOwnedParameters;
+			// Filter to find the first parameter that is the return type.
+			const parameter = parameterList.map((parameterListing) => {
+				// <parameter> node exists under each <operationHasOwnedParameters> node.
+				// Return the value contained within the <parameter> node.
+				return parameterListing.parameter[0];
+			}).filter((parameter) => {
+				return parameter.$.direction === 'Return';
+			})[0];
+
+			if (parameter) {
+				// TODO: Will the system support Python's multiple object return?'
+				type = getTypeFromNode(parameter);
+			}
 		}
-		else {
-			// Did not find a return type, so function has void type.
-			return 'Void';
-		}
+
+		return type;
 	}
 
 	// Helper function to get function arguments to array of { name, type }.
 	function getArguments(parameters) {
 		const args = [];
-		const parameterList = parameters[0].operationHasOwnedParameters;
 
-		parameterList.map((parameterListing) => {
-			// <parameter> node exists under each <operationHasOwnedParameters> node.
-			// Return the value contained within the <parameter> node.
-			return parameterListing.parameter[0];
-		}).filter((parameter) => {
-			return parameter.$.direction === 'In';
-		}).forEach((parameter) => {
-			args.push({
-				name: parameter.$.name,
-				type: getTypeFromNode(parameter)
+		if (parameters) {
+			const parameterList = parameters[0].operationHasOwnedParameters;
+
+			parameterList.map((parameterListing) => {
+				// <parameter> node exists under each <operationHasOwnedParameters> node.
+				// Return the value contained within the <parameter> node.
+				return parameterListing.parameter[0];
+			}).filter((parameter) => {
+				return parameter.$.direction === 'In';
+			}).forEach((parameter) => {
+				args.push({
+					name: parameter.$.name,
+					type: getTypeFromNode(parameter)
+				});
 			});
-		});
+		}
 
 		return args;
 	}
@@ -107,7 +112,9 @@ function parseMethods(umlClass) {
 			const constraint = conditions[0].constraint[0];
 			const conditionString = constraint.specification[0].literalString[0].$.value;
 
-			c = cfgParser(conditionString);
+			if (!(conditionString === '' || conditionString === '()')) {
+				c = cfgParser(conditionString);
+			}
 		}
 
 		return c;

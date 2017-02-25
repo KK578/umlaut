@@ -14,7 +14,9 @@ function convertType(type) {
 			return 'Bool';
 
 		default:
-			return type;
+			console.log(`Undefined type '${type}', defaulting to 'Int'`);
+
+			return 'Int';
 	}
 }
 
