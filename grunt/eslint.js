@@ -7,6 +7,7 @@ module.exports = {
 			{
 				expand: true,
 				src: [
+					'bin/cli',
 					'gruntfile.js',
 					'grunt/*.js',
 					'util/*.js',

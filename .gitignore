@@ -23,7 +23,6 @@ bower[-_]components/
 *.suo
 .vs/
 [Oo]bj/
-[Bb]in/
 [Ll]ib/
 packages/
 [Dd]ebug/
