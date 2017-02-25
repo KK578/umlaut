@@ -48,6 +48,16 @@ namespace UmlAnnotator
 				innerCondition = innerCondition.Substring(1, innerCondition.Length - 2);
 			}
 
+			if (String.IsNullOrWhiteSpace(innerCondition))
+			{
+				arguments = new List<string>();
+				// Add two blank arguments to correspond to left and right arguments.
+				arguments.Add("");
+				arguments.Add("");
+
+				return;
+			}
+
 			string[] items = innerCondition.Split(' ');
 			// Ternary ensures inversion syntax is handled correctly here.
 			Comparator = FindComparison(items[1] == "not" ? items[2] : items[1]);
