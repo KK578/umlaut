@@ -116,7 +116,10 @@ module.exports = (uml) => {
 	const testClass = {};
 
 	testClass.name = uml.name;
-	testClass.methods = Object.keys(uml.methods).map((name) => {
+	testClass.methods = Object.keys(uml.methods).filter((name) => {
+		// Filter out constructors.
+		return testClass.name !== name;
+	}).map((name) => {
 		return readMethod(uml.methods[name], uml.variables);
 	});
 
