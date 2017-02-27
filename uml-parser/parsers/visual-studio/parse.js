@@ -4,6 +4,31 @@ const cfgParser = require('./condition-cfg-parser.js');
 const classes = require('../../util/classes.js');
 const AnnotatedUmlClass = classes.AnnotatedUmlClass;
 
+function convertType(type) {
+	const normalisedType = type.toLowerCase();
+
+	switch (normalisedType) {
+		case 'integer':
+		case 'int':
+			return 'Integer';
+
+		case 'float':
+			return 'Float';
+
+		case 'double':
+			return 'Double';
+
+		case 'boolean':
+		case 'bool':
+			return 'Boolean';
+
+		default:
+			console.log('Unknown Type, defaulting to "Object"');
+
+			return 'Object';
+	}
+}
+
 function getTypeFromNode(parameter) {
 	let type = '';
 
@@ -27,7 +52,7 @@ function getTypeFromNode(parameter) {
 		type = 'Object';
 	}
 
-	return type;
+	return convertType(type);
 }
 
 function parseVariables(umlClass) {
