@@ -130,7 +130,6 @@ module.exports = (uml) => {
 
 	testClass.name = uml.name;
 	testClass.methods = Object.keys(uml.methods).filter((name) => {
-
 		// Filter out constructors.
 		return testClass.name !== name;
 	}).map((name) => {

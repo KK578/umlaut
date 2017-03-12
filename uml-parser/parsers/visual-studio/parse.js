@@ -23,9 +23,9 @@ function convertType(type) {
 			return 'Boolean';
 
 		default:
-			console.log('Unknown Type, defaulting to "Object"');
+			console.log(`User defined type: "${type}"`);
 
-			return 'Object';
+			return type;
 	}
 }
 
