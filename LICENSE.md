@@ -1,6 +1,6 @@
 [BSD 3-Clause License](https://opensource.org/licenses/BSD-3-Clause)
 
-compm091-code  
+UMDT
 Copyright (c) 2017, Kevin Kwan (KevinKwan@googlemail.com)
 All rights reserved.
 

@@ -1,4 +1,4 @@
-# compm091-code
+# UMDT
 
 [![Build Status](https://travis-ci.com/KK578/compm091-code.svg?token=hs1VhKpTNLLpkBzhwkbp&branch=master)](https://travis-ci.com/KK578/compm091-code)
 [![codecov](https://codecov.io/gh/KK578/compm091-code/branch/master/graph/badge.svg?token=IVRG99xGEK)](https://codecov.io/gh/KK578/compm091-code)
