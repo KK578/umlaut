@@ -21,7 +21,11 @@ const conditionList = new Sym('conditionList');
 const condition = new Sym('condition');
 const comparison = new Sym('comparison');
 const comparisonSymbol = new Sym('comparisonSymbol');
+const functionOrArgument = new Sym('functionOrArgument');
+const functionCall = new Sym('functionCall');
+const type = new Sym('type');
 const argument = new Sym('argument');
+const argumentList = new Sym('argumentList');
 const linked = new Sym('linked');
 const linkedConditionList = new Sym('linkedConditionList');
 const exception = new Sym('exception');
@@ -62,29 +66,31 @@ const grammar = [
 	}),
 
 	// Comparison
-	new Rule(comparison, [argument, comparisonSymbol, argument], (a1, c, a2) => {
-		return {
-			comparison: c,
-			arguments: [a1, a2]
-		};
-	}),
-	new Rule(comparison, [argument, 'not', comparisonSymbol, argument], (a1, _, c, a2) => {
-		// TODO: Error or silently log?
-		if (!comparisons.isInvertable(c)) {
-			throw new Error('Comparison is not invertable.');
-		}
+	new Rule(comparison, [functionOrArgument, comparisonSymbol, functionOrArgument],
+		(a1, c, a2) => {
+			return {
+				comparison: c,
+				arguments: [a1, a2]
+			};
+		}),
+	new Rule(comparison, [functionOrArgument, 'not', comparisonSymbol, functionOrArgument],
+		(a1, _, c, a2) => {
+			// TODO: Error or silently log?
+			if (!comparisons.isInvertable(c)) {
+				throw new Error('Comparison is not invertable.');
+			}
 
-		return {
-			comparison: c,
-			arguments: [a1, a2],
-			inverted: true
-		};
-	}),
+			return {
+				comparison: c,
+				arguments: [a1, a2],
+				inverted: true
+			};
+		}),
 
 	new Rule(linked, ['{', linkedConditionList, '}'], (_, l) => {
 		return l;
 	}),
-	new Rule(linkedConditionList, [/[0-9]+/, ',', linkedConditionList], (n, _, n2) => {
+	new Rule(linkedConditionList, [/[0-9]+/, ';', linkedConditionList], (n, _, n2) => {
 		return [parseInt(n), ...n2];
 	}),
 	new Rule(linkedConditionList, [/[0-9]+/], (n) => {
@@ -94,11 +100,55 @@ const grammar = [
 	// All comparisons are listed here
 	...comparisonSymbolGrammars,
 
+	new Rule(functionOrArgument, [functionCall], (f) => {
+		return f;
+	}),
+	new Rule(functionOrArgument, [argument], (a) => {
+		return a;
+	}),
+
+	new Rule(functionCall, [/[a-zA-Z_][-_a-zA-Z0-9]*/, '(', ')', ':', type], (a, _, __, ___, t) => {
+		return {
+			label: 'FunctionCall',
+			type: t,
+			name: a,
+			arguments: {}
+		};
+	}),
+	new Rule(functionCall, [/[a-zA-Z_][-_a-zA-Z0-9]*/, '(', argumentList, ')', ':', type], (a, _, args, __, ___, t) => {
+		return {
+			label: 'FunctionCall',
+			type: t,
+			name: a,
+			arguments: args
+		};
+	}),
+
+	new Rule(argumentList, [argument, ':', type, ',', argumentList], (a, _, t, __, a2) => {
+		return [{ type: t, value: a }, ...a2];
+	}),
+	new Rule(argumentList, [argument, ':', type], (a, _, t) => {
+		return [{ type: t, value: a }];
+	}),
+
+	new Rule(argument, ['true'], () => {
+		return true;
+	}),
+	new Rule(argument, ['false'], () => {
+		return false;
+	}),
 	new Rule(argument, [/[a-zA-Z_][-_a-zA-Z0-9]*/], (a) => {
 		return a;
 	}),
+	new Rule(argument, [/[0-9]+/, /\./, /[0-9]+/], (v, _, vv) => {
+		return parseFloat(`${v}.${vv}`);
+	}),
 	new Rule(argument, [/-?[0-9]+/], (a) => {
 		return parseInt(a);
+	}),
+
+	new Rule(type, [/[a-zA-Z]+/], (t) => {
+		return t;
 	}),
 
 	new Rule(exception, ['Exception', ':', /[a-zA-Z_][-_a-zA-Z0-9]*/], (_, __, e) => {

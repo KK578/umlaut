@@ -14,17 +14,7 @@ namespace UmlAnnotator
 		private string exception;
 		public string Exception
 		{
-			get
-			{
-				if (!String.IsNullOrWhiteSpace(exception))
-				{
-					return String.Format("Exception:{0}", exception);
-				}
-				else
-				{
-					return "";
-				}
-			}
+			get { return exception; }
 		}
 		private bool isInverted;
 		public bool IsInverted
@@ -46,6 +36,16 @@ namespace UmlAnnotator
 			if (innerCondition.StartsWith("("))
 			{
 				innerCondition = innerCondition.Substring(1, innerCondition.Length - 2);
+			}
+
+			if (String.IsNullOrWhiteSpace(innerCondition))
+			{
+				arguments = new List<string>();
+				// Add two blank arguments to correspond to left and right arguments.
+				arguments.Add("");
+				arguments.Add("");
+
+				return;
 			}
 
 			string[] items = innerCondition.Split(' ');
@@ -112,8 +112,8 @@ namespace UmlAnnotator
 
 			if (!String.IsNullOrWhiteSpace(exception))
 			{
-				// Use Exception here to ensure it is formatted correctly.
-				result = String.Format("({0} {1})", main, Exception);
+				string formattedException = String.Format("Exception:{0}", exception);
+				result = String.Format("({0} {1})", main, formattedException);
 			}
 			else
 			{

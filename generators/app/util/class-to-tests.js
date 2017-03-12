@@ -40,7 +40,7 @@ function findCondition(preconditions, condition) {
 	}
 }
 
-function readTest(method, test) {
+function readTest(method, variables, test) {
 	const id = test.id || test.condition;
 	const conditions = findCondition(method.preconditions, id);
 
@@ -49,11 +49,20 @@ function readTest(method, test) {
 	const exception = conditions[0].exception;
 
 	const initialise = Object.keys(test.arguments).map((name) => {
-		return {
+		const result = {
 			name: name,
 			type: method.arguments[name],
 			value: test.arguments[name]
 		};
+
+		// Check if current argument is not a method argument
+		if (!method.arguments[name]) {
+			if (variables[name]) {
+				result.type = '#SelfReference';
+			}
+		}
+
+		return result;
 	});
 
 	const run = [
@@ -68,7 +77,20 @@ function readTest(method, test) {
 		}
 	];
 
-	const assertions = method.postconditions;
+	// HACK: Retargets class variables in postconditions to correctly use the object.
+	//			Should do rewrite at the template point. Hack done here for now as
+	// 			 there are inconsistencies with how variables are represented.
+	const assertions = method.postconditions.map((postcondition) => {
+		postcondition.arguments = postcondition.arguments.map((name) => {
+			if (variables[name]) {
+				name = `testee.${name}`;
+			}
+
+			return name;
+		});
+
+		return postcondition;
+	});
 
 	return {
 		name,
@@ -79,14 +101,14 @@ function readTest(method, test) {
 	};
 }
 
-function readMethod(m) {
+function readMethod(m, variables) {
 	const tests = m.tests.map((t) => {
 		if (t.arguments === 'Unsatisfiable' ||
 			t.unsatisfiable === true) {
 			return null;
 		}
 
-		return readTest(m, t);
+		return readTest(m, variables, t);
 	});
 
 	const postconditions = m.postconditions.map((c) => {
@@ -107,8 +129,11 @@ module.exports = (uml) => {
 	const testClass = {};
 
 	testClass.name = uml.name;
-	testClass.methods = Object.keys(uml.methods).map((name) => {
-		return readMethod(uml.methods[name]);
+	testClass.methods = Object.keys(uml.methods).filter((name) => {
+		// Filter out constructors.
+		return testClass.name !== name;
+	}).map((name) => {
+		return readMethod(uml.methods[name], uml.variables);
 	});
 
 	return testClass;

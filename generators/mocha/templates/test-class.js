@@ -9,7 +9,11 @@ describe('<%= classObject.name %>', function () {
 	<%_			if (test) { %>
 	it('<%= test.name %>', function () {
 		<%_ test.initialise.forEach((i) => { _%>
+		<%_ 	if (i.type == '#SelfReference') { _%>
+		testee.<%= i.name %> = <%= i.value %>;
+		<%_ 	} else { _%>
 		<%= i.type %> <%= i.name %> = <%= i.value %>;
+		<%_ 	} _%>
 		<%_ }) _%>
 
 		<%_ if (test.exception) { _%>
@@ -17,7 +21,11 @@ describe('<%= classObject.name %>', function () {
 		<%_ } else { _%>
 		<%_ test.run.forEach((r) => { _%>
 		<%_ 	if (r.value.type === 'function-call') { _%>
+		<%_			if (r.type === 'Void') { _%>
+		testee.<%= r.value.name %>(<%= r.value.arguments.join(', ') %>);
+		<%_			} else { _%>
 		<%= r.type %> <%= r.name %> = testee.<%= r.value.name %>(<%= r.value.arguments.join(', ') %>);
+		<%_			} _%>
 		<%_ 	} _%>
 		<%_ }) _%>
 

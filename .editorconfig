@@ -16,7 +16,7 @@ insert_final_newline = true
 indent_style = space
 indent_size = 2
 
-[{*.json,*.yml}]
+[{*.json,*.yml,bin/cli}]
 end_of_line = lf
 
 [*.md]

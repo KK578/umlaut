@@ -1,6 +1,11 @@
 const Generator = require('yeoman-generator');
 
-function getLanguageType() {
+function getLanguageType(type) {
+	if (type === '#SelfReference') {
+		// Do not overwrite special types used in the tool.
+		return type;
+	}
+
 	// TODO: Expand this to a config file lookup
 	return 'var';
 }
