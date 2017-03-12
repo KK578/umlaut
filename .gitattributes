@@ -1,8 +1,8 @@
 ###############################################################################
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
-.*			text=auto eol=crlf
-*			text=auto eol=crlf
+.*			text=auto eol=lf
+*			text=auto eol=lf
 
 ###############################################################################
 # Behavior for image files
