@@ -23,7 +23,11 @@ namespace AutomatedTestSuite
 		public void <%= test.name %>()
 		{
 			<%_ test.initialise.forEach((i) => { _%>
+			<%_ 	if (i.type == '#SelfReference') { _%>
+			testee.<%= i.name %> = <%= i.value %>;
+			<%_ 	} else { _%>
 			<%= i.type %> <%= i.name %> = <%= i.value %>;
+			<%_ 	} _%>
 			<%_ }) _%>
 
 			<%_ test.run.forEach((r) => { _%>
