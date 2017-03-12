@@ -1,10 +1,11 @@
 {
   "name": "umdt",
   "version": "0.1.6",
-  "description": "",
+  "description": "Generate unit tests from UML models",
+  "bin": "./bin/cli.js",
   "author": {
     "name": "Kevin Kwan",
-    "email": "KevinKwan@googlemail.com"
+    "email": "KevinKwan95@googlemail.com"
   },
   "license": "BSD-3-Clause",
   "repository": {
@@ -14,19 +15,13 @@
   "bugs": {
     "url": "https://github.com/KK578/compm091-code/issues"
   },
-  "files": [
-    "generators/junit",
-    "generators/nunit"
-  ],
-  "keywords": [
-    "yeoman-generator"
-  ],
   "dependencies": {
     "commander": "^2.9.0",
     "glob": "^7.1.1",
     "parsey": "^0.2.0",
     "uuid": "^3.0.1",
     "xml2js": "^0.4.17",
+    "yeoman-environment": "^1.6.6",
     "yeoman-generator": "^1.0.0"
   },
   "devDependencies": {
