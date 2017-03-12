@@ -131,8 +131,17 @@ const grammar = [
 		return [{ type: t, value: a }];
 	}),
 
+	new Rule(argument, ['true'], () => {
+		return true;
+	}),
+	new Rule(argument, ['false'], () => {
+		return false;
+	}),
 	new Rule(argument, [/[a-zA-Z_][-_a-zA-Z0-9]*/], (a) => {
 		return a;
+	}),
+	new Rule(argument, [/[0-9]+/, /\./, /[0-9]+/], (v, _, vv) => {
+		return parseFloat(`${v}.${vv}`);
 	}),
 	new Rule(argument, [/-?[0-9]+/], (a) => {
 		return parseInt(a);
