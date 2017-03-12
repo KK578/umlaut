@@ -158,6 +158,9 @@ namespace UmlAnnotator
 				UmlMethodNode methodNode = classNode.Methods[selectedMethod];
 
 				this.selectedMethod = methodNode;
+				this.selectedCondition = null;
+				this.selectedPrecondition = null;
+				this.selectedPostcondition = null;
 
 				this.listBoxPreconditions.ItemsSource = this.selectedMethod.Preconditions;
 				this.listBoxPreconditions.Items.Refresh();
@@ -172,6 +175,7 @@ namespace UmlAnnotator
 		{
 			selectedMethod.AddCondition("pre");
 			this.listBoxPreconditions.Items.Refresh();
+			this.listBoxPostconditions.Items.Refresh();
 		}
 
 		private void buttonRemovePrecondition_Click(object sender, RoutedEventArgs e)
@@ -182,6 +186,7 @@ namespace UmlAnnotator
 			{
 				selectedMethod.RemoveCondition("pre", index);
 				this.listBoxPreconditions.Items.Refresh();
+				this.listBoxPostconditions.Items.Refresh();
 			}
 		}
 
@@ -189,6 +194,7 @@ namespace UmlAnnotator
 		{
 			selectedMethod.AddCondition("post");
 			this.listBoxPreconditions.Items.Refresh();
+			this.listBoxPostconditions.Items.Refresh();
 		}
 
 		private void buttonRemovePostcondition_Click(object sender, RoutedEventArgs e)
@@ -199,6 +205,7 @@ namespace UmlAnnotator
 			{
 				selectedMethod.RemoveCondition("post", index);
 				this.listBoxPreconditions.Items.Refresh();
+				this.listBoxPostconditions.Items.Refresh();
 			}
 		}
 
@@ -227,6 +234,8 @@ namespace UmlAnnotator
 			}
 			else
 			{
+				selectedCondition = null;
+				selectedPrecondition = null;
 				comboBoxComparator.SelectedIndex = -1;
 				textBoxArgumentLeft.Text = "";
 				textBoxArgumentRight.Text = "";
@@ -267,6 +276,8 @@ namespace UmlAnnotator
 			}
 			else
 			{
+				this.selectedCondition = null;
+				this.selectedPostcondition = null;
 				comboBoxComparator.SelectedIndex = -1;
 				textBoxArgumentLeft.Text = "";
 				textBoxArgumentRight.Text = "";
@@ -311,28 +322,36 @@ namespace UmlAnnotator
 
 		private void textBoxArgumentLeft_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			selectedCondition.SetArgument(0, textBoxArgumentLeft.Text);
-			this.listBoxPreconditions.Items.Refresh();
-			this.listBoxPostconditions.Items.Refresh();
+			if (selectedCondition != null) { 
+				selectedCondition.SetArgument(0, textBoxArgumentLeft.Text);
+				this.listBoxPreconditions.Items.Refresh();
+				this.listBoxPostconditions.Items.Refresh();
+			}
 		}
 
 		private void textBoxArgumentRight_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			selectedCondition.SetArgument(1, textBoxArgumentRight.Text);
-			this.listBoxPreconditions.Items.Refresh();
-			this.listBoxPostconditions.Items.Refresh();
+			if (selectedCondition != null)
+			{
+				selectedCondition.SetArgument(1, textBoxArgumentRight.Text);
+				this.listBoxPreconditions.Items.Refresh();
+				this.listBoxPostconditions.Items.Refresh();
+			}
 		}
 
 		private void textBoxExceptionCondition_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			selectedCondition.SetException(textBoxExceptionCondition.Text);
-			this.listBoxPreconditions.Items.Refresh();
-			this.listBoxPostconditions.Items.Refresh();
+			if (selectedCondition != null)
+			{
+				selectedCondition.SetException(textBoxExceptionCondition.Text);
+				this.listBoxPreconditions.Items.Refresh();
+				this.listBoxPostconditions.Items.Refresh();
+			}
 		}
 
 		private void checkBoxInvertCondition_CheckedChanged(object sender, RoutedEventArgs e)
 		{
-			if (selectedCondition.Comparator != null)
+			if (selectedCondition != null && selectedCondition.Comparator != null)
 			{
 				bool isChecked = checkBoxInvertCondition.IsChecked == true;
 				selectedCondition.SetInverted(isChecked);

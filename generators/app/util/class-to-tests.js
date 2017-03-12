@@ -77,7 +77,20 @@ function readTest(method, variables, test) {
 		}
 	];
 
-	const assertions = method.postconditions;
+	// HACK: Retargets class variables in postconditions to correctly use the object.
+	//			Should do rewrite at the template point. Hack done here for now as
+	// 			 there are inconsistencies with how variables are represented.
+	const assertions = method.postconditions.map((postcondition) => {
+		postcondition.arguments = postcondition.arguments.map((name) => {
+			if (variables[name]) {
+				name = `testee.${name}`;
+			}
+
+			return name;
+		});
+
+		return postcondition;
+	});
 
 	return {
 		name,
@@ -116,7 +129,10 @@ module.exports = (uml) => {
 	const testClass = {};
 
 	testClass.name = uml.name;
-	testClass.methods = Object.keys(uml.methods).map((name) => {
+	testClass.methods = Object.keys(uml.methods).filter((name) => {
+		// Filter out constructors.
+		return testClass.name !== name;
+	}).map((name) => {
 		return readMethod(uml.methods[name], uml.variables);
 	});
 

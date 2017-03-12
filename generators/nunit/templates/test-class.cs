@@ -32,12 +32,16 @@ namespace AutomatedTestSuite
 
 			<%_ test.run.forEach((r) => { _%>
 			<%_ 	if (r.value.type === 'function-call') { _%>
+			<%_			if (r.type === 'Void') { _%>
+			testee.<%= r.value.name %>(<%= r.value.arguments.join(', ') %>);
+			<%_			} else { _%>
 			<%= r.type %> <%= r.name %> = testee.<%= r.value.name %>(<%= r.value.arguments.join(', ') %>);
+			<%_ 		} _%>
 			<%_ 	} _%>
 			<%_ }) _%>
 
 			<%_ test.assertions.forEach((a) => { _%>
-			Assert.isTrue(<%= a.arguments[0] %> <%- a.comparison %> <%= a.arguments[1] %>);
+			Assert.IsTrue(<%= a.arguments[0] %> <%- a.comparison %> <%= a.arguments[1] %>);
 			<%_ }) _%>
 		}
 		<%_			} _%>
