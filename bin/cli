@@ -29,8 +29,12 @@ function promiseRunTestGenerator(options) {
 
 function run(filename) {
 	return umlParser(filename).then((parsedModelData) => {
+		console.log('Model Parsed!');
+
 		return inputGenerator(parsedModelData);
 	}).then((modelDataWithInputs) => {
+		console.log('Inputs Generated!');
+
 		const options = {
 			model: JSON.stringify(modelDataWithInputs)
 		};
