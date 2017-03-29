@@ -1,5 +1,5 @@
 {
-  "name": "umdt",
+  "name": "umlaut",
   "version": "0.1.6",
   "description": "Generate unit tests from UML models",
   "bin": "./bin/cli.js",
