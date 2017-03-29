@@ -102,14 +102,18 @@ function readTest(method, variables, test) {
 }
 
 function readMethod(m, variables) {
-	const tests = m.tests.map((t) => {
-		if (t.arguments === 'Unsatisfiable' ||
-			t.unsatisfiable === true) {
-			return null;
-		}
+	let tests = [];
 
-		return readTest(m, variables, t);
-	});
+	if (m.tests) {
+		tests = m.tests.map((t) => {
+			if (t.arguments === 'Unsatisfiable' ||
+				t.unsatisfiable === true) {
+				return null;
+			}
+
+			return readTest(m, variables, t);
+		});
+	}
 
 	const postconditions = m.postconditions.map((c) => {
 		c.comparison = comparisons.toSymbol(c.comparison);
