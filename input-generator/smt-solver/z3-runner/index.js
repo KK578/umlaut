@@ -42,6 +42,11 @@ function promiseHandleSmtClass(smt) {
 				name: methodName,
 				inputs: parser(solved)
 			};
+		}).catch((err) => {
+			console.log(`Failed to generate inputs for method "${methodName}"`);
+			console.error(err);
+
+			return undefined;
 		});
 	});
 
@@ -49,6 +54,11 @@ function promiseHandleSmtClass(smt) {
 		const result = {};
 
 		resolved.forEach((resolvedMethod) => {
+			if (resolvedMethod === undefined) {
+				// Continue to next if no object returned from z3 parser.
+				return;
+			}
+
 			if (result[resolvedMethod.name] !== undefined) {
 				throw new Error(`Method ${resolvedMethod.name} already exists.`);
 			}
