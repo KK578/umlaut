@@ -5,6 +5,7 @@
 [Tt]mp/
 build/
 coverage/
+*.tgz
 
 # Test Fixtures
 *.layout

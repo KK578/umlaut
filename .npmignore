@@ -1,0 +1,20 @@
+# Temporary files
+tmp/
+*.tgz
+
+# Ignore uml-annotator in npm package.
+uml-annotator/
+
+# Developer Items
+.github/
+.vscode/
+coverage/
+build/
+
+# Developer Configs
+codecov.yml
+.editorconfig
+.eslintrc.json
+.gitattributes
+.gitignore
+.travis.yml

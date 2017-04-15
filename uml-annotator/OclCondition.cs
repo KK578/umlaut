@@ -50,13 +50,21 @@ namespace UmlAnnotator
 
 			string[] items = innerCondition.Split(' ');
 			// Ternary ensures inversion syntax is handled correctly here.
-			Comparator = FindComparison(items[1] == "not" ? items[2] : items[1]);
+
+			isInverted = items[1] == "not";
+
+			Comparator = FindComparison(isInverted ? items[2] : items[1]);
 
 			arguments = new List<string>();
 			// Left hand argument is the first.
 			arguments.Add(items[0]);
 			// Right hand argument is the last.
-			arguments.Add(items[items.Length - 1]);
+			arguments.Add(items[isInverted ? 3 : 2]);
+
+			if (items[items.Length - 1].Contains(":"))
+			{
+				SetException(items[items.Length - 1].Split(':')[1]);
+			}
 		}
 
 		public void SetArgument(int index, string argument)

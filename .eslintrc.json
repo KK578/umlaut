@@ -44,7 +44,7 @@
     "indent": [ "error", "tab",  { "SwitchCase": 1 } ],
     "key-spacing": "error",
     "keyword-spacing": "error",
-    "linebreak-style": [ "warn", "windows" ],
+    "linebreak-style": [ "warn", "unix" ],
     "lines-around-comment": [ "error", { "beforeBlockComment": true, "allowBlockStart": true } ],
     "max-depth": "warn",
     "max-len": ["error", { "code": 100, "tabWidth": 4, "ignoreUrls": true, "ignoreStrings": true, "ignoreTemplateLiterals": true }],
