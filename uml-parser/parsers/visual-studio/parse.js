@@ -138,7 +138,13 @@ function parseMethods(umlClass) {
 			const conditionString = constraint.specification[0].literalString[0].$.value;
 
 			if (!(conditionString === '' || conditionString === '()')) {
-				c = cfgParser(conditionString);
+				try {
+					c = cfgParser(conditionString);
+				}
+				catch (err) {
+					console.log(`Failed to parse conditions for "${name}"`);
+					console.error(err);
+				}
 			}
 		}
 
