@@ -10,13 +10,13 @@ const promises = require('../util/promises.js');
 
 const yeomanEnv = yeoman.createEnv();
 
-yeomanEnv.register(path.join(__dirname, '../generators/app'), 'mdt:app');
+yeomanEnv.register(path.join(__dirname, '../generators/app'), 'umlaut:app');
 
 ///////////////////////////////////////////////////////////
 // Utility functions
 function promiseRunTestGenerator(options) {
 	return new Promise((resolve, reject) => {
-		yeomanEnv.run('mdt:app', options, (err) => {
+		yeomanEnv.run('umlaut:app', options, (err) => {
 			if (err) {
 				reject();
 			}
